@@ -849,6 +849,10 @@ jobs:
 
 - [ ] **9.1 Render Blueprint** (`xpert-backend/render.yaml`):
   ```yaml
+  databases:
+    - name: xpert-db
+      plan: free
+
   services:
     - type: web
       name: xpert-backend
@@ -863,7 +867,11 @@ jobs:
         - key: HUGGINGFACE_API_KEY
           sync: false
         - key: DB_CONNECTION
-          value: sqlite
+          value: pgsql
+        - key: DATABASE_URL
+          fromDatabase:
+            name: xpert-db
+            property: connectionString
         - key: QUEUE_CONNECTION
           value: database
         - key: CACHE_STORE
