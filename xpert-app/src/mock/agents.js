@@ -1,0 +1,73 @@
+export const agents = [
+  {
+    id: 1,
+    name: 'Code Assistant',
+    slug: 'code_assistant',
+    domain: 'Technology',
+    category: 'development',
+    description: 'Generate, debug, and optimize code across multiple programming languages and frameworks.',
+    system_prompt: 'You are an expert software engineer. Provide clean, well-documented code with explanations.',
+    is_premium_only: false,
+    icon: 'CommandLineIcon',
+    created_at: '2026-01-15T10:00:00Z',
+    updated_at: '2026-03-20T14:30:00Z',
+  },
+  {
+    id: 2,
+    name: 'Content Writer',
+    slug: 'content_writer',
+    domain: 'Creative',
+    category: 'writing',
+    description: 'Craft compelling articles, blog posts, marketing copy, and creative content tailored to your audience.',
+    system_prompt: 'You are an expert content writer. Create engaging, well-structured content.',
+    is_premium_only: false,
+    icon: 'PencilSquareIcon',
+    created_at: '2026-01-15T10:00:00Z',
+    updated_at: '2026-03-20T14:30:00Z',
+  },
+  {
+    id: 3,
+    name: 'Business Analyst',
+    slug: 'business_analyst',
+    domain: 'Business',
+    category: 'analysis',
+    description: 'Analyze business scenarios, generate reports, and provide strategic insights for decision-making.',
+    system_prompt: 'You are a senior business analyst. Provide data-driven insights and actionable recommendations.',
+    is_premium_only: false,
+    icon: 'ChartBarIcon',
+    created_at: '2026-01-15T10:00:00Z',
+    updated_at: '2026-03-20T14:30:00Z',
+  },
+  {
+    id: 4,
+    name: 'Document Analyzer',
+    slug: 'document_qa',
+    domain: 'Research',
+    category: 'analysis',
+    description: 'Extract insights, summarize content, and answer questions from uploaded documents.',
+    system_prompt: 'You are a document analysis expert. Extract and summarize key information accurately.',
+    is_premium_only: false,
+    icon: 'DocumentMagnifyingGlassIcon',
+    created_at: '2026-01-15T10:00:00Z',
+    updated_at: '2026-03-20T14:30:00Z',
+  },
+  {
+    id: 5,
+    name: 'Translation Agent',
+    slug: 'translation',
+    domain: 'Language',
+    category: 'translation',
+    description: 'Translate text between languages with context-aware accuracy and cultural sensitivity.',
+    system_prompt: 'You are a professional translator. Provide accurate, natural-sounding translations.',
+    is_premium_only: true,
+    icon: 'LanguageIcon',
+    created_at: '2026-01-15T10:00:00Z',
+    updated_at: '2026-03-20T14:30:00Z',
+  },
+];
+
+export const domains = ['Technology', 'Creative', 'Business', 'Research', 'Language'];
+
+export function getAgentById(id) {
+  return agents.find((a) => a.id === Number(id));
+}

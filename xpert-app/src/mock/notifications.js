@@ -1,0 +1,42 @@
+export const notifications = [
+  {
+    id: 1,
+    type: 'warning',
+    title: 'Token quota at 80%',
+    message: 'You have used 20,000 of your 25,000 daily token quota. Consider upgrading to Standard for 150,000 tokens/day.',
+    read: false,
+    created_at: '2026-03-26T08:00:00Z',
+  },
+  {
+    id: 2,
+    type: 'info',
+    title: 'New Agent: Translation Agent',
+    message: 'We have launched a new Translation Agent with support for 8 languages. Available for Premium users.',
+    read: false,
+    created_at: '2026-03-25T12:00:00Z',
+  },
+  {
+    id: 3,
+    type: 'success',
+    title: 'Prompt saved to library',
+    message: 'Your Code Assistant prompt "REST API authentication" has been saved to your library.',
+    read: true,
+    created_at: '2026-03-24T14:30:00Z',
+  },
+  {
+    id: 4,
+    type: 'info',
+    title: 'Platform update v2.1',
+    message: 'We have improved response times by 40% and added markdown rendering in AI responses.',
+    read: true,
+    created_at: '2026-03-22T10:00:00Z',
+  },
+  {
+    id: 5,
+    type: 'warning',
+    title: 'Rate limit approaching',
+    message: 'You have made 45 of your 50 daily requests. Requests will reset at midnight UTC.',
+    read: true,
+    created_at: '2026-03-20T18:00:00Z',
+  },
+];

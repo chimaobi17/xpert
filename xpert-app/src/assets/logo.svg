@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 50" fill="none">
+  <path d="M12 8L24 25L12 42" stroke="#22c55e" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M36 8L24 25L36 42" stroke="#22c55e" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="48" y="35" font-family="Hanken Grotesk, sans-serif" font-weight="700" font-size="28" fill="currentColor">XPERT</text>
+</svg>
