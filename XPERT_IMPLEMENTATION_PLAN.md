@@ -849,10 +849,6 @@ jobs:
 
 - [ ] **9.1 Render Blueprint** (`xpert-backend/render.yaml`):
   ```yaml
-  databases:
-    - name: xpert-db
-      plan: free
-
   services:
     - type: web
       name: xpert-backend
@@ -867,11 +863,9 @@ jobs:
         - key: HUGGINGFACE_API_KEY
           sync: false
         - key: DB_CONNECTION
-          value: pgsql
+          value: pgsql # Important: Supabase is Postgres
         - key: DATABASE_URL
-          fromDatabase:
-            name: xpert-db
-            property: connectionString
+          sync: false # You will paste your Supabase Connection String directly into the Render Dashboard Secrets!
         - key: QUEUE_CONNECTION
           value: database
         - key: CACHE_STORE
