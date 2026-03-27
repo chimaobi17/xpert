@@ -13,7 +13,7 @@ export default function AdminRoute() {
     );
   }
 
-  if (!user || user.role !== 'admin') return <Navigate to="/login" replace />;
+  if (!user || (user.role !== 'admin' && user.role !== 'super_admin')) return <Navigate to="/login" replace />;
 
   return <Outlet />;
 }

@@ -60,4 +60,43 @@ class AuthController extends Controller
     {
         return response()->json($request->user());
     }
+
+    public function updateProfile(Request $request)
+    {
+        $validated = $request->validate([
+            'job_title' => ['sometimes', 'string', 'max:255'],
+            'purpose' => ['sometimes', 'string', 'max:1000'],
+            'field_of_specialization' => ['sometimes', 'in:technology,creative,business,research,language'],
+        ]);
+
+        $user = $request->user();
+        $user->update($validated);
+
+        // Auto-assign default agents based on specialization
+        if (isset($validated['field_of_specialization']) && $user->agents()->count() === 0) {
+            $this->assignDefaultAgents($user, $validated['field_of_specialization']);
+        }
+
+        return response()->json($user->fresh());
+    }
+
+    private function assignDefaultAgents(User $user, string $specialization): void
+    {
+        $domainMap = [
+            'technology' => ['Technology', 'Research'],
+            'creative' => ['Creative'],
+            'business' => ['Business', 'Creative'],
+            'research' => ['Research', 'Language'],
+            'language' => ['Language', 'Creative', 'Research'],
+        ];
+
+        $domains = $domainMap[$specialization] ?? ['Technology'];
+
+        $agentIds = \App\Models\AiAgent::whereIn('domain', $domains)
+            ->where('is_premium_only', false)
+            ->limit(5)
+            ->pluck('id');
+
+        $user->agents()->syncWithoutDetaching($agentIds);
+    }
 }

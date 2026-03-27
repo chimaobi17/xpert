@@ -14,7 +14,7 @@ export function AuthProvider({ children }) {
   async function checkAuth() {
     try {
       const res = await api.get('/user');
-      if (res.data.role === 'admin') {
+      if (res.data.role === 'admin' || res.data.role === 'super_admin') {
         setUser(res.data);
       } else {
         setUser(null);

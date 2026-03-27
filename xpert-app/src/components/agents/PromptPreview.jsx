@@ -1,48 +1,88 @@
 import { useState } from 'react';
+import clsx from 'clsx';
 import Button from '../ui/Button';
-import { PencilIcon, PaperAirplaneIcon, BookmarkIcon } from '@heroicons/react/24/outline';
+import Textarea from '../ui/Textarea';
 
-export default function PromptPreview({ prompt, onSendToAi, onSaveToLibrary, onBack }) {
-  const [editing, setEditing] = useState(false);
-  const [editedPrompt, setEditedPrompt] = useState(prompt);
+export default function PromptPreview({ generatedPrompt, onSubmit, onBack }) {
+  const [choice, setChoice] = useState(null);
+  const [customPrompt, setCustomPrompt] = useState('');
+  const [editedPrompt, setEditedPrompt] = useState(generatedPrompt);
+
+  function getFinalPrompt() {
+    if (choice === 'generated') return generatedPrompt;
+    if (choice === 'custom') return customPrompt;
+    if (choice === 'edited') return editedPrompt;
+    return '';
+  }
+
+  function getPromptType() {
+    if (choice === 'generated') return 'generated';
+    if (choice === 'custom') return 'custom';
+    return 'edited';
+  }
+
+  const options = [
+    { id: 'generated', label: 'Use Generated Prompt', desc: 'Send the AI-crafted prompt as-is' },
+    { id: 'custom', label: 'Write My Own', desc: 'Start from scratch with your own prompt' },
+    { id: 'edited', label: 'Edit Generated Prompt', desc: 'Tweak the generated prompt to your liking' },
+  ];
 
   return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <h3 className="text-sm font-semibold text-[var(--color-text)]">Generated Prompt</h3>
-        <button
-          onClick={() => setEditing(!editing)}
-          className="flex items-center gap-1 text-xs text-primary-600 hover:text-primary-700"
-        >
-          <PencilIcon className="h-3.5 w-3.5" />
-          {editing ? 'Preview' : 'Edit'}
-        </button>
+    <div className="space-y-6">
+      <div>
+        <h3 className="text-sm font-semibold text-[var(--color-text)] mb-3">Choose how to proceed</h3>
+        <div className="grid gap-3 sm:grid-cols-3">
+          {options.map((opt) => (
+            <button
+              key={opt.id}
+              onClick={() => setChoice(opt.id)}
+              className={clsx(
+                'rounded-lg border p-4 text-left transition-all',
+                choice === opt.id
+                  ? 'border-primary-500 bg-primary-50 ring-1 ring-primary-500'
+                  : 'border-[var(--color-border)] hover:border-primary-300'
+              )}
+            >
+              <p className="text-sm font-medium text-[var(--color-text)]">{opt.label}</p>
+              <p className="text-xs text-[var(--color-text-secondary)] mt-1">{opt.desc}</p>
+            </button>
+          ))}
+        </div>
       </div>
 
-      {editing ? (
-        <textarea
-          value={editedPrompt}
-          onChange={(e) => setEditedPrompt(e.target.value)}
-          rows={8}
-          className="block w-full rounded-lg border border-[var(--color-border)] bg-[var(--color-bg)] px-4 py-3 text-sm text-[var(--color-text)] font-mono"
-        />
-      ) : (
-        <div className="rounded-lg border border-[var(--color-border)] bg-[var(--color-bg)] p-4">
-          <p className="text-sm text-[var(--color-text)] whitespace-pre-wrap">{editedPrompt}</p>
+      {choice === 'generated' && (
+        <div className="rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-secondary)] p-4">
+          <p className="text-xs font-medium text-[var(--color-text-secondary)] mb-2">Generated Prompt (read-only)</p>
+          <pre className="text-sm text-[var(--color-text)] whitespace-pre-wrap font-sans">{generatedPrompt}</pre>
         </div>
       )}
 
-      <div className="flex flex-col gap-2 sm:flex-row">
-        <Button onClick={() => onSendToAi(editedPrompt)} className="flex-1">
-          <PaperAirplaneIcon className="h-4 w-4" />
+      {choice === 'custom' && (
+        <Textarea
+          label="Your Custom Prompt"
+          placeholder="Write your prompt here..."
+          value={customPrompt}
+          onChange={(e) => setCustomPrompt(e.target.value)}
+          rows={8}
+        />
+      )}
+
+      {choice === 'edited' && (
+        <Textarea
+          label="Edit the Generated Prompt"
+          value={editedPrompt}
+          onChange={(e) => setEditedPrompt(e.target.value)}
+          rows={8}
+        />
+      )}
+
+      <div className="flex items-center justify-between pt-4 border-t border-[var(--color-border)]">
+        <Button variant="ghost" onClick={onBack}>Back to Form</Button>
+        <Button
+          onClick={() => onSubmit(getFinalPrompt(), getPromptType())}
+          disabled={!choice || !getFinalPrompt().trim()}
+        >
           Send to AI
-        </Button>
-        <Button variant="secondary" onClick={() => onSaveToLibrary(editedPrompt)}>
-          <BookmarkIcon className="h-4 w-4" />
-          Save to Library
-        </Button>
-        <Button variant="ghost" onClick={onBack}>
-          Back
         </Button>
       </div>
     </div>

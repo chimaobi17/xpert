@@ -9,19 +9,27 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        // Create admin user
-        User::factory()->admin()->create([
-            'name' => 'Admin',
-            'email' => 'admin@xpert.test',
-        ]);
+        User::updateOrCreate(
+            ['email' => env('SUPER_ADMIN_EMAIL', 'admin@xpert.test')],
+            [
+                'name' => 'Admin',
+                'password' => bcrypt(env('SUPER_ADMIN_PASSWORD', 'password')),
+                'role' => 'super_admin',
+                'plan_level' => 'premium',
+            ]
+        );
 
-        // Create test user (free plan)
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'user@xpert.test',
-        ]);
+        User::updateOrCreate(
+            ['email' => 'user@xpert.test'],
+            [
+                'name' => 'Test User',
+                'password' => bcrypt('password'),
+                'role' => 'user',
+                'plan_level' => 'free',
+            ]
+        );
 
-        // Seed AI agents with their prompt templates
         $this->call(AiAgentSeeder::class);
+        $this->call(ChatbotKnowledgeSeeder::class);
     }
 }

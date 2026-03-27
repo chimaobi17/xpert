@@ -1,5 +1,7 @@
 # XPERT Architectural Blueprint (v5.0 - Zero-Cost MVP, Smart Prompt System)
 
+> **CROSS-REFERENCE**: This plan's frontend is implemented in `XPERT_FRONTEND_IMPLEMENTATION_PLAN.md`. All API response shapes, error codes, and endpoints must match across all documents.
+
 **CRITICAL DIRECTIVE FOR CLAUDE CODE**: Every technology is free-tier or open-source. **No OpenAI. No GPT-4o. No paid API keys.** Items marked `[SCALE-TRIGGER]` flag what needs upgrading at scale. Never commit secrets. No hardcoded credentials anywhere.
 
 > **⚠️ EXECUTION STRATEGY**: Build phase by phase. Do NOT build all phases in one session. Start with Phase 1+2, verify everything runs, then proceed. See `XPERT_IMPLEMENTATION_PLAN.md` for the full build order. **Phase 0 (HF model research) must be completed before any code is written** — crawl Hugging Face for the best free models per agent category and update the model registry table.
@@ -64,6 +66,7 @@ POST /api/prompts/submit
 - **User App** (`xpert-app`): React SPA. Responsive Tailwind = mobile strategy. 320px–1440px+.
 - **Admin Dashboard** (`xpert-admin-dashboard`): Separate React SPA. Agent CRUD, template editing, prompt log viewer, user management.
 - Client-side MIME + size validation on file uploads.
+- **Chatbot Widget**: Floating help bubble on all authenticated pages. Keyword matching runs entirely client-side. Route-aware context hints. Can trigger navigation and modals.
 
 ### Application Layer (`xpert-backend`)
 - **Laravel 11 API**: Serves both frontends. CORS bound to Vercel domains.
@@ -71,6 +74,7 @@ POST /api/prompts/submit
 - **Smart Prompt Engine**: Constructs prompts from agent `system_prompt` + `prompt_template` + user inputs + file content. Returns to frontend for user review before AI call.
 - **Queue**: Database driver + cron `queue:work`. `[SCALE-TRIGGER]`: Redis + Horizon.
 - **Response Cache**: `prompt_cache` table (SHA-256 key, 24h TTL).
+- **Help Chatbot**: Client-side keyword-matching assistant. Knowledge base stored in `chatbot_knowledge` table, admin-editable, fetched once and cached in browser. No AI API calls — zero cost. Handles app Q&A and navigation. Falls back to hardcoded knowledge base if API unavailable.
 
 ### AI Model Registry (`config/ai_models.php`)
 
@@ -112,27 +116,54 @@ POST /api/prompts/submit
 | `prompt_library` | `id`, `user_id` (FK), `agent_id` (FK), `original_input`, `final_prompt`, `ai_response` (text), `created_at` | User-saved outputs |
 | `prompt_cache` | `id`, `cache_key` (unique SHA-256), `agent_id`, `prompt_text`, `response_text`, `created_at` | 24h response cache |
 | `token_usage_logs` | `id`, `user_id` (FK), `date` (indexed), `tokens_used`, `request_count` | Quota tracking |
-| `uploaded_files` | `id`, `user_id` (FK), `file_path`, `mime_type`, `size_bytes`, `parsed_content` (nullable) | Local disk refs |
+| `uploaded_files` | `id`, `user_id` (FK), `file_path`, `original_name` (string), `mime_type`, `size_bytes`, `parsed_content` (nullable) | Local disk refs |
+| `chatbot_knowledge` | `id`, `keywords` (text), `question` (text), `answer` (text), `action_type` (string, nullable), `action_target` (string, nullable), `category` (string), `sort_order` (int), timestamps | Admin-editable Q&A for non-AI help widget |
 | `jobs`, `cache`, `sessions` | Laravel defaults | Infrastructure |
 
 ### Key API Endpoints
 
-| Method | Endpoint | Purpose | Auth |
-|---|---|---|---|
-| `POST` | `/api/auth/register` | Create user | Public |
-| `POST` | `/api/auth/login` | Get Sanctum token | Public |
-| `GET` | `/api/agents` | List available agents | User |
-| `GET` | `/api/agents/{id}` | Agent details + field_schema | User |
-| `POST` | `/api/prompts/generate` | Build prompt from form inputs (no AI call) | User |
-| `POST` | `/api/prompts/submit` | Send final prompt to AI | User |
-| `GET` | `/api/library` | User's saved prompts | User |
-| `POST` | `/api/files/upload` | Upload project file | User |
-| `GET` | `/api/admin/users` | List users | Admin |
-| `PUT` | `/api/admin/users/{id}/upgrade` | Change plan | Admin |
-| `CRUD` | `/api/admin/agents` | Manage agents | Admin |
-| `PUT` | `/api/admin/agents/{id}/template` | Edit prompt template | Admin |
-| `GET` | `/api/admin/prompt-logs` | View prompt logs | Admin |
-| `GET` | `/api/admin/stats` | Usage analytics | Admin |
+| Method | Endpoint | Auth |
+|---|---|---|
+| `GET` | `/api/health` | Public |
+| `GET` | `/api/config/features` | Public |
+| `POST` | `/api/auth/register` | Public |
+| `POST` | `/api/auth/login` | Public |
+| `POST` | `/api/auth/logout` | User |
+| `GET` | `/api/user` | User |
+| `PATCH` | `/api/user/profile` | User |
+| `GET` | `/api/agents` | User |
+| `GET` | `/api/agents/{id}` | User |
+| `GET` | `/api/agents/search?q=` | User |
+| `GET` | `/api/user/agents` | User |
+| `POST` | `/api/user/agents/{agent_id}` | User |
+| `DELETE` | `/api/user/agents/{agent_id}` | User |
+| `POST` | `/api/prompts/generate` | User |
+| `POST` | `/api/prompts/submit` | User |
+| `GET` | `/api/library` | User |
+| `POST` | `/api/library` | User |
+| `DELETE` | `/api/library/{id}` | User |
+| `POST` | `/api/files/upload` | User |
+| `GET` | `/api/files` | User |
+| `DELETE` | `/api/files/{id}` | User |
+| `GET` | `/api/chatbot/knowledge` | User |
+| `GET` | `/api/admin/users` | Admin |
+| `PUT` | `/api/admin/users/{id}/upgrade` | Admin |
+| `PUT` | `/api/admin/users/{id}/block` | Admin |
+| `PUT` | `/api/admin/users/{id}/unblock` | Admin |
+| `PUT` | `/api/admin/users/{id}/promote` | Super Admin |
+| `DELETE` | `/api/admin/users/{id}` | Super Admin |
+| `GET` | `/api/admin/agents` | Admin |
+| `POST` | `/api/admin/agents` | Admin |
+| `GET` | `/api/admin/agents/{id}` | Admin |
+| `PUT` | `/api/admin/agents/{id}` | Admin |
+| `DELETE` | `/api/admin/agents/{id}` | Admin |
+| `PUT` | `/api/admin/agents/{id}/template` | Admin |
+| `GET` | `/api/admin/prompt-logs` | Admin |
+| `GET` | `/api/admin/stats` | Admin |
+| `GET` | `/api/admin/chatbot/knowledge` | Admin |
+| `POST` | `/api/admin/chatbot/knowledge` | Admin |
+| `PUT` | `/api/admin/chatbot/knowledge/{id}` | Admin |
+| `DELETE` | `/api/admin/chatbot/knowledge/{id}` | Admin |
 
 ## 5. Deployment Architecture (Zero-Cost)
 
@@ -156,6 +187,7 @@ POST /api/prompts/submit
 | Requests/Day | 50 | 300 | Unlimited |
 | Tokens/Request | 500 | 2,000 | 8,000 |
 | Daily Token Budget | 25,000 | 150,000 | 1,000,000 |
+| Max Active Agents | 5 | 15 | Unlimited |
 | File Upload Size | 5 MB | 25 MB | 100 MB |
 
 - Quota exceeded → `HTTP 402` with `{ "error": "quota_exceeded" }`.
@@ -229,6 +261,10 @@ The backend Global Exception Handler and frontend API client both implement agai
 
 | Error Code | HTTP | Retry? | Upgrade? | Frontend Action |
 |---|---|---|---|---|
+| `account_blocked` | 403 | No | No | Show blocked screen with reason, duration, support link |
+| `premium_required` | 402 | No | Yes | Show upgrade modal with agent name |
+| `agent_already_added` | 409 | No | No | Toast "This agent is already in your workspace" |
+| `agent_limit_reached` | 403 | No | Yes | Toast "Free plan limited to X agents. Upgrade for more." |
 | `quota_exceeded` | 402 | No | Yes | Show upgrade modal |
 | `rate_limited` | 429 | Yes (after `retry_after`) | No | Toast with countdown timer |
 | `ai_unavailable` | 503 | Auto (queued) | No | Show "Processing shortly" + poll |

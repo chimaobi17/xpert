@@ -17,6 +17,11 @@ class User extends Authenticatable
         'password',
         'role',
         'plan_level',
+        'job_title',
+        'purpose',
+        'field_of_specialization',
+        'banned_until',
+        'ban_reason',
     ];
 
     protected $hidden = [
@@ -24,17 +29,35 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    protected $appends = ['onboarding_complete'];
+
     protected function casts(): array
     {
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'banned_until' => 'datetime',
         ];
+    }
+
+    public function getOnboardingCompleteAttribute(): bool
+    {
+        return !is_null($this->field_of_specialization);
     }
 
     public function isAdmin(): bool
     {
-        return $this->role === 'admin';
+        return in_array($this->role, ['admin', 'super_admin']);
+    }
+
+    public function isSuperAdmin(): bool
+    {
+        return $this->role === 'super_admin';
+    }
+
+    public function agents()
+    {
+        return $this->belongsToMany(AiAgent::class, 'user_agents');
     }
 
     public function promptLogs()

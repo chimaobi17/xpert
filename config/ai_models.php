@@ -9,15 +9,17 @@ return [
     |
     | Maps each agent category to its primary and fallback Hugging Face models.
     | All models MUST be free-tier HF Inference API compatible.
-    | Update with better models discovered during Phase 0 research.
     |
     */
+
+    // --- Text Generation Models (Free Tier) ---
 
     'code_assistant' => [
         'primary' => 'bigcode/starcoder2-15b',
         'fallback' => 'codellama/CodeLlama-34b-Instruct-hf',
         'max_tokens' => 2048,
         'timeout' => 30,
+        'type' => 'text',
     ],
 
     'content_writer' => [
@@ -25,6 +27,7 @@ return [
         'fallback' => 'HuggingFaceH4/zephyr-7b-beta',
         'max_tokens' => 4096,
         'timeout' => 30,
+        'type' => 'text',
     ],
 
     'business_analyst' => [
@@ -32,6 +35,7 @@ return [
         'fallback' => 'mistralai/Mistral-7B-Instruct-v0.2',
         'max_tokens' => 4096,
         'timeout' => 30,
+        'type' => 'text',
     ],
 
     'ux_research' => [
@@ -39,20 +43,15 @@ return [
         'fallback' => 'HuggingFaceH4/zephyr-7b-beta',
         'max_tokens' => 4096,
         'timeout' => 30,
+        'type' => 'text',
     ],
 
     'graphic_designer' => [
-        'primary' => 'stabilityai/stable-diffusion-xl-base-1.0',
-        'fallback' => 'runwayml/stable-diffusion-v1-5',
-        'max_tokens' => 512,
-        'timeout' => 60,
-    ],
-
-    'translation' => [
-        'primary' => 'facebook/nllb-200-distilled-600M',
-        'fallback' => null,
+        'primary' => 'mistralai/Mixtral-8x7B-Instruct-v0.1',
+        'fallback' => 'HuggingFaceH4/zephyr-7b-beta',
         'max_tokens' => 4096,
         'timeout' => 30,
+        'type' => 'text',
     ],
 
     'document_qa' => [
@@ -60,6 +59,7 @@ return [
         'fallback' => 'HuggingFaceH4/zephyr-7b-beta',
         'max_tokens' => 4096,
         'timeout' => 30,
+        'type' => 'text',
     ],
 
     'sentiment_analysis' => [
@@ -67,13 +67,45 @@ return [
         'fallback' => null,
         'max_tokens' => 512,
         'timeout' => 15,
+        'type' => 'text',
     ],
+
+    // --- Text-to-Image Models (Premium Only) ---
+
+    'interior_designer' => [
+        'primary' => 'stabilityai/stable-diffusion-xl-base-1.0',
+        'fallback' => 'runwayml/stable-diffusion-v1-5',
+        'max_tokens' => 512,
+        'timeout' => 60,
+        'type' => 'image',
+    ],
+
+    'logo_creator' => [
+        'primary' => 'stabilityai/stable-diffusion-xl-base-1.0',
+        'fallback' => 'runwayml/stable-diffusion-v1-5',
+        'max_tokens' => 512,
+        'timeout' => 60,
+        'type' => 'image',
+    ],
+
+    // --- Translation ---
+
+    'translation' => [
+        'primary' => 'facebook/nllb-200-distilled-600M',
+        'fallback' => null,
+        'max_tokens' => 4096,
+        'timeout' => 30,
+        'type' => 'text',
+    ],
+
+    // --- Embeddings ---
 
     'embeddings' => [
         'primary' => 'BAAI/bge-small-en-v1.5',
         'fallback' => null,
         'max_tokens' => 512,
         'timeout' => 15,
+        'type' => 'embedding',
     ],
 
     /*
@@ -90,14 +122,26 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Plan Rate Limits (requests per day)
+    | Plan Rate Limits (requests per day, 0 = unlimited)
     |--------------------------------------------------------------------------
     */
 
     'rate_limits' => [
         'free' => 50,
         'standard' => 300,
-        'premium' => 0, // 0 = unlimited
+        'premium' => 0,
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | File Upload Limits (in MB, per plan)
+    |--------------------------------------------------------------------------
+    */
+
+    'file_limits' => [
+        'free' => 25,
+        'standard' => 100,
+        'premium' => 200,
     ],
 
 ];

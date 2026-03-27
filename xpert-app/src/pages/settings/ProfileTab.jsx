@@ -1,22 +1,25 @@
 import { useState } from 'react';
 import useAuth from '../../hooks/useAuth';
+import { patch } from '../../lib/apiClient';
 import Input from '../../components/ui/Input';
 import Button from '../../components/ui/Button';
 import Avatar from '../../components/ui/Avatar';
 import toast from 'react-hot-toast';
 
 export default function ProfileTab() {
-  const { user } = useAuth();
+  const { user, updateUser } = useAuth();
   const [name, setName] = useState(user?.name || '');
   const [loading, setLoading] = useState(false);
 
-  function handleSave(e) {
+  async function handleSave(e) {
     e.preventDefault();
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
+    const res = await patch('/user/profile', { name });
+    if (res.ok) {
+      updateUser(res.data);
       toast.success('Profile updated');
-    }, 800);
+    }
+    setLoading(false);
   }
 
   return (

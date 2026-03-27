@@ -24,14 +24,14 @@ export function AuthProvider({ children }) {
 
   async function login(email, password) {
     await getCsrfCookie();
-    await api.post('/login', { email, password });
-    await checkAuth();
+    const res = await api.post('/login', { email, password });
+    setUser(res.data);
   }
 
   async function register(name, email, password, password_confirmation) {
     await getCsrfCookie();
-    await api.post('/register', { name, email, password, password_confirmation });
-    await checkAuth();
+    const res = await api.post('/register', { name, email, password, password_confirmation });
+    setUser(res.data);
   }
 
   async function logout() {
@@ -39,8 +39,21 @@ export function AuthProvider({ children }) {
     setUser(null);
   }
 
+  async function refreshUser() {
+    try {
+      const res = await api.get('/user');
+      setUser(res.data);
+    } catch {
+      setUser(null);
+    }
+  }
+
+  function updateUser(data) {
+    setUser((prev) => (prev ? { ...prev, ...data } : prev));
+  }
+
   return (
-    <AuthContext.Provider value={{ user, loading, login, register, logout }}>
+    <AuthContext.Provider value={{ user, loading, login, register, logout, refreshUser, updateUser }}>
       {children}
     </AuthContext.Provider>
   );

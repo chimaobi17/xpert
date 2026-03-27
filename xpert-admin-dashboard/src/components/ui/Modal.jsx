@@ -26,7 +26,8 @@ export default function Modal({ isOpen, onClose, title, size = 'md', children })
       <div className="fixed inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose} />
       <div
         className={clsx(
-          'relative z-10 w-full mx-4 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] shadow-xl',
+          'relative z-10 w-full mx-4 rounded-xl border shadow-xl backdrop-blur-md',
+          'bg-white/60 border-white/20 [html[data-theme=dark]_&]:bg-gray-900/60 [html[data-theme=dark]_&]:border-white/10',
           sizes[size]
         )}
       >

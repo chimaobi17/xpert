@@ -18,16 +18,16 @@ class UsageController extends Controller
             ->where('date', $today)
             ->first();
 
-        $quotas = config('ai_models.quotas.' . $user->plan_level, config('ai_models.quotas.free'));
-        $rateLimits = config('ai_models.rate_limits.' . $user->plan_level, config('ai_models.rate_limits.free'));
+        $tokenQuota = config('ai_models.quotas.' . $user->plan_level, 25000);
+        $requestLimit = config('ai_models.rate_limits.' . $user->plan_level, 50);
 
         $savedCount = PromptLibrary::where('user_id', $user->id)->count();
 
         return response()->json([
             'tokens_used' => $todayUsage?->tokens_used ?? 0,
             'requests_today' => $todayUsage?->request_count ?? 0,
-            'token_quota' => $quotas['daily_tokens'],
-            'request_limit' => $rateLimits['daily_requests'],
+            'token_quota' => $tokenQuota,
+            'request_limit' => $requestLimit,
             'saved_prompts' => $savedCount,
             'plan_level' => $user->plan_level,
         ]);

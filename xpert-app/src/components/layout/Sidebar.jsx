@@ -2,21 +2,33 @@ import { NavLink } from 'react-router-dom';
 import clsx from 'clsx';
 import {
   HomeIcon,
-  CpuChipIcon,
+  RectangleStackIcon,
+  MagnifyingGlassCircleIcon,
   BookOpenIcon,
+  BellIcon,
   Cog6ToothIcon,
   QuestionMarkCircleIcon,
 } from '@heroicons/react/24/outline';
+import useAuth from '../../hooks/useAuth';
 
 const navItems = [
   { to: '/dashboard', label: 'Dashboard', icon: HomeIcon },
-  { to: '/agents', label: 'AI Agents', icon: CpuChipIcon },
-  { to: '/library', label: 'Library', icon: BookOpenIcon },
-  { to: '/settings', label: 'Settings', icon: Cog6ToothIcon },
+  { to: '/workspace', label: 'My Workspace', icon: RectangleStackIcon },
+  { to: '/agents/discover', label: 'Discover Agents', icon: MagnifyingGlassCircleIcon },
+  { to: '/library', label: 'Prompt Library', icon: BookOpenIcon },
+  { to: '/notifications', label: 'Notifications', icon: BellIcon },
   { to: '/help', label: 'Help', icon: QuestionMarkCircleIcon },
+  { to: '/settings', label: 'Settings', icon: Cog6ToothIcon },
 ];
 
 export default function Sidebar({ open, onClose }) {
+  const { user } = useAuth();
+
+  const planLabel = user?.plan_level === 'premium' ? 'Premium' : user?.plan_level === 'standard' ? 'Standard' : 'Free';
+  const quotaMax = user?.plan_level === 'premium' ? 1000000 : user?.plan_level === 'standard' ? 150000 : 25000;
+  const tokensUsed = 8750;
+  const pct = Math.min((tokensUsed / quotaMax) * 100, 100);
+
   return (
     <>
       {open && (
@@ -51,11 +63,13 @@ export default function Sidebar({ open, onClose }) {
 
         <div className="border-t border-[var(--color-border)] p-4">
           <div className="rounded-lg bg-primary-50 p-3">
-            <p className="text-xs font-semibold text-primary-700 mb-1">Free Plan</p>
+            <p className="text-xs font-semibold text-primary-700 mb-1">{planLabel} Plan</p>
             <div className="h-1.5 rounded-full bg-primary-200">
-              <div className="h-1.5 rounded-full bg-primary-500" style={{ width: '35%' }} />
+              <div className="h-1.5 rounded-full bg-primary-500" style={{ width: `${pct}%` }} />
             </div>
-            <p className="text-xs text-primary-600 mt-1">8,750 / 25,000 tokens</p>
+            <p className="text-xs text-primary-600 mt-1">
+              {tokensUsed.toLocaleString()} / {quotaMax.toLocaleString()} tokens
+            </p>
           </div>
         </div>
       </aside>

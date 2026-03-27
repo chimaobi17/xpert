@@ -1,7 +1,8 @@
-import { useState } from 'react';
-import { notifications as initialNotifications } from '../mock/notifications';
+import { useState, useEffect } from 'react';
+import { get } from '../lib/apiClient';
 import { formatDateTime } from '../lib/helpers';
 import Badge from '../components/ui/Badge';
+import Spinner from '../components/ui/Spinner';
 import {
   ExclamationTriangleIcon,
   InformationCircleIcon,
@@ -22,7 +23,19 @@ const typeBadgeVariant = {
 };
 
 export default function Notifications() {
-  const [notifications, setNotifications] = useState(initialNotifications);
+  const [notifications, setNotifications] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    loadNotifications();
+  }, []);
+
+  async function loadNotifications() {
+    setLoading(true);
+    const res = await get('/notifications');
+    if (res.ok) setNotifications(res.data);
+    setLoading(false);
+  }
 
   function markAsRead(id) {
     setNotifications((prev) =>
@@ -31,6 +44,10 @@ export default function Notifications() {
   }
 
   const unreadCount = notifications.filter((n) => !n.read).length;
+
+  if (loading) {
+    return <div className="flex justify-center py-16"><Spinner size="lg" /></div>;
+  }
 
   return (
     <div className="space-y-6">

@@ -15,8 +15,22 @@
 4. **Session 4 → Phase 5** (Subscription stubs). Quick verification round.
 5. **Session 5 → Phase 6** (User frontend). Verify: full user flow works end-to-end in browser.
 6. **Session 6 → Phase 7** (Admin dashboard). Verify: admin can manage agents and view logs.
-7. **Session 7 → Phase 8** (Docker, CI/CD). Verify: `docker-compose up` runs the full stack.
-8. **Session 8 → Phase 9** (Deployment). Verify: smoke tests pass on live URLs.
+7. **Session 7 → Phase 8** (User Onboarding & Agent Discovery). Verify: Onboarding flow saves correctly and default agents are attached.
+8. **Session 8 → Phase 9** (Specialized AI Agents). Verify: Text-to-image agents UI handles premium gating and layout prompts work well.
+9. **Session 9 → Phase 10** (Docker, CI/CD). Verify: `docker-compose up` runs the full stack.
+10. **Session 10 → Phase 11** (Pre-Deployment Testing & Security Audit). Verify: Claude Code executes full sweep via `XPERT_MAINTENANCE_PLAN.md`.
+11. **Session 11 → Phase 12** (Deployment). Verify: smoke tests pass on live URLs.
+
+### Required Files — Verify Before Session 1
+Before starting any build session, confirm these files exist in the workspace root:
+- [ ] `XPERT_ARCHITECTURE.md`
+- [ ] `XPERT_IMPLEMENTATION_PLAN.md`
+- [ ] `XPERT_FRONTEND_IMPLEMENTATION_PLAN.md`
+- [ ] `XPERT_FRONTEND_FEATURE_EXTENSIONS.md`
+- [ ] `XPERT_MAINTENANCE_PLAN.md`
+- [ ] `XPERT_FUTURE_INTEGRATION_PLAN.md`
+
+If ANY file is missing, create it before proceeding. Claude Code must not start Session 1 until all files are present.
 
 ### Rules
 - **Run tests at the end of every session** before moving to the next phase.
@@ -31,11 +45,11 @@
 **MANDATORY BEFORE ANY CODE IS WRITTEN.** Claude Code must crawl Hugging Face and research the best-performing free models fine-tuned for each agent category. The model registry table below is a starting point — Claude Code must verify and potentially replace these with better alternatives discovered during research.
 
 ### Research Checklist
-- [ ] **0.1** For each agent category below, search Hugging Face for the top-rated, most-downloaded, free Inference API-compatible models.
-- [ ] **0.2** Verify each model is available on the free Inference API (not gated, not requiring Pro subscription).
-- [ ] **0.3** Test each model with a sample prompt to confirm it returns quality output and reasonable latency.
-- [ ] **0.4** Update the model registry table below with the best models found. Document why each was chosen (downloads, benchmark scores, community rating, response quality).
-- [ ] **0.5** Write the final `config/ai_models.php` based on research results.
+- [x] **0.1** For each agent category below, search Hugging Face for the top-rated, most-downloaded, free Inference API-compatible models.
+- [x] **0.2** Verify each model is available on the free Inference API (not gated, not requiring Pro subscription).
+- [x] **0.3** Test each model with a sample prompt to confirm it returns quality output and reasonable latency.
+- [x] **0.4** Update the model registry table below with the best models found. Document why each was chosen (downloads, benchmark scores, community rating, response quality).
+- [x] **0.5** Write the final `config/ai_models.php` based on research results.
 
 ### Research Criteria
 - **Must be free**: Available on HF Inference API without Pro subscription.
@@ -104,7 +118,11 @@ Claude Code must create `config/ai_models.php` with this mapping. **These are st
 | **Content Writer** | `mistralai/Mixtral-8x7B-Instruct-v0.1` | `HuggingFaceH4/zephyr-7b-beta` | Copywriting, marketing, emails |
 | **Business Analyst** | `mistralai/Mixtral-8x7B-Instruct-v0.1` | `mistralai/Mistral-7B-Instruct-v0.2` | SWOT, strategy, business prompts |
 | **UX Research** | `mistralai/Mistral-7B-Instruct-v0.2` | `HuggingFaceH4/zephyr-7b-beta` | Usability scripts, UX writing |
-| **Graphic Designer** | `stabilityai/stable-diffusion-xl-base-1.0` | `runwayml/stable-diffusion-v1-5` | Image generation, visual concepts |
+| **Graphics Design Advisor** | `mistralai/Mixtral-8x7B-Instruct-v0.1` | `HuggingFaceH4/zephyr-7b-beta` | Design ideas, typography, layout suggestions (Text-based) |
+| **Interior Designer (Premium)** | `stabilityai/stable-diffusion-xl-base-1.0` | `runwayml/stable-diffusion-v1-5` | Room design and interior generation (Text-to-Image) |
+| **Architectural Visualizer (Premium)** | `stabilityai/stable-diffusion-xl-base-1.0` | `runwayml/stable-diffusion-v1-5` | Building layouts and architectural rendering (Text-to-Image) |
+| **Product Photographer (Premium)** | `stabilityai/stable-diffusion-xl-base-1.0` | `runwayml/stable-diffusion-v1-5` | Product shots and studio lighting images (Text-to-Image) |
+| **Logo Creator (Premium)** | `stabilityai/stable-diffusion-xl-base-1.0` | `runwayml/stable-diffusion-v1-5` | Vector-style logos and branding marks (Text-to-Image) |
 | **Translation** | `facebook/nllb-200-distilled-600M` | N/A | Multilingual prompts |
 | **Document Q&A** | `mistralai/Mistral-7B-Instruct-v0.2` | `HuggingFaceH4/zephyr-7b-beta` | RAG-style document analysis |
 | **Sentiment Analysis** | `cardiffnlp/twitter-roberta-base-sentiment-latest` | N/A | Classification, tone |
@@ -126,12 +144,12 @@ Claude Code must create `config/ai_models.php` with this mapping. **These are st
 
 ## Phase 1: Repository Foundation & Security
 
-- [ ] **1.1 Monorepo Scaffold**: Create `xpert-backend` directory. Run:
+- [x] **1.1 Monorepo Scaffold**: Create `xpert-backend` directory. Run:
   ```bash
   composer create-project laravel/laravel xpert-backend
   ```
 
-- [ ] **1.2 `.gitignore`**: Create `xpert-backend/.gitignore`:
+- [x] **1.2 `.gitignore`**: Create `xpert-backend/.gitignore`:
   ```gitignore
   # Environment & secrets
   .env
@@ -177,7 +195,7 @@ Claude Code must create `config/ai_models.php` with this mapping. **These are st
   public/build/
   ```
 
-- [ ] **1.3 `.env.example`**: Create `xpert-backend/.env.example`:
+- [x] **1.3 `.env.example`**: Create `xpert-backend/.env.example`:
   ```env
   APP_NAME=Xpert
   APP_ENV=local
@@ -207,12 +225,16 @@ Claude Code must create `config/ai_models.php` with this mapping. **These are st
   # Error alerting — Discord webhook (free)
   DISCORD_WEBHOOK_URL=your_discord_webhook_here
 
+  # Super Admin seed credentials
+  SUPER_ADMIN_EMAIL=admin@xpert.com
+  SUPER_ADMIN_PASSWORD=change_this_immediately
+
   # Paystack — STUBBED for MVP (activate later)
   # PAYSTACK_PUBLIC_KEY=your_key_here
   # PAYSTACK_SECRET_KEY=your_key_here
   ```
 
-- [ ] **1.4 `README.md`** (setup section): Create `xpert-backend/README.md`:
+- [x] **1.4 `README.md`** (setup section): Create `xpert-backend/README.md`:
   ```markdown
   # Xpert Backend
 
@@ -256,13 +278,13 @@ Claude Code must create `config/ai_models.php` with this mapping. **These are st
   The API is now running at `http://localhost:8000`.
   ```
 
-- [ ] **1.5 Secret Scanning (CI)**: Add secret scanning to GitHub Actions (see Phase 8).
+- [x] **1.5 Secret Scanning (CI)**: Add secret scanning to GitHub Actions (see Phase 8).
 
 ---
 
 ## Phase 2: Database & Auth
 
-- [ ] **2.1 Environment & SQLite**: Configure `.env` per `.env.example`. Create SQLite file:
+- [x] **2.1 Environment & SQLite**: Configure `.env` per `.env.example`. Create SQLite file:
   ```bash
   touch database/database.sqlite
   ```
@@ -275,7 +297,18 @@ Claude Code must create `config/ai_models.php` with this mapping. **These are st
   - *Justification*: Zero-cost. No external DB server.
   - `[SCALE-TRIGGER]`: PostgreSQL + Redis when writes > 50/sec.
 
-- [ ] **2.2 Database Migrations (SQLite-Compatible)**:
+- [x] **2.2 Database Migrations (SQLite-Compatible)**:
+
+  **Seeder Note**: Seed one `super_admin` user with credentials configurable via `.env` variables `SUPER_ADMIN_EMAIL` and `SUPER_ADMIN_PASSWORD` (with defaults in `.env.example` as placeholders). Use `updateOrCreate` so it's idempotent.
+  **Seeder Idempotency Rules (MANDATORY — enforced across ALL seeders):**
+- Every seeder MUST use `updateOrCreate()` — NEVER `create()`, `insert()`, or `firstOrCreate()`.
+- Unique lookup key for agents: `['name' => '...']`
+- Unique lookup key for prompt templates: `['agent_id' => ..., 'version' => ...]`
+- Unique lookup key for chatbot knowledge: `['question' => '...']`
+- Unique lookup key for super_admin: `['email' => config('app.super_admin_email')]`
+- These seeders run on EVERY deploy and container restart. They must be safe to execute 1,000 times with zero side effects.
+
+  **Chatbot Seeder**: Seed the `chatbot_knowledge` table with 20-30 Q&A pairs (5 Getting Started, 5 Agents&Prompts, 5 Billing, 5 Navigation, 5 Features) using `updateOrCreate`.
 
   **SQLite strict rules** — enforce in every migration:
   - No `ALTER COLUMN` — drop and recreate if modification needed.
@@ -287,17 +320,18 @@ Claude Code must create `config/ai_models.php` with this mapping. **These are st
 
   | Table | Columns | Notes |
   |---|---|---|
-  | `users` | `id`, `name`, `email` (unique), `password`, `role` (string: user/admin/super_admin), `plan_level` (string: free/standard/premium, default: free), `banned_until` (timestamp, null), `ban_reason` (text, null), timestamps | No enum in SQLite |
-  | `ai_agents` | `id`, `name`, `domain`, `category` (maps to model registry), `system_prompt` (text), `is_premium_only` (bool, default: false), timestamps | Seeded with 5+ agents |
+  | `users` | `id`, `name`, `email` (unique), `password`, `role` (string: user/admin/super_admin) | Three-tier role system: `user` (default), `admin` (dashboard access, user management, agent CRUD), `super_admin` (all admin powers + can promote/demote admins + can delete users permanently)., `plan_level` (string: free/standard/premium, default: free), `banned_until` (timestamp, null), `ban_reason` (text, null), timestamps |
+  | `ai_agents` | `id`, `name`, `domain` (Must be one of: Technology, Creative, Business, Research, Language), `category` (maps to model registry), `system_prompt` (text), `is_premium_only` (bool, default: false), timestamps | Seeded with 5+ agents |
   | `prompt_templates` | `id`, `agent_id` (FK, cascade), `template_body` (text with `{{placeholders}}`), `field_schema` (text — JSON as TEXT), `version` (integer, default: 1), timestamps | Admin-editable. `field_schema` defines the dynamic form fields per agent |
   | `prompt_logs` | `id`, `user_id` (FK, cascade), `agent_id` (FK, cascade), `prompt_type` (string: generated/custom/edited), `prompt_text` (text), `tokens_estimated` (integer), `created_at` | Invaluable for improving templates |
   | `prompt_library` | `id`, `user_id` (FK, cascade), `agent_id` (FK, cascade), `original_input` (text), `final_prompt` (text), `ai_response` (text), `created_at` | User-saved prompts |
   | `prompt_cache` | `id`, `cache_key` (unique, SHA-256), `agent_id`, `prompt_text` (text), `response_text` (text), `created_at` | 24h TTL in app |
   | `token_usage_logs` | `id`, `user_id` (FK, cascade), `date` (indexed), `tokens_used`, `request_count` | Index: user_id + date |
   | `uploaded_files` | `id`, `user_id` (FK, cascade), `file_path`, `mime_type`, `size_bytes`, `parsed_content` (text, nullable), timestamps | Local disk paths |
-  | `jobs`, `cache`, `sessions` | Laravel defaults | Via artisan commands above |
+  | `chatbot_knowledge` | `id`, `keywords` (text, comma-separated), `question` (text), `answer` (text, markdown-supported), `action_type` (string, nullable: `navigate`, `modal`, `null`), `action_target` (string, nullable: route path or modal name), `category` (string: `general`, `agents`, `prompts`, `billing`, `navigation`, `getting_started`), `sort_order` (int), timestamps | Admin-editable Q&A for non-AI help widget |
+| `jobs`, `cache`, `sessions` | Laravel defaults | Via artisan commands above |
 
-- [ ] **2.3 AI Model Registry Config**: Create `config/ai_models.php` with the exact model mapping from the reference table above. Structure:
+- [x] **2.3 AI Model Registry Config**: Create `config/ai_models.php` with the exact model mapping from the reference table above. Structure:
   ```php
   return [
       'code_assistant' => [
@@ -316,12 +350,27 @@ Claude Code must create `config/ai_models.php` with this mapping. **These are st
   ];
   ```
 
-- [ ] **2.4 Auth & Roles (Sanctum)**: Install Sanctum. Create:
+- [x] **2.4 Auth & Roles (Sanctum)**: Install Sanctum. Create:
+  - `GET /api/chatbot/knowledge` — returns full chatbot knowledge base for client caching.
+  - `GET /api/health` — Public, no auth required, no database query. Returns `{ "status": "ok", "timestamp": "..." }`. Used for Render health checks and Frontend keep-alive.
   - `POST /api/auth/register` — user with `role: user`, `plan_level: free`.
-  - `POST /api/auth/login` — returns Sanctum token (works for user + admin).
-  - `role:admin` middleware gating admin routes.
+  - `POST /api/auth/login` — returns Sanctum token (works for user + admin). **Ban Check**: AFTER validating credentials but BEFORE returning a token, check ban status. If banned, do NOT return a token. Return `account_blocked` error (403) with `banned_until` and `ban_reason`.
+  - `GET /api/user` — returns authenticated user profile with exact shape:
+    ```json
+    {
+      "id": 1, "name": "Chimaobi", "email": "chimaobi@example.com", "role": "user", "plan_level": "free",
+      "job_title": "Full-Stack Developer", "purpose": "Build tools", "field_of_specialization": "technology",
+      "onboarding_complete": true, "banned_until": null, "ban_reason": null, "created_at": "2025-07-01T00:00:00Z"
+    }
+    ```
+    *Note: `onboarding_complete` is a computed accessor (true if `field_of_specialization` is not null).*
+  - `role` middleware hierarchy:
+    - `user` → `/api/*` user routes
+    - `admin` → `/api/admin/*` routes (user management, agent CRUD, logs)
+    - `super_admin` → `/api/admin/*` + `/api/admin/users/{id}/promote` + `/api/admin/users/{id}/delete`
+    The `role:admin` middleware must allow BOTH `admin` and `super_admin`. The `role:super_admin` middleware must allow ONLY `super_admin`.
 
-- [ ] **2.5 Security Hardening (OWASP-Aligned)**:
+- [x] **2.5 Security Hardening (OWASP-Aligned)**:
   
   **DIRECTIVE**: Review this app and **harden its security**. Follow **OWASP best practices**, include clear comments, and do not break existing functionality.
   
@@ -336,6 +385,7 @@ Claude Code must create `config/ai_models.php` with this mapping. **These are st
   **2.5.2 Strict Input Validation & Sanitization**:
   - Every endpoint must use Laravel **Form Requests** with explicit validation rules. No raw `$request->input()`.
   - **Type checks**: Enforce `string`, `integer`, `boolean`, `file`, `array` on every field. Reject mismatched types.
+  - **Domain Validation**: Explicitly use `in:technology,creative,business,research,language` (and capitalized variants for AI Agents table).
   - **Length limits**: `max:` rules on all inputs (prompt text max 10,000 chars, name max 255, etc.).
   - **Reject unexpected fields**: Use `$request->validated()` exclusively — never `$request->all()`. Extra fields silently dropped.
   - **File validation**: Validate MIME (`mimes:pdf,docx,xlsx,png,jpg`), size (per plan), reject executables.
@@ -356,7 +406,10 @@ Claude Code must create `config/ai_models.php` with this mapping. **These are st
   - **Authorization**: `role:admin` middleware on `/api/admin/*`. Verify ownership on user resources (prevent IDOR).
   - **Error handling**: `APP_DEBUG=false` in production. Never expose stack traces in API responses.
 
-- [ ] **2.6 Phase 2 Tests**:
+- [x] **2.6 Phase 2 Tests**:
+  - ✅ `GET /api/chatbot/knowledge` returns seeded entries.
+  - ✅ `GET /api/health` returns 200 with `{ status: ok }` without authentication.
+  - ✅ Non-authenticated users cannot access chatbot endpoint (401).
   - ✅ Registration returns Sanctum token with correct `role` and `plan_level`.
   - ✅ Login succeeds/fails correctly.
   - ✅ Admin middleware blocks non-admin users.
@@ -372,7 +425,7 @@ Claude Code must create `config/ai_models.php` with this mapping. **These are st
 
 ## Phase 3: Smart Prompt Generation Engine (CORE FEATURE)
 
-- [ ] **3.1 Dynamic Form Schema**: Each agent's `prompt_templates.field_schema` column stores a JSON (as TEXT) definition of the form fields the frontend must render. Example schemas:
+- [x] **3.1 Dynamic Form Schema**: Each agent's `prompt_templates.field_schema` column stores a JSON (as TEXT) definition of the form fields the frontend must render. Example schemas:
 
   **Code Assistant:**
   ```json
@@ -423,7 +476,7 @@ Claude Code must create `config/ai_models.php` with this mapping. **These are st
   }
   ```
 
-- [ ] **3.2 Prompt Template System**: Each agent has admin-editable prompt templates in `prompt_templates` with `{{placeholder}}` variables. Example for Code Assistant:
+- [x] **3.2 Prompt Template System**: Each agent has admin-editable prompt templates in `prompt_templates` with `{{placeholder}}` variables. Example for Code Assistant:
   ```
   You are an expert {{language}} developer.
 
@@ -444,7 +497,7 @@ Claude Code must create `config/ai_models.php` with this mapping. **These are st
   ```
   The engine replaces `{{placeholders}}` with user field values at runtime.
 
-- [ ] **3.3 Prompt Engine Service** (`App\Services\PromptEngineService`):
+- [x] **3.3 Prompt Engine Service** (`App\Services\PromptEngineService`):
   ```php
   // Pseudocode
   class PromptEngineService {
@@ -470,22 +523,22 @@ Claude Code must create `config/ai_models.php` with this mapping. **These are st
   ```
   This is NOT simple string concatenation — it applies prompt engineering best practices: role assignment, structured instructions, output format specification, and contextual constraints.
 
-- [ ] **3.4 Prompt Generation API Endpoint**:
+- [x] **3.4 Prompt Generation API Endpoint**:
   - `POST /api/prompts/generate` — accepts `agent_id` + structured field values + optional file. Returns the generated prompt text (does NOT call AI yet).
   - `POST /api/prompts/submit` — accepts the final prompt text (generated, custom, or edited) + `prompt_type` (generated/custom/edited). Calls the AI model and returns the response.
   - This two-step API enforces the user choice flow: generate first, then explicitly submit.
 
-- [ ] **3.5 Prompt Logging**: On every `POST /api/prompts/submit`, log to `prompt_logs`:
+- [x] **3.5 Prompt Logging**: On every `POST /api/prompts/submit`, log to `prompt_logs`:
   - `user_id`, `agent_id`, `prompt_type` (generated/custom/edited), `prompt_text`, `tokens_estimated` (approx: `strlen / 4`), `created_at`.
   - *Justification*: Data for improving prompt templates over time.
 
-- [ ] **3.6 File Processor Service**: Accept uploads via `Storage::disk('local')`. Validate MIME types in Form Request. Extract text:
+- [x] **3.6 File Processor Service**: Accept uploads via `Storage::disk('local')`. Validate MIME types in Form Request. Extract text:
   - PDF → `smalot/pdfparser`.
   - DOCX → `phpoffice/phpword`.
   - Images → store path only (no OCR for MVP).
   - `[SCALE-TRIGGER]`: S3/R2 when disk exceeds capacity.
 
-- [ ] **3.7 Phase 3 Tests**:
+- [x] **3.7 Phase 3 Tests**:
   - ✅ Prompt engine correctly replaces `{{placeholders}}` in templates.
   - ✅ File content is appended to prompt when present.
   - ✅ `/api/prompts/generate` returns assembled prompt without calling AI.
@@ -500,7 +553,7 @@ Claude Code must create `config/ai_models.php` with this mapping. **These are st
 
 ## Phase 4: AI Integration & Caching
 
-- [ ] **4.1 Hugging Face Service** (`App\Services\HuggingFaceService`):
+- [x] **4.1 Hugging Face Service** (`App\Services\HuggingFaceService`):
   ```php
   class HuggingFaceService {
       public function generate(string $category, string $prompt): ?string {
@@ -534,20 +587,20 @@ Claude Code must create `config/ai_models.php` with this mapping. **These are st
   }
   ```
 
-- [ ] **4.2 Response Caching (SQLite)**: Before any AI call, hash `agent_id . $final_prompt` (SHA-256) → check `prompt_cache`. If hit exists and < 24h old → return cached. On miss → call HF, store result.
+- [x] **4.2 Response Caching (SQLite)**: Before any AI call, hash `agent_id . $final_prompt` (SHA-256) → check `prompt_cache`. If hit exists and < 24h old → return cached. On miss → call HF, store result.
   - *Justification*: Dramatically reduces API consumption on HF free tier.
 
-- [ ] **4.3 Quota Enforcement**: Check `token_usage_logs` for user's daily total before every AI call.
+- [x] **4.3 Quota Enforcement**: Check `token_usage_logs` for user's daily total before every AI call.
   - Free: 25k/day, Standard: 150k/day, Premium: 1M/day.
   - Exceeded → `HTTP 402` with `{ "error": "quota_exceeded" }`.
 
-- [ ] **4.4 Queue Processing**: Database queue driver. Dispatch long-running AI jobs. Process via cron:
+- [x] **4.4 Queue Processing**: Database queue driver. Dispatch long-running AI jobs. Process via cron:
   ```bash
   * * * * * cd /var/www/html && php artisan queue:work database --stop-when-empty --tries=3 --backoff=10
   ```
   - `[SCALE-TRIGGER]`: Redis + Horizon.
 
-- [ ] **4.5 Phase 4 Tests**:
+- [x] **4.5 Phase 4 Tests**:
   - ✅ HF service returns response (mock HTTP).
   - ✅ Fallback triggers on primary 429.
   - ✅ Cache hit returns stored response without API call.
@@ -561,11 +614,13 @@ Claude Code must create `config/ai_models.php` with this mapping. **These are st
 
 ## Phase 5: Subscription Logic (Stubbed)
 
-- [ ] **5.1 Plan Enforcement**: `plan_level` column drives gating. No payment processor for MVP.
-- [ ] **5.2 Admin Manual Upgrade**: `PUT /api/admin/users/{id}/upgrade` changes `plan_level`.
-- [ ] **5.3 Paystack Stub**: `PaymentService` interface with empty `PaystackService`. Commented-out webhooks.
+- [x] **5.1 Plan Enforcement**: `plan_level` column drives gating. No payment processor for MVP.
+- [x] **5.2 Admin Manual Upgrade**: `PUT /api/admin/users/{id}/upgrade` changes `plan_level`.
+- [x] **5.3 Paystack Stub**: `PaymentService` interface with empty `PaystackService`. Commented-out webhooks. **Feature Flag Endpoints**: Add `GET /api/config/features` returning `{ "payments_enabled": false }` based on `.env`. `PaymentService` interface with empty `PaystackService`. Commented-out webhooks.
   - `[SCALE-TRIGGER]`: Paystack test → production.
-- [ ] **5.4 Phase 5 Tests**:
+- [x] **5.4 Phase 5 Tests**:
+  - ✅ `GET /api/config/features` returns `{ "payments_enabled": false }` when `PAYSTACK_SECRET_KEY` is not set.
+  - ✅ `GET /api/config/features` returns `{ "payments_enabled": true }` when `PAYSTACK_SECRET_KEY` is set.
   - ✅ Plan upgrade propagates to quota/rate checks.
   - ✅ Free user blocked from premium-only agents.
 
@@ -573,114 +628,90 @@ Claude Code must create `config/ai_models.php` with this mapping. **These are st
 
 ## Phase 6: User App Frontend (`xpert-app`)
 
-- [ ] **6.1 React App Init**: Create `xpert-app/`. Scaffold:
-  ```bash
-  npx -y create-vite@latest ./ -- --template react
-  npm install -D tailwindcss @tailwindcss/vite
-  ```
-  Create `.gitignore` for the frontend:
-  ```gitignore
-  node_modules/
-  dist/
-  .env
-  .DS_Store
-  ```
-  Create `.env.example`:
-  ```env
-  VITE_API_BASE_URL=http://localhost:8000
-  VITE_DISCORD_WEBHOOK=your_discord_webhook_here
-  ```
-
-- [ ] **6.2 UI Design System & Mobile-First Responsiveness**: Card-based layout. Dark/light mode toggle. **Responsive Tailwind build IS the mobile strategy.**
-  - Mobile-first: 320px → 1440px+. Test at 375px, 768px, 1440px.
-  - Min touch targets: 44x44px. Fluid typography. Responsive grid.
-  - Loading skeletons on all AI calls.
-
-- [ ] **6.2a Centralized API Client** (`src/lib/apiClient.js`): **MUST be created BEFORE any API integration.** Single wrapper — **no raw `fetch()` calls anywhere in the app.** Intercepts all responses and handles every error code from the Error Code Reference Table (see Error Handling Strategy section). Every component uses `apiCall()` exclusively.
-
-- [ ] **6.2b Global Error Boundary**: Wrap entire React app. On unhandled JS error: show "Something went wrong" + "Reload" button. POST error details to Discord webhook (non-blocking). In dev, also `console.error`.
-
-- [ ] **6.2c Toast Notification System**: Four severity levels: `info` (blue), `success` (green), `warning` (yellow), `error` (red). Auto-dismiss after 5s except `error`. Called by `apiClient` — components never handle toast logic.
-
-- [ ] **6.2d Offline Detection**: Listen `online`/`offline` events. Show persistent top banner when offline. Disable all submit/send buttons. Auto-dismiss on reconnect.
-
-- [ ] **6.2e Component Loading States**: Every API-calling component manages `idle`/`loading`/`error`. Skeleton loaders matching expected content shape. AI calls > 45s update text to "Taking longer..."; > 90s show "queued" with polling. Disable submit buttons on click, show spinner, prevent double-submit.
-
-- [ ] **6.3 Auth & State**: Sanctum token in `localStorage`. Protected route wrapper.
-
-- [ ] **6.4 Dynamic Agent Form (Smart Prompt Step 1)**: When user selects an agent:
-  1. Fetch agent details + `field_schema` from `GET /api/agents/{id}`.
-  2. Dynamically render form fields based on the `field_schema` JSON.
-  3. Support field types: `text`, `textarea`, `select`, `number`, `file`.
-  4. Validate required fields client-side before submission.
-
-- [ ] **6.5 User Choice Screen (Smart Prompt Step 3 — CRITICAL UX)**:
-  After submitting the form, call `POST /api/prompts/generate`. Then show a choice screen with three options:
-
-  **Option A — "Use Generated Prompt"**: Display the full generated prompt in a read-only, formatted preview card. User reviews what will be sent.
-
-  **Option B — "Write My Own Prompt"**: A blank textarea. The agent's system instructions are still prepended silently on the backend, but the user writes the main body.
-
-  **Option C — "Edit Generated Prompt"**: The generated prompt is loaded into an editable textarea for tweaking.
-
-  **A prominent "Send to AI" button appears only after the user selects an option. NO automatic submission.**
-
-- [ ] **6.6 AI Response & Library**: Display AI response with markdown rendering. Buttons: "Save to Library", "Regenerate", "New Prompt". Handle:
-  - `HTTP 402` → "Upgrade Plan" modal.
-  - `HTTP 429` → "Rate limit reached" toast.
-  - `null` response (queued) → "Your request is being processed" with polling.
-
-- [ ] **6.7 Prompt Library UI**: Paginated saved prompts. Search by keyword. Filter by agent/domain.
-
-- [ ] **6.8 Error Alerting**: Global error boundary → POST to Discord webhook.
-  - `[SCALE-TRIGGER]`: Sentry.
-
-- [ ] **6.9 Phase 6 Tests**:
-  - ✅ Login → select agent → dynamic form renders correct fields.
-  - ✅ Form submission → generated prompt preview appears.
-  - ✅ All three prompt choice options work correctly.
-  - ✅ "Send to AI" → response received and displayed.
-  - ✅ 402 error shows upgrade modal.
-  - ✅ 429 error shows toast with countdown.
-  - ✅ 503 (ai_unavailable) shows "Processing shortly" message.
-  - ✅ Network offline shows persistent top banner and disables buttons.
-  - ✅ Unhandled JS error triggers Error Boundary, not blank screen.
-  - ✅ All API calls route through `apiClient.js`, never raw `fetch()`.
+> **DELEGATED TO FRONTEND PLAN:** All User App UI/UX, State Management, and frontend logic have been extracted (Note: Theme management is entirely client-side via localStorage and HTML class, no backend schema needed) to ensure this plan remains strictly for backend functionalities. 
+> 
+> 👉 **Please execute [XPERT_FRONTEND_IMPLEMENTATION_PLAN.md](./XPERT_FRONTEND_IMPLEMENTATION_PLAN.md) for Phase 6.**
 
 ---
 
 ## Phase 7: Admin Dashboard Frontend (`xpert-admin-dashboard`)
 
-- [ ] **7.1 Dashboard Scaffold & API Connection**: Create `xpert-admin-dashboard/`. Scaffold same as user app. Create `.env` file and set `VITE_API_BASE_URL=http://localhost:8000`. **CRITICAL**: The admin dashboard MUST point to the same backend URL as the user app so they both read/write to the exact same shared SQLite database. Own `.gitignore` and `.env.example`.
-
-- [ ] **7.2 Admin Auth Gateway**: Login → verify `role: admin`. Reject non-admins.
-
-- [ ] **7.3 User Management**: Sortable/filterable user table. Actions: Upgrade Plan, **Block User** (temporarily via `banned_until` or permanently, with a `ban_reason` notification), **Delete User**, and **Toggle Admin Role** (promote/demote). *Authorization: Only a `super_admin` can trigger the role toggle. Regular `admin` accounts can block/delete users but cannot promote others.*
-
-- [ ] **7.4 AI Agent Manager**: Full CRUD for agents. **Must include:**
-  - Edit `system_prompt` (rich textarea).
-  - Edit `prompt_templates.template_body` with `{{placeholder}}` syntax highlighted.
-  - Edit `prompt_templates.field_schema` (JSON editor or structured form builder).
-  - Toggle `is_premium_only`.
-
-- [ ] **7.5 Prompt Log Viewer**: Searchable/filterable table of `prompt_logs`. Filter by agent, prompt_type, date range. Show `tokens_estimated` totals. This lets admins see which templates are most used and iterate on quality.
-
-- [ ] **7.6 Analytics Dashboard**: Cards: total users, DAU, prompts today, token usage by plan. All responsive.
-
-- [ ] **7.7 Admin API Client**: Admin dashboard must use the same `apiClient.js` pattern (copy or shared package). Admin-specific errors (e.g., deleting an agent with active prompts) use the same JSON error format.
-
-- [ ] **7.8 Phase 7 Tests**:
-  - ✅ Non-admin login rejected.
-  - ✅ Agent CRUD + template editing reflects in API.
-  - ✅ Prompt logs display correctly with filters.
-  - ✅ Admin dashboard uses `apiClient.js` — no raw `fetch()` calls.
-  - ✅ Error responses render correctly with the standardized JSON format.
+> **DELEGATED TO FRONTEND PLAN:** All Admin Dashboard frontend features (user management UI, role toggles, moderation modals) are now handled in the dedicated frontend plan.
+> 
+> 👉 **Please execute [XPERT_FRONTEND_IMPLEMENTATION_PLAN.md](./XPERT_FRONTEND_IMPLEMENTATION_PLAN.md) for Phase 7.**
 
 ---
 
-## Phase 8: Docker, Monitoring & CI/CD
 
-### 8.1 Dockerfile (`xpert-backend/Dockerfile`)
+### Phase 7 Backend Support (Built During Session 6 Alongside Admin Frontend)
+
+These backend API endpoints support the admin dashboard features. Build them when executing Phase 7 from the frontend plan.
+
+- [ ] **7.6 Admin Chatbot Knowledge Manager API**: `CRUD /api/admin/chatbot/knowledge` endpoints behind `role:admin` middleware. Form Request validation: `question` required string max:500, `answer` required string max:5000 (markdown), `keywords` required string max:500 (comma-separated), `action_type` nullable string in:navigate,modal, `action_target` nullable string max:255, `category` required string in:general,agents,prompts,billing,navigation,getting_started, `sort_order` integer.
+
+- [ ] **7.6 Admin Chatbot Knowledge Manager UI** (`/chatbot` route in admin):
+  - Data table of all `chatbot_knowledge` entries (Question, Category, Has Action, Sort Order).
+  - Edit Modal for row: question, markdown answer, tag-style keywords, action type dropdown, action target input.
+  - "Add Entry" / "Delete" confirm.
+  - "Preview" simulation panel to test matching.
+  - Add to admin Sidebar between "Prompt Logs" and "Settings".
+  - Corresponds to backend API endpoint: `CRUD /api/admin/chatbot/knowledge`.
+  
+  **Phase 7.7 Test Checklist Additions**:
+  - ✅ Admin can CRUD chatbot knowledge entries.
+  - ✅ New entries appear in `GET /api/chatbot/knowledge` immediately.
+  - ✅ Admin preview panel matches questions correctly.
+
+## Phase 8: User Onboarding & Agent Discovery (Backend)
+
+- [ ] **8.1 User Profile Fields**: Create migration to add `job_title` (string, nullable), `purpose` (text, nullable), and `field_of_specialization` (string, nullable). Note: Must be one of: `technology`, `creative`, `business`, `research`, `language`. Stored as lowercase. to `users` table. Update `User` model `$fillable`.
+- [ ] **8.2 User-Agent Relationship**: Create migration for `user_agents` pivot table (`id`, `user_id`, `agent_id`, timestamps) to track which agents a user has added to their active workspace.
+- [ ] **8.3 Onboarding Endpoint**: `PATCH /api/user/profile` to validate and save onboarding fields.
+- [ ] **8.4 Auto-Assign Default Agents**: In the Onboarding logic, when a user sets their `field_of_specialization`, automatically attach 3-5 free default agents from that domain to their `user_agents` pivot table.
+    **Case-Insensitive Match**: Use `where('domain', 'LIKE', $user->field_of_specialization)` or normalize both to lowercase.
+    **Explicit Mapping**:
+    - `technology` → Code Assistant, Document Q&A, UX Research
+    - `creative` → Content Writer, Graphics Design Advisor, Logo Creator (if free)
+    - `business` → Business Analyst, Content Writer, Sentiment Analysis
+    - `research` → Document Q&A, Sentiment Analysis, Translation
+    - `language` → Translation, Content Writer, Document Q&A
+- [ ] **8.5 Agent Search API**:
+  - `GET /api/agents` behavior: Include an `is_added` boolean field eagerly loaded based on if the user has the agent in `user_agents` pivot.
+  - `GET /api/user/agents` behavior: Returns ONLY the agents attached to the authenticated user. 
+  - `GET /api/agents/search?q={query}` (Add text search to AgentController).
+  - `POST /api/user/agents/{agent_id}` to add an agent to the user's workspace.
+  - `DELETE /api/user/agents/{agent_id}` to remove an agent.
+
+---
+
+
+- [ ] **8.6 Admin Moderation Endpoints**:
+  - `PUT /api/admin/users/{id}/block` (admin): Accepts `{ "duration": "24h|7d|30d|permanent", "reason": "string (min 10)" }`. Sets `banned_until` and `ban_reason`.
+  - `PUT /api/admin/users/{id}/unblock` (admin): Clears `banned_until` and `ban_reason`.
+  - `PUT /api/admin/users/{id}/promote` (super_admin): Accepts `{ "role": "admin|user" }`. Returns 403 for regular admins.
+  - `DELETE /api/admin/users/{id}` (super_admin): Cascading delete of user and all data. Returns 403 for regular admins.
+  
+  **CheckBanStatus Middleware**: Run on all authenticated routes. If `banned_until` is set and in the future (or null for permanent), return `account_blocked` (403) with JSON showing duration and reason.
+
+## Phase 9: Specialized AI Agents (Graphics & Image Generation)
+
+- [ ] **9.1 Update AI Model Registry**: Modify `config/ai_models.php` to include:
+  - `graphics_design_advisor`: Text-based model for design advice (e.g., `mistralai/Mixtral-8x7B-Instruct-v0.1`), **Free Tier**.
+  - `interior_designer`: Text-to-Image generation (e.g., `stabilityai/stable-diffusion-xl-base-1.0`), **Premium Only**.
+  - `architectural_renderer`: Text-to-Image generation, **Premium Only**.
+  - `product_photographer`: Text-to-Image generation, **Premium Only**.
+  - `logo_creator`: Text-to-Image generation, **Premium Only**.
+- [ ] **9.2 Update Agent Seeder**: Modify `database/seeders/AiAgentSeeder.php`:
+  - Add the `Graphics Design Advisor` agent (non-image, free).
+  - Add the four Premium text-to-image agents (`Interior Designer`, `Architectural Visualizer`, `Product Photographer`, `Logo Creator`) with `is_premium_only` set to `true`.
+- [ ] **9.3 Image Generation Prompts**: Ensure text-to-image agents use `prompt_templates` that combine all user inputs (style, subject, lighting) into a single descriptive string, since HF Inference API expects a single string for image generation.
+- [ ] **9.4 Premium Gating Backend Enforcement**: Ensure the `AgentController` securely blocks access to Premium agents if the user is on a free plan (return 402 Payment Required). *Note: The specific UI/UX for the Upgrade Modal is covered in the Frontend Implementation Plan.*
+
+---
+
+## Phase 10: Docker, Monitoring & CI/CD
+
+### 10.1 Dockerfile (`xpert-backend/Dockerfile`)
 
 ```dockerfile
 # ------- Stage 1: Composer Dependencies -------
@@ -694,7 +725,9 @@ FROM php:8.3-cli-alpine AS production
 
 RUN apk add --no-cache \
     sqlite sqlite-dev libzip-dev oniguruma-dev \
-    && docker-php-ext-install pdo_sqlite mbstring zip bcmath
+    postgresql-dev \
+    && docker-php-ext-install pdo_sqlite pdo_pgsql mbstring zip bcmath
+# Supports both SQLite (local dev) and PostgreSQL (production on Supabase/Neon)
 
 WORKDIR /var/www/html
 
@@ -715,7 +748,7 @@ RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 ENTRYPOINT ["docker-entrypoint.sh"]
 ```
 
-### 8.2 Entrypoint (`xpert-backend/docker-entrypoint.sh`)
+### 10.2 Entrypoint (`xpert-backend/docker-entrypoint.sh`)
 
 ```bash
 #!/bin/sh
@@ -730,16 +763,21 @@ php artisan view:cache
 php artisan migrate --force
 
 # Seed default agents if empty
+# CRITICAL: ALL seeders MUST use updateOrCreate() — never create() or insert().
+# This command runs on every container restart. Non-idempotent seeders WILL create duplicates.
 php artisan db:seed --force
 
 # Start queue worker in background
-php artisan queue:work database --stop-when-empty --tries=3 --backoff=10 &
+# DO NOT use --stop-when-empty in the entrypoint — it kills the worker permanently after first drain.
+# --sleep=30: poll every 30s when idle (saves CPU on free tier)
+# --max-time=3600: restart worker hourly to prevent memory leaks
+php artisan queue:work database --sleep=30 --tries=3 --backoff=10 --max-time=3600 &
 
 # Start API server
 php artisan serve --host=0.0.0.0 --port=8000
 ```
 
-### 8.3 Docker Compose (`docker-compose.dev.yml` — project root)
+### 10.3 Docker Compose (`docker-compose.dev.yml` — project root)
 
 ```yaml
 version: "3.8"
@@ -784,12 +822,12 @@ docker exec -it $(docker ps -qf "name=ollama") ollama pull mistral:7b
 # If machine has < 8GB RAM, remove ollama service — use HF API only.
 ```
 
-### 8.4 Laravel Logging & Alerts
+### 10.4 Laravel Logging & Alerts
 
 Configure `config/logging.php`: `daily` channel, 14-day rotation. Custom `discord` channel for `critical`/`emergency` events.
 - `[SCALE-TRIGGER]`: Sentry.
 
-### 8.5 GitHub Actions CI + Secret Scanning
+### 10.5 GitHub Actions CI + Secret Scanning
 
 Create `.github/workflows/ci.yml`:
 
@@ -845,9 +883,30 @@ jobs:
 
 ---
 
-## Phase 9: Cloud Deployment (Render Free + Vercel Free)
+## Phase 11: Pre-Deployment Maintenance & Testing Audit
 
-- [ ] **9.1 Render Blueprint** (`xpert-backend/render.yaml`):
+**Goal**: Execute a comprehensive codebase review and security sweep BEFORE launching, strictly adhering to the protocols in `XPERT_MAINTENANCE_PLAN.md`.
+
+- [ ] **11.1 Full Application Code Review** 
+  - [ ] Prompt Claude Code: *"Review all files in `app/Http/Controllers`, `app/Models`, `src/components`, and `src/pages` for performance bottlenecks, dead code, and standard React/Laravel best practices."*
+  - [ ] Apply all refactoring suggestions (e.g., fix React re-render issues, consolidate Tailwind classes).
+- [ ] **11.2 Comprehensive Security Sweep**
+  - [ ] Prompt Claude Code: *"Use Security Guidance across the backend API and frontend routing layer. Check for OWASP vulnerabilities, API key exposures, and broken access controls."*
+  - [ ] Verify `CheckBanStatus` and agent restrictions are airtight. Apply all patches.
+- [ ] **11.3 End-to-End Testing Execution**
+  - [ ] Run backend tests (if PHPUnit tests exist) or manually test the critical `user`, `admin`, and `super_admin` pathways.
+  - [ ] Test the In-App Help Chatbot widget offline to ensure the fallback knowledge base loads.
+  - [ ] Run frontend checks: `npm run lint` and `npm run build` (ensure no Vite compile errors).
+- [ ] **11.4 Phase 11 Approvals**:
+  - [ ] ✅ Zero CRITICAL/HIGH vulnerabilities reported by Claude's Security Guidance.
+  - [ ] ✅ Zero unhandled JavaScript console errors.
+  - [ ] ✅ The app is 100% stable locally.
+
+---
+
+## Phase 12: Cloud Deployment (Render Free + Vercel Free)
+
+- [ ] **12.1 Render Blueprint** (`xpert-backend/render.yaml`):
   ```yaml
   services:
     - type: web
@@ -883,7 +942,7 @@ jobs:
   - `vercel env add VITE_API_BASE_URL production` (Set to the live Render URL).
   - `vercel env add VITE_DISCORD_WEBHOOK production`.
   - Update CORS on Laravel `config/cors.php` to allow both live Vercel domains.
-- [ ] **9.5 Smoke Test**:
+- [ ] **12.5 Smoke Test**:
   - ✅ Login from both frontends.
   - ✅ Select agent → dynamic form → generate prompt → choose option → send → receive AI response.
   - ✅ Admin can edit agent templates and view prompt logs.
@@ -932,6 +991,10 @@ For `validation_failed`, include `details`:
 
 | Error Code | HTTP | Retry? | Upgrade? | Frontend Action |
 |---|---|---|---|---|
+| `account_blocked` | 403 | No | No | Show blocked screen with reason, duration, support link |
+| `premium_required` | 402 | No | Yes | Show upgrade modal with agent name |
+| `agent_already_added` | 409 | No | No | Toast "This agent is already in your workspace" |
+| `agent_limit_reached` | 403 | No | Yes | Toast "Free plan limited to X agents. Upgrade for more." |
 | `quota_exceeded` | 402 | No | Yes | Show upgrade modal |
 | `rate_limited` | 429 | Yes (after `retry_after`) | No | Toast with countdown timer |
 | `ai_unavailable` | 503 | Auto (queued) | No | Show "Processing shortly" + poll |
@@ -1030,6 +1093,14 @@ async function apiCall(method, url, data, options = {}) {
           return { ok: false, validationErrors: error.details };
         case 'forbidden':
           showToast('Access denied.', 'error'); break;
+        case 'account_blocked':
+          showBlockedScreen(error.message, error.banned_until); break;
+        case 'premium_required':
+          showUpgradeModal(error.message); break;
+        case 'agent_already_added':
+          showToast('This agent is already in your workspace.', 'info'); break;
+        case 'agent_limit_reached':
+          showUpgradeModal('You\'ve reached your agent limit.'); break;
         default:
           showToast(error.message || 'Something went wrong.', 'error');
       }
@@ -1052,19 +1123,6 @@ async function apiCall(method, url, data, options = {}) {
 **Offline Detection**: `online`/`offline` events. Persistent top banner when offline, disable submit buttons, auto-dismiss on reconnect.
 
 **Toast System**: Four levels: `info` (blue), `success` (green), `warning` (yellow), `error` (red). Auto-dismiss 5s except `error`. Called by `apiClient` — components never handle toast logic.
-
----
-
-## Phase 10: User Onboarding & Agent Discovery (Backend)
-
-- [ ] **10.1 User Profile Fields**: Create migration to add `job_title` (string, nullable), `purpose` (text, nullable), and `field_of_specialization` (string, nullable) to `users` table. Update `User` model `$fillable`.
-- [ ] **10.2 User-Agent Relationship**: Create migration for `user_agents` pivot table (`id`, `user_id`, `agent_id`, timestamps) to track which agents a user has added to their active workspace.
-- [ ] **10.3 Onboarding Endpoint**: `PATCH /api/user/profile` to validate and save onboarding fields.
-- [ ] **10.4 Auto-Assign Default Agents**: In the Onboarding logic, when a user sets their `field_of_specialization`, automatically attach 3-5 free default agents from that domain to their `user_agents` pivot table.
-- [ ] **10.5 Agent Search API**: 
-  - `GET /api/agents/search?q={query}` (Add text search to AgentController).
-  - `POST /api/user/agents/{agent_id}` to add an agent to the user's workspace.
-  - `DELETE /api/user/agents/{agent_id}` to remove an agent.
 
 ---
 

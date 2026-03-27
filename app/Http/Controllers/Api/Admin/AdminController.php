@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\AiAgent;
 use App\Models\PromptLog;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
@@ -31,30 +32,94 @@ class AdminController extends Controller
 
     public function updateUser(Request $request, User $user)
     {
-        $request->validate([
+        $validated = $request->validate([
             'plan_level' => ['sometimes', 'in:free,standard,premium'],
-            'role' => ['sometimes', 'in:user,admin'],
         ]);
 
-        $user->update($request->only(['plan_level', 'role']));
+        $user->update($validated);
 
         return response()->json($user);
     }
 
+    public function blockUser(Request $request, User $user)
+    {
+        $validated = $request->validate([
+            'duration' => ['required', 'in:24h,7d,30d,permanent'],
+            'reason' => ['required', 'string', 'min:10'],
+        ]);
+
+        $bannedUntil = match ($validated['duration']) {
+            '24h' => Carbon::now()->addDay(),
+            '7d' => Carbon::now()->addWeek(),
+            '30d' => Carbon::now()->addMonth(),
+            'permanent' => null,
+        };
+
+        $user->update([
+            'banned_until' => $bannedUntil,
+            'ban_reason' => $validated['reason'],
+        ]);
+
+        return response()->json($user);
+    }
+
+    public function unblockUser(User $user)
+    {
+        $user->update([
+            'banned_until' => null,
+            'ban_reason' => null,
+        ]);
+
+        return response()->json($user);
+    }
+
+    public function promoteUser(Request $request, User $user)
+    {
+        $validated = $request->validate([
+            'role' => ['required', 'in:user,admin'],
+        ]);
+
+        $user->update(['role' => $validated['role']]);
+
+        return response()->json($user);
+    }
+
+    public function deleteUser(User $user)
+    {
+        $user->delete();
+
+        return response()->json(['message' => 'User deleted']);
+    }
+
     public function agents()
     {
-        return response()->json(AiAgent::all());
+        return response()->json(AiAgent::with('latestTemplate')->get());
+    }
+
+    public function createAgent(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'domain' => ['required', 'string', 'in:Technology,Creative,Business,Research,Language'],
+            'category' => ['required', 'string', 'max:100'],
+            'system_prompt' => ['required', 'string'],
+            'is_premium_only' => ['sometimes', 'boolean'],
+        ]);
+
+        $agent = AiAgent::create($validated);
+
+        return response()->json($agent, 201);
     }
 
     public function updateAgent(Request $request, AiAgent $agent)
     {
-        $request->validate([
+        $validated = $request->validate([
             'name' => ['sometimes', 'string', 'max:255'],
             'system_prompt' => ['sometimes', 'string'],
             'is_premium_only' => ['sometimes', 'boolean'],
         ]);
 
-        $agent->update($request->only(['name', 'system_prompt', 'is_premium_only']));
+        $agent->update($validated);
 
         return response()->json($agent);
     }

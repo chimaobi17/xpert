@@ -35,4 +35,12 @@ return [
         ],
     ],
 
+    'huggingface' => [
+        'api_key' => env('HUGGINGFACE_API_KEY'),
+    ],
+
+    'discord' => [
+        'webhook_url' => env('DISCORD_WEBHOOK_URL'),
+    ],
+
 ];
