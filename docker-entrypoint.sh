@@ -3,16 +3,21 @@ set -e
 
 echo "==> Starting XPERT API..."
 
+# Create .env if it doesn't exist (Render injects env vars, but artisan needs the file)
+if [ ! -f .env ]; then
+    echo "==> Creating .env from environment..."
+    touch .env
+fi
+
 # Generate app key if not set
 if [ -z "$APP_KEY" ]; then
     echo "==> Generating app key..."
     php artisan key:generate --force
 fi
 
-# Cache config and routes for production
+# Cache config for production (skip route:cache — closure routes can't be cached)
 echo "==> Caching config..."
 php artisan config:cache
-php artisan route:cache
 php artisan view:cache
 
 # Run migrations
