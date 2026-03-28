@@ -320,6 +320,7 @@ export default function AgentWorkspace() {
               values={formValues}
               onChange={setFormValues}
               errors={formErrors}
+              disabled={loading}
             />
             <div className="mt-6 flex justify-end">
               <Button onClick={handleGeneratePrompt} loading={loading}>

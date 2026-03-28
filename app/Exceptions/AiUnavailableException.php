@@ -10,7 +10,7 @@ class AiUnavailableException extends Exception
     {
         return response()->json([
             'error' => 'ai_unavailable',
-            'message' => 'Your request has been queued and will be processed shortly.',
+            'message' => $this->getMessage() ?: 'Your request has been queued and will be processed shortly.',
             'retry' => true,
             'upgrade' => false,
         ], 503);

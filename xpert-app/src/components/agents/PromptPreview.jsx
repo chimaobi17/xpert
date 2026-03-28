@@ -4,6 +4,7 @@ import { BookmarkIcon as BookmarkOutline } from '@heroicons/react/24/outline';
 import { BookmarkIcon as BookmarkSolid } from '@heroicons/react/24/solid';
 import Button from '../ui/Button';
 import Textarea from '../ui/Textarea';
+import Spinner from '../ui/Spinner';
 
 export default function PromptPreview({ generatedPrompt, onSubmit, onBack, loading, onSavePrompt, onUnsavePrompt }) {
   const [choice, setChoice] = useState(null);
@@ -108,7 +109,13 @@ export default function PromptPreview({ generatedPrompt, onSubmit, onBack, loadi
             disabled={!choice || !getFinalPrompt().trim() || loading}
             loading={loading}
           >
-            {loading ? 'Thinking...' : 'Send to AI'}
+            {loading ? (
+              <span className="flex items-center gap-2">
+                <Spinner size="sm" light /> Thinking...
+              </span>
+            ) : (
+              'Send to AI'
+            )}
           </Button>
         </div>
       </div>

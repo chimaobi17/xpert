@@ -3,8 +3,9 @@ import Textarea from '../ui/Textarea';
 import Select from '../ui/Select';
 import FileUpload from '../ui/FileUpload';
 
-export default function DynamicForm({ fields, values, onChange, errors }) {
+export default function DynamicForm({ fields, values, onChange, errors, disabled }) {
   function handleChange(name, value) {
+    if (disabled) return;
     onChange({ ...values, [name]: value });
   }
 
@@ -23,6 +24,7 @@ export default function DynamicForm({ fields, values, onChange, errors }) {
                 onChange={(e) => handleChange(field.name, e.target.value)}
                 error={error}
                 required={field.required}
+                disabled={disabled}
               />
             );
           case 'textarea':
@@ -34,6 +36,7 @@ export default function DynamicForm({ fields, values, onChange, errors }) {
                 onChange={(e) => handleChange(field.name, e.target.value)}
                 error={error}
                 required={field.required}
+                disabled={disabled}
               />
             );
           case 'select':
@@ -46,6 +49,7 @@ export default function DynamicForm({ fields, values, onChange, errors }) {
                 onChange={(e) => handleChange(field.name, e.target.value)}
                 error={error}
                 required={field.required}
+                disabled={disabled}
               />
             );
           case 'number':
@@ -58,6 +62,7 @@ export default function DynamicForm({ fields, values, onChange, errors }) {
                 onChange={(e) => handleChange(field.name, e.target.value)}
                 error={error}
                 required={field.required}
+                disabled={disabled}
               />
             );
           case 'file':
@@ -67,6 +72,7 @@ export default function DynamicForm({ fields, values, onChange, errors }) {
                 label={field.label}
                 onFile={(file) => handleChange(field.name, file)}
                 accept=".pdf,.docx,.xlsx,.png,.jpg"
+                disabled={disabled}
               />
             );
           default:

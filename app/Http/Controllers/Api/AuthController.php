@@ -104,9 +104,10 @@ class AuthController extends Controller
 
         $domains = $domainMap[$specialization] ?? ['Technology'];
 
+        $limit = ($user->plan_level === 'free' || ! $user->plan_level) ? 3 : 5;
         $agentIds = \App\Models\AiAgent::whereIn('domain', $domains)
             ->where('is_premium_only', false)
-            ->limit(5)
+            ->limit($limit)
             ->pluck('id');
 
         $user->agents()->syncWithoutDetaching($agentIds);

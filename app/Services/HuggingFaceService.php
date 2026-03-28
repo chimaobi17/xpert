@@ -196,6 +196,15 @@ class HuggingFaceService
                     );
                 }
 
+                if ($response->status() === 503) {
+                    $errorData = $response->json();
+                    $errorMsg = $errorData['error'] ?? 'Your request has been queued and will be processed shortly.';
+                    if (isset($errorData['estimated_time'])) {
+                        $errorMsg .= ' Estimated loading time: ' . round($errorData['estimated_time']) . 's';
+                    }
+                    throw new AiUnavailableException($errorMsg);
+                }
+
                 if ($response->serverError()) {
                     throw new AiUnavailableException("HF server error: {$response->status()}");
                 }

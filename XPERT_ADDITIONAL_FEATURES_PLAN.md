@@ -8,16 +8,16 @@ This document outlines post-MVP feature extensions and critical user experience 
 
 ### Phase 14: Strict Workspace Agent Limits (3-Agent Cap)
 **Goal**: Enforce a hard cap of 3 active agents for Free tier users.
-- [ ] **14.1 Controller Guard**: Update `UserAgentController@store` to block additions if count >= 3 for free users (Error: `agent_limit_reached`).
-- [ ] **14.2 Onboarding Logic**: Limit default agents to top 3 for free users.
-- [ ] **14.3 "Limit Reached" Modal**: Intercept adds on frontend and show upgrade modal.
-- [ ] **14.4 UI Badge**: Add "Agents: X/3" counter to sidebar.
+- [x] **14.1 Controller Guard**: Update `UserAgentController@store` to block additions if count >= 3 for free users (Error: `agent_limit_reached`).
+- [x] **14.2 Onboarding Logic**: Limit default agents to top 3 for free users in `AuthController.php`.
+- [x] **14.3 "Limit Reached" Modal**: Intercept adds on frontend and show upgrade modal in `AgentDiscover.jsx`.
+- [x] **14.4 UI Badge**: Add "Agents: X/3" counter to sidebar in `Sidebar.jsx`.
 
 ### Phase 15: Chatbot UI Branding & Icon Refinement
 **Goal**: Align chatbot with primary green branding.
-- [ ] **15.1 Color Shift**: Update `ChatbotPanel.jsx` to use `primary-600` classes instead of `indigo-600`.
-- [ ] **15.2 Message Bubbles**: Update bot responses to use `bg-primary-50`.
-- [ ] **15.3 Bot Icon**: Replace generic bubble with `CpuChipIcon` (Robot icon).
+- [x] **15.1 Color Shift**: Update `ChatbotPanel.jsx` to use `primary-600` classes instead of `indigo-600`.
+- [x] **15.2 Message Bubbles**: Update bot responses to use `bg-primary-50`.
+- [x] **15.3 Bot Icon**: Replace generic bubble with `CpuChipIcon` (Robot icon) in `ChatbotPanel.jsx`.
 
 ---
 
@@ -25,19 +25,19 @@ This document outlines post-MVP feature extensions and critical user experience 
 
 ### Phase 16: AI Loading States & Connectivity
 **Goal**: Fix the perceived "frozen" state during AI generation.
-- [ ] **16.1 Loading UI**: Add a "Thinking..." spinner and disable buttons during `generate` calls.
-- [ ] **16.2 Connectivity Check**: Verify `HUGGINGFACE_API_KEY` synchronization and add "Cold Start" detection/alerts.
+- [x] **16.1 Loading UI**: Add a "Thinking..." spinner and disable buttons during `generate` calls.
+- [x] **16.2 Connectivity Check**: Verify `HUGGINGFACE_API_KEY` synchronization and add "Cold Start" detection/alerts.
 
 ### Phase 17: One-Time Onboarding Experience
 **Goal**: Ensure the onboarding modal only pops up once.
-- [ ] **17.1 Onboarding Flag**: Add `is_onboarded` column to `users` table and a `PATCH /user/onboarded` endpoint.
-- [ ] **17.2 Persistence on Skip**: Update "Skip" button to call the onboarded endpoint.
-- [ ] **17.3 Dashboard Sync**: Update `Dashboard.jsx` to respect the `is_onboarded` flag from the auth state.
-+
-+### Phase 18: Agent Library Expansion
-+**Goal**: Diversify the AI ecosystem with specialized agents once core functionality is efficient.
-+- [ ] **18.1 Niche Agents**: Add 10-15 new agents across `creative`, `business`, and `language` domains in `AiAgentSeeder.php`.
-+- [ ] **18.2 Multi-Model Support**: Ensure new agents are mapped to relevant Hugging Face models (e.g., Llama 3, Mistral, FLUX).
+- [x] **17.1 Onboarding Flag**: Add `is_onboarded` column to `users` table and a `PATCH /api/user/onboarded` endpoint.
+- [x] **17.2 Persistence on Skip**: Update "Skip" button to call the onboarded endpoint in `OnboardingFlow.jsx`.
+- [x] **17.3 Dashboard Sync**: Update `Dashboard.jsx` to respect the `is_onboarded` flag from the auth state.
+
+### Phase 18: Agent Library Expansion
+**Goal**: Diversify the AI ecosystem with specialized agents once core functionality is efficient.
+- [x] **18.1 Niche Agents**: Add 10-15 new agents across `creative`, `business`, and `language` domains in `AiAgentSeeder.php`.
+- [x] **18.2 Multi-Model Support**: Ensure new agents are mapped to relevant Hugging Face models (e.g., Llama 3, Mistral, FLUX).
 
 ---
 
