@@ -18,9 +18,11 @@ export function AuthProvider({ children }) {
         setUser(res.data);
       } else {
         setUser(null);
+        localStorage.removeItem('auth_token');
       }
     } catch {
       setUser(null);
+      localStorage.removeItem('auth_token');
     } finally {
       setLoading(false);
     }
@@ -28,13 +30,20 @@ export function AuthProvider({ children }) {
 
   async function login(email, password) {
     await getCsrfCookie();
-    await api.post('/login', { email, password });
+    const res = await api.post('/login', { email, password });
+    if (res.data.token) {
+      localStorage.setItem('auth_token', res.data.token);
+    }
     await checkAuth();
   }
 
   async function logout() {
-    await api.post('/logout');
-    setUser(null);
+    try {
+      await api.post('/logout');
+    } finally {
+      localStorage.removeItem('auth_token');
+      setUser(null);
+    }
   }
 
   return (

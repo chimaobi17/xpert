@@ -22,9 +22,19 @@ class AuthController extends Controller
             return response()->json(['message' => 'Invalid credentials'], 401);
         }
 
-        $request->session()->regenerate();
+        $user = Auth::user();
 
-        return response()->json(Auth::user());
+        // For SPA cookie auth, regenerate session; for cross-origin, issue token
+        if ($request->hasSession()) {
+            $request->session()->regenerate();
+        }
+
+        $token = $user->createToken('spa')->plainTextToken;
+
+        return response()->json([
+            'user' => $user,
+            'token' => $token,
+        ]);
     }
 
     public function register(Request $request)
@@ -43,15 +53,27 @@ class AuthController extends Controller
 
         Auth::login($user);
 
-        return response()->json($user, 201);
+        $token = $user->createToken('spa')->plainTextToken;
+
+        return response()->json([
+            'user' => $user,
+            'token' => $token,
+        ], 201);
     }
 
     public function logout(Request $request)
     {
-        Auth::guard('web')->logout();
+        // Revoke token if using token auth
+        if ($request->user() && $request->user()->currentAccessToken()) {
+            $request->user()->currentAccessToken()->delete();
+        }
 
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
+        // Also clear session if present
+        if ($request->hasSession()) {
+            Auth::guard('web')->logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+        }
 
         return response()->json(['message' => 'Logged out']);
     }

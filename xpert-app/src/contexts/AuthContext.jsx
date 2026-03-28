@@ -17,6 +17,7 @@ export function AuthProvider({ children }) {
       setUser(res.data);
     } catch {
       setUser(null);
+      localStorage.removeItem('auth_token');
     } finally {
       setLoading(false);
     }
@@ -25,18 +26,28 @@ export function AuthProvider({ children }) {
   async function login(email, password) {
     await getCsrfCookie();
     const res = await api.post('/login', { email, password });
-    setUser(res.data);
+    if (res.data.token) {
+      localStorage.setItem('auth_token', res.data.token);
+    }
+    setUser(res.data.user || res.data);
   }
 
   async function register(name, email, password, password_confirmation) {
     await getCsrfCookie();
     const res = await api.post('/register', { name, email, password, password_confirmation });
-    setUser(res.data);
+    if (res.data.token) {
+      localStorage.setItem('auth_token', res.data.token);
+    }
+    setUser(res.data.user || res.data);
   }
 
   async function logout() {
-    await api.post('/logout');
-    setUser(null);
+    try {
+      await api.post('/logout');
+    } finally {
+      localStorage.removeItem('auth_token');
+      setUser(null);
+    }
   }
 
   async function refreshUser() {
@@ -45,6 +56,7 @@ export function AuthProvider({ children }) {
       setUser(res.data);
     } catch {
       setUser(null);
+      localStorage.removeItem('auth_token');
     }
   }
 
