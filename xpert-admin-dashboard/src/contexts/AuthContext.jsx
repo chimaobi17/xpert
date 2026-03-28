@@ -1,5 +1,5 @@
 import { createContext, useState, useEffect } from 'react';
-import api, { getCsrfCookie } from '../lib/axios';
+import api from '../lib/axios';
 
 export const AuthContext = createContext(null);
 
@@ -29,7 +29,6 @@ export function AuthProvider({ children }) {
   }
 
   async function login(email, password) {
-    await getCsrfCookie();
     const res = await api.post('/login', { email, password });
     if (res.data.token) {
       localStorage.setItem('auth_token', res.data.token);

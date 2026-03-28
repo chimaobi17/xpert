@@ -18,15 +18,10 @@ class AuthController extends Controller
             'password' => ['required'],
         ]);
 
-        if (! Auth::attempt($request->only('email', 'password'))) {
+        $user = User::where('email', $request->email)->first();
+
+        if (! $user || ! Hash::check($request->password, $user->password)) {
             return response()->json(['message' => 'Invalid credentials'], 401);
-        }
-
-        $user = Auth::user();
-
-        // For SPA cookie auth, regenerate session; for cross-origin, issue token
-        if ($request->hasSession()) {
-            $request->session()->regenerate();
         }
 
         $token = $user->createToken('spa')->plainTextToken;
@@ -50,8 +45,6 @@ class AuthController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
-
-        Auth::login($user);
 
         $token = $user->createToken('spa')->plainTextToken;
 
