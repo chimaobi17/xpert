@@ -1,45 +1,31 @@
-FROM php:8.2-cli-alpine
+FROM php:8.2-cli
 
-# Install system dependencies
-RUN apk add --no-cache \
-    git \
-    curl \
-    libpng-dev \
-    oniguruma-dev \
-    libxml2-dev \
-    libpq-dev \
-    libzip-dev \
-    zip \
-    unzip \
-    bash \
+# Install system dependencies in single layer
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    git curl libpng-dev libonig-dev libxml2-dev libpq-dev libzip-dev zip unzip \
     && docker-php-ext-install pdo pdo_pgsql pdo_sqlite pgsql mbstring exif pcntl bcmath gd zip \
-    && apk del --purge
+    && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/*
 
 # Install Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html
 
-# Copy composer files first for better caching
+# Copy composer files first for better layer caching
 COPY composer.json composer.lock ./
 RUN composer install --no-dev --optimize-autoloader --no-scripts --no-interaction
 
 # Copy application code
 COPY . .
 
-# Run post-install scripts
-RUN composer dump-autoload --optimize
-
-# Set permissions
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
-    && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
-
-# Create SQLite database directory (fallback for local)
-RUN mkdir -p /var/www/html/database && touch /var/www/html/database/database.sqlite
+# Post-install
+RUN composer dump-autoload --optimize \
+    && chown -R www-data:www-data storage bootstrap/cache \
+    && chmod -R 775 storage bootstrap/cache \
+    && mkdir -p database && touch database/database.sqlite
 
 EXPOSE 8000
 
-# Start script handles migrations + seeding + serving
 COPY docker-entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
