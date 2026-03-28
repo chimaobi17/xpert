@@ -1,9 +1,12 @@
 FROM php:8.2-cli
 
-# Use install-php-extensions for fast, pre-compiled extension installation
-ADD --chmod=0755 https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
+# Download extension installer (avoid ADD --chmod which requires BuildKit)
+RUN curl -sSLf -o /usr/local/bin/install-php-extensions \
+    https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions \
+    && chmod +x /usr/local/bin/install-php-extensions
 
-RUN install-php-extensions pdo_pgsql pgsql mbstring bcmath zip gd
+# Install only essential PHP extensions (dropped gd/pgsql to reduce memory)
+RUN install-php-extensions pdo_pgsql mbstring bcmath zip
 
 RUN apt-get update && apt-get install -y --no-install-recommends git curl unzip \
     && rm -rf /var/lib/apt/lists/*
