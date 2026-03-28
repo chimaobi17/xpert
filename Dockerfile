@@ -6,7 +6,7 @@ RUN apk add --no-cache \
     php82-bcmath php82-zip php82-xml php82-curl php82-tokenizer \
     php82-session php82-ctype php82-fileinfo php82-dom php82-phar \
     php82-openssl php82-iconv php82-simplexml php82-xmlwriter \
-    php82-xmlreader php82-sodium php82-gd php82-zlib \
+    php82-xmlreader php82-sodium php82-gd \
     git curl unzip bash
 
 # Create standard php symlink
