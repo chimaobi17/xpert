@@ -1,59 +1,40 @@
-# ------- Stage 1: Composer Dependencies -------
-FROM composer:2 AS composer-deps
+FROM alpine:3.21
+
+# Install pre-compiled PHP 8.4 packages (no C compilation — fast builds on free tier)
+RUN apk add --no-cache \
+    php84 php84-pdo php84-pdo_pgsql php84-pgsql php84-mbstring \
+    php84-bcmath php84-zip php84-xml php84-curl php84-tokenizer \
+    php84-session php84-ctype php84-fileinfo php84-dom php84-phar \
+    php84-openssl php84-iconv php84-simplexml php84-xmlwriter \
+    php84-xmlreader php84-sodium php84-gd php84-intl php84-opcache \
+    php84-pdo_sqlite \
+    git curl unzip bash
+
+# Symlink php84 to php
+RUN ln -sf /usr/bin/php84 /usr/bin/php
+
+# Install Composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
 WORKDIR /app
+
+# Install dependencies (cached layer)
 COPY composer.json composer.lock ./
-# We use --ignore-platform-reqs here because the composer image might not have PHP 8.4
-RUN composer install --no-dev --no-scripts --no-autoloader --prefer-dist --ignore-platform-reqs
+RUN composer install --no-dev --optimize-autoloader --no-scripts --no-interaction --ignore-platform-reqs
 
-# ------- Stage 2: Production Image -------
-FROM php:8.4-cli-alpine AS production
-
-# Install PHP Extension Installer to simplify modern extension management
-COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
-
-# Install essential Laravel 12 and PostgreSQL extensions
-RUN install-php-extensions \
-    pdo_pgsql \
-    pgsql \
-    bcmath \
-    zip \
-    xml \
-    curl \
-    gd \
-    intl \
-    mbstring \
-    openssl \
-    dom \
-    tokenizer \
-    session \
-    ctype \
-    fileinfo \
-    simplexml \
-    xmlwriter \
-    xmlreader \
-    sodium \
-    opcache
-
-# Install common system utilities
-RUN apk add --no-cache git curl unzip bash
-
-WORKDIR /var/www/html
-
-COPY --from=composer-deps /app/vendor ./vendor
+# Copy application code
 COPY . .
 
-# Optimize layer caching
+# Dump optimized autoloader with full app context
 RUN composer dump-autoload --optimize
 
-# Configure permissions for Laravel
-RUN mkdir -p database storage/framework/cache/data storage/framework/sessions storage/framework/views storage/logs bootstrap/cache \
+# Prepare Laravel directories and permissions
+RUN mkdir -p storage/framework/cache/data storage/framework/sessions storage/framework/views storage/logs bootstrap/cache database \
     && chmod -R 775 storage bootstrap/cache \
     && touch database/database.sqlite
 
 EXPOSE 8000
 
-# Setup entrypoint
 COPY docker-entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
-
 ENTRYPOINT ["docker-entrypoint.sh"]
