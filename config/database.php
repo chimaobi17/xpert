@@ -85,7 +85,8 @@ return [
 
         'pgsql' => [
             'driver' => 'pgsql',
-            'url' => env('DATABASE_URL', env('DB_URL')),
+            // Individual DB_* env vars used instead of DATABASE_URL (brackets in password break URL parsing)
+            'url' => null,
             'host' => env('DB_HOST', '127.0.0.1'),
             'port' => env('DB_PORT', '6543'),
             'database' => env('DB_DATABASE', 'postgres'),
