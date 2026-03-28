@@ -1,17 +1,14 @@
-FROM php:8.2-cli
+FROM debian:bookworm-slim
 
-# Download extension installer (avoid ADD --chmod which requires BuildKit)
-RUN curl -sSLf -o /usr/local/bin/install-php-extensions \
-    https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions \
-    && chmod +x /usr/local/bin/install-php-extensions
-
-# Install only essential PHP extensions (dropped gd/pgsql to reduce memory)
-RUN install-php-extensions pdo_pgsql mbstring bcmath zip
-
-RUN apt-get update && apt-get install -y --no-install-recommends git curl unzip \
+# Install PHP 8.2 from Debian repos (pre-compiled .deb packages, zero compilation)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    php8.2-cli php8.2-pgsql php8.2-mbstring php8.2-bcmath php8.2-zip \
+    php8.2-xml php8.2-curl php8.2-sqlite3 \
+    git curl unzip ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
-COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+# Install Composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 WORKDIR /app
 
