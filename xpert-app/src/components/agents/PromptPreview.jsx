@@ -1,12 +1,15 @@
 import { useState } from 'react';
 import clsx from 'clsx';
+import { BookmarkIcon as BookmarkOutline } from '@heroicons/react/24/outline';
+import { BookmarkIcon as BookmarkSolid } from '@heroicons/react/24/solid';
 import Button from '../ui/Button';
 import Textarea from '../ui/Textarea';
 
-export default function PromptPreview({ generatedPrompt, onSubmit, onBack, loading }) {
+export default function PromptPreview({ generatedPrompt, onSubmit, onBack, loading, onSavePrompt, onUnsavePrompt }) {
   const [choice, setChoice] = useState(null);
   const [customPrompt, setCustomPrompt] = useState('');
   const [editedPrompt, setEditedPrompt] = useState(generatedPrompt);
+  const [savedId, setSavedId] = useState(null);
 
   function getFinalPrompt() {
     if (choice === 'generated') return generatedPrompt;
@@ -19,6 +22,16 @@ export default function PromptPreview({ generatedPrompt, onSubmit, onBack, loadi
     if (choice === 'generated') return 'generated';
     if (choice === 'custom') return 'custom';
     return 'edited';
+  }
+
+  async function handleToggleSave() {
+    if (savedId) {
+      await onUnsavePrompt?.(savedId);
+      setSavedId(null);
+    } else {
+      const id = await onSavePrompt?.(getFinalPrompt());
+      if (id) setSavedId(id);
+    }
   }
 
   const options = [
@@ -77,14 +90,27 @@ export default function PromptPreview({ generatedPrompt, onSubmit, onBack, loadi
       )}
 
       <div className="flex items-center justify-between pt-4 border-t border-[var(--color-border)]">
-        <Button variant="ghost" onClick={onBack}>Back to Form</Button>
-        <Button
-          onClick={() => onSubmit(getFinalPrompt(), getPromptType())}
-          disabled={!choice || !getFinalPrompt().trim() || loading}
-          loading={loading}
-        >
-          {loading ? 'Thinking...' : 'Send to AI'}
-        </Button>
+        <Button variant="ghost" onClick={onBack} disabled={loading}>Back to Form</Button>
+        <div className="flex items-center gap-2">
+          {onSavePrompt && choice && getFinalPrompt().trim() && !loading && (
+            <Button
+              variant={savedId ? 'secondary' : 'outline'}
+              size="sm"
+              onClick={handleToggleSave}
+              className={savedId ? 'text-primary-600' : ''}
+            >
+              {savedId ? <BookmarkSolid className="h-4 w-4 text-primary-500" /> : <BookmarkOutline className="h-4 w-4" />}
+              {savedId ? 'Saved' : 'Save Prompt'}
+            </Button>
+          )}
+          <Button
+            onClick={() => onSubmit(getFinalPrompt(), getPromptType())}
+            disabled={!choice || !getFinalPrompt().trim() || loading}
+            loading={loading}
+          >
+            {loading ? 'Thinking...' : 'Send to AI'}
+          </Button>
+        </div>
       </div>
     </div>
   );

@@ -40,6 +40,11 @@ export async function apiCall(method, url, data = null, options = {}) {
 
     return { ok: true, data: response.data };
   } catch (err) {
+    // Handle aborted requests silently
+    if (err.code === 'ERR_CANCELED' || err.name === 'CanceledError') {
+      return { ok: false, error: { error: 'cancelled' }, data: null };
+    }
+
     if (!err.response) {
       toast('Cannot reach server. Check your connection.', 'error');
       return { ok: false, error: { error: 'network_error', retry: true, upgrade: false } };

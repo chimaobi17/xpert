@@ -62,6 +62,9 @@ export default function Navbar({ onMenuToggle }) {
         <div className="relative ml-1">
           <button
             onClick={() => setDropdownOpen(!dropdownOpen)}
+            aria-expanded={dropdownOpen}
+            aria-haspopup="true"
+            aria-label="User menu"
             className="flex items-center gap-2 rounded-lg p-1.5 hover:bg-[var(--color-surface-hover)] transition-colors"
           >
             <Avatar name={user?.name} size="sm" />
@@ -70,20 +73,31 @@ export default function Navbar({ onMenuToggle }) {
           {dropdownOpen && (
             <>
               <div className="fixed inset-0 z-40" onClick={() => setDropdownOpen(false)} />
-              <div className="absolute right-0 z-50 mt-2 w-56 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] py-1 shadow-lg">
+              <div role="menu" className="absolute right-0 z-50 mt-2 w-56 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] py-1 shadow-lg">
                 <div className="border-b border-[var(--color-border)] px-4 py-3">
-                  <p className="text-sm font-medium text-[var(--color-text)]">{user?.name}</p>
+                  <div className="flex items-center gap-2">
+                    <p className="text-sm font-medium text-[var(--color-text)]">{user?.name}</p>
+                    <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-semibold ${
+                      user?.plan_level === 'premium'
+                        ? 'bg-gradient-to-r from-primary-500 to-emerald-400 text-white'
+                        : user?.plan_level === 'standard'
+                          ? 'bg-green-100 text-green-700'
+                          : 'bg-gray-100 text-gray-600'
+                    }`}>
+                      {user?.plan_level === 'premium' ? 'Premium' : user?.plan_level === 'standard' ? 'Standard' : 'Free'}
+                    </span>
+                  </div>
                   <p className="text-xs text-[var(--color-text-secondary)]">{user?.email}</p>
                 </div>
                 <Link
-                  to="/settings"
+                  to="/settings?tab=profile"
                   onClick={() => setDropdownOpen(false)}
                   className="flex items-center gap-2 px-4 py-2 text-sm text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-hover)]"
                 >
                   <UserCircleIcon className="h-4 w-4" /> Profile
                 </Link>
                 <Link
-                  to="/settings"
+                  to="/settings?tab=preferences"
                   onClick={() => setDropdownOpen(false)}
                   className="flex items-center gap-2 px-4 py-2 text-sm text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-hover)]"
                 >

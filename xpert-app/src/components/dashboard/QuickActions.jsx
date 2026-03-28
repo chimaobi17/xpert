@@ -28,7 +28,7 @@ export default function QuickActions() {
           return (
             <button
               key={agent.id}
-              onClick={() => navigate(`/agents/${agent.id}`)}
+              onClick={() => navigate(`/agents/${agent.id}`, { state: { from: '/dashboard' } })}
               className="flex flex-col items-center gap-2 rounded-lg border border-[var(--color-border)] bg-[var(--color-bg)] p-3 text-center transition-all duration-150 hover:border-primary-500/40 hover:shadow-sm"
             >
               {Icon && <Icon className="h-6 w-6 text-primary-500" />}

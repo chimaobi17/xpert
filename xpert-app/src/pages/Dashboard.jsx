@@ -157,7 +157,7 @@ export default function Dashboard() {
                 <Card
                   key={agent.id}
                   hoverable
-                  onClick={() => navigate(`/agents/${agent.id}`)}
+                  onClick={() => navigate(`/agents/${agent.id}`, { state: { from: '/dashboard' } })}
                   className="!p-4"
                 >
                   <div className="flex items-center gap-2">

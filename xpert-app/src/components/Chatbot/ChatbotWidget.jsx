@@ -18,10 +18,8 @@ function ChatbotWidget() {
     if (isOpen && knowledgeBase.length === 0) {
       // Lazy load KB
       fetch('/api/chatbot/knowledge', {
-        headers: {
-          'Accept': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}` // If you store token
-        }
+        headers: { 'Accept': 'application/json' },
+        credentials: 'include',
       })
       .then(res => res.json())
       .then(data => {

@@ -32,7 +32,7 @@ export default function AgentCard({ agent, userPlan = 'free' }) {
 
   return (
     <button
-      onClick={() => !isLocked && navigate(`/agents/${agent.id}`)}
+      onClick={() => !isLocked && navigate(`/agents/${agent.id}`, { state: { from: '/agents/discover' } })}
       className="relative flex flex-col items-start rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5 text-left transition-all duration-150 hover:border-primary-500/40 hover:shadow-md w-full"
       disabled={isLocked}
     >

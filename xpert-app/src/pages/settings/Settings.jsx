@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import Tabs from '../../components/ui/Tabs';
 import ProfileTab from './ProfileTab';
@@ -13,9 +13,17 @@ const tabs = [
 ];
 
 export default function Settings() {
-  const [searchParams] = useSearchParams();
-  const initialTab = searchParams.get('tab') || 'profile';
-  const [activeTab, setActiveTab] = useState(initialTab);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const savedTab = sessionStorage.getItem('settings_tab');
+  const activeTab = searchParams.get('tab') || savedTab || 'profile';
+
+  useEffect(() => {
+    sessionStorage.setItem('settings_tab', activeTab);
+  }, [activeTab]);
+
+  function setActiveTab(tab) {
+    setSearchParams({ tab }, { replace: true });
+  }
 
   return (
     <div className="space-y-6">

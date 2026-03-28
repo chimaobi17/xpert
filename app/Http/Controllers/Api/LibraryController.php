@@ -22,17 +22,17 @@ class LibraryController extends Controller
     {
         $request->validate([
             'agent_id' => ['required', 'exists:ai_agents,id'],
-            'original_input' => ['required', 'string'],
+            'original_input' => ['sometimes', 'string'],
             'final_prompt' => ['required', 'string'],
-            'ai_response' => ['nullable', 'string'],
+            'ai_response' => ['sometimes', 'nullable', 'string'],
         ]);
 
         $item = PromptLibrary::create([
             'user_id' => $request->user()->id,
             'agent_id' => $request->agent_id,
-            'original_input' => $request->original_input,
+            'original_input' => $request->original_input ?? '{}',
             'final_prompt' => $request->final_prompt,
-            'ai_response' => $request->ai_response,
+            'ai_response' => $request->ai_response ?? '',
         ]);
 
         return response()->json($item, 201);

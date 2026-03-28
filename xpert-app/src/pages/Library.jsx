@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { MagnifyingGlassIcon, TrashIcon, ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/outline';
 import { BookOpenIcon } from '@heroicons/react/24/outline';
 import { get, del } from '../lib/apiClient';
@@ -10,6 +11,7 @@ import Badge from '../components/ui/Badge';
 import toast from 'react-hot-toast';
 
 export default function Library() {
+  const navigate = useNavigate();
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
@@ -84,7 +86,7 @@ export default function Library() {
           title="No saved prompts"
           description="Your saved prompts will appear here. Generate a prompt and save it to get started."
           actionLabel="Go to Workspace"
-          onAction={() => window.location.href = '/workspace'}
+          onAction={() => navigate('/workspace')}
         />
       ) : (
         <div className="space-y-3">

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import {
   CodeBracketIcon,
@@ -13,26 +13,51 @@ import Spinner from '../components/ui/Spinner';
 import EmptyState from '../components/ui/EmptyState';
 import toast from 'react-hot-toast';
 
+const CACHE_KEY = 'workspace_agents';
+const CACHE_TTL = 60_000; // 1 minute
+
+function readCache() {
+  try {
+    const raw = sessionStorage.getItem(CACHE_KEY);
+    if (!raw) return null;
+    const { data, ts } = JSON.parse(raw);
+    if (Date.now() - ts > CACHE_TTL) return null;
+    return data;
+  } catch { return null; }
+}
+
+function writeCache(data) {
+  try {
+    sessionStorage.setItem(CACHE_KEY, JSON.stringify({ data, ts: Date.now() }));
+  } catch { /* ignore */ }
+}
+
 export default function Workspace() {
   const navigate = useNavigate();
-  const [myAgents, setMyAgents] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const cached = useRef(readCache()).current;
+  const [myAgents, setMyAgents] = useState(cached || []);
+  const [loading, setLoading] = useState(!cached);
 
   useEffect(() => {
     loadAgents();
   }, []);
 
   async function loadAgents() {
-    setLoading(true);
+    if (!cached) setLoading(true);
     const res = await get('/user/agents');
-    if (res.ok) setMyAgents(res.data);
+    if (res.ok) {
+      setMyAgents(res.data);
+      writeCache(res.data);
+    }
     setLoading(false);
   }
 
   async function handleRemove(agentId) {
     const res = await del(`/user/agents/${agentId}`);
     if (res.ok) {
-      setMyAgents((prev) => prev.filter((a) => a.id !== agentId));
+      const updated = myAgents.filter((a) => a.id !== agentId);
+      setMyAgents(updated);
+      writeCache(updated);
       toast.success('Agent removed from workspace');
     }
   }
@@ -82,7 +107,7 @@ export default function Workspace() {
           <Card
             key={agent.id}
             hoverable
-            onClick={() => navigate(`/agents/${agent.id}`)}
+            onClick={() => navigate(`/agents/${agent.id}`, { state: { from: '/workspace' } })}
             className="relative group"
           >
             <div className="flex items-start gap-3">
