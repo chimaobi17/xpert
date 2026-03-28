@@ -1,14 +1,22 @@
-FROM debian:bookworm-slim
+FROM php:8.2-cli
 
-# Install PHP 8.2 from Debian repos (pre-compiled .deb packages, zero compilation)
+# Install dev libraries needed for PHP extensions
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    php8.2-cli php8.2-pgsql php8.2-mbstring php8.2-bcmath php8.2-zip \
-    php8.2-xml php8.2-curl php8.2-sqlite3 \
-    git curl unzip ca-certificates \
+    libpq-dev libonig-dev libzip-dev git curl unzip \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+# Compile extensions one at a time to minimize peak memory on 512MB hosts
+RUN docker-php-ext-install pdo_pgsql
+RUN docker-php-ext-install mbstring
+RUN docker-php-ext-install bcmath
+RUN docker-php-ext-install zip
+
+# Clean up dev libraries to save space
+RUN apt-get purge -y libpq-dev libonig-dev libzip-dev \
+    && apt-get autoremove -y --purge \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /app
 
