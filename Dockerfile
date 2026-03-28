@@ -1,22 +1,19 @@
-FROM php:8.2-cli
+FROM alpine:3.19
 
-# Install dev libraries needed for PHP extensions
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    libpq-dev libonig-dev libzip-dev git curl unzip \
-    && rm -rf /var/lib/apt/lists/*
+# Install PHP 8.2 from Alpine repos (fully pre-compiled, zero C compilation)
+RUN apk add --no-cache \
+    php82 php82-pdo php82-pdo_pgsql php82-pgsql php82-mbstring \
+    php82-bcmath php82-zip php82-xml php82-curl php82-tokenizer \
+    php82-session php82-ctype php82-fileinfo php82-dom php82-phar \
+    php82-openssl php82-iconv php82-simplexml php82-xmlwriter \
+    php82-xmlreader php82-sodium php82-json \
+    git curl unzip bash
 
-# Compile extensions one at a time to minimize peak memory on 512MB hosts
-RUN docker-php-ext-install pdo_pgsql
-RUN docker-php-ext-install mbstring
-RUN docker-php-ext-install bcmath
-RUN docker-php-ext-install zip
+# Create standard php symlink
+RUN ln -sf /usr/bin/php82 /usr/bin/php
 
-# Clean up dev libraries to save space
-RUN apt-get purge -y libpq-dev libonig-dev libzip-dev \
-    && apt-get autoremove -y --purge \
-    && rm -rf /var/lib/apt/lists/*
-
-COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+# Install Composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 WORKDIR /app
 
