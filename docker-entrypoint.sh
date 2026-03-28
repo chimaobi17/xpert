@@ -17,9 +17,14 @@ if [ -z "$APP_KEY" ]; then
     php artisan key:generate --force || echo "==> key:generate failed"
 fi
 
-# Cache config for production (skip route:cache — closure routes can't be cached)
+# Clear old cached config then re-cache with current env vars
 echo "==> Caching config..."
+php artisan config:clear || true
 php artisan config:cache || echo "==> config:cache failed, continuing..."
+
+# Debug: show which DB host will be used
+echo "==> DB_HOST: ${DB_HOST:-not set}"
+echo "==> DB_USERNAME: ${DB_USERNAME:-not set}"
 
 echo "==> Caching views..."
 php artisan view:cache || echo "==> view:cache failed, continuing..."
