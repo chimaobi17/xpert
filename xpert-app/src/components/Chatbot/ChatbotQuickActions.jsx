@@ -16,7 +16,7 @@ function ChatbotQuickActions({ onSend }) {
         <button
           key={label}
           onClick={() => onSend(label)}
-          className="text-xs text-left bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 border border-indigo-100 dark:border-indigo-800/50 hover:bg-indigo-100 dark:hover:bg-indigo-800/50 rounded-lg p-2 transition-colors duration-200"
+          className="text-xs text-left bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 border border-primary-100 dark:border-primary-800/50 hover:bg-primary-100 dark:hover:bg-primary-800/50 rounded-lg p-2 transition-colors duration-200"
         >
           {label}
         </button>

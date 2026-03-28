@@ -24,7 +24,7 @@ function ChatbotContextHint() {
   }
 
   return (
-    <div className="bg-indigo-50/80 dark:bg-indigo-900/40 border-b border-indigo-100 dark:border-indigo-800/50 p-3 text-xs text-indigo-800 dark:text-indigo-200 text-center animate-fade-in">
+    <div className="bg-primary-50/80 dark:bg-primary-900/40 border-b border-primary-100 dark:border-primary-800/50 p-3 text-xs text-primary-800 dark:text-primary-200 text-center animate-fade-in">
       <span className="font-medium">💡 Tip:</span> {hint}
     </div>
   );

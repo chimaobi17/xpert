@@ -1,4 +1,4 @@
-import { useEffect, lazy, Suspense } from 'react';
+import { Component, useEffect, lazy, Suspense } from 'react';
 import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import { Toaster, toast } from 'react-hot-toast';
 import { registerApiHandlers } from './lib/apiClient';
@@ -28,6 +28,27 @@ function PageLoader() {
       <Spinner size="lg" />
     </div>
   );
+}
+
+class ErrorBoundary extends Component {
+  state = { hasError: false };
+  static getDerivedStateFromError() { return { hasError: true }; }
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="flex flex-col items-center justify-center py-24 text-center">
+          <p className="text-lg font-semibold text-[var(--color-text)]">Something went wrong</p>
+          <button
+            onClick={() => { this.setState({ hasError: false }); window.location.reload(); }}
+            className="mt-4 rounded-lg bg-primary-500 px-4 py-2 text-sm font-medium text-white hover:bg-primary-600"
+          >
+            Reload Page
+          </button>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
 }
 
 function ApiHandlerRegistration() {
@@ -70,6 +91,7 @@ export default function App() {
         }}
       />
       <ApiHandlerRegistration />
+      <ErrorBoundary>
       <Suspense fallback={<PageLoader />}>
         <Routes>
           <Route element={<GuestRoute />}>
@@ -97,6 +119,7 @@ export default function App() {
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Suspense>
+      </ErrorBoundary>
     </>
   );
 }

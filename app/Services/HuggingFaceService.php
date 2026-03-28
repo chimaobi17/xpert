@@ -11,7 +11,13 @@ use Illuminate\Support\Facades\Log;
 
 class HuggingFaceService
 {
-    protected string $baseUrl = 'https://api-inference.huggingface.co/models/';
+    /**
+     * New HuggingFace Inference API endpoint (OpenAI-compatible).
+     * The old api-inference.huggingface.co was deprecated (returns 410).
+     */
+    protected string $baseUrl = 'https://router.huggingface.co/v1/chat/completions';
+
+    protected string $imageBaseUrl = 'https://router.huggingface.co/hf-inference/models/';
 
     public function generate(string $category, string $prompt, ?int $userId = null): ?string
     {
@@ -22,11 +28,17 @@ class HuggingFaceService
             throw new AiUnavailableException("Unknown agent category: {$category}");
         }
 
-        // 1. Try primary model with retries
         $startTime = microtime(true);
 
+        // 1. Try primary model with retries
         try {
-            $response = $this->callInferenceApi($models['primary'], $prompt, $models['max_tokens'] ?? 2048, $models['timeout'] ?? 30, retries: 2);
+            $response = $this->callChatApi(
+                $models['primary'],
+                $prompt,
+                $models['max_tokens'] ?? 2048,
+                $models['timeout'] ?? 30,
+                retries: 2
+            );
 
             $latency = (int) ((microtime(true) - $startTime) * 1000);
             Log::info('ai_call', [
@@ -58,7 +70,13 @@ class HuggingFaceService
         // 2. Try fallback model
         if (! empty($models['fallback'])) {
             try {
-                $response = $this->callInferenceApi($models['fallback'], $prompt, $models['max_tokens'] ?? 2048, $models['timeout'] ?? 30, retries: 1);
+                $response = $this->callChatApi(
+                    $models['fallback'],
+                    $prompt,
+                    $models['max_tokens'] ?? 2048,
+                    $models['timeout'] ?? 30,
+                    retries: 1
+                );
 
                 $latency = (int) ((microtime(true) - $startTime) * 1000);
                 Log::warning('ai_fallback', [
@@ -101,12 +119,16 @@ class HuggingFaceService
         try {
             $response = Http::withToken(config('services.huggingface.api_key'))
                 ->timeout($models['timeout'] ?? 60)
-                ->post($this->baseUrl . $models['primary'], [
+                ->post($this->imageBaseUrl . $models['primary'], [
                     'inputs' => $prompt,
                 ]);
 
             if ($response->status() === 401 || $response->status() === 403) {
                 throw new InvalidApiKeyException('Invalid HuggingFace API key');
+            }
+
+            if ($response->status() === 402) {
+                throw new RateLimitException(3600, 'HuggingFace free credits depleted. Credits reset monthly.');
             }
 
             if ($response->status() === 429) {
@@ -131,7 +153,10 @@ class HuggingFaceService
         }
     }
 
-    protected function callInferenceApi(string $model, string $prompt, int $maxTokens, int $timeout, int $retries): string
+    /**
+     * Call HuggingFace's OpenAI-compatible chat completions endpoint.
+     */
+    protected function callChatApi(string $model, string $prompt, int $maxTokens, int $timeout, int $retries): string
     {
         $apiKey = config('services.huggingface.api_key');
 
@@ -140,27 +165,28 @@ class HuggingFaceService
 
         for ($attempt = 0; $attempt <= $retries; $attempt++) {
             if ($attempt > 0) {
-                usleep($backoff * 1000000); // Exponential backoff
+                usleep($backoff * 1000000);
                 $backoff *= 2;
             }
 
             try {
                 $response = Http::withToken($apiKey)
                     ->timeout($timeout)
-                    ->post($this->baseUrl . $model, [
-                        'inputs' => $prompt,
-                        'parameters' => [
-                            'max_new_tokens' => $maxTokens,
-                            'return_full_text' => false,
-                            'temperature' => 0.7,
+                    ->post($this->baseUrl, [
+                        'model' => $model,
+                        'messages' => [
+                            ['role' => 'user', 'content' => $prompt],
                         ],
-                        'options' => [
-                            'wait_for_model' => true,
-                        ],
+                        'max_tokens' => $maxTokens,
+                        'temperature' => 0.7,
                     ]);
 
                 if ($response->status() === 401 || $response->status() === 403) {
                     throw new InvalidApiKeyException('Invalid or expired HuggingFace API key.');
+                }
+
+                if ($response->status() === 402) {
+                    throw new RateLimitException(3600, 'HuggingFace free credits depleted for this month. Credits reset monthly.');
                 }
 
                 if ($response->status() === 429) {
@@ -177,26 +203,32 @@ class HuggingFaceService
                 if ($response->successful()) {
                     $data = $response->json();
 
-                    // Text generation models return array of objects
+                    // OpenAI-compatible format: choices[0].message.content
+                    if (isset($data['choices'][0]['message']['content'])) {
+                        return $data['choices'][0]['message']['content'];
+                    }
+
+                    // Legacy format fallbacks (in case some endpoints still use old format)
                     if (is_array($data) && isset($data[0]['generated_text'])) {
                         return $data[0]['generated_text'];
                     }
 
-                    // Some models return different shapes
                     if (is_array($data) && isset($data[0]['summary_text'])) {
                         return $data[0]['summary_text'];
                     }
 
-                    if (is_array($data) && isset($data[0]['translation_text'])) {
-                        return $data[0]['translation_text'];
-                    }
-
-                    // Raw text response
                     if (is_string($data)) {
                         return $data;
                     }
 
                     return json_encode($data);
+                }
+
+                // Handle 400 errors (model not supported)
+                if ($response->status() === 400) {
+                    $errorData = $response->json();
+                    $errorMsg = $errorData['error']['message'] ?? $errorData['error'] ?? "Bad request: {$response->status()}";
+                    throw new AiUnavailableException($errorMsg);
                 }
 
                 $lastException = new AiUnavailableException("Unexpected response: {$response->status()}");

@@ -10,61 +10,64 @@ return [
     | Maps each agent category to its primary and fallback Hugging Face models.
     | All models MUST be free-tier HF Inference API compatible.
     |
+    | Endpoint: https://router.huggingface.co/v1/chat/completions (OpenAI-compatible)
+    | Free tier: ~1000 requests/day, resets monthly.
+    |
     */
 
     // --- Text Generation Models (Free Tier) ---
 
     'code_assistant' => [
-        'primary' => 'bigcode/starcoder2-15b',
-        'fallback' => 'codellama/CodeLlama-34b-Instruct-hf',
+        'primary' => 'Qwen/Qwen2.5-Coder-32B-Instruct',
+        'fallback' => 'meta-llama/Llama-3.2-1B-Instruct',
         'max_tokens' => 2048,
         'timeout' => 30,
         'type' => 'text',
     ],
 
     'content_writer' => [
-        'primary' => 'mistralai/Mixtral-8x7B-Instruct-v0.1',
-        'fallback' => 'HuggingFaceH4/zephyr-7b-beta',
+        'primary' => 'Qwen/Qwen2.5-72B-Instruct',
+        'fallback' => 'Qwen/Qwen2.5-7B-Instruct',
         'max_tokens' => 4096,
         'timeout' => 30,
         'type' => 'text',
     ],
 
     'business_analyst' => [
-        'primary' => 'mistralai/Mixtral-8x7B-Instruct-v0.1',
-        'fallback' => 'mistralai/Mistral-7B-Instruct-v0.2',
+        'primary' => 'Qwen/Qwen2.5-72B-Instruct',
+        'fallback' => 'meta-llama/Llama-3.3-70B-Instruct',
         'max_tokens' => 4096,
         'timeout' => 30,
         'type' => 'text',
     ],
 
     'ux_research' => [
-        'primary' => 'mistralai/Mistral-7B-Instruct-v0.2',
-        'fallback' => 'HuggingFaceH4/zephyr-7b-beta',
+        'primary' => 'Qwen/Qwen2.5-7B-Instruct',
+        'fallback' => 'meta-llama/Llama-3.2-1B-Instruct',
         'max_tokens' => 4096,
         'timeout' => 30,
         'type' => 'text',
     ],
 
     'graphic_designer' => [
-        'primary' => 'mistralai/Mixtral-8x7B-Instruct-v0.1',
-        'fallback' => 'HuggingFaceH4/zephyr-7b-beta',
+        'primary' => 'Qwen/Qwen2.5-72B-Instruct',
+        'fallback' => 'Qwen/Qwen2.5-7B-Instruct',
         'max_tokens' => 4096,
         'timeout' => 30,
         'type' => 'text',
     ],
 
     'document_qa' => [
-        'primary' => 'mistralai/Mistral-7B-Instruct-v0.2',
-        'fallback' => 'HuggingFaceH4/zephyr-7b-beta',
+        'primary' => 'Qwen/Qwen2.5-72B-Instruct',
+        'fallback' => 'Qwen/Qwen2.5-7B-Instruct',
         'max_tokens' => 4096,
         'timeout' => 30,
         'type' => 'text',
     ],
 
     'sentiment_analysis' => [
-        'primary' => 'cardiffnlp/twitter-roberta-base-sentiment-latest',
-        'fallback' => null,
+        'primary' => 'Qwen/Qwen2.5-7B-Instruct',
+        'fallback' => 'meta-llama/Llama-3.2-1B-Instruct',
         'max_tokens' => 512,
         'timeout' => 15,
         'type' => 'text',
@@ -88,11 +91,109 @@ return [
         'type' => 'image',
     ],
 
+    // --- New Agent Categories (Text Generation, Free Tier) ---
+
+    'email_writer' => [
+        'primary' => 'Qwen/Qwen2.5-72B-Instruct',
+        'fallback' => 'Qwen/Qwen2.5-7B-Instruct',
+        'max_tokens' => 2048,
+        'timeout' => 30,
+        'type' => 'text',
+    ],
+
+    'resume_builder' => [
+        'primary' => 'Qwen/Qwen2.5-72B-Instruct',
+        'fallback' => 'meta-llama/Llama-3.3-70B-Instruct',
+        'max_tokens' => 4096,
+        'timeout' => 30,
+        'type' => 'text',
+    ],
+
+    'social_media' => [
+        'primary' => 'Qwen/Qwen2.5-72B-Instruct',
+        'fallback' => 'Qwen/Qwen2.5-7B-Instruct',
+        'max_tokens' => 2048,
+        'timeout' => 30,
+        'type' => 'text',
+    ],
+
+    'academic_writer' => [
+        'primary' => 'Qwen/Qwen2.5-72B-Instruct',
+        'fallback' => 'meta-llama/Llama-3.3-70B-Instruct',
+        'max_tokens' => 4096,
+        'timeout' => 30,
+        'type' => 'text',
+    ],
+
+    'legal_assistant' => [
+        'primary' => 'Qwen/Qwen2.5-72B-Instruct',
+        'fallback' => 'meta-llama/Llama-3.3-70B-Instruct',
+        'max_tokens' => 4096,
+        'timeout' => 30,
+        'type' => 'text',
+    ],
+
+    'data_analyst' => [
+        'primary' => 'Qwen/Qwen2.5-72B-Instruct',
+        'fallback' => 'Qwen/Qwen2.5-7B-Instruct',
+        'max_tokens' => 4096,
+        'timeout' => 30,
+        'type' => 'text',
+    ],
+
+    'grammar_editor' => [
+        'primary' => 'Qwen/Qwen2.5-7B-Instruct',
+        'fallback' => 'meta-llama/Llama-3.2-1B-Instruct',
+        'max_tokens' => 2048,
+        'timeout' => 30,
+        'type' => 'text',
+    ],
+
+    'meeting_summarizer' => [
+        'primary' => 'Qwen/Qwen2.5-72B-Instruct',
+        'fallback' => 'Qwen/Qwen2.5-7B-Instruct',
+        'max_tokens' => 4096,
+        'timeout' => 30,
+        'type' => 'text',
+    ],
+
+    'story_writer' => [
+        'primary' => 'Qwen/Qwen2.5-72B-Instruct',
+        'fallback' => 'Qwen/Qwen2.5-7B-Instruct',
+        'max_tokens' => 4096,
+        'timeout' => 30,
+        'type' => 'text',
+    ],
+
+    'api_docs' => [
+        'primary' => 'Qwen/Qwen2.5-Coder-32B-Instruct',
+        'fallback' => 'Qwen/Qwen2.5-7B-Instruct',
+        'max_tokens' => 4096,
+        'timeout' => 30,
+        'type' => 'text',
+    ],
+
+    'pitch_deck' => [
+        'primary' => 'Qwen/Qwen2.5-72B-Instruct',
+        'fallback' => 'meta-llama/Llama-3.3-70B-Instruct',
+        'max_tokens' => 4096,
+        'timeout' => 30,
+        'type' => 'text',
+    ],
+
+    'language_tutor' => [
+        'primary' => 'Qwen/Qwen2.5-7B-Instruct',
+        'fallback' => 'meta-llama/Llama-3.2-1B-Instruct',
+        'max_tokens' => 2048,
+        'timeout' => 30,
+        'type' => 'text',
+    ],
+
     // --- Translation ---
 
     'translation' => [
-        'primary' => 'facebook/nllb-200-distilled-600M',
-        'fallback' => null,
+        'primary' => 'Qwen/Qwen2.5-7B-Instruct',
+        'fallback' => 'meta-llama/Llama-3.2-1B-Instruct',
         'max_tokens' => 4096,
         'timeout' => 30,
         'type' => 'text',

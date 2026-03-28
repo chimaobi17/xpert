@@ -1,0 +1,1 @@
+import{j as d,c as t}from"./index-DVOk68hj.js";function n({children:r,className:o,hoverable:a=!1,onClick:e,...s}){return d.jsx("div",{className:t("rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6",a&&"transition-all duration-150 hover:border-primary-500/40 hover:shadow-md cursor-pointer",o),onClick:e,...s,children:r})}export{n as C};

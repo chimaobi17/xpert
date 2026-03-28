@@ -111,6 +111,15 @@ export default function AgentWorkspace() {
       setAiResponse(res.data.response);
       setResponseType(res.data.type || 'text');
       setStep(3);
+    } else {
+      const message = res.data?.message || 'AI is temporarily unavailable. Please try again.';
+      if (res.data?.retry) {
+        toast.error(message + ' Retrying may help.');
+      } else if (res.data?.upgrade) {
+        toast(message, { icon: '⬆️' });
+      } else {
+        toast.error(message);
+      }
     }
     setLoading(false);
   }

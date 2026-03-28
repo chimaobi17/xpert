@@ -8,6 +8,7 @@ import {
   CheckCircleIcon,
   PlusIcon,
   SparklesIcon,
+  RectangleStackIcon,
 } from '@heroicons/react/24/outline';
 import { get, post } from '../../lib/apiClient';
 import useAuth from '../../hooks/useAuth';
