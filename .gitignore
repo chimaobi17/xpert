@@ -24,3 +24,5 @@ Homestead.yaml
 Thumbs.db
 */node_modules/*
 /xpert
+/xpert-app/dist
+/xpert-admin-dashboard/dist
