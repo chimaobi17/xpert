@@ -1,0 +1,17 @@
+node_modules
+xpert-app/node_modules
+xpert-admin-dashboard/node_modules
+xpert-app/dist
+xpert-admin-dashboard/dist
+.git
+.env
+.env.local
+vendor
+storage/logs/*
+storage/framework/cache/*
+storage/framework/sessions/*
+storage/framework/views/*
+tests
+.github
+*.md
+docker-compose.yml

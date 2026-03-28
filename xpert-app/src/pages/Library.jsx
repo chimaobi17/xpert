@@ -27,13 +27,13 @@ export default function Library() {
     setLoading(false);
   }
 
-  const agentNames = [...new Set(items.map((i) => i.ai_agent?.name).filter(Boolean))];
+  const agentNames = [...new Set(items.map((i) => i.agent?.name).filter(Boolean))];
 
   const filtered = items.filter((item) => {
     const matchesSearch =
       (item.original_input || '').toLowerCase().includes(search.toLowerCase()) ||
       (item.final_prompt || '').toLowerCase().includes(search.toLowerCase());
-    const matchesAgent = filterAgent === 'All' || item.ai_agent?.name === filterAgent;
+    const matchesAgent = filterAgent === 'All' || item.agent?.name === filterAgent;
     return matchesSearch && matchesAgent;
   });
 
@@ -99,7 +99,7 @@ export default function Library() {
               >
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-1">
-                    <Badge variant="info" size="sm">{item.ai_agent?.name || 'Agent'}</Badge>
+                    <Badge variant="info" size="sm">{item.agent?.name || 'Agent'}</Badge>
                     <span className="text-xs text-[var(--color-text-tertiary)]">{formatDate(item.created_at)}</span>
                   </div>
                   <p className="text-sm font-medium text-[var(--color-text)] truncate">{item.original_input}</p>

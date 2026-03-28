@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import Button from '../ui/Button';
 import Textarea from '../ui/Textarea';
 
-export default function PromptPreview({ generatedPrompt, onSubmit, onBack }) {
+export default function PromptPreview({ generatedPrompt, onSubmit, onBack, loading }) {
   const [choice, setChoice] = useState(null);
   const [customPrompt, setCustomPrompt] = useState('');
   const [editedPrompt, setEditedPrompt] = useState(generatedPrompt);
@@ -80,9 +80,10 @@ export default function PromptPreview({ generatedPrompt, onSubmit, onBack }) {
         <Button variant="ghost" onClick={onBack}>Back to Form</Button>
         <Button
           onClick={() => onSubmit(getFinalPrompt(), getPromptType())}
-          disabled={!choice || !getFinalPrompt().trim()}
+          disabled={!choice || !getFinalPrompt().trim() || loading}
+          loading={loading}
         >
-          Send to AI
+          {loading ? 'Thinking...' : 'Send to AI'}
         </Button>
       </div>
     </div>

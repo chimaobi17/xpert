@@ -77,7 +77,19 @@ class AuthController extends Controller
             $this->assignDefaultAgents($user, $validated['field_of_specialization']);
         }
 
+        // Mark as onboarded when specialization is set (completing onboarding)
+        if (isset($validated['field_of_specialization']) && ! $user->is_onboarded) {
+            $user->update(['is_onboarded' => true]);
+        }
+
         return response()->json($user->fresh());
+    }
+
+    public function markOnboarded(Request $request)
+    {
+        $request->user()->update(['is_onboarded' => true]);
+
+        return response()->json($request->user()->fresh());
     }
 
     private function assignDefaultAgents(User $user, string $specialization): void

@@ -1,23 +1,34 @@
-import { useEffect } from 'react';
+import { useEffect, lazy, Suspense } from 'react';
 import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import { Toaster, toast } from 'react-hot-toast';
 import { registerApiHandlers } from './lib/apiClient';
 import ProtectedRoute from './routes/ProtectedRoute';
 import GuestRoute from './routes/GuestRoute';
 import AppLayout from './components/layout/AppLayout';
-import Login from './pages/auth/Login';
-import Register from './pages/auth/Register';
-import ForgotPassword from './pages/auth/ForgotPassword';
-import Dashboard from './pages/Dashboard';
-import Workspace from './pages/Workspace';
-import AgentDiscover from './pages/agents/AgentDiscover';
-import AgentWorkspace from './pages/agents/AgentWorkspace';
-import Library from './pages/Library';
-import Settings from './pages/settings/Settings';
-import Notifications from './pages/Notifications';
-import Help from './pages/Help';
-import NotFound from './pages/NotFound';
-import BlockedScreen from './pages/BlockedScreen';
+import Spinner from './components/ui/Spinner';
+
+// Lazy-loaded pages for code splitting
+const Login = lazy(() => import('./pages/auth/Login'));
+const Register = lazy(() => import('./pages/auth/Register'));
+const ForgotPassword = lazy(() => import('./pages/auth/ForgotPassword'));
+const Dashboard = lazy(() => import('./pages/Dashboard'));
+const Workspace = lazy(() => import('./pages/Workspace'));
+const AgentDiscover = lazy(() => import('./pages/agents/AgentDiscover'));
+const AgentWorkspace = lazy(() => import('./pages/agents/AgentWorkspace'));
+const Library = lazy(() => import('./pages/Library'));
+const Settings = lazy(() => import('./pages/settings/Settings'));
+const Notifications = lazy(() => import('./pages/Notifications'));
+const Help = lazy(() => import('./pages/Help'));
+const NotFound = lazy(() => import('./pages/NotFound'));
+const BlockedScreen = lazy(() => import('./pages/BlockedScreen'));
+
+function PageLoader() {
+  return (
+    <div className="flex justify-center items-center py-24">
+      <Spinner size="lg" />
+    </div>
+  );
+}
 
 function ApiHandlerRegistration() {
   const navigate = useNavigate();
@@ -59,31 +70,33 @@ export default function App() {
         }}
       />
       <ApiHandlerRegistration />
-      <Routes>
-        <Route element={<GuestRoute />}>
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
-        </Route>
-
-        <Route path="/blocked" element={<BlockedScreen />} />
-
-        <Route element={<ProtectedRoute />}>
-          <Route element={<AppLayout />}>
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/workspace" element={<Workspace />} />
-            <Route path="/agents/discover" element={<AgentDiscover />} />
-            <Route path="/agents/:id" element={<AgentWorkspace />} />
-            <Route path="/library" element={<Library />} />
-            <Route path="/settings" element={<Settings />} />
-            <Route path="/notifications" element={<Notifications />} />
-            <Route path="/help" element={<Help />} />
+      <Suspense fallback={<PageLoader />}>
+        <Routes>
+          <Route element={<GuestRoute />}>
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
           </Route>
-        </Route>
 
-        <Route path="/" element={<Navigate to="/dashboard" replace />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
+          <Route path="/blocked" element={<BlockedScreen />} />
+
+          <Route element={<ProtectedRoute />}>
+            <Route element={<AppLayout />}>
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/workspace" element={<Workspace />} />
+              <Route path="/agents/discover" element={<AgentDiscover />} />
+              <Route path="/agents/:id" element={<AgentWorkspace />} />
+              <Route path="/library" element={<Library />} />
+              <Route path="/settings" element={<Settings />} />
+              <Route path="/notifications" element={<Notifications />} />
+              <Route path="/help" element={<Help />} />
+            </Route>
+          </Route>
+
+          <Route path="/" element={<Navigate to="/dashboard" replace />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </Suspense>
     </>
   );
 }

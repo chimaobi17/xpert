@@ -11,7 +11,7 @@ class LibraryController extends Controller
     public function index(Request $request)
     {
         $items = PromptLibrary::where('user_id', $request->user()->id)
-            ->with('aiAgent:id,name')
+            ->with('agent:id,name')
             ->latest()
             ->get();
 

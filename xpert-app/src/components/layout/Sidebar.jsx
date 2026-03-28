@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import clsx from 'clsx';
 import {
@@ -10,6 +11,7 @@ import {
   QuestionMarkCircleIcon,
 } from '@heroicons/react/24/outline';
 import useAuth from '../../hooks/useAuth';
+import { get } from '../../lib/apiClient';
 
 const navItems = [
   { to: '/dashboard', label: 'Dashboard', icon: HomeIcon },
@@ -23,10 +25,22 @@ const navItems = [
 
 export default function Sidebar({ open, onClose }) {
   const { user } = useAuth();
+  const [tokensUsed, setTokensUsed] = useState(0);
+  const [agentCount, setAgentCount] = useState(0);
 
   const planLabel = user?.plan_level === 'premium' ? 'Premium' : user?.plan_level === 'standard' ? 'Standard' : 'Free';
   const quotaMax = user?.plan_level === 'premium' ? 1000000 : user?.plan_level === 'standard' ? 150000 : 25000;
-  const tokensUsed = 8750;
+  const isFree = user?.plan_level === 'free' || !user?.plan_level;
+
+  useEffect(() => {
+    get('/usage').then((res) => {
+      if (res.ok) setTokensUsed(res.data.tokens_used_today ?? 0);
+    });
+    get('/user/agents').then((res) => {
+      if (res.ok) setAgentCount(res.data.length);
+    });
+  }, []);
+
   const pct = Math.min((tokensUsed / quotaMax) * 100, 100);
 
   return (
@@ -70,6 +84,11 @@ export default function Sidebar({ open, onClose }) {
             <p className="text-xs text-primary-600 mt-1">
               {tokensUsed.toLocaleString()} / {quotaMax.toLocaleString()} tokens
             </p>
+            {isFree && (
+              <p className="text-xs text-primary-600 mt-1">
+                Agents: {agentCount}/3
+              </p>
+            )}
           </div>
         </div>
       </aside>

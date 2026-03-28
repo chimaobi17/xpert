@@ -34,6 +34,12 @@ export default function OnboardingFlow({ onComplete }) {
     if (step > 0) setStep(step - 1);
   }
 
+  async function handleSkip() {
+    await patch('/user/onboarded', {});
+    await refreshUser();
+    onComplete?.();
+  }
+
   async function handleSubmit() {
     setLoading(true);
     const res = await patch('/user/profile', form);
@@ -117,7 +123,7 @@ export default function OnboardingFlow({ onComplete }) {
                 Back
               </Button>
             )}
-            <Button variant="ghost" onClick={onComplete} className="text-[var(--color-text-tertiary)]">
+            <Button variant="ghost" onClick={handleSkip} className="text-[var(--color-text-tertiary)]">
               Skip
             </Button>
           </div>

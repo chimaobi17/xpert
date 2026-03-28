@@ -15,8 +15,10 @@ Route::get('/health', fn () => response()->json([
     'timestamp' => now()->toISOString(),
 ]));
 
-Route::post('/login', [AuthController::class, 'login']);
-Route::post('/register', [AuthController::class, 'register']);
+Route::middleware('throttle:10,1')->group(function () {
+    Route::post('/login', [AuthController::class, 'login']);
+    Route::post('/register', [AuthController::class, 'register']);
+});
 
 // Authenticated routes
 Route::middleware('auth:sanctum')->group(function () {
@@ -24,6 +26,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', [AuthController::class, 'user']);
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::patch('/user/profile', [AuthController::class, 'updateProfile']);
+    Route::patch('/user/onboarded', [AuthController::class, 'markOnboarded']);
 
     // User's agents (workspace)
     Route::get('/user/agents', [UserAgentController::class, 'index']);

@@ -33,8 +33,20 @@ export default function AgentDiscover() {
   );
   const [tier, setTier] = useState('All Tiers');
   const [upgradeModal, setUpgradeModal] = useState(false);
+  const [limitModal, setLimitModal] = useState(false);
   const [agents, setAgents] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [userAgentCount, setUserAgentCount] = useState(0);
+
+  const isFree = user?.plan_level === 'free' || !user?.plan_level;
+
+  useEffect(() => {
+    if (isFree) {
+      get('/user/agents').then((res) => {
+        if (res.ok) setUserAgentCount(res.data.length);
+      });
+    }
+  }, [isFree]);
 
   const loadAgents = useCallback(async () => {
     setLoading(true);
@@ -60,10 +72,17 @@ export default function AgentDiscover() {
       setUpgradeModal(true);
       return;
     }
+    if (isFree && userAgentCount >= 3) {
+      setLimitModal(true);
+      return;
+    }
     const res = await post(`/user/agents/${agent.id}`);
     if (res.ok) {
       setAgents((prev) => prev.map((a) => (a.id === agent.id ? { ...a, is_added: true } : a)));
+      setUserAgentCount((c) => c + 1);
       toast.success(`${agent.name} added to your workspace`);
+    } else if (res.error === 'agent_limit_reached') {
+      setLimitModal(true);
     }
   }
 
@@ -185,6 +204,20 @@ export default function AgentDiscover() {
           No agents found matching your criteria.
         </div>
       )}
+
+      {/* Agent Limit Modal */}
+      <Modal isOpen={limitModal} onClose={() => setLimitModal(false)} title="Agent Limit Reached" isSolid>
+        <div className="text-center">
+          <RectangleStackIcon className="h-12 w-12 text-primary-500 mx-auto mb-4" />
+          <h3 className="text-lg font-semibold text-[var(--color-text)] mb-2">You've Reached Your Limit</h3>
+          <p className="text-sm text-[var(--color-text-secondary)] mb-6">
+            Free plan users can have up to 3 agents in their workspace. Upgrade to add unlimited agents.
+          </p>
+          <Button className="w-full" onClick={() => { setLimitModal(false); navigate('/settings?tab=plan'); }}>
+            View Plans
+          </Button>
+        </div>
+      </Modal>
 
       {/* Upgrade Modal */}
       <Modal isOpen={upgradeModal} onClose={() => setUpgradeModal(false)} title="Upgrade Your Plan" isSolid>

@@ -22,6 +22,7 @@ class User extends Authenticatable
         'field_of_specialization',
         'banned_until',
         'ban_reason',
+        'is_onboarded',
     ];
 
     protected $hidden = [
@@ -37,12 +38,13 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'banned_until' => 'datetime',
+            'is_onboarded' => 'boolean',
         ];
     }
 
     public function getOnboardingCompleteAttribute(): bool
     {
-        return !is_null($this->field_of_specialization);
+        return (bool) $this->is_onboarded;
     }
 
     public function isAdmin(): bool

@@ -1,9 +1,25 @@
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { agents } from '../mock/agents';
+import { get } from '../lib/apiClient';
 import Badge from '../components/ui/Badge';
+import Spinner from '../components/ui/Spinner';
 
 export default function Agents() {
   const navigate = useNavigate();
+  const [agents, setAgents] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    loadAgents();
+  }, []);
+
+  async function loadAgents() {
+    const res = await get('/admin/agents');
+    if (res.ok) setAgents(res.data);
+    setLoading(false);
+  }
+
+  if (loading) return <div className="flex justify-center py-16"><Spinner size="lg" /></div>;
 
   return (
     <div className="space-y-6">
@@ -15,9 +31,8 @@ export default function Agents() {
             <tr className="border-b border-[var(--color-border)] bg-[var(--color-bg-secondary)]">
               <th className="px-4 py-3 text-left font-medium text-[var(--color-text-secondary)]">Agent</th>
               <th className="px-4 py-3 text-left font-medium text-[var(--color-text-secondary)]">Domain</th>
+              <th className="px-4 py-3 text-left font-medium text-[var(--color-text-secondary)]">Category</th>
               <th className="px-4 py-3 text-left font-medium text-[var(--color-text-secondary)]">Type</th>
-              <th className="px-4 py-3 text-left font-medium text-[var(--color-text-secondary)]">Total Usage</th>
-              <th className="px-4 py-3 text-left font-medium text-[var(--color-text-secondary)]">Active Users</th>
               <th className="px-4 py-3 text-left font-medium text-[var(--color-text-secondary)]">Actions</th>
             </tr>
           </thead>
@@ -28,6 +43,7 @@ export default function Agents() {
                 <td className="px-4 py-3">
                   <Badge variant="info" size="sm">{agent.domain}</Badge>
                 </td>
+                <td className="px-4 py-3 text-[var(--color-text-secondary)]">{agent.category}</td>
                 <td className="px-4 py-3">
                   {agent.is_premium_only ? (
                     <Badge variant="premium" size="sm">Premium</Badge>
@@ -35,8 +51,6 @@ export default function Agents() {
                     <Badge variant="neutral" size="sm">Free</Badge>
                   )}
                 </td>
-                <td className="px-4 py-3 text-[var(--color-text-secondary)]">{agent.usage_count.toLocaleString()}</td>
-                <td className="px-4 py-3 text-[var(--color-text-secondary)]">{agent.active_users}</td>
                 <td className="px-4 py-3">
                   <button
                     onClick={() => navigate(`/agents/${agent.id}/edit`)}

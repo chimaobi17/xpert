@@ -1,19 +1,32 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MagnifyingGlassIcon, ShieldExclamationIcon } from '@heroicons/react/24/outline';
-import { users as allUsers } from '../mock/users';
-import useAuth from '../hooks/useAuth';
+import { get } from '../lib/apiClient';
+
 import Badge from '../components/ui/Badge';
 import Input from '../components/ui/Input';
 import Card from '../components/ui/Card';
+import Spinner from '../components/ui/Spinner';
 
 export default function Users() {
   const navigate = useNavigate();
-  const { user: currentUser } = useAuth();
+  const [allUsers, setAllUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [planFilter, setPlanFilter] = useState('all');
   const [roleFilter, setRoleFilter] = useState('all');
   const [specFilter, setSpecFilter] = useState('all');
+
+  useEffect(() => {
+    loadUsers();
+  }, []);
+
+  async function loadUsers() {
+    setLoading(true);
+    const res = await get('/admin/users');
+    if (res.ok) setAllUsers(res.data);
+    setLoading(false);
+  }
 
   let filtered = allUsers;
   if (search) {
@@ -28,6 +41,10 @@ export default function Users() {
   }
   if (specFilter !== 'all') {
     filtered = filtered.filter((u) => u.field_of_specialization === specFilter);
+  }
+
+  if (loading) {
+    return <div className="flex justify-center py-16"><Spinner size="lg" /></div>;
   }
 
   return (
@@ -46,31 +63,19 @@ export default function Users() {
             onChange={(e) => setSearch(e.target.value)}
           />
         </div>
-        <select
-          value={planFilter}
-          onChange={(e) => setPlanFilter(e.target.value)}
-          className="rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-2 text-sm text-[var(--color-text)]"
-        >
+        <select value={planFilter} onChange={(e) => setPlanFilter(e.target.value)} className="rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-2 text-sm text-[var(--color-text)]">
           <option value="all">All Plans</option>
           <option value="free">Free</option>
           <option value="standard">Standard</option>
           <option value="premium">Premium</option>
         </select>
-        <select
-          value={roleFilter}
-          onChange={(e) => setRoleFilter(e.target.value)}
-          className="rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-2 text-sm text-[var(--color-text)]"
-        >
+        <select value={roleFilter} onChange={(e) => setRoleFilter(e.target.value)} className="rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-2 text-sm text-[var(--color-text)]">
           <option value="all">All Roles</option>
           <option value="user">User</option>
           <option value="admin">Admin</option>
           <option value="super_admin">Super Admin</option>
         </select>
-        <select
-          value={specFilter}
-          onChange={(e) => setSpecFilter(e.target.value)}
-          className="rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-2 text-sm text-[var(--color-text)]"
-        >
+        <select value={specFilter} onChange={(e) => setSpecFilter(e.target.value)} className="rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-2 text-sm text-[var(--color-text)]">
           <option value="all">All Specializations</option>
           <option value="technology">Technology</option>
           <option value="creative">Creative</option>
@@ -90,7 +95,6 @@ export default function Users() {
                 <th className="px-4 py-3 text-left font-medium text-[var(--color-text-secondary)]">Plan</th>
                 <th className="px-4 py-3 text-left font-medium text-[var(--color-text-secondary)]">Specialization</th>
                 <th className="px-4 py-3 text-left font-medium text-[var(--color-text-secondary)]">Status</th>
-                <th className="px-4 py-3 text-left font-medium text-[var(--color-text-secondary)]">Tokens Today</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-[var(--color-border)]">
@@ -118,16 +122,13 @@ export default function Users() {
                     {user.field_of_specialization || '—'}
                   </td>
                   <td className="px-4 py-3">
-                    {user.banned_until ? (
+                    {user.banned_until || user.ban_reason ? (
                       <Badge variant="error" size="sm">
                         <ShieldExclamationIcon className="h-3 w-3 mr-1" /> Blocked
                       </Badge>
                     ) : (
                       <Badge variant="success" size="sm">Active</Badge>
                     )}
-                  </td>
-                  <td className="px-4 py-3 text-[var(--color-text-secondary)]">
-                    {user.tokens_today.toLocaleString()}
                   </td>
                 </tr>
               ))}

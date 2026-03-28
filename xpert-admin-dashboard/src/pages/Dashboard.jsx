@@ -1,41 +1,54 @@
+import { useState, useEffect } from 'react';
 import {
   UsersIcon,
   DocumentTextIcon,
   CpuChipIcon,
-  CurrencyDollarIcon,
   CheckCircleIcon,
 } from '@heroicons/react/24/outline';
-import { dashboardStats, usageOverWeek, popularAgents, recentRegistrations, systemHealth } from '../mock/stats';
+import { get } from '../lib/apiClient';
 import Badge from '../components/ui/Badge';
-
-function formatDateTime(dateStr) {
-  return new Date(dateStr).toLocaleDateString('en-US', {
-    month: 'short',
-    day: 'numeric',
-    hour: 'numeric',
-    minute: '2-digit',
-  });
-}
+import Spinner from '../components/ui/Spinner';
 
 export default function Dashboard() {
-  const maxPrompts = Math.max(...usageOverWeek.map((d) => d.prompts));
+  const [stats, setStats] = useState(null);
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  async function loadData() {
+    const [statsRes, usersRes] = await Promise.all([
+      get('/admin/stats'),
+      get('/admin/users'),
+    ]);
+    if (statsRes.ok) setStats(statsRes.data);
+    if (usersRes.ok) setUsers(usersRes.data.slice(0, 5));
+    setLoading(false);
+  }
+
+  if (loading) {
+    return <div className="flex justify-center py-16"><Spinner size="lg" /></div>;
+  }
+
+  const statCards = [
+    { icon: UsersIcon, label: 'Total Users', value: stats?.total_users ?? 0 },
+    { icon: DocumentTextIcon, label: 'Prompts Today', value: stats?.total_prompts_today ?? 0 },
+    { icon: CpuChipIcon, label: 'Active Agents', value: stats?.active_agents ?? 0 },
+  ];
 
   return (
     <div className="space-y-6">
       <h1 className="text-2xl font-bold text-[var(--color-text)]">Admin Dashboard</h1>
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {[
-          { icon: UsersIcon, label: 'Total Users', value: dashboardStats.totalUsers.toLocaleString() },
-          { icon: DocumentTextIcon, label: 'Prompts Today', value: dashboardStats.totalPromptsToday.toLocaleString() },
-          { icon: CpuChipIcon, label: 'Active Agents', value: dashboardStats.activeAgents },
-          { icon: CurrencyDollarIcon, label: 'Revenue (MTD)', value: dashboardStats.revenue },
-        ].map((stat) => (
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {statCards.map((stat) => (
           <div key={stat.label} className="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-[var(--color-text-secondary)]">{stat.label}</p>
-                <p className="mt-1 text-2xl font-bold text-[var(--color-text)]">{stat.value}</p>
+                <p className="mt-1 text-2xl font-bold text-[var(--color-text)]">{stat.value.toLocaleString()}</p>
               </div>
               <div className="rounded-lg bg-primary-50 p-2.5">
                 <stat.icon className="h-5 w-5 text-primary-600" />
@@ -47,55 +60,17 @@ export default function Dashboard() {
 
       <div className="grid gap-6 lg:grid-cols-2">
         <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5">
-          <h3 className="text-sm font-semibold text-[var(--color-text)] mb-4">Usage (Last 7 Days)</h3>
-          <div className="flex items-end gap-2 h-40">
-            {usageOverWeek.map((day) => (
-              <div key={day.day} className="flex flex-1 flex-col items-center gap-1">
-                <div
-                  className="w-full rounded-t bg-primary-500 transition-all"
-                  style={{ height: `${(day.prompts / maxPrompts) * 100}%` }}
-                />
-                <span className="text-xs text-[var(--color-text-tertiary)]">{day.day}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5">
-          <h3 className="text-sm font-semibold text-[var(--color-text)] mb-4">Popular Agents</h3>
-          <div className="space-y-3">
-            {popularAgents.map((agent) => (
-              <div key={agent.name} className="flex items-center gap-3">
-                <span className="text-sm text-[var(--color-text)] w-36 truncate">{agent.name}</span>
-                <div className="flex-1 h-2 rounded-full bg-[var(--color-bg-secondary)]">
-                  <div
-                    className="h-2 rounded-full bg-primary-500"
-                    style={{ width: `${agent.usage}%` }}
-                  />
-                </div>
-                <span className="text-xs font-medium text-[var(--color-text-secondary)] w-8 text-right">{agent.usage}%</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      <div className="grid gap-6 lg:grid-cols-2">
-        <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5">
           <h3 className="text-sm font-semibold text-[var(--color-text)] mb-4">Recent Registrations</h3>
           <div className="space-y-3">
-            {recentRegistrations.map((user) => (
+            {users.map((user) => (
               <div key={user.id} className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-[var(--color-text)]">{user.name}</p>
                   <p className="text-xs text-[var(--color-text-tertiary)]">{user.email}</p>
                 </div>
-                <div className="text-right">
-                  <Badge variant={user.plan_level === 'premium' ? 'premium' : user.plan_level === 'standard' ? 'info' : 'neutral'} size="sm">
-                    {user.plan_level}
-                  </Badge>
-                  <p className="text-xs text-[var(--color-text-tertiary)] mt-0.5">{formatDateTime(user.created_at)}</p>
-                </div>
+                <Badge variant={user.plan_level === 'premium' ? 'premium' : user.plan_level === 'standard' ? 'info' : 'neutral'} size="sm">
+                  {user.plan_level}
+                </Badge>
               </div>
             ))}
           </div>
@@ -104,9 +79,9 @@ export default function Dashboard() {
         <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5">
           <h3 className="text-sm font-semibold text-[var(--color-text)] mb-4">System Health</h3>
           <div className="space-y-3">
-            {systemHealth.map((service) => (
-              <div key={service.name} className="flex items-center justify-between rounded-lg bg-[var(--color-bg)] p-3">
-                <span className="text-sm text-[var(--color-text)]">{service.name}</span>
+            {['Laravel API', 'SQLite Database', 'HuggingFace API', 'Queue Worker'].map((service) => (
+              <div key={service} className="flex items-center justify-between rounded-lg bg-[var(--color-bg)] p-3">
+                <span className="text-sm text-[var(--color-text)]">{service}</span>
                 <div className="flex items-center gap-1.5">
                   <CheckCircleIcon className="h-4 w-4 text-green-500" />
                   <span className="text-xs font-medium text-green-600">Healthy</span>

@@ -75,6 +75,14 @@ class AdminController extends Controller
 
     public function promoteUser(Request $request, User $user)
     {
+        if ($user->id === $request->user()->id) {
+            return response()->json(['error' => 'You cannot modify your own role.'], 403);
+        }
+
+        if ($user->role === 'super_admin') {
+            return response()->json(['error' => 'Cannot modify a super admin.'], 403);
+        }
+
         $validated = $request->validate([
             'role' => ['required', 'in:user,admin'],
         ]);
@@ -84,8 +92,16 @@ class AdminController extends Controller
         return response()->json($user);
     }
 
-    public function deleteUser(User $user)
+    public function deleteUser(Request $request, User $user)
     {
+        if ($user->id === $request->user()->id) {
+            return response()->json(['error' => 'You cannot delete your own account.'], 403);
+        }
+
+        if ($user->role === 'super_admin') {
+            return response()->json(['error' => 'Cannot delete a super admin.'], 403);
+        }
+
         $user->delete();
 
         return response()->json(['message' => 'User deleted']);
@@ -102,7 +118,7 @@ class AdminController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'domain' => ['required', 'string', 'in:Technology,Creative,Business,Research,Language'],
             'category' => ['required', 'string', 'max:100'],
-            'system_prompt' => ['required', 'string'],
+            'system_prompt' => ['required', 'string', 'max:50000'],
             'is_premium_only' => ['sometimes', 'boolean'],
         ]);
 
@@ -115,7 +131,7 @@ class AdminController extends Controller
     {
         $validated = $request->validate([
             'name' => ['sometimes', 'string', 'max:255'],
-            'system_prompt' => ['sometimes', 'string'],
+            'system_prompt' => ['sometimes', 'string', 'max:50000'],
             'is_premium_only' => ['sometimes', 'boolean'],
         ]);
 

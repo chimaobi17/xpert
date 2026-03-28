@@ -28,6 +28,15 @@ class UserAgentController extends Controller
             ], 409);
         }
 
+        if ($user->plan_level === 'free' && $user->agents()->count() >= 3) {
+            return response()->json([
+                'error' => 'agent_limit_reached',
+                'message' => 'Free plan users can have up to 3 agents. Upgrade your plan to add more.',
+                'retry' => false,
+                'upgrade' => true,
+            ], 402);
+        }
+
         if ($agent->is_premium_only && $user->plan_level === 'free') {
             return response()->json([
                 'error' => 'premium_required',

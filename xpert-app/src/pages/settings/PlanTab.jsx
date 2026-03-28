@@ -1,6 +1,8 @@
+import { useState, useEffect } from 'react';
 import useAuth from '../../hooks/useAuth';
 import Badge from '../../components/ui/Badge';
 import Button from '../../components/ui/Button';
+import { get } from '../../lib/apiClient';
 import { CheckIcon } from '@heroicons/react/24/solid';
 
 const plans = [
@@ -31,9 +33,26 @@ const plans = [
   },
 ];
 
+const quotaLimits = {
+  free: { tokens: 25000, requests: 50 },
+  standard: { tokens: 150000, requests: 300 },
+  premium: { tokens: 1000000, requests: null },
+};
+
 export default function PlanTab() {
   const { user } = useAuth();
   const currentPlan = user?.plan_level || 'free';
+  const [usage, setUsage] = useState({ tokens_used_today: 0, requests_today: 0 });
+
+  useEffect(() => {
+    get('/usage').then((res) => {
+      if (res.ok) setUsage(res.data);
+    });
+  }, []);
+
+  const limits = quotaLimits[currentPlan] || quotaLimits.free;
+  const tokenPct = limits.tokens ? Math.min((usage.tokens_used_today / limits.tokens) * 100, 100) : 0;
+  const requestPct = limits.requests ? Math.min((usage.requests_today / limits.requests) * 100, 100) : 0;
 
   return (
     <div className="space-y-6">
@@ -42,16 +61,20 @@ export default function PlanTab() {
         <div className="mt-3 grid gap-4 sm:grid-cols-2">
           <div className="rounded-lg bg-[var(--color-bg)] p-4">
             <p className="text-xs text-[var(--color-text-secondary)]">Token Usage Today</p>
-            <p className="text-lg font-bold text-[var(--color-text)] mt-1">8,750 / 25,000</p>
+            <p className="text-lg font-bold text-[var(--color-text)] mt-1">
+              {(usage.tokens_used_today ?? 0).toLocaleString()} / {limits.tokens ? limits.tokens.toLocaleString() : '∞'}
+            </p>
             <div className="mt-2 h-2 rounded-full bg-[var(--color-border)]">
-              <div className="h-2 rounded-full bg-primary-500" style={{ width: '35%' }} />
+              <div className="h-2 rounded-full bg-primary-500" style={{ width: `${tokenPct}%` }} />
             </div>
           </div>
           <div className="rounded-lg bg-[var(--color-bg)] p-4">
             <p className="text-xs text-[var(--color-text-secondary)]">Requests Today</p>
-            <p className="text-lg font-bold text-[var(--color-text)] mt-1">18 / 50</p>
+            <p className="text-lg font-bold text-[var(--color-text)] mt-1">
+              {(usage.requests_today ?? 0).toLocaleString()} / {limits.requests ? limits.requests.toLocaleString() : '∞'}
+            </p>
             <div className="mt-2 h-2 rounded-full bg-[var(--color-border)]">
-              <div className="h-2 rounded-full bg-primary-500" style={{ width: '36%' }} />
+              <div className="h-2 rounded-full bg-primary-500" style={{ width: `${requestPct}%` }} />
             </div>
           </div>
         </div>
