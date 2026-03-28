@@ -22,9 +22,16 @@ echo "==> Caching config..."
 php artisan config:clear || true
 php artisan config:cache || echo "==> config:cache failed, continuing..."
 
-# Debug: show which DB host will be used
+# Debug: show which DB config will be used
+echo "==> DB_CONNECTION: ${DB_CONNECTION:-not set}"
 echo "==> DB_HOST: ${DB_HOST:-not set}"
+echo "==> DB_PORT: ${DB_PORT:-not set}"
 echo "==> DB_USERNAME: ${DB_USERNAME:-not set}"
+echo "==> DB_DATABASE: ${DB_DATABASE:-not set}"
+echo "==> DB_SSLMODE: ${DB_SSLMODE:-not set}"
+
+# Verify config:cache resolved correctly
+php artisan tinker --execute="echo 'Cached DB driver: '.config('database.default').PHP_EOL.'Cached DB host: '.config('database.connections.pgsql.host').PHP_EOL.'Cached DB user: '.config('database.connections.pgsql.username').PHP_EOL.'Cached DB url: '.var_export(config('database.connections.pgsql.url'),true).PHP_EOL;" 2>/dev/null || echo "==> tinker debug failed"
 
 echo "==> Caching views..."
 php artisan view:cache || echo "==> view:cache failed, continuing..."
