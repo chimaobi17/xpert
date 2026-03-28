@@ -1,11 +1,11 @@
 FROM php:8.2-cli
 
-# Install system dependencies and PHP extensions in a single, optimized layer
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends \
-       git curl unzip libpq-dev libzip-dev libpng-dev libonig-dev libxml2-dev \
-    && docker-php-ext-install -j$(nproc) pdo_pgsql pgsql mbstring bcmath zip gd \
-    && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
+# Use install-php-extensions for fast, pre-compiled extension installation
+ADD --chmod=0755 https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
+
+RUN install-php-extensions pdo_pgsql pgsql mbstring bcmath zip gd
+
+RUN apt-get update && apt-get install -y --no-install-recommends git curl unzip \
     && rm -rf /var/lib/apt/lists/*
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
