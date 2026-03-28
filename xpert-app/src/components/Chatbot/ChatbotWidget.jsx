@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import ChatbotBubble from './ChatbotBubble';
 import ChatbotPanel from './ChatbotPanel';
 import { matchQuestion, FALLBACK_KNOWLEDGE } from './ChatbotMatcher';
+import api from '../../lib/axios';
 
 function ChatbotWidget() {
   const [isOpen, setIsOpen] = useState(false);
@@ -17,11 +18,8 @@ function ChatbotWidget() {
   useEffect(() => {
     if (isOpen && knowledgeBase.length === 0) {
       // Lazy load KB
-      fetch('/api/chatbot/knowledge', {
-        headers: { 'Accept': 'application/json' },
-        credentials: 'include',
-      })
-      .then(res => res.json())
+      api.get('/chatbot/knowledge')
+      .then(res => res.data)
       .then(data => {
         setKnowledgeBase(data.length > 0 ? data : FALLBACK_KNOWLEDGE);
       })
