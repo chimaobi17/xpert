@@ -45,7 +45,7 @@ export default function AgentDiscover() {
     if (isFree) {
       get('/user/agents').then((res) => {
         if (res.ok) setUserAgentCount(res.data.length);
-      });
+      }).catch(() => {});
     }
   }, [isFree]);
 

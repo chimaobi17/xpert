@@ -1,4 +1,4 @@
-import api, { getCsrfCookie } from './axios';
+import api from './axios';
 
 /**
  * Centralized API client — all components call this instead of axios directly.

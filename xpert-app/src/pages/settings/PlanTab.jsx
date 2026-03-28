@@ -47,7 +47,7 @@ export default function PlanTab() {
   useEffect(() => {
     get('/usage').then((res) => {
       if (res.ok) setUsage(res.data);
-    });
+    }).catch(() => {});
   }, []);
 
   const limits = quotaLimits[currentPlan] || quotaLimits.free;

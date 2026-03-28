@@ -160,6 +160,11 @@ class HuggingFaceService
     {
         $apiKey = config('services.huggingface.api_key');
 
+        if (empty($apiKey)) {
+            Log::critical('ai_missing_key', ['action' => 'HUGGINGFACE_API_KEY env var not set']);
+            throw new InvalidApiKeyException('HuggingFace API key not configured.');
+        }
+
         $lastException = null;
         $backoff = 1;
 

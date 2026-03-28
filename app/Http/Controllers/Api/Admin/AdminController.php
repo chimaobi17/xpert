@@ -142,7 +142,7 @@ class AdminController extends Controller
 
     public function logs()
     {
-        $logs = PromptLog::with(['user:id,name,email', 'aiAgent:id,name'])
+        $logs = PromptLog::with(['user:id,name,email', 'agent:id,name'])
             ->latest()
             ->limit(100)
             ->get();
