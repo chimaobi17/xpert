@@ -1,28 +1,32 @@
 #!/bin/bash
-set -e
 
 echo "==> Starting XPERT API..."
+echo "==> PHP version: $(php -v | head -1)"
+echo "==> DB_CONNECTION: ${DB_CONNECTION}"
+echo "==> APP_ENV: ${APP_ENV}"
 
-# Create .env if it doesn't exist (Render injects env vars, but artisan needs the file)
+# Create .env if it doesn't exist (Render injects env vars directly)
 if [ ! -f .env ]; then
-    echo "==> Creating .env from environment..."
+    echo "==> Creating empty .env (env vars from Render)..."
     touch .env
 fi
 
 # Generate app key if not set
 if [ -z "$APP_KEY" ]; then
     echo "==> Generating app key..."
-    php artisan key:generate --force
+    php artisan key:generate --force || echo "==> key:generate failed"
 fi
 
 # Cache config for production (skip route:cache — closure routes can't be cached)
 echo "==> Caching config..."
-php artisan config:cache
-php artisan view:cache
+php artisan config:cache || echo "==> config:cache failed, continuing..."
+
+echo "==> Caching views..."
+php artisan view:cache || echo "==> view:cache failed, continuing..."
 
 # Run migrations
 echo "==> Running migrations..."
-php artisan migrate --force
+php artisan migrate --force || echo "==> Migration failed, continuing..."
 
 # Seed only if DB is empty (prevents duplicate seeding on redeploys)
 echo "==> Seeding database..."
