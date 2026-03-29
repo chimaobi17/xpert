@@ -64,8 +64,14 @@ export default function Workspace() {
 
   if (loading) {
     return (
-      <div className="flex justify-center py-16">
+      <div className="flex flex-col items-center justify-center py-24">
         <Spinner size="lg" />
+        <p className="mt-4 text-sm text-[var(--color-text-secondary)] animate-pulse">
+          Loading your workspace...
+        </p>
+        <div className="mt-2 text-xs text-[var(--color-text-tertiary)] max-w-xs text-center">
+          Note: The backend may take up to 30 seconds to wake up on the first visit.
+        </div>
       </div>
     );
   }

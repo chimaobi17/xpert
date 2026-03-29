@@ -155,7 +155,12 @@ export default function Dashboard() {
         <div>
           <h2 className="text-lg font-semibold text-[var(--color-text)] mb-4">Quick Actions</h2>
           {loadingData ? (
-            <div className="flex justify-center py-8"><Spinner /></div>
+            <div className="flex flex-col items-center justify-center py-12">
+              <Spinner />
+              <p className="mt-4 text-xs text-[var(--color-text-tertiary)] max-w-[200px] text-center animate-pulse">
+                Server may take 30s to wake up...
+              </p>
+            </div>
           ) : (
             <div className="grid gap-3 grid-cols-2">
               {myAgents.map((agent) => (

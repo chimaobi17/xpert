@@ -85,8 +85,12 @@ class AuthController extends Controller
         }
 
         // Mark as onboarded when specialization is set (completing onboarding)
-        if (isset($validated['field_of_specialization']) && ! $user->is_onboarded) {
-            $user->update(['is_onboarded' => true]);
+        try {
+            if (isset($validated['field_of_specialization']) && ! ($user->is_onboarded ?? false)) {
+                $user->update(['is_onboarded' => true]);
+            }
+        } catch (\Exception $e) {
+            \Log::warning('Silent onboarding update failed during profile update: ' . $e->getMessage());
         }
 
         return response()->json($user->fresh());
@@ -103,11 +107,12 @@ class AuthController extends Controller
             }
             return response()->json(['error' => 'auth_required'], 401);
         } catch (\Exception $e) {
-            \Log::error('Onboarding update failed: ' . $e->getMessage());
+            \Log::error('CRITICAL: Onboarding status persistence failed. This usually indicates a missing "is_onboarded" column in the users table. Error: ' . $e->getMessage());
+            
             return response()->json([
                 'error' => 'server_error',
-                'message' => 'Failed to persist onboarding status.',
-                'details' => config('app.debug') ? $e->getMessage() : null,
+                'message' => 'Failed to persist onboarding status. Please contact support or try again later.',
+                'details' => config('app.debug') ? $e->getMessage() : 'Database column mismatch or connection error.',
             ], 500);
         }
     }
