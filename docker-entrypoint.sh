@@ -26,7 +26,7 @@ php artisan view:cache || echo "==> view:cache failed, continuing..."
 
 # Run migrations
 echo "==> Running migrations..."
-php artisan migrate --force || echo "==> Migration failed, continuing..."
+php artisan migrate --force || { echo "==> ERROR: Migration failed. Deployment truncated."; exit 1; }
 
 # Seed only if DB is empty (prevents duplicate seeding on redeploys)
 echo "==> Seeding database..."

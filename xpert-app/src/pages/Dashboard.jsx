@@ -33,8 +33,13 @@ export default function Dashboard() {
   const [loadingData, setLoadingData] = useState(true);
 
   useEffect(() => {
-    if (user && !user.onboarding_complete) {
+    // Only trigger onboarding if the user hasn't seen it in this session 
+    // AND they aren't marked as onboarded in the database.
+    const hasSeenOnboarding = sessionStorage.getItem('xpert_onboarding_shown');
+    
+    if (user && !user.onboarding_complete && !hasSeenOnboarding) {
       setShowOnboarding(true);
+      sessionStorage.setItem('xpert_onboarding_shown', 'true');
     }
   }, [user]);
 

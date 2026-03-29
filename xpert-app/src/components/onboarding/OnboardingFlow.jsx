@@ -16,13 +16,7 @@ const steps = [
 
 export default function OnboardingFlow({ onComplete }) {
   const { user, refreshUser } = useAuth();
-  const [step, setStep] = useState(0);
-  const [form, setForm] = useState({
-    job_title: '',
-    purpose: '',
-    field_of_specialization: '',
-  });
-  const [loading, setLoading] = useState(false);
+  const [loadingSkip, setLoadingSkip] = useState(false);
 
   function handleNext() {
     if (step < 2) {
@@ -35,9 +29,13 @@ export default function OnboardingFlow({ onComplete }) {
   }
 
   async function handleSkip() {
-    await patch('/user/onboarded', {});
-    await refreshUser();
-    onComplete?.();
+    setLoadingSkip(true);
+    const res = await patch('/user/onboarded', {});
+    if (res.ok) {
+      await refreshUser();
+      onComplete?.();
+    }
+    setLoadingSkip(false);
   }
 
   async function handleSubmit() {
@@ -123,7 +121,12 @@ export default function OnboardingFlow({ onComplete }) {
                 Back
               </Button>
             )}
-            <Button variant="ghost" onClick={handleSkip} className="text-[var(--color-text-tertiary)]">
+            <Button
+              variant="ghost"
+              onClick={handleSkip}
+              loading={loadingSkip}
+              className="text-[var(--color-text-tertiary)]"
+            >
               Skip
             </Button>
           </div>

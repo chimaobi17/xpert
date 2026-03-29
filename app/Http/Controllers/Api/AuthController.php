@@ -94,9 +94,22 @@ class AuthController extends Controller
 
     public function markOnboarded(Request $request)
     {
-        $request->user()->update(['is_onboarded' => true]);
-
-        return response()->json($request->user()->fresh());
+        try {
+            $user = $request->user();
+            if ($user) {
+                $user->is_onboarded = true;
+                $user->save();
+                return response()->json($user->fresh());
+            }
+            return response()->json(['error' => 'auth_required'], 401);
+        } catch (\Exception $e) {
+            \Log::error('Onboarding update failed: ' . $e->getMessage());
+            return response()->json([
+                'error' => 'server_error',
+                'message' => 'Failed to persist onboarding status.',
+                'details' => config('app.debug') ? $e->getMessage() : null,
+            ], 500);
+        }
     }
 
     private function assignDefaultAgents(User $user, string $specialization): void
