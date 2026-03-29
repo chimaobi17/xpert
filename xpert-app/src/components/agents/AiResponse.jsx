@@ -53,9 +53,8 @@ export default function AiResponse({ response, responseType, tokensUsed, onSaveT
     setStreaming(true);
     let i = 0;
     intervalRef.current = setInterval(() => {
-      // Check if stopped was set externally
+      // Check if stopped was set externally — freeze at current position
       if (stoppedRef.current) {
-        setDisplayedText(response);
         setStreaming(false);
         stopInterval();
         return;
@@ -76,17 +75,17 @@ export default function AiResponse({ response, responseType, tokensUsed, onSaveT
     return stopInterval;
   }, [response, isImage]);
 
-  // React to parent stop signal
+  // React to parent stop signal — freeze text at current position
   useEffect(() => {
     if (stopped) {
       stopInterval();
-      setDisplayedText(response || '');
+      setDisplayedText(prev => prev);
       setStreaming(false);
     }
-  }, [stopped, response]);
+  }, [stopped]);
 
   function handleCopy() {
-    navigator.clipboard.writeText(response);
+    navigator.clipboard.writeText(displayedText);
     setCopied(true);
     toast.success('Copied to clipboard');
     setTimeout(() => setCopied(false), 2000);
@@ -103,40 +102,44 @@ export default function AiResponse({ response, responseType, tokensUsed, onSaveT
   const showActions = !streaming || isImage || stopped;
 
   return (
-    <div className="space-y-4">
-      <div className="rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] p-6">
-        {isImage ? (
-          <div className="flex justify-center">
-            <img
-              src={`data:image/jpeg;base64,${response}`}
-              alt="AI generated image"
-              className="max-w-full rounded-lg shadow-md"
-            />
-          </div>
-        ) : (
-          <>
-            <div className="prose prose-sm max-w-none text-[var(--color-text)]">
-              <ReactMarkdown>{displayedText}</ReactMarkdown>
+    <div className="flex flex-col" style={{ maxHeight: 'calc(100vh - 280px)' }}>
+      {/* Scrollable AI content */}
+      <div className="flex-1 overflow-y-auto min-h-0">
+        <div className="rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] p-4 sm:p-6 overflow-hidden">
+          {isImage ? (
+            <div className="flex justify-center">
+              <img
+                src={`data:image/jpeg;base64,${response}`}
+                alt="AI generated image"
+                className="max-w-full rounded-lg shadow-md"
+              />
             </div>
-            {streaming && !stopped && (
-              <div className="flex items-center gap-3 mt-3">
-                <span className="inline-block w-2 h-4 bg-primary-500 animate-pulse" />
-                <span className="text-xs text-[var(--color-text-tertiary)]">Generating...</span>
+          ) : (
+            <>
+              <div className="prose prose-sm max-w-none text-[var(--color-text)] overflow-x-auto break-words [&_pre]:overflow-x-auto [&_pre]:max-w-full [&_table]:block [&_table]:overflow-x-auto">
+                <ReactMarkdown>{displayedText}</ReactMarkdown>
               </div>
-            )}
-          </>
-        )}
+              {streaming && !stopped && (
+                <div className="flex items-center gap-3 mt-3">
+                  <span className="inline-block w-2 h-4 bg-primary-500 animate-pulse" />
+                  <span className="text-xs text-[var(--color-text-tertiary)]">Generating...</span>
+                </div>
+              )}
+            </>
+          )}
+        </div>
       </div>
 
+      {/* Fixed action buttons — always visible below the scroll area */}
       {showActions && (
-        <>
+        <div className="flex-shrink-0 pt-4 border-t border-[var(--color-border)] mt-4">
           {!isImage && (
-            <div className="flex items-center justify-between text-xs text-[var(--color-text-tertiary)]">
+            <div className="flex items-center justify-between text-xs text-[var(--color-text-tertiary)] mb-3">
               <span>Estimated tokens: ~{tokensUsed || Math.ceil(response.length / 4)}</span>
             </div>
           )}
 
-          <div className="flex flex-wrap gap-2">
+          <div className="grid grid-cols-2 sm:flex sm:flex-wrap gap-2 [&>button]:min-h-[44px]">
             {!isImage && (
               <Button variant="outline" size="sm" onClick={handleCopy}>
                 {copied ? <CheckIcon className="h-4 w-4" /> : <ClipboardIcon className="h-4 w-4" />}
@@ -164,7 +167,7 @@ export default function AiResponse({ response, responseType, tokensUsed, onSaveT
               <PlusIcon className="h-4 w-4" /> New Prompt
             </Button>
           </div>
-        </>
+        </div>
       )}
     </div>
   );

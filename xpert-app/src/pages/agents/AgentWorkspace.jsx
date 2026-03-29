@@ -296,13 +296,13 @@ export default function AgentWorkspace() {
             }`}>
               {step > i + 1 ? '✓' : i + 1}
             </div>
-            <span className={`text-xs font-medium ${
+            <span className={`text-xs font-medium hidden sm:inline ${
               step === i + 1 ? 'text-primary-600' : 'text-[var(--color-text-tertiary)]'
             }`}>
               {label}
             </span>
             {i < stepLabels.length - 1 && (
-              <div className={`h-px w-8 transition-colors ${step > i + 1 ? 'bg-primary-500' : 'bg-[var(--color-border)]'}`} />
+              <div className={`h-px w-4 sm:w-8 transition-colors ${step > i + 1 ? 'bg-primary-500' : 'bg-[var(--color-border)]'}`} />
             )}
           </div>
         ))}

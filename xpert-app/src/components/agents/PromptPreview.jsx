@@ -90,9 +90,9 @@ export default function PromptPreview({ generatedPrompt, onSubmit, onBack, loadi
         />
       )}
 
-      <div className="flex items-center justify-between pt-4 border-t border-[var(--color-border)]">
+      <div className="flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between pt-4 border-t border-[var(--color-border)]">
         <Button variant="ghost" onClick={onBack} disabled={loading}>Back to Form</Button>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 w-full sm:w-auto">
           {onSavePrompt && choice && getFinalPrompt().trim() && !loading && (
             <Button
               variant={savedId ? 'secondary' : 'outline'}

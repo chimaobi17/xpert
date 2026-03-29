@@ -79,23 +79,15 @@ function ChatbotWidget() {
   return (
     <>
       {/* Expanded Panel Details */}
-      <div 
-        className={`fixed z-50 transition-all duration-300 transform origin-bottom-right shadow-2xl ${
-          isOpen 
-            ? 'scale-100 opacity-100 translate-y-0' 
+      <div
+        className={`fixed z-50 transition-all duration-300 transform origin-bottom-right shadow-2xl
+          bottom-[90px] right-0 sm:right-6
+          w-full sm:w-[380px] h-[75vh] sm:h-[500px]
+          rounded-t-2xl sm:rounded-2xl
+          ${isOpen
+            ? 'scale-100 opacity-100 translate-y-0'
             : 'scale-90 opacity-0 translate-y-10 pointer-events-none'
-        }`}
-        style={{
-          bottom: '90px', // Just above bubble
-          right: window.innerWidth < 768 ? '0' : '24px',
-          width: window.innerWidth < 768 ? '100%' : '380px',
-          height: window.innerWidth < 768 ? '75vh' : '500px',
-          maxWidth: '100%',
-          borderTopLeftRadius: '1rem',
-          borderTopRightRadius: '1rem',
-          borderBottomLeftRadius: window.innerWidth < 768 ? '0' : '1rem',
-          borderBottomRightRadius: window.innerWidth < 768 ? '0' : '1rem',
-        }}
+          }`}
       >
         <div className="w-full h-full bg-white/70 dark:bg-gray-900/70 backdrop-blur-md rounded-2xl border border-white/20 dark:border-white/10 overflow-hidden flex flex-col">
           <ChatbotPanel 

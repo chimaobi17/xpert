@@ -12,8 +12,8 @@ function ChatbotBubble({ isOpen, toggle, unreadCount }) {
       style={{
         bottom: '24px',
         right: '24px',
-        width: '56px',
-        height: '56px'
+        width: '48px',
+        height: '48px'
       }}
       aria-label="Toggle Help Chatbot"
     >
