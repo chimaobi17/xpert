@@ -25,6 +25,7 @@ export default function OnboardingFlow({ onComplete }) {
   });
   const [loading, setLoading] = useState(false);
   const [loadingSkip, setLoadingSkip] = useState(false);
+  const [error, setError] = useState(null);
 
   function handleNext() {
     if (step < 2) {
@@ -51,19 +52,28 @@ export default function OnboardingFlow({ onComplete }) {
   }
 
   async function handleSubmit() {
+    if (!canProceed) return;
     setLoading(true);
-    const res = await patch('/user/profile', form);
-    if (res.ok) {
-      await refreshUser();
-      onComplete?.();
+    setError(null);
+    try {
+      const res = await patch('/user/profile', form);
+      if (res.ok) {
+        await refreshUser();
+        onComplete?.();
+      } else {
+        setError(res.error?.message || 'Failed to update profile. Please try again.');
+      }
+    } catch (err) {
+      setError('An unexpected error occurred. Please try again.');
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   }
 
-  const canProceed =
-    (step === 0 && form.job_title.trim()) ||
-    (step === 1 && form.purpose.trim()) ||
-    (step === 2 && form.field_of_specialization);
+  const canProceed = 
+    (step === 0 && form.job_title.trim().length > 0) ||
+    (step === 1 && form.purpose.trim().length > 0) ||
+    (step === 2 && form.field_of_specialization !== '');
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
@@ -123,6 +133,9 @@ export default function OnboardingFlow({ onComplete }) {
               value={form.field_of_specialization}
               onChange={(e) => setForm({ ...form, field_of_specialization: e.target.value })}
             />
+          )}
+          {error && (
+            <p className="text-xs text-red-500 text-center animate-pulse">{error}</p>
           )}
         </div>
 
