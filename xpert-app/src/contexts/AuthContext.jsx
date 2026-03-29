@@ -28,6 +28,7 @@ export function AuthProvider({ children }) {
     if (res.data.token) {
       localStorage.setItem('auth_token', res.data.token);
     }
+    sessionStorage.removeItem('xpert_onboarding_shown');
     setUser(res.data.user || res.data);
   }
 
@@ -36,6 +37,7 @@ export function AuthProvider({ children }) {
     if (res.data.token) {
       localStorage.setItem('auth_token', res.data.token);
     }
+    sessionStorage.removeItem('xpert_onboarding_shown');
     setUser(res.data.user || res.data);
   }
 
@@ -44,6 +46,7 @@ export function AuthProvider({ children }) {
       await api.post('/logout');
     } finally {
       localStorage.removeItem('auth_token');
+      sessionStorage.removeItem('xpert_onboarding_shown');
       setUser(null);
     }
   }

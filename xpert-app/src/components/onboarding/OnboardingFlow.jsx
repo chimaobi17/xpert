@@ -2,6 +2,7 @@ import { useState } from 'react';
 import clsx from 'clsx';
 import useAuth from '../../hooks/useAuth';
 import { patch } from '../../lib/apiClient';
+import api from '../../lib/axios';
 import Input from '../ui/Input';
 import Select from '../ui/Select';
 import Button from '../ui/Button';
@@ -38,19 +39,14 @@ export default function OnboardingFlow({ onComplete }) {
   async function handleSkip() {
     setLoadingSkip(true);
     try {
-      const res = await patch('/user/onboarded', {});
-      if (res.ok) {
-        await refreshUser();
-        onComplete?.();
-      } else {
-        // Even if the backend fails, we should probably allow the user to skip if they're stuck
-        onComplete?.();
-      }
-    } catch (err) {
-      console.error('Failed to skip onboarding:', err);
-      onComplete?.();
+      // Use raw axios to avoid apiClient's automatic error toasts
+      await api.patch('/user/onboarded', {});
+      await refreshUser();
+    } catch {
+      // Silently ignore — user just wants to skip
     } finally {
       setLoadingSkip(false);
+      onComplete?.();
     }
   }
 
