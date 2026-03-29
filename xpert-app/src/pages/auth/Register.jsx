@@ -28,8 +28,8 @@ export default function Register() {
       navigate('/dashboard');
     } catch (err) {
       const data = err.response?.data;
-      if (data?.errors) {
-        setErrors(data.errors);
+      if (data?.errors || data?.details) {
+        setErrors(data.errors || data.details);
       } else {
         setErrors({ email: data?.message || 'Registration failed' });
       }
