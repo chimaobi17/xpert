@@ -16,6 +16,13 @@ const steps = [
 
 export default function OnboardingFlow({ onComplete }) {
   const { user, refreshUser } = useAuth();
+  const [step, setStep] = useState(0);
+  const [form, setForm] = useState({
+    job_title: '',
+    purpose: '',
+    field_of_specialization: '',
+  });
+  const [loading, setLoading] = useState(false);
   const [loadingSkip, setLoadingSkip] = useState(false);
 
   function handleNext() {
@@ -30,12 +37,21 @@ export default function OnboardingFlow({ onComplete }) {
 
   async function handleSkip() {
     setLoadingSkip(true);
-    const res = await patch('/user/onboarded', {});
-    if (res.ok) {
-      await refreshUser();
+    try {
+      const res = await patch('/user/onboarded', {});
+      if (res.ok) {
+        await refreshUser();
+        onComplete?.();
+      } else {
+        // Even if the backend fails, we should probably allow the user to skip if they're stuck
+        onComplete?.();
+      }
+    } catch (err) {
+      console.error('Failed to skip onboarding:', err);
       onComplete?.();
+    } finally {
+      setLoadingSkip(false);
     }
-    setLoadingSkip(false);
   }
 
   async function handleSubmit() {
@@ -43,9 +59,9 @@ export default function OnboardingFlow({ onComplete }) {
     const res = await patch('/user/profile', form);
     if (res.ok) {
       await refreshUser();
+      onComplete?.();
     }
     setLoading(false);
-    onComplete?.();
   }
 
   const canProceed =
@@ -125,7 +141,7 @@ export default function OnboardingFlow({ onComplete }) {
               variant="ghost"
               onClick={handleSkip}
               loading={loadingSkip}
-              className="text-[var(--color-text-tertiary)]"
+              className="text-[var(--color-text-secondary)] opacity-70 hover:opacity-100"
             >
               Skip
             </Button>
