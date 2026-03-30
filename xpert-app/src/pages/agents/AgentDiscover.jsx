@@ -133,7 +133,7 @@ export default function AgentDiscover() {
               onChange={(e) => setTier(e.target.value)}
               className={clsx(
                 'appearance-none rounded-full border border-border px-6 py-2 text-sm font-bold transition-all pr-12',
-                'bg-surface-hover text-foreground cursor-pointer hover:border-primary-500/50'
+                'bg-background text-foreground cursor-pointer hover:border-primary-500/50'
               )}
             >
               {tierFilters.map((t) => (

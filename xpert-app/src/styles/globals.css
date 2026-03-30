@@ -183,6 +183,20 @@ html, body {
   }
 }
 
+/* Force Pitch Black for Selects/Options in Dark Mode */
+[data-theme="dark"] select,
+[data-theme="dark"] option {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+}
+
+/* Force standard text inversion if white backgrounds appear in dark mode */
+[data-theme="dark"] .bg-white,
+[data-theme="dark"] .bg-zinc-50,
+[data-theme="dark"] .bg-slate-50 {
+  color: #000000 !important;
+}
+
 @supports (padding-bottom: env(safe-area-inset-bottom)) {
   .fixed.bottom-4,
   .fixed.bottom-6 {

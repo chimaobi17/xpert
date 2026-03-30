@@ -11,7 +11,7 @@ function resolveTheme(preference) {
 }
 
 export function ThemeProvider({ children }) {
-  // Force 'dark' as base default if no preference is found
+  // Hard Default is 'dark' for all users
   const [preference, setPreference] = useState(() => {
     return localStorage.getItem('xpert-theme') || 'dark';
   });
