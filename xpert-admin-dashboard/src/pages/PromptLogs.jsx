@@ -33,7 +33,8 @@ export default function PromptLogs() {
     (log) =>
       (log.user?.name || '').toLowerCase().includes(search.toLowerCase()) ||
       (log.user?.email || '').toLowerCase().includes(search.toLowerCase()) ||
-      (log.ai_agent?.name || '').toLowerCase().includes(search.toLowerCase())
+      (log.agent?.name || '').toLowerCase().includes(search.toLowerCase()) ||
+      (log.prompt_text || '').toLowerCase().includes(search.toLowerCase())
   );
 
   if (loading) return <div className="flex justify-center py-16"><Spinner size="lg" /></div>;
@@ -56,7 +57,7 @@ export default function PromptLogs() {
             <tr className="border-b border-[var(--color-border)] bg-[var(--color-bg-secondary)]">
               <th className="px-4 py-3 text-left font-medium text-[var(--color-text-secondary)]">User</th>
               <th className="px-4 py-3 text-left font-medium text-[var(--color-text-secondary)]">Agent</th>
-              <th className="px-4 py-3 text-left font-medium text-[var(--color-text-secondary)]">Type</th>
+              <th className="px-4 py-3 text-left font-medium text-[var(--color-text-secondary)]">Prompt</th>
               <th className="px-4 py-3 text-left font-medium text-[var(--color-text-secondary)]">Tokens</th>
               <th className="px-4 py-3 text-left font-medium text-[var(--color-text-secondary)]">Time</th>
             </tr>
@@ -71,16 +72,20 @@ export default function PromptLogs() {
             ) : (
               filtered.map((log) => (
                 <tr key={log.id} className="border-b border-[var(--color-border)] hover:bg-[var(--color-surface-hover)] transition-colors">
-                  <td className="px-4 py-3">
+                  <td className="px-4 py-3 min-w-[150px]">
                     <p className="font-medium text-[var(--color-text)]">{log.user?.name || 'Unknown'}</p>
                     <p className="text-xs text-[var(--color-text-tertiary)]">{log.user?.email || ''}</p>
                   </td>
                   <td className="px-4 py-3">
-                    <Badge variant="info" size="sm">{log.ai_agent?.name || 'Unknown'}</Badge>
+                    <Badge variant="info" size="sm" className="whitespace-nowrap">{log.agent?.name || 'Default'}</Badge>
                   </td>
-                  <td className="px-4 py-3 text-[var(--color-text-secondary)]">{log.prompt_type}</td>
-                  <td className="px-4 py-3 text-[var(--color-text-secondary)]">{(log.tokens_estimated || 0).toLocaleString()}</td>
-                  <td className="px-4 py-3 text-[var(--color-text-tertiary)]">{formatDateTime(log.created_at)}</td>
+                  <td className="px-4 py-3 max-w-sm">
+                    <p className="line-clamp-2 text-[var(--color-text-secondary)] font-medium leading-relaxed" title={log.prompt_text}>
+                      {log.prompt_text || '—'}
+                    </p>
+                  </td>
+                  <td className="px-4 py-3 text-[var(--color-text-secondary)] font-mono">{(log.tokens_estimated || 0).toLocaleString()}</td>
+                  <td className="px-4 py-3 text-[var(--color-text-tertiary)] text-xs whitespace-nowrap">{formatDateTime(log.created_at)}</td>
                 </tr>
               ))
             )}

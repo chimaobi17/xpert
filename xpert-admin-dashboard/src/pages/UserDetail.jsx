@@ -165,7 +165,7 @@ export default function UserDetail() {
                 <thead className="bg-[var(--color-bg-secondary)] border-b border-[var(--color-border)]">
                    <tr>
                       <th className="px-4 py-2 text-left font-medium text-[var(--color-text-secondary)]">Agent</th>
-                      <th className="px-4 py-2 text-left font-medium text-[var(--color-text-secondary)]">Type</th>
+                      <th className="px-4 py-2 text-left font-medium text-[var(--color-text-secondary)]">Prompt</th>
                       <th className="px-4 py-2 text-left font-medium text-[var(--color-text-secondary)]">Tokens</th>
                       <th className="px-4 py-2 text-left font-medium text-[var(--color-text-secondary)]">Date</th>
                    </tr>
@@ -175,9 +175,11 @@ export default function UserDetail() {
                       targetUser.prompt_logs.map((log) => (
                          <tr key={log.id} className="hover:bg-[var(--color-surface-hover)]">
                             <td className="px-4 py-2">
-                               <Badge variant="info" size="sm">{log.agent?.name || 'Unknown'}</Badge>
+                               <Badge variant="info" size="sm">{log.agent?.name || 'Default'}</Badge>
                             </td>
-                            <td className="px-4 py-2 text-[var(--color-text-secondary)]">{log.prompt_type}</td>
+                            <td className="px-4 py-2 text-[var(--color-text-secondary)]">
+                               <p className="line-clamp-1 max-w-[200px]" title={log.prompt_text}>{log.prompt_text || '—'}</p>
+                            </td>
                             <td className="px-4 py-2 text-[var(--color-text-secondary)]">{(log.tokens_estimated || 0).toLocaleString()}</td>
                             <td className="px-4 py-2 text-[var(--color-text-tertiary)]">{new Date(log.created_at).toLocaleDateString()}</td>
                          </tr>
