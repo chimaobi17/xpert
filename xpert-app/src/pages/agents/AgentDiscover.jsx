@@ -105,7 +105,7 @@ export default function AgentDiscover() {
             placeholder="Search agents by name or description..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            className="bg-surface-hover/40 border-border rounded-2xl h-14 text-base"
+            className="bg-background border-border rounded-2xl h-14 text-base"
           />
         </div>
 

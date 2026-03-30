@@ -183,17 +183,32 @@ html, body {
   }
 }
 
-/* Force Pitch Black for Selects/Options in Dark Mode */
+/* Aggressive Dark Mode Overrides */
+[data-theme="dark"] input, 
+[data-theme="dark"] textarea,
 [data-theme="dark"] select,
 [data-theme="dark"] option {
   background-color: #000000 !important;
   color: #ffffff !important;
+  border-color: #1a1a1a !important;
+}
+
+/* Specific fix for Autofills/System-default whites */
+[data-theme="dark"] input:-webkit-autofill,
+[data-theme="dark"] input:-webkit-autofill:hover, 
+[data-theme="dark"] input:-webkit-autofill:focus {
+  -webkit-text-fill-color: #ffffff !important;
+  -webkit-box-shadow: 0 0 0px 1000px #000000 inset !important;
+  transition: background-color 5000s ease-in-out 0s;
 }
 
 /* Force standard text inversion if white backgrounds appear in dark mode */
 [data-theme="dark"] .bg-white,
 [data-theme="dark"] .bg-zinc-50,
-[data-theme="dark"] .bg-slate-50 {
+[data-theme="dark"] .bg-slate-50,
+[data-theme="dark"] [style*="background-color: white"],
+[data-theme="dark"] [style*="background-color: #fff"],
+[data-theme="dark"] [style*="background-color: rgb(255, 255, 255)"] {
   color: #000000 !important;
 }
 
