@@ -92,54 +92,68 @@ export default function Workspace() {
   }
 
   return (
-    <div>
-      <div className="flex items-center justify-between mb-6">
+    <div className="animate-fade-in">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
         <div>
-          <h1 className="text-2xl font-bold text-[var(--color-text)]">My Workspace</h1>
-          <p className="text-sm text-[var(--color-text-secondary)] mt-1">
-            {myAgents.length} agent{myAgents.length !== 1 ? 's' : ''} in your workspace
+          <h1 className="text-4xl font-bold text-foreground tracking-tight italic">My Workspace</h1>
+          <p className="text-lg text-text-secondary font-medium mt-2">
+            Managing <span className="text-primary-500 font-black">{myAgents.length}</span> curated neural agents.
           </p>
         </div>
         <Link to="/agents/discover">
-          <Button variant="outline" size="sm">
-            <PlusCircleIcon className="h-4 w-4" />
-            Discover More
+          <Button size="lg" className="rounded-full shadow-[0_0_20px_rgba(33,196,93,0.2)]">
+            <PlusCircleIcon className="h-6 w-6 mr-1" />
+            Deploy More
           </Button>
         </Link>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {myAgents.map((agent) => (
-          <Card
-            key={agent.id}
-            hoverable
-            onClick={() => navigate(`/agents/${agent.id}`, { state: { from: '/workspace' } })}
-            className="relative group"
-          >
-            <div className="flex items-start gap-3">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary-50 text-primary-600">
-                <CodeBracketIcon className="h-5 w-5" />
+          <div key={agent.id} className="group relative">
+            <Card
+              hoverable
+              glass
+              onClick={() => navigate(`/agents/${agent.id}`, { state: { from: '/workspace' } })}
+              className="relative h-full border-border/50 hover:border-primary-500/30 transition-all duration-500 flex flex-col p-8"
+            >
+              <div className="flex items-start justify-between mb-6">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-surface-hover border border-border text-primary-500 shadow-inner group-hover:scale-110 transition-transform">
+                  <CodeBracketIcon className="h-6 w-6" />
+                </div>
+                {agent.is_premium_only && (
+                  <Badge variant="premium" size="sm" className="rounded-full px-3 py-1 bg-gradient-to-r from-amber-400 to-orange-500 text-black border-none font-bold uppercase tracking-tighter italic">
+                    Premium
+                  </Badge>
+                )}
               </div>
+              
               <div className="min-w-0 flex-1">
-                <div className="flex items-center gap-2">
-                  <h3 className="text-sm font-semibold text-[var(--color-text)] truncate">
+                <div className="flex items-center gap-2 mb-1">
+                  <h3 className="text-xl font-bold text-foreground tracking-tight truncate">
                     {agent.name}
                   </h3>
-                  {agent.is_premium_only && <Badge variant="premium" size="sm">Premium</Badge>}
                 </div>
-                <p className="text-xs text-[var(--color-text-secondary)] mt-0.5">{agent.domain}</p>
-                <p className="text-xs text-[var(--color-text-tertiary)] mt-2 line-clamp-2">
-                  {agent.system_prompt?.slice(0, 100)}...
+                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-text-tertiary mb-4">{agent.domain}</p>
+                <p className="text-sm text-text-secondary font-medium leading-relaxed line-clamp-3 italic opacity-80 group-hover:opacity-100 transition-opacity">
+                   {agent.system_prompt?.slice(0, 120)}...
                 </p>
               </div>
-            </div>
-            <button
-              onClick={(e) => { e.stopPropagation(); handleRemove(agent.id); }}
-              className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 text-xs text-[var(--color-text-tertiary)] hover:text-red-500 transition-all"
-            >
-              Remove
-            </button>
-          </Card>
+
+              <div className="mt-8 flex items-center justify-between border-t border-border/50 pt-6">
+                 <span className="text-[10px] font-black text-text-tertiary uppercase tracking-widest">Active Neural Link</span>
+                 <button
+                  onClick={(e) => { e.stopPropagation(); handleRemove(agent.id); }}
+                  className="rounded-full p-2 text-text-tertiary hover:text-red-500 hover:bg-red-500/10 transition-all border border-transparent hover:border-red-500/20"
+                  title="Remove Agent"
+                >
+                   <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                   </svg>
+                </button>
+              </div>
+            </Card>
+          </div>
         ))}
       </div>
     </div>

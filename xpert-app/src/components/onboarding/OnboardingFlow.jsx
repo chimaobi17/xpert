@@ -40,7 +40,6 @@ export default function OnboardingFlow({ onComplete }) {
   async function handleSkip() {
     setLoadingSkip(true);
     try {
-      // Use raw axios to avoid apiClient's automatic error toasts
       await api.patch('/user/onboarded', {});
       await refreshUser();
     } catch {
@@ -57,14 +56,19 @@ export default function OnboardingFlow({ onComplete }) {
     setError(null);
     try {
       const res = await patch('/user/profile', form);
-      if (res.ok) {
-        await refreshUser();
-        onComplete?.();
-      } else {
-        setError(res.error?.message || 'Failed to update profile. Please try again.');
-      }
+      // Wait for user refresh to ensure state is synced before closing
+      await refreshUser();
+      onComplete?.();
     } catch (err) {
-      setError('An unexpected error occurred. Please try again.');
+      console.error('Onboarding submit error:', err);
+      // Fallback: even if profile update fails, mark as onboarded if possible or just let them in
+      try {
+         await api.patch('/user/onboarded', {});
+         await refreshUser();
+         onComplete?.();
+      } catch (e) {
+         setError('Connection lost. Please try again.');
+      }
     } finally {
       setLoading(false);
     }
@@ -76,91 +80,113 @@ export default function OnboardingFlow({ onComplete }) {
     (step === 2 && form.field_of_specialization !== '');
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
-      <div className="fixed inset-0 bg-black/50 backdrop-blur-sm" />
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <div className="fixed inset-0 bg-black/80 backdrop-blur-md" />
       <div
         className={clsx(
-          'relative z-10 w-full max-w-lg mx-4 rounded-2xl p-8 shadow-2xl backdrop-blur-md',
-          'bg-white border border-white/20 [html[data-theme=dark]_&]:bg-gray-900/60 [html[data-theme=dark]_&]:border-white/10'
+          'relative z-10 w-full max-w-lg rounded-super p-8 md:p-12 shadow-2xl glass',
+          'animate-fade-in'
         )}
       >
-        <div className="mb-6 text-center">
-          <svg className="mx-auto h-10 w-10 mb-3" viewBox="0 0 48 48" fill="none">
-            <path d="M12 8L24 25L12 42" stroke="#22c55e" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
-            <path d="M36 8L24 25L36 42" stroke="#22c55e" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-          <p className="text-sm text-[var(--color-text-secondary)] mb-1">
-            Welcome, {user?.name || 'there'}!
+        <div className="mb-8 text-center">
+          <div className="mx-auto h-16 w-16 mb-6 flex items-center justify-center rounded-2xl bg-primary-500/10 shadow-[0_0_20px_rgba(33,196,93,0.2)]">
+            <svg className="h-10 w-10" viewBox="0 0 48 48" fill="none">
+              <path d="M12 8L24 25L12 42" stroke="#21c45d" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
+              <path d="M36 8L24 25L36 42" stroke="#21c45d" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </div>
+          <p className="text-xs font-bold uppercase tracking-[0.2em] text-primary-500 mb-2">
+            Welcome, {user?.name || 'Explorer'}
           </p>
-          <h2 className="text-xl font-bold text-[var(--color-text)]">{steps[step].title}</h2>
-          <p className="text-sm text-[var(--color-text-secondary)] mt-1">{steps[step].subtitle}</p>
+          <h2 className="text-3xl font-bold text-white tracking-tight leading-tight">{steps[step].title}</h2>
+          <p className="text-base text-zinc-400 mt-2 font-medium">{steps[step].subtitle}</p>
         </div>
 
         {/* Progress dots */}
-        <div className="flex justify-center gap-2 mb-6">
+        <div className="flex justify-center gap-3 mb-10">
           {steps.map((_, i) => (
             <div
               key={i}
               className={clsx(
-                'h-2 rounded-full transition-all duration-300',
-                i === step ? 'w-8 bg-primary-500' : 'w-2 bg-[var(--color-border)]'
+                'h-1.5 rounded-full transition-all duration-500',
+                i === step ? 'w-10 bg-primary-500' : 'w-4 bg-zinc-800'
               )}
             />
           ))}
         </div>
 
-        <div className="space-y-4">
+        <div className="space-y-6">
           {step === 0 && (
-            <Input
-              label="Job Title"
-              placeholder="e.g. Full-Stack Developer, Product Manager"
-              value={form.job_title}
-              onChange={(e) => setForm({ ...form, job_title: e.target.value })}
-            />
+            <div className="animate-fade-in">
+              <Input
+                label="Job Title"
+                placeholder="e.g. Full-Stack Developer, Product Manager"
+                value={form.job_title}
+                onChange={(e) => setForm({ ...form, job_title: e.target.value })}
+                className="bg-zinc-900/50 border-zinc-800"
+              />
+            </div>
           )}
           {step === 1 && (
-            <Input
-              label="What's your main goal with XPERT?"
-              placeholder="e.g. Generate code faster, write better content"
-              value={form.purpose}
-              onChange={(e) => setForm({ ...form, purpose: e.target.value })}
-            />
+            <div className="animate-fade-in">
+              <Input
+                label="What's your main goal with XPERT?"
+                placeholder="e.g. Generate code faster, write better content"
+                value={form.purpose}
+                onChange={(e) => setForm({ ...form, purpose: e.target.value })}
+                className="bg-zinc-900/50 border-zinc-800"
+              />
+            </div>
           )}
           {step === 2 && (
-            <Select
-              label="Field of Specialization"
-              options={specializations}
-              value={form.field_of_specialization}
-              onChange={(e) => setForm({ ...form, field_of_specialization: e.target.value })}
-            />
+            <div className="animate-fade-in">
+              <Select
+                label="Field of Specialization"
+                options={specializations}
+                value={form.field_of_specialization}
+                onChange={(e) => setForm({ ...form, field_of_specialization: e.target.value })}
+                className="bg-zinc-900/50 border-zinc-800"
+              />
+            </div>
           )}
           {error && (
-            <p className="text-xs text-red-500 text-center animate-pulse">{error}</p>
+            <p className="text-sm text-red-500 text-center font-medium animate-pulse">{error}</p>
           )}
         </div>
 
-        <div className="mt-8 flex items-center justify-between">
-          <div className="flex items-center gap-2">
+        <div className="mt-12 flex items-center justify-between gap-4">
+          <div className="flex items-center gap-4">
             {step > 0 && (
-              <Button variant="ghost" onClick={handleBack}>
+              <button 
+                onClick={handleBack}
+                className="text-sm font-bold text-zinc-400 hover:text-white transition-colors px-4 py-2"
+              >
                 Back
-              </Button>
+              </button>
             )}
-            <Button
-              variant="ghost"
+            <button
               onClick={handleSkip}
-              loading={loadingSkip}
-              className="text-[var(--color-text-secondary)] opacity-70 hover:opacity-100"
+              disabled={loadingSkip}
+              className="text-sm font-bold text-zinc-500 hover:text-white transition-colors px-4 py-2"
             >
-              Skip
-            </Button>
+              {loadingSkip ? 'Skipping...' : 'Skip'}
+            </button>
           </div>
           {step < 2 ? (
-            <Button onClick={handleNext} disabled={!canProceed}>
+            <Button 
+              onClick={handleNext} 
+              disabled={!canProceed}
+              className="px-8 rounded-full font-bold"
+            >
               Continue
             </Button>
           ) : (
-            <Button onClick={handleSubmit} loading={loading} disabled={!canProceed}>
+            <Button 
+              onClick={handleSubmit} 
+              loading={loading} 
+              disabled={!canProceed}
+              className="px-8 rounded-full font-bold shadow-[0_0_20px_rgba(33,196,93,0.3)]"
+            >
               Get Started
             </Button>
           )}

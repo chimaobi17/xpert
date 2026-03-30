@@ -3,18 +3,18 @@
 @tailwind utilities;
 
 :root {
-  --color-primary: #21c45d;
+  --color-primary: #21c45d; /* Xpert Green */
   --color-primary-hover: #16a34a;
-  --color-primary-light: #dcfce7;
+  --color-primary-light: rgba(33, 196, 93, 0.1);
   --color-primary-dark: #15803d;
-  --color-bg: #ffffff;
-  --color-bg-secondary: #f9fafb;
-  --color-surface: #ffffff;
-  --color-surface-hover: #f3f4f6;
-  --color-text: #111827;
-  --color-text-secondary: #6b7280;
-  --color-text-tertiary: #9ca3af;
-  --color-border: #e2e8f0;
+  --color-bg: #000000; /* Pitch Black */
+  --color-bg-secondary: #000000;
+  --color-surface: #0a0a0a;
+  --color-surface-hover: #121212;
+  --color-text: #ffffff;
+  --color-text-secondary: #a1a1aa;
+  --color-text-tertiary: #52525b;
+  --color-border: #1a1a1a;
   --color-border-focus: #21c45d;
   --color-danger: #ef4444;
   --color-warning: #f59e0b;
@@ -22,24 +22,38 @@
   --color-success: #21c45d;
 }
 
-[data-theme="dark"] {
+[data-theme="light"] {
   --color-primary: #21c45d;
-  --color-primary-hover: #4ade80;
-  --color-primary-light: #166534;
-  --color-primary-dark: #86efac;
-  --color-bg: #000000;
-  --color-bg-secondary: #0a0a0a;
-  --color-surface: #121212;
-  --color-surface-hover: #1a1a1a;
-  --color-text: #ffffff;
-  --color-text-secondary: #a1a1aa;
-  --color-text-tertiary: #52525b;
-  --color-border: #27272a;
+  --color-primary-hover: #16a34a;
+  --color-primary-light: rgba(33, 196, 93, 0.05);
+  --color-primary-dark: #15803d;
+  --color-bg: #ffffff; /* pure white */
+  --color-bg-secondary: #f9f9f9;
+  --color-surface: #ffffff;
+  --color-surface-hover: #f3f4f6;
+  --color-text: #111827;
+  --color-text-secondary: #4b5563;
+  --color-text-tertiary: #9ca3af;
+  --color-border: #e5e7eb;
   --color-border-focus: #21c45d;
-  --color-danger: #f87171;
-  --color-warning: #fbbf24;
-  --color-info: #60a5fa;
-  --color-success: #4ade80;
+  --color-danger: #ef4444;
+  --color-warning: #f59e0b;
+  --color-info: #3b82f6;
+  --color-success: #21c45d;
+}
+
+.glass {
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="light"] .glass {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px) saturate(180%);
+  -webkit-backdrop-filter: blur(12px) saturate(180%);
+  border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 * {

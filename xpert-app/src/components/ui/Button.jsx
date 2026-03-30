@@ -2,17 +2,17 @@ import clsx from 'clsx';
 import Spinner from './Spinner';
 
 const variants = {
-  primary: 'bg-gradient-to-tr from-primary-600 to-emerald-400 text-black font-bold shadow-[0_4px_15px_rgba(33,196,93,0.3)] hover:scale-[1.03] active:scale-[0.97] transition-all',
-  secondary: 'bg-[var(--color-bg-secondary)] text-[var(--color-text)] hover:bg-[var(--color-surface-hover)]',
-  outline: 'border-2 border-primary-500/20 text-[var(--color-text)] hover:bg-primary-500/5 hover:border-primary-500/40',
-  ghost: 'text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-hover)] hover:text-[var(--color-text)]',
-  danger: 'bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white',
+  primary: 'bg-primary-500 text-black font-black uppercase tracking-widest shadow-[0_0_30px_rgba(33,196,93,0.3)] hover:scale-105 hover:bg-white hover:shadow-[0_0_40px_rgba(255,255,255,0.2)] active:scale-95 transition-all outline-none border-none',
+  secondary: 'bg-surface-hover text-foreground font-bold glass border-border/50 hover:bg-surface hover:text-foreground active:scale-95 border transition-all',
+  outline: 'border border-border text-text-secondary font-bold hover:border-primary-500 hover:text-primary-500 hover:bg-primary-500/5 active:scale-95 transition-all',
+  ghost: 'text-text-secondary hover:text-foreground hover:bg-surface-hover font-bold active:scale-95 transition-all',
+  danger: 'bg-red-500/10 text-red-500 font-black uppercase tracking-tighter hover:bg-red-500 hover:text-white hover:shadow-[0_0_20px_rgba(239,68,68,0.3)] active:scale-95 transition-all',
 };
 
 const sizes = {
-  sm: 'px-4 py-2 text-xs',
-  md: 'px-6 py-2.5 text-sm',
-  lg: 'px-8 py-4 text-base',
+  sm: 'px-5 py-2 text-[10px]',
+  md: 'px-8 py-3.5 text-sm',
+  lg: 'px-12 py-5 text-base',
 };
 
 export default function Button({
@@ -27,16 +27,16 @@ export default function Button({
   return (
     <button
       className={clsx(
-        'inline-flex items-center justify-center gap-2 rounded-2xl font-bold transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-primary-500/20 active:scale-95',
+        'inline-flex items-center justify-center gap-2 rounded-full font-bold transition-all duration-500 focus:outline-none focus:ring-4 focus:ring-primary-500/20 active:scale-95',
         variants[variant],
         sizes[size],
-        (disabled || loading) && 'opacity-50 cursor-not-allowed',
+        (disabled || loading) && 'opacity-50 cursor-not-allowed grayscale',
         className
       )}
       disabled={disabled || loading}
       {...props}
     >
-      {loading && <Spinner size="sm" />}
+      {loading ? <Spinner size="sm" className="mr-1" /> : null}
       {children}
     </button>
   );

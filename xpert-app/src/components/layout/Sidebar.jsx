@@ -50,11 +50,11 @@ export default function Sidebar({ open, onClose }) {
       )}
       <aside
         className={clsx(
-          'fixed inset-y-0 left-0 z-30 flex w-72 flex-col bg-[var(--color-surface)] pt-16 transition-transform duration-300 ease-in-out lg:static lg:translate-x-0 lg:pt-0',
+          'fixed inset-y-0 left-0 z-30 flex w-80 flex-col bg-background transition-transform duration-500 ease-in-out lg:static lg:translate-x-0 pt-0 border-r border-border/30',
           open ? 'translate-x-0' : '-translate-x-full'
         )}
       >
-        <nav className="flex-1 space-y-1 px-3 py-4">
+        <nav className="flex-1 space-y-2 px-6 py-10">
           {navItems.map((item) => (
             <NavLink
               key={item.to}
@@ -62,49 +62,42 @@ export default function Sidebar({ open, onClose }) {
               onClick={onClose}
               className={({ isActive }) =>
                 clsx(
-                  'group relative flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-all duration-200',
+                  'group relative flex items-center gap-4 rounded-2xl px-5 py-4 text-sm font-bold transition-all duration-300',
                   isActive
-                    ? 'bg-primary-500/10 text-primary-500'
-                    : 'text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-hover)] hover:text-[var(--color-text)]'
+                    ? 'bg-primary-500 text-black shadow-[0_0_20px_rgba(33,196,93,0.3)]'
+                    : 'text-text-secondary hover:bg-surface-hover hover:text-foreground'
                 )
               }
             >
-              {({ isActive }) => (
-                <>
-                  <item.icon className={clsx("h-5 w-5 transition-transform group-hover:scale-110", isActive && "text-primary-500")} />
-                  {item.label}
-                  {isActive && (
-                    <div className="absolute left-0 h-6 w-1 rounded-r-full bg-primary-500 shadow-[0_0_8px_rgba(33,196,93,0.6)]" />
-                  )}
-                </>
-              )}
+              <item.icon className={clsx("h-6 w-6 transition-transform group-hover:scale-110")} />
+              <span className="tracking-tight">{item.label}</span>
             </NavLink>
           ))}
         </nav>
 
-        <div className="p-4 border-t border-[var(--color-border)]/50">
-          <div className="rounded-2xl bg-[var(--color-bg-secondary)] p-4 shadow-sm">
-            <div className="flex items-center justify-between mb-2">
-              <p className="text-xs font-bold uppercase tracking-wider text-[var(--color-text-tertiary)]">{planLabel}</p>
-              <span className="text-[10px] font-bold text-primary-500 bg-primary-500/10 px-2 py-0.5 rounded-full">Active</span>
+        <div className="p-6 pb-10">
+          <div className="rounded-[2.5rem] bg-surface-hover p-7 border border-border/50 glass">
+            <div className="flex items-center justify-between mb-4">
+              <p className="text-[10px] font-black uppercase tracking-[0.3em] text-text-tertiary">{planLabel}</p>
+              <span className="text-[10px] font-bold text-primary-500 bg-primary-500/10 px-2 py-0.5 rounded-full">ACTIVE</span>
             </div>
-            <div className="h-1.5 w-full rounded-full bg-[var(--color-surface-hover)] overflow-hidden">
+            <div className="h-2 w-full rounded-full bg-border/20 overflow-hidden mb-4">
               <div 
-                className="h-full rounded-full bg-gradient-to-r from-primary-500 to-emerald-400 shadow-[0_0_8px_rgba(33,196,93,0.4)] transition-all duration-500" 
+                className="h-full rounded-full bg-primary-500 shadow-[0_0_15px_rgba(33,196,93,0.5)] transition-all duration-1000 ease-out" 
                 style={{ width: `${pct}%` }} 
               />
             </div>
-            <div className="flex items-center justify-between mt-2">
-              <p className="text-[10px] font-medium text-[var(--color-text-secondary)]">
-                {tokensUsed.toLocaleString()} / {quotaMax.toLocaleString()}
-              </p>
-              <p className="text-[10px] font-bold text-[var(--color-text-secondary)]">
-                {Math.round(pct)}%
+            <div className="flex items-center justify-between">
+               <p className="text-[10px] font-black text-text-secondary uppercase tracking-[0.1em]">
+                {Math.round(pct)}% CAPACITY
               </p>
             </div>
             {isFree && (
-              <button onClick={() => window.location.href='/settings?tab=plan'} className="w-full mt-3 py-2 rounded-xl bg-primary-500 text-black text-xs font-bold hover:bg-primary-400 transition-colors">
-                Upgrade Now
+              <button 
+                onClick={() => window.location.href='/settings?tab=plan'} 
+                className="w-full mt-6 py-3.5 rounded-full bg-foreground text-background text-xs font-black uppercase tracking-widest hover:scale-[1.02] active:scale-95 transition-all shadow-xl"
+              >
+                Upgrade System
               </button>
             )}
           </div>

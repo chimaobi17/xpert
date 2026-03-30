@@ -265,56 +265,71 @@ export default function AgentWorkspace() {
   const showStopButton = loading || (step === 3 && !stopped && aiResponse && responseType !== 'image');
 
   return (
-    <div>
+    <div className="animate-fade-in max-w-5xl mx-auto">
       {/* Header */}
-      <div className="flex items-center gap-3 mb-6">
+      <div className="flex items-center gap-6 mb-10">
         <button
           onClick={handleBack}
-          className="rounded-lg p-2 text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-hover)] transition-colors"
+          className="rounded-2xl p-3 text-zinc-400 bg-zinc-900/50 hover:bg-zinc-800 hover:text-white transition-all border border-zinc-800/50"
         >
-          <ArrowLeftIcon className="h-5 w-5" />
+          <ArrowLeftIcon className="h-6 w-6" />
         </button>
         <div>
-          <div className="flex items-center gap-2">
-            <h1 className="text-xl font-bold text-[var(--color-text)]">{agent.name}</h1>
-            {agent.is_premium_only && <Badge variant="premium" size="sm">Premium</Badge>}
+          <div className="flex items-center gap-3">
+            <h1 className="text-3xl font-bold text-white tracking-tight">{agent.name}</h1>
+            {agent.is_premium_only && (
+              <Badge variant="premium" size="sm" className="rounded-full px-3 py-1 bg-gradient-to-r from-amber-400 to-orange-500 text-black border-none font-bold uppercase tracking-tighter italic">
+                Premium
+              </Badge>
+            )}
           </div>
-          <p className="text-sm text-[var(--color-text-secondary)]">{agent.domain} — {agent.category}</p>
+          <p className="text-sm text-zinc-500 font-bold uppercase tracking-[0.2em] mt-1">{agent.domain} • {agent.category}</p>
         </div>
       </div>
 
       {/* Step Indicator */}
-      <div className="flex items-center gap-2 mb-6">
+      <div className="flex items-center justify-between gap-4 mb-12 px-2">
         {stepLabels.map((label, i) => (
-          <div key={label} className="flex items-center gap-2">
-            <div className={`flex h-7 w-7 items-center justify-center rounded-full text-xs font-semibold transition-colors ${
-              step > i + 1
-                ? 'bg-primary-500 text-white'
-                : step === i + 1
-                  ? 'bg-primary-100 text-primary-700 ring-2 ring-primary-500'
-                  : 'bg-[var(--color-bg-secondary)] text-[var(--color-text-tertiary)]'
-            }`}>
-              {step > i + 1 ? '✓' : i + 1}
+          <div key={label} className="flex-1 group">
+            <div className="relative mb-4">
+              <div className={clsx(
+                "h-1 rounded-full transition-all duration-700",
+                step > i + 1 ? "bg-primary-500" : step === i + 1 ? "bg-primary-500/30" : "bg-zinc-900"
+              )} />
+              {step === i + 1 && (
+                <div className="absolute top-0 left-0 h-1 bg-primary-500 animate-pulse-slow shadow-[0_0_10px_rgba(33,196,93,0.5)]" style={{ width: '100%' }} />
+              )}
             </div>
-            <span className={`text-xs font-medium hidden sm:inline ${
-              step === i + 1 ? 'text-primary-600' : 'text-[var(--color-text-tertiary)]'
-            }`}>
-              {label}
-            </span>
-            {i < stepLabels.length - 1 && (
-              <div className={`h-px w-4 sm:w-8 transition-colors ${step > i + 1 ? 'bg-primary-500' : 'bg-[var(--color-border)]'}`} />
-            )}
+            <div className="flex items-center gap-3">
+              <div className={clsx(
+                "flex h-9 w-9 items-center justify-center rounded-xl text-sm font-black transition-all duration-500",
+                step > i + 1
+                  ? "bg-primary-500 text-black"
+                  : step === i + 1
+                    ? "bg-zinc-900 text-primary-500 border border-primary-500/30 shadow-[0_0_15px_rgba(33,196,93,0.1)]"
+                    : "bg-zinc-900/50 text-zinc-600 border border-zinc-800/30"
+              )}>
+                {step > i + 1 ? "✓" : i + 1}
+              </div>
+              <span className={clsx(
+                "text-xs font-black uppercase tracking-widest transition-colors",
+                step === i + 1 ? "text-white" : "text-zinc-600"
+              )}>
+                {label}
+              </span>
+            </div>
           </div>
         ))}
       </div>
 
       {/* Step Content */}
-      <Card>
+      <Card glass className="border-zinc-800/50 p-10 min-h-[400px]">
         {step === 1 && (
-          <div>
-            <h2 className="text-lg font-semibold text-[var(--color-text)] mb-4">
-              Configure your prompt
-            </h2>
+          <div className="animate-slide-up">
+            <div className="mb-8">
+               <h2 className="text-2xl font-bold text-white mb-2">Configure Interaction</h2>
+               <p className="text-zinc-400 font-medium">Define parameters for your elite AI curator.</p>
+            </div>
             <DynamicForm
               fields={fields}
               values={formValues}
@@ -322,19 +337,24 @@ export default function AgentWorkspace() {
               errors={formErrors}
               disabled={loading}
             />
-            <div className="mt-6 flex justify-end">
-              <Button onClick={handleGeneratePrompt} loading={loading}>
-                Generate Prompt
+            <div className="mt-10 flex justify-end">
+              <Button 
+                onClick={handleGeneratePrompt} 
+                loading={loading}
+                className="h-14 px-10 rounded-full font-black uppercase tracking-widest shadow-[0_0_20px_rgba(33,196,93,0.3)]"
+              >
+                Synthesize Prompt
               </Button>
             </div>
           </div>
         )}
 
         {step === 2 && (
-          <div>
-            <h2 className="text-lg font-semibold text-[var(--color-text)] mb-4">
-              Review your prompt
-            </h2>
+          <div className="animate-slide-up">
+            <div className="mb-8">
+               <h2 className="text-2xl font-bold text-white mb-2">Review Blueprint</h2>
+               <p className="text-zinc-400 font-medium">Verify the detailed instructions before execution.</p>
+            </div>
             <PromptPreview
               generatedPrompt={generatedPrompt}
               onSubmit={handleSubmitToAI}
@@ -350,10 +370,14 @@ export default function AgentWorkspace() {
         )}
 
         {step === 3 && (
-          <div>
-            <h2 className="text-lg font-semibold text-[var(--color-text)] mb-4">
-              AI Response
-            </h2>
+          <div className="animate-slide-up">
+            <div className="mb-8 border-b border-zinc-800/50 pb-6 flex items-center justify-between">
+               <div>
+                  <h2 className="text-2xl font-bold text-white mb-1">Curation Complete</h2>
+                  <p className="text-zinc-400 font-medium">Review the optimized response from your agent.</p>
+               </div>
+               <Badge className="bg-primary-500/10 text-primary-500 border-primary-500/20 rounded-full px-4 py-1.5 font-bold uppercase tracking-tighter">Verified Result</Badge>
+            </div>
             <AiResponse
               response={aiResponse}
               responseType={responseType}
