@@ -13,8 +13,8 @@ export default function Select({ label, options = [], error, className, id, ...p
       <select
         id={selectId}
         className={clsx(
-          'block w-full rounded-lg border bg-[var(--color-surface)] px-3 py-2 text-sm text-[var(--color-text)] transition-colors duration-150',
-          error ? 'border-red-500 focus:ring-red-500/30' : 'border-[var(--color-border)]'
+          'block w-full rounded-lg border bg-[var(--color-bg)] px-3 py-2 text-sm text-[var(--color-text)] transition-all duration-300',
+          error ? 'border-red-500 focus:ring-red-500/30' : 'border-[var(--color-border)] focus:border-primary-500/50'
         )}
         {...props}
       >

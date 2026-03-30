@@ -91,6 +91,7 @@ export default function Users() {
             <thead>
               <tr className="border-b border-[var(--color-border)] bg-[var(--color-bg-secondary)]">
                 <th className="px-4 py-3 text-left font-medium text-[var(--color-text-secondary)]">User</th>
+                <th className="px-4 py-3 text-left font-medium text-[var(--color-text-secondary)]">Last Agent</th>
                 <th className="px-4 py-3 text-left font-medium text-[var(--color-text-secondary)]">Role</th>
                 <th className="px-4 py-3 text-left font-medium text-[var(--color-text-secondary)]">Plan</th>
                 <th className="px-4 py-3 text-left font-medium text-[var(--color-text-secondary)]">Specialization</th>
@@ -107,6 +108,15 @@ export default function Users() {
                   <td className="px-4 py-3">
                     <p className="font-medium text-[var(--color-text)]">{user.name}</p>
                     <p className="text-xs text-[var(--color-text-secondary)]">{user.email}</p>
+                  </td>
+                  <td className="px-4 py-3">
+                    {user.prompt_logs?.[0]?.agent?.name ? (
+                      <Badge variant="info" size="sm">
+                        {user.prompt_logs[0].agent.name}
+                      </Badge>
+                    ) : (
+                      <span className="text-xs text-[var(--color-text-tertiary)] italic">None</span>
+                    )}
                   </td>
                   <td className="px-4 py-3">
                     <Badge variant={user.role === 'super_admin' ? 'premium' : user.role === 'admin' ? 'info' : 'neutral'} size="sm">

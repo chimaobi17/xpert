@@ -22,12 +22,18 @@ class AdminController extends Controller
 
     public function users()
     {
-        return response()->json(User::latest()->get());
+        return response()->json(
+            User::with(['promptLogs' => function($q) {
+                $q->latest()->with('agent:id,name');
+            }])->latest()->get()
+        );
     }
-
+    
     public function showUser(User $user)
     {
-        return response()->json($user);
+        return response()->json($user->load(['promptLogs' => function($q) {
+            $q->latest()->with('agent:id,name')->limit(10);
+        }]));
     }
 
     public function updateUser(Request $request, User $user)

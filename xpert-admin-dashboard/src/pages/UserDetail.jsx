@@ -159,6 +159,42 @@ export default function UserDetail() {
         </Card>
 
         <Card className="lg:col-span-2">
+          <h3 className="text-sm font-semibold text-[var(--color-text)] mb-4">Recent Activity</h3>
+          <div className="overflow-hidden rounded-xl border border-[var(--color-border)]">
+             <table className="w-full text-xs">
+                <thead className="bg-[var(--color-bg-secondary)] border-b border-[var(--color-border)]">
+                   <tr>
+                      <th className="px-4 py-2 text-left font-medium text-[var(--color-text-secondary)]">Agent</th>
+                      <th className="px-4 py-2 text-left font-medium text-[var(--color-text-secondary)]">Type</th>
+                      <th className="px-4 py-2 text-left font-medium text-[var(--color-text-secondary)]">Tokens</th>
+                      <th className="px-4 py-2 text-left font-medium text-[var(--color-text-secondary)]">Date</th>
+                   </tr>
+                </thead>
+                <tbody className="divide-y divide-[var(--color-border)]">
+                   {targetUser.prompt_logs?.length > 0 ? (
+                      targetUser.prompt_logs.map((log) => (
+                         <tr key={log.id} className="hover:bg-[var(--color-surface-hover)]">
+                            <td className="px-4 py-2">
+                               <Badge variant="info" size="sm">{log.agent?.name || 'Unknown'}</Badge>
+                            </td>
+                            <td className="px-4 py-2 text-[var(--color-text-secondary)]">{log.prompt_type}</td>
+                            <td className="px-4 py-2 text-[var(--color-text-secondary)]">{(log.tokens_estimated || 0).toLocaleString()}</td>
+                            <td className="px-4 py-2 text-[var(--color-text-tertiary)]">{new Date(log.created_at).toLocaleDateString()}</td>
+                         </tr>
+                      ))
+                   ) : (
+                      <tr>
+                         <td colSpan="4" className="px-4 py-6 text-center text-[var(--color-text-tertiary)] italic">
+                            No recent activity found for this user.
+                         </td>
+                      </tr>
+                   )}
+                </tbody>
+             </table>
+          </div>
+        </Card>
+
+        <Card className="lg:col-span-2">
           <h3 className="text-sm font-semibold text-[var(--color-text)] mb-4">Moderation</h3>
 
           {isBlocked && targetUser.ban_reason && (
