@@ -2,11 +2,11 @@ import clsx from 'clsx';
 
 const variants = {
   success: 'bg-primary-500/10 text-primary-500 border border-primary-500/20 italic font-bold uppercase tracking-tighter',
-  warning: 'bg-amber-500/10 text-amber-500 border border-amber-500/20 italic font-bold uppercase tracking-tighter',
+  warning: 'bg-yellow-500/10 text-yellow-500 border border-yellow-500/20 italic font-bold uppercase tracking-tighter',
   error: 'bg-red-500/10 text-red-500 border border-red-500/20 italic font-bold uppercase tracking-tighter',
   info: 'bg-blue-500/10 text-blue-500 border border-blue-500/20 italic font-bold uppercase tracking-tighter',
-  neutral: 'bg-zinc-800 text-zinc-400 border border-zinc-700/50 italic font-bold uppercase tracking-tighter',
-  premium: 'bg-gradient-to-r from-amber-400 to-orange-500 text-black border-none italic font-black uppercase tracking-tighter shadow-[0_0_15px_rgba(251,191,36,0.2)]',
+  neutral: 'bg-surface-hover text-text-secondary border border-border/50 italic font-bold uppercase tracking-tighter',
+  premium: 'bg-gradient-to-r from-amber-400 to-orange-500 text-black border-none italic font-black uppercase tracking-tighter shadow-lg',
 };
 
 const sizeClasses = {
