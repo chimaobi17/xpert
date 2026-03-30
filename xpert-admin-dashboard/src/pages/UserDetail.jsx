@@ -7,6 +7,7 @@ import {
   ShieldCheckIcon,
   ArrowUpCircleIcon,
   TrashIcon,
+  CpuChipIcon,
 } from '@heroicons/react/24/outline';
 import { get, put, patch, del } from '../lib/apiClient';
 import useAuth from '../hooks/useAuth';
@@ -28,6 +29,7 @@ export default function UserDetail() {
   const [loading, setLoading] = useState(true);
   const [blockModal, setBlockModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
+  const [selectedLog, setSelectedLog] = useState(null);
   const [blockDuration, setBlockDuration] = useState('24h');
   const [blockReason, setBlockReason] = useState('');
 
@@ -173,12 +175,16 @@ export default function UserDetail() {
                 <tbody className="divide-y divide-[var(--color-border)]">
                    {targetUser.prompt_logs?.length > 0 ? (
                       targetUser.prompt_logs.map((log) => (
-                         <tr key={log.id} className="hover:bg-[var(--color-surface-hover)]">
+                         <tr 
+                            key={log.id} 
+                            onClick={() => setSelectedLog(log)}
+                            className="hover:bg-[var(--color-surface-hover)] cursor-pointer transition-colors"
+                         >
                             <td className="px-4 py-2">
                                <Badge variant="info" size="sm">{log.agent?.name || 'Default'}</Badge>
                             </td>
                             <td className="px-4 py-2 text-[var(--color-text-secondary)]">
-                               <p className="line-clamp-1 max-w-[200px]" title={log.prompt_text}>{log.prompt_text || '—'}</p>
+                               <p className="line-clamp-1 max-w-[200px]">{log.prompt_text || '—'}</p>
                             </td>
                             <td className="px-4 py-2 text-[var(--color-text-secondary)]">{(log.tokens_estimated || 0).toLocaleString()}</td>
                             <td className="px-4 py-2 text-[var(--color-text-tertiary)]">{new Date(log.created_at).toLocaleDateString()}</td>
@@ -195,6 +201,52 @@ export default function UserDetail() {
              </table>
           </div>
         </Card>
+
+        {/* Breakdown Modal */}
+        <Modal 
+          isOpen={!!selectedLog} 
+          onClose={() => setSelectedLog(null)} 
+          title="Interaction Discovery"
+        >
+          {selectedLog && (
+            <div className="space-y-6 max-h-[70vh] overflow-y-auto pr-2">
+              <div className="p-4 rounded-xl bg-[var(--color-bg-secondary)] border border-[var(--color-border)]">
+                <div className="flex items-center gap-3">
+                  <div className="rounded-lg bg-primary-500/10 p-2">
+                    <CpuChipIcon className="h-5 w-5 text-primary-500" />
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-bold text-[var(--color-text)]">
+                      {selectedLog.agent?.name || 'Standard Agent'} Interaction
+                    </h4>
+                    <p className="text-xs text-[var(--color-text-tertiary)]">
+                      {new Date(selectedLog.created_at).toLocaleString()} • Ref #{selectedLog.id}
+                    </p>
+                  </div>
+                  <div className="ml-auto">
+                     <Badge variant="neutral" size="sm">{selectedLog.tokens_estimated || 0} tokens</Badge>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <h5 className="text-xs font-semibold uppercase tracking-widest text-[var(--color-text-tertiary)] mb-3">
+                  Full Prompt Context
+                </h5>
+                <div className="rounded-xl border border-[var(--color-border)] bg-[#0c0c0c] p-5 shadow-2xl">
+                  <p className="whitespace-pre-wrap text-sm leading-relaxed text-[var(--color-text)]">
+                    {selectedLog.prompt_text}
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex justify-end gap-3 pt-2">
+                <Button variant="ghost" onClick={() => setSelectedLog(null)}>Dismiss</Button>
+                <Button variant="outline" onClick={() => window.print()}>Export Log</Button>
+              </div>
+            </div>
+          )}
+        </Modal>
 
         <Card className="lg:col-span-2">
           <h3 className="text-sm font-semibold text-[var(--color-text)] mb-4">Moderation</h3>

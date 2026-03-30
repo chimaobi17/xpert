@@ -1,14 +1,17 @@
 import { useState, useEffect } from 'react';
-import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
+import { MagnifyingGlassIcon, ClipboardDocumentIcon, UserCircleIcon, CpuChipIcon } from '@heroicons/react/24/outline';
 import { get } from '../lib/apiClient';
 import Input from '../components/ui/Input';
 import Badge from '../components/ui/Badge';
 import Spinner from '../components/ui/Spinner';
+import Modal from '../components/ui/Modal';
+import Button from '../components/ui/Button';
 
 function formatDateTime(dateStr) {
   return new Date(dateStr).toLocaleDateString('en-US', {
     month: 'short',
     day: 'numeric',
+    year: 'numeric',
     hour: 'numeric',
     minute: '2-digit',
   });
@@ -18,6 +21,7 @@ export default function PromptLogs() {
   const [logs, setLogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
+  const [selectedLog, setSelectedLog] = useState(null);
 
   useEffect(() => {
     loadLogs();
@@ -45,7 +49,7 @@ export default function PromptLogs() {
 
       <Input
         icon={MagnifyingGlassIcon}
-        placeholder="Search by user or agent..."
+        placeholder="Search by user, agent or prompt text..."
         value={search}
         onChange={(e) => setSearch(e.target.value)}
         className="max-w-md"
@@ -71,7 +75,11 @@ export default function PromptLogs() {
               </tr>
             ) : (
               filtered.map((log) => (
-                <tr key={log.id} className="border-b border-[var(--color-border)] hover:bg-[var(--color-surface-hover)] transition-colors">
+                <tr 
+                  key={log.id} 
+                  onClick={() => setSelectedLog(log)}
+                  className="border-b border-[var(--color-border)] hover:bg-[var(--color-surface-hover)] transition-colors cursor-pointer"
+                >
                   <td className="px-4 py-3 min-w-[150px]">
                     <p className="font-medium text-[var(--color-text)]">{log.user?.name || 'Unknown'}</p>
                     <p className="text-xs text-[var(--color-text-tertiary)]">{log.user?.email || ''}</p>
@@ -80,7 +88,7 @@ export default function PromptLogs() {
                     <Badge variant="info" size="sm" className="whitespace-nowrap">{log.agent?.name || 'Default'}</Badge>
                   </td>
                   <td className="px-4 py-3 max-w-sm">
-                    <p className="line-clamp-2 text-[var(--color-text-secondary)] font-medium leading-relaxed" title={log.prompt_text}>
+                    <p className="line-clamp-2 text-[var(--color-text-secondary)] font-medium leading-relaxed">
                       {log.prompt_text || '—'}
                     </p>
                   </td>
@@ -92,6 +100,55 @@ export default function PromptLogs() {
           </tbody>
         </table>
       </div>
+
+      <Modal 
+        isOpen={!!selectedLog} 
+        onClose={() => setSelectedLog(null)} 
+        title="Prompt Breakdown"
+      >
+        {selectedLog && (
+          <div className="space-y-6 max-h-[70vh] overflow-y-auto pr-2">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="p-3 rounded-lg bg-[var(--color-bg-secondary)] border border-[var(--color-border)]">
+                <div className="flex items-center gap-2 mb-1 text-[var(--color-text-secondary)] mb-1">
+                  <UserCircleIcon className="h-4 w-4" />
+                  <span className="text-xs font-semibold uppercase tracking-wider">User Account</span>
+                </div>
+                <p className="text-sm font-bold text-[var(--color-text)] truncate">{selectedLog.user?.name}</p>
+                <p className="text-xs text-[var(--color-text-tertiary)] truncate">{selectedLog.user?.email}</p>
+              </div>
+              <div className="p-3 rounded-lg bg-[var(--color-bg-secondary)] border border-[var(--color-border)]">
+                <div className="flex items-center gap-2 mb-1 text-[var(--color-text-secondary)] mb-1">
+                  <CpuChipIcon className="h-4 w-4" />
+                  <span className="text-xs font-semibold uppercase tracking-wider">AI Integration</span>
+                </div>
+                <p className="text-sm font-bold text-[var(--color-text)] truncate">{selectedLog.agent?.name || 'Standard Agent'}</p>
+                <p className="text-xs text-[var(--color-text-tertiary)] truncate">{selectedLog.prompt_type || 'Chat Session'}</p>
+              </div>
+            </div>
+
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center gap-2 text-[var(--color-text-secondary)]">
+                  <ClipboardDocumentIcon className="h-4 w-4" />
+                  <span className="text-sm font-semibold">User Request</span>
+                </div>
+                <Badge variant="neutral" size="sm">{(selectedLog.tokens_estimated || 0).toLocaleString()} Tokens Used</Badge>
+              </div>
+              <div className="rounded-xl border border-[var(--color-border)] bg-background p-4 shadow-inner">
+                <p className="whitespace-pre-wrap text-sm leading-relaxed text-[var(--color-text)] font-medium">
+                  {selectedLog.prompt_text}
+                </p>
+              </div>
+            </div>
+
+            <div className="flex justify-between items-center pt-2 border-t border-[var(--color-border)]">
+              <span className="text-xs text-[var(--color-text-tertiary)]">Log Reference: #{selectedLog.id} • {formatDateTime(selectedLog.created_at)}</span>
+              <Button variant="outline" size="sm" onClick={() => setSelectedLog(null)}>Close Inspection</Button>
+            </div>
+          </div>
+        )}
+      </Modal>
     </div>
   );
 }
