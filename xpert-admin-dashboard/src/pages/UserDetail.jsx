@@ -21,6 +21,32 @@ import toast from 'react-hot-toast';
 
 const durationOptions = ['24h', '7d', '30d', 'permanent'];
 
+function formatRelativeTime(dateStr) {
+  const date = new Date(dateStr);
+  const now = new Date();
+  const diffInSeconds = Math.floor((now - date) / 1000);
+
+  if (diffInSeconds < 60) return 'Just now';
+  if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)}m ago`;
+  if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)}h ago`;
+  if (diffInSeconds < 604800) return `${Math.floor(diffInSeconds / 86400)}d ago`;
+
+  return date.toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+  });
+}
+
+function formatExactDateTime(dateStr) {
+  return new Date(dateStr).toLocaleString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit',
+  });
+}
+
 export default function UserDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -187,7 +213,9 @@ export default function UserDetail() {
                                <p className="line-clamp-1 max-w-[200px]">{log.prompt_text || '—'}</p>
                             </td>
                             <td className="px-4 py-2 text-[var(--color-text-secondary)]">{(log.tokens_estimated || 0).toLocaleString()}</td>
-                            <td className="px-4 py-2 text-[var(--color-text-tertiary)]">{new Date(log.created_at).toLocaleDateString()}</td>
+                            <td className="px-4 py-2 text-[var(--color-text-tertiary)] text-xs" title={formatExactDateTime(log.created_at)}>
+                               {formatRelativeTime(log.created_at)}
+                            </td>
                          </tr>
                       ))
                    ) : (
@@ -219,8 +247,8 @@ export default function UserDetail() {
                     <h4 className="text-sm font-bold text-[var(--color-text)]">
                       {selectedLog.agent?.name || 'Standard Agent'} Interaction
                     </h4>
-                    <p className="text-xs text-[var(--color-text-tertiary)]">
-                      {new Date(selectedLog.created_at).toLocaleString()} • Ref #{selectedLog.id}
+                    <p className="text-xs text-[var(--color-text-tertiary)]" title={formatExactDateTime(selectedLog.created_at)}>
+                      {formatRelativeTime(selectedLog.created_at)} ago • Ref #{selectedLog.id}
                     </p>
                   </div>
                   <div className="ml-auto">

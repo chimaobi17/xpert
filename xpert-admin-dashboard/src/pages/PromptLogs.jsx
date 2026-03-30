@@ -7,8 +7,24 @@ import Spinner from '../components/ui/Spinner';
 import Modal from '../components/ui/Modal';
 import Button from '../components/ui/Button';
 
-function formatDateTime(dateStr) {
-  return new Date(dateStr).toLocaleDateString('en-US', {
+function formatRelativeTime(dateStr) {
+  const date = new Date(dateStr);
+  const now = new Date();
+  const diffInSeconds = Math.floor((now - date) / 1000);
+
+  if (diffInSeconds < 60) return 'Just now';
+  if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)}m ago`;
+  if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)}h ago`;
+  if (diffInSeconds < 604800) return `${Math.floor(diffInSeconds / 86400)}d ago`;
+
+  return date.toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+  });
+}
+
+function formatExactDateTime(dateStr) {
+  return new Date(dateStr).toLocaleString('en-US', {
     month: 'short',
     day: 'numeric',
     year: 'numeric',
@@ -93,7 +109,9 @@ export default function PromptLogs() {
                     </p>
                   </td>
                   <td className="px-4 py-3 text-[var(--color-text-secondary)] font-mono">{(log.tokens_estimated || 0).toLocaleString()}</td>
-                  <td className="px-4 py-3 text-[var(--color-text-tertiary)] text-xs whitespace-nowrap">{formatDateTime(log.created_at)}</td>
+                  <td className="px-4 py-3 text-[var(--color-text-tertiary)] text-xs whitespace-nowrap" title={formatExactDateTime(log.created_at)}>
+                    {formatRelativeTime(log.created_at)}
+                  </td>
                 </tr>
               ))
             )}
@@ -143,7 +161,9 @@ export default function PromptLogs() {
             </div>
 
             <div className="flex justify-between items-center pt-2 border-t border-[var(--color-border)]">
-              <span className="text-xs text-[var(--color-text-tertiary)]">Log Reference: #{selectedLog.id} • {formatDateTime(selectedLog.created_at)}</span>
+              <span className="text-xs text-[var(--color-text-tertiary)]" title={formatExactDateTime(selectedLog.created_at)}>
+                Log Reference: #{selectedLog.id} • {formatRelativeTime(selectedLog.created_at)}
+              </span>
               <Button variant="outline" size="sm" onClick={() => setSelectedLog(null)}>Close Inspection</Button>
             </div>
           </div>
