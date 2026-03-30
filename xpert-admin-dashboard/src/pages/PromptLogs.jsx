@@ -109,8 +109,8 @@ export default function PromptLogs() {
                     </p>
                   </td>
                   <td className="px-4 py-3 text-[var(--color-text-secondary)] font-mono">{(log.tokens_estimated || 0).toLocaleString()}</td>
-                  <td className="px-4 py-3 text-[var(--color-text-tertiary)] text-xs whitespace-nowrap" title={formatExactDateTime(log.created_at)}>
-                    {formatRelativeTime(log.created_at)}
+                  <td className="px-4 py-3 text-[var(--color-text-tertiary)] text-xs whitespace-nowrap" title={formatRelativeTime(log.created_at) + ' ago'}>
+                    {formatExactDateTime(log.created_at)}
                   </td>
                 </tr>
               ))

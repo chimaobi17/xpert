@@ -213,10 +213,10 @@ export default function UserDetail() {
                                <p className="line-clamp-1 max-w-[200px]">{log.prompt_text || '—'}</p>
                             </td>
                             <td className="px-4 py-2 text-[var(--color-text-secondary)]">{(log.tokens_estimated || 0).toLocaleString()}</td>
-                            <td className="px-4 py-2 text-[var(--color-text-tertiary)] text-xs" title={formatExactDateTime(log.created_at)}>
-                               {formatRelativeTime(log.created_at)}
-                            </td>
-                         </tr>
+                             <td className="px-4 py-2 text-[var(--color-text-secondary)] text-xs font-mono" title={formatRelativeTime(log.created_at) + ' ago'}>
+                                {formatExactDateTime(log.created_at)}
+                             </td>
+                          </tr>
                       ))
                    ) : (
                       <tr>

@@ -1,14 +1,33 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   SunIcon,
   MoonIcon,
   Bars3Icon,
   ArrowRightOnRectangleIcon,
+  CalendarDaysIcon,
 } from '@heroicons/react/24/outline';
 import useAuth from '../../hooks/useAuth';
 import useTheme from '../../hooks/useTheme';
 import Avatar from '../ui/Avatar';
+
+function LiveClock() {
+  const [time, setTime] = useState(new Date());
+
+  useEffect(() => {
+    const timer = setInterval(() => setTime(new Date()), 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  return (
+    <div className="flex items-center gap-2 rounded-lg bg-[var(--color-bg-secondary)] px-3 py-1.5 border border-[var(--color-border)] shadow-sm">
+      <CalendarDaysIcon className="h-4 w-4 text-primary-500" />
+      <span className="text-xs font-bold text-[var(--color-text)] font-mono tracking-tight uppercase">
+        {time.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} • {time.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false })}
+      </span>
+    </div>
+  );
+}
 
 export default function AdminNavbar({ onMenuToggle }) {
   const { user, logout } = useAuth();
@@ -42,7 +61,11 @@ export default function AdminNavbar({ onMenuToggle }) {
         </div>
       </div>
 
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 md:gap-4">
+        <div className="hidden sm:block">
+          <LiveClock />
+        </div>
+        
         <button
           onClick={toggleTheme}
           className="rounded-lg p-2 text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-hover)] transition-colors"
