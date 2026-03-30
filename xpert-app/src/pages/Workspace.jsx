@@ -95,13 +95,13 @@ export default function Workspace() {
     <div className="animate-fade-in">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
         <div>
-          <h1 className="text-4xl font-bold text-foreground tracking-tight italic">My Workspace</h1>
+          <h1 className="text-4xl font-bold text-foreground tracking-tight">My Workspace</h1>
           <p className="text-lg text-text-secondary font-medium mt-2">
-            Managing <span className="text-primary-500 font-black">{myAgents.length}</span> curated neural agents.
+            Managing <span className="text-primary-500 font-bold">{myAgents.length}</span> active curators.
           </p>
         </div>
         <Link to="/agents/discover">
-          <Button size="lg" className="rounded-full shadow-[0_0_20px_rgba(33,196,93,0.2)]">
+          <Button size="lg" className="rounded-full shadow-lg">
             <PlusCircleIcon className="h-6 w-6 mr-1" />
             Deploy More
           </Button>
@@ -118,14 +118,25 @@ export default function Workspace() {
               className="relative h-full border-border/50 hover:border-primary-500/30 transition-all duration-500 flex flex-col p-8"
             >
               <div className="flex items-start justify-between mb-6">
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-surface-hover border border-border text-primary-500 shadow-inner group-hover:scale-110 transition-transform">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-surface-hover text-primary-500 shadow-sm group-hover:scale-110 transition-transform">
                   <CodeBracketIcon className="h-6 w-6" />
                 </div>
-                {agent.is_premium_only && (
-                  <Badge variant="premium" size="sm" className="rounded-full px-3 py-1 bg-gradient-to-r from-amber-400 to-orange-500 text-black border-none font-bold uppercase tracking-tighter italic">
-                    Premium
-                  </Badge>
-                )}
+                <div className="flex items-center gap-3">
+                  {agent.is_premium_only && (
+                    <Badge variant="premium" size="sm" className="rounded-full px-3 py-1 bg-gradient-to-r from-amber-400 to-orange-500 text-black border-none font-bold uppercase tracking-tighter">
+                      Premium
+                    </Badge>
+                  )}
+                  <button
+                    onClick={(e) => { e.stopPropagation(); handleRemove(agent.id); }}
+                    className="rounded-full p-2 text-text-tertiary hover:text-red-500 hover:bg-red-500/10 transition-all opacity-0 group-hover:opacity-100"
+                    title="Remove Agent"
+                  >
+                    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                  </button>
+                </div>
               </div>
               
               <div className="min-w-0 flex-1">
@@ -134,23 +145,10 @@ export default function Workspace() {
                     {agent.name}
                   </h3>
                 </div>
-                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-text-tertiary mb-4">{agent.domain}</p>
-                <p className="text-sm text-text-secondary font-medium leading-relaxed line-clamp-3 italic opacity-80 group-hover:opacity-100 transition-opacity">
+                <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-text-tertiary mb-4">{agent.domain}</p>
+                <p className="text-sm text-text-secondary font-medium leading-relaxed line-clamp-3 opacity-80 group-hover:opacity-100 transition-opacity">
                    {agent.system_prompt?.slice(0, 120)}...
                 </p>
-              </div>
-
-              <div className="mt-8 flex items-center justify-between border-t border-border/50 pt-6">
-                 <span className="text-[10px] font-black text-text-tertiary uppercase tracking-widest">Active Neural Link</span>
-                 <button
-                  onClick={(e) => { e.stopPropagation(); handleRemove(agent.id); }}
-                  className="rounded-full p-2 text-text-tertiary hover:text-red-500 hover:bg-red-500/10 transition-all border border-transparent hover:border-red-500/20"
-                  title="Remove Agent"
-                >
-                   <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                   </svg>
-                </button>
               </div>
             </Card>
           </div>

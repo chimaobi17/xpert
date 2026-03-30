@@ -15,12 +15,11 @@ export default function AuthLayout({ children }) {
               </svg>
             </div>
           </div>
-          <h1 className="text-4xl font-black text-foreground tracking-tighter mb-2 italic">XPERT</h1>
-          <p className="text-text-tertiary font-bold uppercase tracking-[0.3em] text-[10px]">Elite Neural Command Platform</p>
+          <h1 className="text-4xl font-bold text-foreground tracking-tight mb-2 uppercase">XPERT</h1>
+          <p className="text-text-tertiary font-bold uppercase tracking-[0.2em] text-[10px]">Premium AI Management Platform</p>
         </div>
 
-        <div className="rounded-[2.5rem] border border-border bg-surface/50 p-10 lg:p-12 shadow-2xl glass relative overflow-hidden border-opacity-50">
-          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary-600 to-emerald-400 shadow-[0_0_15px_rgba(33,196,93,0.3)]" />
+        <div className="rounded-3xl border border-border bg-surface/40 p-10 lg:p-12 shadow-xl glass relative overflow-hidden">
           {children}
         </div>
         

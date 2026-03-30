@@ -35,13 +35,13 @@ export default function Modal({ isOpen, onClose, title, size = 'md', isSolid = f
       
       <div
         className={clsx(
-          'relative z-10 w-full rounded-[2.5rem] shadow-2xl border transition-all duration-500 animate-slide-up overflow-hidden',
+          'relative z-10 w-full rounded-[2rem] shadow-2xl border transition-all duration-500 animate-slide-up overflow-hidden',
           !isSolid ? 'glass border-border/50' : 'bg-background border-border',
           sizes[size]
         )}
       >
         <div className="flex items-center justify-between px-8 py-6">
-          <h3 className="text-2xl font-bold text-foreground tracking-tight italic">{title}</h3>
+          <h3 className="text-2xl font-bold text-foreground tracking-tight">{title}</h3>
           <button
             onClick={onClose}
             className="rounded-2xl p-2 text-text-tertiary bg-surface-hover hover:text-foreground transition-all border border-border/30"
