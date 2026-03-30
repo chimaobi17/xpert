@@ -157,7 +157,7 @@ export default function AgentDiscover() {
                   )}>
                     <div className="text-center p-4">
                       <LockClosedIcon className="h-8 w-8 text-primary-500 mx-auto mb-2" />
-                      <p className="text-sm font-bold text-[var(--color-text)] leading-tight">{agent.name}</p>
+                      <p className="text-sm font-bold text-[var(--color-text)] leading-tight">[ANTIGRAVITY] {agent.name}</p>
                       <p className="text-[10px] uppercase tracking-wider text-[var(--color-text-secondary)] mt-1">{agent.domain}</p>
                       <Button size="sm" className="mt-3 w-full" onClick={() => setUpgradeModal(true)}>
                         Upgrade to Unlock

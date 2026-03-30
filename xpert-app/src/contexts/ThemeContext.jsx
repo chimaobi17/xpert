@@ -12,7 +12,7 @@ function resolveTheme(preference) {
 
 export function ThemeProvider({ children }) {
   const [preference, setPreference] = useState(() => {
-    return localStorage.getItem('xpert-theme') || 'system';
+    return localStorage.getItem('xpert-theme') || 'dark';
   });
 
   const resolved = resolveTheme(preference);

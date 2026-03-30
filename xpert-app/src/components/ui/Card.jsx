@@ -4,8 +4,8 @@ export default function Card({ children, className, hoverable = false, onClick, 
   return (
     <div
       className={clsx(
-        'rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6',
-        hoverable && 'transition-all duration-150 hover:border-primary-500/40 hover:shadow-md cursor-pointer',
+        'rounded-[2rem] bg-[var(--color-surface)] p-8 transition-all duration-300',
+        hoverable && 'cursor-pointer hover:bg-[var(--color-surface-hover)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:scale-[1.01] active:scale-[0.99]',
         className
       )}
       onClick={onClick}

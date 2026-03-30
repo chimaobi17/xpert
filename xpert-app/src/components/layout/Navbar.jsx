@@ -26,7 +26,7 @@ export default function Navbar({ onMenuToggle }) {
   }
 
   return (
-    <header className="sticky top-0 z-40 flex h-16 items-center justify-between border-b border-[var(--color-border)] bg-[var(--color-surface)] px-4 lg:px-6">
+    <header className="sticky top-0 z-40 flex h-16 items-center justify-between backdrop-blur-md bg-[var(--color-surface)]/70 px-4 lg:px-6 transition-all duration-300">
       <div className="flex items-center gap-3">
         <button
           onClick={onMenuToggle}
@@ -34,12 +34,12 @@ export default function Navbar({ onMenuToggle }) {
         >
           <Bars3Icon className="h-5 w-5" />
         </button>
-        <Link to="/dashboard" className="flex items-center gap-2">
-          <svg className="h-8 w-8" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 8L24 25L12 42" stroke="#22c55e" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"/>
-            <path d="M36 8L24 25L36 42" stroke="#22c55e" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"/>
+        <Link to="/dashboard" className="flex items-center gap-2 group">
+          <svg className="h-8 w-8 transition-transform group-hover:scale-110" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 8L24 25L12 42" stroke="#21c45d" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"/>
+            <path d="M36 8L24 25L36 42" stroke="#21c45d" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
-          <span className="text-xl font-bold text-[var(--color-text)] hidden sm:block">XPERT</span>
+          <span className="text-xl font-bold text-[var(--color-text)] hidden sm:block tracking-tight">XPERT</span>
         </Link>
       </div>
 

@@ -50,7 +50,7 @@ export default function Sidebar({ open, onClose }) {
       )}
       <aside
         className={clsx(
-          'fixed inset-y-0 left-0 z-30 flex w-64 flex-col border-r border-[var(--color-border)] bg-[var(--color-surface)] pt-16 transition-transform duration-200 lg:static lg:translate-x-0 lg:pt-0',
+          'fixed inset-y-0 left-0 z-30 flex w-72 flex-col bg-[var(--color-surface)] pt-16 transition-transform duration-300 ease-in-out lg:static lg:translate-x-0 lg:pt-0',
           open ? 'translate-x-0' : '-translate-x-full'
         )}
       >
@@ -62,32 +62,50 @@ export default function Sidebar({ open, onClose }) {
               onClick={onClose}
               className={({ isActive }) =>
                 clsx(
-                  'flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors duration-150',
+                  'group relative flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-all duration-200',
                   isActive
-                    ? 'bg-primary-50 text-primary-700'
+                    ? 'bg-primary-500/10 text-primary-500'
                     : 'text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-hover)] hover:text-[var(--color-text)]'
                 )
               }
             >
-              <item.icon className="h-5 w-5" />
-              {item.label}
+              {({ isActive }) => (
+                <>
+                  <item.icon className={clsx("h-5 w-5 transition-transform group-hover:scale-110", isActive && "text-primary-500")} />
+                  {item.label}
+                  {isActive && (
+                    <div className="absolute left-0 h-6 w-1 rounded-r-full bg-primary-500 shadow-[0_0_8px_rgba(33,196,93,0.6)]" />
+                  )}
+                </>
+              )}
             </NavLink>
           ))}
         </nav>
 
-        <div className="border-t border-[var(--color-border)] p-4">
-          <div className="rounded-lg bg-primary-50 p-3">
-            <p className="text-xs font-semibold text-primary-700 mb-1">{planLabel} Plan</p>
-            <div className="h-1.5 rounded-full bg-primary-200">
-              <div className="h-1.5 rounded-full bg-primary-500" style={{ width: `${pct}%` }} />
+        <div className="p-4 border-t border-[var(--color-border)]/50">
+          <div className="rounded-2xl bg-[var(--color-bg-secondary)] p-4 shadow-sm">
+            <div className="flex items-center justify-between mb-2">
+              <p className="text-xs font-bold uppercase tracking-wider text-[var(--color-text-tertiary)]">{planLabel}</p>
+              <span className="text-[10px] font-bold text-primary-500 bg-primary-500/10 px-2 py-0.5 rounded-full">Active</span>
             </div>
-            <p className="text-xs text-primary-600 mt-1">
-              {tokensUsed.toLocaleString()} / {quotaMax.toLocaleString()} tokens
-            </p>
-            {isFree && (
-              <p className="text-xs text-primary-600 mt-1">
-                Agents: {agentCount}/3
+            <div className="h-1.5 w-full rounded-full bg-[var(--color-surface-hover)] overflow-hidden">
+              <div 
+                className="h-full rounded-full bg-gradient-to-r from-primary-500 to-emerald-400 shadow-[0_0_8px_rgba(33,196,93,0.4)] transition-all duration-500" 
+                style={{ width: `${pct}%` }} 
+              />
+            </div>
+            <div className="flex items-center justify-between mt-2">
+              <p className="text-[10px] font-medium text-[var(--color-text-secondary)]">
+                {tokensUsed.toLocaleString()} / {quotaMax.toLocaleString()}
               </p>
+              <p className="text-[10px] font-bold text-[var(--color-text-secondary)]">
+                {Math.round(pct)}%
+              </p>
+            </div>
+            {isFree && (
+              <button onClick={() => window.location.href='/settings?tab=plan'} className="w-full mt-3 py-2 rounded-xl bg-primary-500 text-black text-xs font-bold hover:bg-primary-400 transition-colors">
+                Upgrade Now
+              </button>
             )}
           </div>
         </div>
