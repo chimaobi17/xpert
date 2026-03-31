@@ -132,10 +132,10 @@ export default function AiResponse({ response, responseType, tokensUsed, onSaveT
 
       {/* Fixed action buttons — always visible below the scroll area */}
       {showActions && (
-        <div className="flex-shrink-0 pt-4 border-t border-[var(--color-border)] mt-4">
+        <div className="flex-shrink-0 pt-4 border-t border-border mt-4">
           {!isImage && (
-            <div className="flex items-center justify-between text-xs text-[var(--color-text-tertiary)] mb-3">
-              <span>Estimated tokens: ~{tokensUsed || Math.ceil(response.length / 4)}</span>
+            <div className="flex items-center justify-between text-xs text-text-tertiary mb-3">
+              <span className="font-bold uppercase tracking-widest text-[10px]">Estimated tokens: ~{tokensUsed || Math.ceil(response.length / 4)}</span>
             </div>
           )}
 

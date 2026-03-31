@@ -13,6 +13,7 @@ import {
 import useAuth from '../../hooks/useAuth';
 import useTheme from '../../hooks/useTheme';
 import Avatar from '../ui/Avatar';
+import Badge from '../ui/Badge';
 
 export default function Navbar({ onMenuToggle }) {
   const { user, logout } = useAuth();
@@ -120,7 +121,7 @@ export default function Navbar({ onMenuToggle }) {
                       onClick={() => { setDropdownOpen(false); handleLogout(); }}
                       className="flex w-full items-center gap-3 px-4 py-3 text-sm font-bold text-red-500 hover:bg-red-500/10 rounded-2xl transition-all uppercase tracking-tighter"
                     >
-                      <ArrowRightOnRectangleIcon className="h-5 w-5" /> Terminate Session
+                      <ArrowRightOnRectangleIcon className="h-5 w-5" /> Log Out
                     </button>
                   </div>
                 </div>

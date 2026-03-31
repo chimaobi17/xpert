@@ -205,11 +205,16 @@ html, body {
 /* Force standard text inversion if white backgrounds appear in dark mode */
 [data-theme="dark"] .bg-white,
 [data-theme="dark"] .bg-zinc-50,
-[data-theme="dark"] .bg-slate-50,
-[data-theme="dark"] [style*="background-color: white"],
-[data-theme="dark"] [style*="background-color: #fff"],
-[data-theme="dark"] [style*="background-color: rgb(255, 255, 255)"] {
-  color: #000000 !important;
+[data-theme="dark"] .bg-slate-50 {
+  background-color: var(--color-bg) !important;
+}
+
+[data-theme="dark"] button:active,
+[data-theme="dark"] button:focus {
+  background-color: transparent !important;
+  border-color: #21c45d !important;
+  color: #21c45d !important;
+  box-shadow: 0 0 0 2px rgba(33, 196, 93, 0.4) !important;
 }
 
 @supports (padding-bottom: env(safe-area-inset-bottom)) {

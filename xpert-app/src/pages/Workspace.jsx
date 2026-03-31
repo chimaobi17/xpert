@@ -4,6 +4,7 @@ import {
   CodeBracketIcon,
   PlusCircleIcon,
   RectangleStackIcon,
+  TrashIcon,
 } from '@heroicons/react/24/outline';
 import { get, del } from '../lib/apiClient';
 import Card from '../components/ui/Card';
@@ -115,39 +116,35 @@ export default function Workspace() {
               hoverable
               glass
               onClick={() => navigate(`/agents/${agent.id}`, { state: { from: '/workspace' } })}
-              className="relative h-full border-border/50 hover:border-primary-500/30 transition-all duration-500 flex flex-col p-8"
+              className="relative h-full border-border/50 hover:border-primary-500/50 transition-all duration-500 flex flex-col p-8"
             >
-              <div className="flex items-start justify-between mb-6">
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-surface-hover text-primary-500 shadow-sm group-hover:scale-110 transition-transform">
-                  <CodeBracketIcon className="h-6 w-6" />
+              <div className="flex items-start justify-between mb-8">
+                <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-surface-hover text-primary-500 shadow-sm group-hover:scale-110 transition-all duration-500">
+                  <CodeBracketIcon className="h-7 w-7" />
                 </div>
                 <div className="flex items-center gap-3">
                   {agent.is_premium_only && (
-                    <Badge variant="premium" size="sm" className="rounded-full px-3 py-1 bg-gradient-to-r from-amber-400 to-orange-500 text-black border-none font-bold uppercase tracking-tighter">
-                      Premium
+                    <Badge variant="premium" size="sm" className="rounded-full px-3 py-1 bg-gradient-to-r from-amber-400 to-orange-500 text-black border-none font-bold uppercase tracking-tighter italic">
+                      Elite
                     </Badge>
                   )}
                   <button
                     onClick={(e) => { e.stopPropagation(); handleRemove(agent.id); }}
-                    className="rounded-full p-2 text-text-tertiary hover:text-red-500 hover:bg-red-500/10 transition-all opacity-0 group-hover:opacity-100"
+                    className="rounded-full p-2.5 text-text-tertiary hover:text-red-500 hover:bg-red-500/10 transition-all opacity-0 group-hover:opacity-100"
                     title="Remove Agent"
                   >
-                    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                    </svg>
+                    <TrashIcon className="h-5 w-5" />
                   </button>
                 </div>
               </div>
               
               <div className="min-w-0 flex-1">
-                <div className="flex items-center gap-2 mb-1">
-                  <h3 className="text-xl font-bold text-foreground tracking-tight truncate">
-                    {agent.name}
-                  </h3>
-                </div>
-                <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-text-tertiary mb-4">{agent.domain}</p>
-                <p className="text-sm text-text-secondary font-medium leading-relaxed line-clamp-3 opacity-80 group-hover:opacity-100 transition-opacity">
-                   {agent.system_prompt?.slice(0, 120)}...
+                <h3 className="text-2xl font-black text-foreground tracking-tight truncate mb-1">
+                  {agent.name}
+                </h3>
+                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-text-tertiary mb-6">{agent.domain}</p>
+                <p className="text-sm text-text-secondary font-medium leading-relaxed line-clamp-3 opacity-80 group-hover:opacity-100 transition-all duration-300">
+                   {agent.description || agent.system_prompt?.slice(0, 120)}...
                 </p>
               </div>
             </Card>

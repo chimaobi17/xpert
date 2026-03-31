@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import Spinner from './Spinner';
 
 const variants = {
-  primary: 'bg-primary-500 text-black font-black uppercase tracking-widest shadow-[0_0_30px_rgba(33,196,93,0.3)] hover:scale-105 hover:bg-white hover:shadow-[0_0_40px_rgba(255,255,255,0.2)] active:scale-95 transition-all outline-none border-none',
+  primary: 'bg-primary-500 text-black font-black uppercase tracking-widest shadow-[0_0_30px_rgba(33,196,93,0.3)] hover:scale-105 hover:bg-white active:scale-95 transition-all outline-none',
   secondary: 'bg-surface-hover text-foreground font-bold glass border-border/50 hover:bg-surface hover:text-foreground active:scale-95 border transition-all',
   outline: 'border border-border text-text-secondary font-bold hover:border-primary-500 hover:text-primary-500 hover:bg-primary-500/5 active:scale-95 transition-all',
   ghost: 'text-text-secondary hover:text-foreground hover:bg-surface-hover font-bold active:scale-95 transition-all',
@@ -27,7 +27,8 @@ export default function Button({
   return (
     <button
       className={clsx(
-        'inline-flex items-center justify-center gap-2 rounded-full font-bold transition-all duration-500 focus:outline-none focus:ring-4 focus:ring-primary-500/20 active:scale-95',
+        'inline-flex items-center justify-center gap-2 rounded-full font-bold transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary-500/40 active:scale-95 border border-transparent',
+        'dark:active:bg-transparent dark:active:border-primary-500 dark:active:text-primary-500',
         variants[variant],
         sizes[size],
         (disabled || loading) && 'opacity-50 cursor-not-allowed grayscale',

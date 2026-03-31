@@ -89,7 +89,7 @@ function ChatbotWidget() {
             : 'scale-90 opacity-0 translate-y-10 pointer-events-none'
           }`}
       >
-        <div className="w-full h-full bg-white/70 dark:bg-gray-900/70 backdrop-blur-md rounded-2xl border border-white/20 dark:border-white/10 overflow-hidden flex flex-col">
+        <div className="w-full h-full bg-white dark:bg-black rounded-2xl border border-gray-200 dark:border-primary-500 overflow-hidden flex flex-col shadow-[0_0_50px_rgba(33,196,93,0.15)]">
           <ChatbotPanel 
             messages={messages} 
             showQuickActions={showQuickActions}

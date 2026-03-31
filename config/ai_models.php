@@ -50,10 +50,10 @@ return [
     ],
 
     'graphic_designer' => [
-        'primary' => 'Qwen/Qwen2.5-72B-Instruct',
-        'fallback' => 'Qwen/Qwen2.5-7B-Instruct',
-        'max_tokens' => 4096,
-        'timeout' => 30,
+        'primary' => 'Qwen/Qwen2.5-7B-Instruct',
+        'fallback' => 'meta-llama/Llama-3.1-8B-Instruct',
+        'max_tokens' => 2048,
+        'timeout' => 45,
         'type' => 'text',
     ],
 

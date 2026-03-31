@@ -21,31 +21,7 @@ import toast from 'react-hot-toast';
 
 const durationOptions = ['24h', '7d', '30d', 'permanent'];
 
-function formatRelativeTime(dateStr) {
-  const date = new Date(dateStr);
-  const now = new Date();
-  const diffInSeconds = Math.floor((now - date) / 1000);
-
-  if (diffInSeconds < 60) return 'Just now';
-  if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)}m ago`;
-  if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)}h ago`;
-  if (diffInSeconds < 604800) return `${Math.floor(diffInSeconds / 86400)}d ago`;
-
-  return date.toLocaleDateString('en-US', {
-    month: 'short',
-    day: 'numeric',
-  });
-}
-
-function formatExactDateTime(dateStr) {
-  return new Date(dateStr).toLocaleString('en-US', {
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric',
-    hour: 'numeric',
-    minute: '2-digit',
-  });
-}
+import { formatExactDateTime, formatRelativeTime } from '../lib/helpers';
 
 export default function UserDetail() {
   const { id } = useParams();
@@ -261,7 +237,7 @@ export default function UserDetail() {
                 <h5 className="text-xs font-semibold uppercase tracking-widest text-[var(--color-text-tertiary)] mb-3">
                   Full Prompt Context
                 </h5>
-                <div className="rounded-xl border border-[var(--color-border)] bg-[#0c0c0c] p-5 shadow-2xl">
+                <div className="rounded-xl border border-[var(--color-border)] bg-[#000000] p-5 shadow-inner">
                   <p className="whitespace-pre-wrap text-sm leading-relaxed text-[var(--color-text)]">
                     {selectedLog.prompt_text}
                   </p>

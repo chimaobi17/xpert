@@ -95,7 +95,7 @@ export default function Notifications() {
                     <p className={`text-sm font-medium ${n.read ? 'text-[var(--color-text-secondary)]' : 'text-[var(--color-text)]'}`}>
                       {n.title}
                     </p>
-                    <Badge variant={typeBadgeVariant[n.type]} size="sm">{n.type}</Badge>
+                      <Badge variant={typeBadgeVariant[n.type]} size="sm">{n.type}</Badge>
                     {!n.read && <span className="h-2 w-2 rounded-full bg-primary-500" />}
                   </div>
                   <p className="text-xs text-[var(--color-text-secondary)]">{n.message}</p>

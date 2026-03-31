@@ -26,12 +26,13 @@ export default function Modal({ isOpen, onClose, title, size = 'md', children })
       <div className="fixed inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose} />
       <div
         className={clsx(
-          'relative z-10 w-full mx-4 rounded-xl border-2 shadow-2xl overflow-hidden',
+          'relative z-10 w-full mx-4 rounded-3xl border shadow-2xl overflow-hidden',
           'bg-white border-gray-100',
-          '[html[data-theme=dark]_&]:bg-[#000000] [html[data-theme=dark]_&]:border-white/10',
+          'dark:bg-[#000000] dark:border-white/10',
           sizes[size]
         )}
       >
+
         <div className="flex items-center justify-between border-b border-[var(--color-border)] px-6 py-4">
           <h3 className="text-lg font-semibold text-[var(--color-text)]">{title}</h3>
           <button

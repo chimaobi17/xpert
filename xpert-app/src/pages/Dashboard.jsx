@@ -15,6 +15,7 @@ import useAuth from '../hooks/useAuth';
 import { get } from '../lib/apiClient';
 import { getGreeting, formatDateTime, formatNumber } from '../lib/helpers';
 import Card from '../components/ui/Card';
+import Badge from '../components/ui/Badge';
 import Button from '../components/ui/Button';
 import Spinner from '../components/ui/Spinner';
 import OnboardingFlow from '../components/onboarding/OnboardingFlow';
@@ -96,32 +97,32 @@ export default function Dashboard() {
       )}
 
       <div className="mb-10">
-        <h1 className="text-4xl font-bold text-white tracking-tight">
+        <h1 className="text-4xl font-black text-foreground tracking-tight">
           {getGreeting()}, {user?.name?.split(' ')[0] || 'there'}
         </h1>
-        <p className="text-lg text-zinc-400 mt-2 font-medium">
+        <p className="text-lg text-text-secondary mt-2 font-medium">
           Your elite AI workspace is ready for deployment.
         </p>
       </div>
 
       {/* Stats Cards */}
-      <div className="grid gap-6 sm:grid-cols-3 mb-10 text-white">
+      <div className="grid gap-6 sm:grid-cols-3 mb-10 text-foreground">
         {stats.map((stat) => (
-          <Card key={stat.label} glass className="border-zinc-800/50 hover:border-primary-500/30 transition-all group">
-            <div className="flex items-center gap-5">
-              <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-zinc-900 border border-zinc-800 text-primary-500 shadow-inner group-hover:scale-110 transition-transform">
-                <stat.icon className="h-7 w-7" />
+          <Card key={stat.label} hoverable glass className="transition-all group p-8">
+            <div className="flex items-center gap-6">
+              <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-surface-hover text-primary-500 shadow-sm group-hover:scale-110 transition-all duration-500">
+                <stat.icon className="h-8 w-8" />
               </div>
               <div className="min-w-0">
-                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500 mb-1">{stat.label}</p>
-                <div className="flex items-baseline gap-1.5 flex-wrap">
-                  <span className="text-3xl font-black">{stat.value}</span>
-                  <span className="text-xs font-bold text-zinc-600 mb-1 truncate">{stat.sub}</span>
+                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-text-tertiary mb-2">{stat.label}</p>
+                <div className="flex items-baseline gap-2 flex-wrap">
+                  <span className="text-4xl font-black text-foreground">{stat.value}</span>
+                  <span className="text-xs font-bold text-text-tertiary mb-1 truncate">{stat.sub}</span>
                 </div>
               </div>
             </div>
             {stat.pct !== null && (
-              <div className="mt-6 h-1.5 w-full rounded-full bg-black/40 overflow-hidden">
+              <div className="mt-8 h-1.5 w-full rounded-full bg-surface-hover overflow-hidden">
                 <div
                   className="h-full rounded-full bg-primary-500 shadow-[0_0_15px_rgba(33,196,93,0.5)] transition-all duration-1000"
                   style={{ width: `${Math.min(stat.pct, 100)}%` }}
@@ -157,8 +158,8 @@ export default function Dashboard() {
         {/* Quick Access */}
         <div>
           <div className="flex items-center justify-between mb-6">
-             <h2 className="text-xl font-bold text-white tracking-tight italic">Deployed Agents</h2>
-             <Link to="/workspace" className="text-xs font-black uppercase tracking-widest text-primary-500 hover:text-white transition-colors">View All</Link>
+             <h2 className="text-xl font-bold text-foreground tracking-tight">Deployed Agents</h2>
+             <Link to="/workspace" className="text-xs font-black uppercase tracking-widest text-primary-500 hover:text-foreground transition-colors">View All</Link>
           </div>
           {loadingData ? (
              <div className="flex flex-col items-center justify-center py-20 glass rounded-[2rem] border border-zinc-800/50">
@@ -173,29 +174,38 @@ export default function Dashboard() {
                 <Card
                   key={agent.id}
                   hoverable
+                  glass
                   onClick={() => navigate(`/agents/${agent.id}`, { state: { from: '/dashboard' } })}
-                  className="!p-6 glass border-zinc-800/50 hover:border-primary-500/30 transition-all flex items-center gap-4 group"
+                  className="!p-8 flex items-center gap-6 group border-border/50 hover:border-primary-500/30"
                 >
-                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-zinc-900 border border-zinc-800 text-primary-500 group-hover:scale-110 transition-transform">
-                    <CodeBracketIcon className="h-6 w-6" />
+                  <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-surface-hover text-primary-500 shadow-sm group-hover:scale-110 transition-all duration-500">
+                    <CodeBracketIcon className="h-8 w-8" />
                   </div>
-                  <div className="min-w-0">
-                    <span className="text-sm font-bold text-white block truncate">{agent.name}</span>
-                    <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">{agent.domain}</span>
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-2 mb-1">
+                      <h3 className="text-xl font-bold text-foreground tracking-tight truncate">{agent.name}</h3>
+                      {agent.is_premium_only && (
+                         <Badge variant="premium" size="sm">Elite</Badge>
+                      )}
+                    </div>
+                    <p className="text-[10px] font-black uppercase tracking-[0.2em] text-text-tertiary mb-3">{agent.domain}</p>
+                    <p className="text-sm text-text-secondary leading-relaxed opacity-80 group-hover:opacity-100 transition-opacity truncate pr-4">
+                       {agent.description?.slice(0, 100) || agent.system_prompt?.slice(0, 100)}...
+                    </p>
                   </div>
                 </Card>
               ))}
               <Card
                 hoverable
                 onClick={() => navigate('/agents/discover')}
-                className="!p-6 glass border-zinc-800/50 border-dashed hover:border-solid hover:border-primary-500/50 transition-all flex items-center gap-4 group bg-zinc-950/20"
+                className="!p-6 border-dashed hover:border-solid transition-all flex items-center gap-4 group bg-surface-hover/20"
               >
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-zinc-900/50 border border-zinc-800 text-zinc-500 group-hover:text-primary-500 transition-colors">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-surface-hover border border-border text-text-tertiary group-hover:text-primary-500 transition-colors">
                   <span className="text-2xl font-light">+</span>
                 </div>
                 <div>
-                  <span className="text-sm font-bold text-zinc-400 group-hover:text-white transition-colors">Curate more agents</span>
-                  <span className="text-[10px] font-bold text-zinc-600 block uppercase tracking-widest">Discover library</span>
+                  <span className="text-sm font-bold text-text-secondary group-hover:text-foreground transition-colors">Curate more agents</span>
+                  <span className="text-[10px] font-bold text-text-tertiary block uppercase tracking-widest">Discover library</span>
                 </div>
               </Card>
             </div>
@@ -206,19 +216,19 @@ export default function Dashboard() {
         <div>
           <h2 className="text-xl font-bold text-white mb-6 tracking-tight italic">Recent Interactions</h2>
           {myAgents.length === 0 && !loadingData ? (
-             <Card glass className="text-center py-20 border-zinc-800/50">
-               <p className="text-sm font-bold text-zinc-500 uppercase tracking-widest">No neural pathways mapped yet.</p>
-               <Button variant="outline" className="mt-8 rounded-full h-12 px-8 font-bold border-zinc-800" onClick={() => navigate('/agents/discover')}>Curate first agent</Button>
+             <Card className="text-center py-20">
+               <p className="text-sm font-bold text-text-tertiary uppercase tracking-widest">No neural pathways mapped yet.</p>
+               <Button variant="outline" className="mt-8 rounded-full h-12 px-8 font-bold" onClick={() => navigate('/agents/discover')}>Curate first agent</Button>
              </Card>
           ) : (
-            <Card glass className="text-center py-20 border-zinc-800/50 group">
-               <div className="w-16 h-16 rounded-full bg-zinc-900 border border-zinc-800 flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-500">
-                  <ChartBarIcon className="h-8 w-8 text-zinc-600" />
+            <Card className="text-center py-20 group">
+               <div className="w-16 h-16 rounded-full bg-surface-hover border border-border flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-500">
+                  <ChartBarIcon className="h-8 w-8 text-text-tertiary" />
                </div>
-               <p className="text-sm font-bold text-zinc-500 uppercase tracking-widest">
+               <p className="text-sm font-bold text-text-tertiary uppercase tracking-widest">
                 Interaction mapping active...
               </p>
-              <p className="text-xs text-zinc-600 font-medium mt-2">Activity logs will stream here during deployment.</p>
+              <p className="text-xs text-text-tertiary font-medium mt-2">Activity logs will stream here during deployment.</p>
             </Card>
           )}
         </div>

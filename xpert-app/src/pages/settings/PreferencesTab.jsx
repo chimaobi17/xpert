@@ -17,19 +17,20 @@ export default function PreferencesTab() {
         <h3 className="text-sm font-semibold text-[var(--color-text)] mb-4">Theme</h3>
         <div className="flex gap-2">
           {themeOptions.map((opt) => (
-            <button
+            <Card
               key={opt.id}
+              hoverable
               onClick={() => setTheme(opt.id)}
               className={clsx(
-                'flex-1 rounded-lg border px-4 py-3 text-center transition-all',
+                'flex-1 p-4 flex flex-col items-center justify-center transition-all duration-500',
                 preference === opt.id
-                  ? 'border-primary-500 bg-primary-50 ring-1 ring-primary-500'
-                  : 'border-[var(--color-border)] hover:border-primary-300'
+                  ? 'border-primary-500 bg-transparent ring-1 ring-primary-500 shadow-[0_0_20px_rgba(33,196,93,0.15)]'
+                  : 'border-gray-100 dark:border-border hover:border-primary-500/50'
               )}
             >
-              <span className="text-xl">{opt.icon}</span>
-              <p className="text-xs font-medium text-[var(--color-text)] mt-1">{opt.label}</p>
-            </button>
+              <span className="text-2xl mb-2">{opt.icon}</span>
+              <p className="text-xs font-bold text-foreground">{opt.label}</p>
+            </Card>
           ))}
         </div>
         <p className="text-xs text-[var(--color-text-tertiary)] mt-3">

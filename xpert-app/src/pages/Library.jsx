@@ -3,12 +3,14 @@ import { useNavigate } from 'react-router-dom';
 import { MagnifyingGlassIcon, TrashIcon, ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/outline';
 import { BookOpenIcon } from '@heroicons/react/24/outline';
 import { get, del } from '../lib/apiClient';
-import { formatDate, truncate } from '../lib/helpers';
 import Input from '../components/ui/Input';
+import Select from '../components/ui/Select';
 import Spinner from '../components/ui/Spinner';
 import EmptyState from '../components/ui/EmptyState';
 import Badge from '../components/ui/Badge';
+import Card from '../components/ui/Card';
 import toast from 'react-hot-toast';
+import { formatDate, truncate } from '../lib/helpers';
 
 export default function Library() {
   const navigate = useNavigate();
@@ -54,9 +56,9 @@ export default function Library() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-[var(--color-text)]">Prompt Library</h1>
-        <p className="text-sm text-[var(--color-text-secondary)] mt-1">
-          Your saved prompts and AI responses
+        <h1 className="text-4xl font-black text-foreground tracking-tight">Prompt Library</h1>
+        <p className="text-lg text-text-secondary mt-2 font-medium">
+          Your elite repository of AI blueprints and curated intelligence.
         </p>
       </div>
 
@@ -68,16 +70,12 @@ export default function Library() {
           onChange={(e) => setSearch(e.target.value)}
           className="flex-1"
         />
-        <select
+        <Select
           value={filterAgent}
           onChange={(e) => setFilterAgent(e.target.value)}
-          className="rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-2 text-sm text-[var(--color-text)]"
-        >
-          <option value="All">All Agents</option>
-          {agentNames.map((name) => (
-            <option key={name} value={name}>{name}</option>
-          ))}
-        </select>
+          options={agentNames}
+          className="sm:w-64"
+        />
       </div>
 
       {filtered.length === 0 ? (
@@ -89,58 +87,60 @@ export default function Library() {
           onAction={() => navigate('/workspace')}
         />
       ) : (
-        <div className="space-y-3">
+        <div className="space-y-5">
           {filtered.map((item) => (
-            <div
+            <Card
               key={item.id}
-              className="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] overflow-hidden"
+              className="!p-0 rounded-lg overflow-hidden"
             >
-              <button
+              <div
                 onClick={() => setExpandedId(expandedId === item.id ? null : item.id)}
-                className="flex w-full items-center justify-between p-4 text-left"
+                className="flex w-full items-center justify-between p-5 text-left cursor-pointer hover:bg-surface-hover/30 transition-all duration-300 group/card"
               >
                 <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 mb-1">
-                    <Badge variant="info" size="sm">{item.agent?.name || 'Agent'}</Badge>
-                    <span className="text-xs text-[var(--color-text-tertiary)]">{formatDate(item.created_at)}</span>
+                  <div className="flex items-center gap-2 mb-2">
+                    <Badge variant="info" size="sm" className="rounded-full px-3">{item.agent?.name || 'Agent'}</Badge>
+                    <span className="text-[10px] font-black uppercase tracking-widest text-text-tertiary">{formatDate(item.created_at)}</span>
                   </div>
-                  <p className="text-sm font-medium text-[var(--color-text)] truncate">{item.original_input}</p>
+                  <p className="text-sm font-bold text-foreground truncate">{item.original_input}</p>
                   {expandedId !== item.id && (
-                    <p className="text-xs text-[var(--color-text-secondary)] mt-0.5">{truncate(item.ai_response || '', 100)}</p>
+                    <p className="text-xs text-text-secondary mt-1 line-clamp-1">{truncate(item.ai_response || '', 100)}</p>
                   )}
                 </div>
-                <div className="flex items-center gap-2 ml-3">
+                <div className="flex items-center gap-3 ml-4">
                   <button
                     onClick={(e) => { e.stopPropagation(); handleDelete(item.id); }}
-                    className="rounded-lg p-1.5 text-[var(--color-text-tertiary)] hover:text-red-500 hover:bg-red-50 transition-colors"
+                    className="rounded-xl p-2.5 text-text-tertiary hover:text-red-500 hover:bg-red-500/10 transition-all"
                   >
-                    <TrashIcon className="h-4 w-4" />
+                    <TrashIcon className="h-5 w-5" />
                   </button>
                   {expandedId === item.id ? (
-                    <ChevronUpIcon className="h-4 w-4 text-[var(--color-text-tertiary)]" />
+                    <ChevronUpIcon className="h-5 w-5 text-text-tertiary" />
                   ) : (
-                    <ChevronDownIcon className="h-4 w-4 text-[var(--color-text-tertiary)]" />
+                    <ChevronDownIcon className="h-5 w-5 text-text-tertiary" />
                   )}
                 </div>
-              </button>
+              </div>
 
               {expandedId === item.id && (
-                <div className="border-t border-[var(--color-border)] p-4 space-y-3">
+                <div className="border-t border-border p-6 space-y-4 animate-slide-up">
                   <div>
-                    <p className="text-xs font-semibold text-[var(--color-text-secondary)] uppercase mb-1">Prompt</p>
-                    <p className="text-sm text-[var(--color-text)] bg-[var(--color-bg)] rounded-lg p-3">{item.final_prompt}</p>
+                    <p className="text-[10px] font-black text-text-tertiary uppercase tracking-widest mb-2">Detailed Blueprint</p>
+                    <div className="text-sm text-foreground bg-surface-hover/30 rounded-2xl p-4 border border-border/50">
+                      {item.final_prompt}
+                    </div>
                   </div>
                   {item.ai_response && (
                     <div>
-                      <p className="text-xs font-semibold text-[var(--color-text-secondary)] uppercase mb-1">AI Response</p>
-                      <div className="text-sm text-[var(--color-text)] bg-[var(--color-bg)] rounded-lg p-3 whitespace-pre-wrap">
+                      <p className="text-[10px] font-black text-text-tertiary uppercase tracking-widest mb-2">Curated Intelligence</p>
+                      <div className="text-sm text-foreground bg-surface-hover/30 rounded-2xl p-4 border border-border/50 whitespace-pre-wrap">
                         {item.ai_response}
                       </div>
                     </div>
                   )}
                 </div>
               )}
-            </div>
+            </Card>
           ))}
         </div>
       )}

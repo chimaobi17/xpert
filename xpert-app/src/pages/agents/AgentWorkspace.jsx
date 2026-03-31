@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
+import clsx from 'clsx';
 import { get, post, del } from '../../lib/apiClient';
 import Card from '../../components/ui/Card';
 import Badge from '../../components/ui/Badge';
@@ -270,20 +271,20 @@ export default function AgentWorkspace() {
       <div className="flex items-center gap-6 mb-10">
         <button
           onClick={handleBack}
-          className="rounded-2xl p-3 text-zinc-400 bg-zinc-900/50 hover:bg-zinc-800 hover:text-white transition-all border border-zinc-800/50"
+          className="rounded-2xl p-3 text-text-tertiary bg-surface-hover hover:bg-neutral-100 dark:hover:bg-zinc-800 hover:text-foreground transition-all border border-border"
         >
           <ArrowLeftIcon className="h-6 w-6" />
         </button>
         <div>
           <div className="flex items-center gap-3">
-            <h1 className="text-3xl font-bold text-white tracking-tight">{agent.name}</h1>
+            <h1 className="text-3xl font-black text-foreground tracking-tight">{agent.name}</h1>
             {agent.is_premium_only && (
               <Badge variant="premium" size="sm" className="rounded-full px-3 py-1 bg-gradient-to-r from-amber-400 to-orange-500 text-black border-none font-bold uppercase tracking-tighter italic">
                 Premium
               </Badge>
             )}
           </div>
-          <p className="text-sm text-zinc-500 font-bold uppercase tracking-[0.2em] mt-1">{agent.domain} • {agent.category}</p>
+          <p className="text-sm text-text-tertiary font-bold uppercase tracking-[0.2em] mt-1">{agent.domain} • {agent.category}</p>
         </div>
       </div>
 
@@ -294,7 +295,7 @@ export default function AgentWorkspace() {
             <div className="relative mb-4">
               <div className={clsx(
                 "h-1 rounded-full transition-all duration-700",
-                step > i + 1 ? "bg-primary-500" : step === i + 1 ? "bg-primary-500/30" : "bg-zinc-900"
+                step > i + 1 ? "bg-primary-500" : step === i + 1 ? "bg-primary-500/30" : "bg-surface-hover"
               )} />
               {step === i + 1 && (
                 <div className="absolute top-0 left-0 h-1 bg-primary-500 animate-pulse-slow shadow-[0_0_10px_rgba(33,196,93,0.5)]" style={{ width: '100%' }} />
@@ -306,14 +307,14 @@ export default function AgentWorkspace() {
                 step > i + 1
                   ? "bg-primary-500 text-black"
                   : step === i + 1
-                    ? "bg-zinc-900 text-primary-500 border border-primary-500/30 shadow-[0_0_15px_rgba(33,196,93,0.1)]"
-                    : "bg-zinc-900/50 text-zinc-600 border border-zinc-800/30"
+                    ? "bg-surface-hover text-primary-500 border border-primary-500/30 shadow-[0_0_15px_rgba(33,196,93,0.1)]"
+                    : "bg-surface-hover/50 text-text-tertiary border border-border/30"
               )}>
                 {step > i + 1 ? "✓" : i + 1}
               </div>
               <span className={clsx(
                 "text-xs font-black uppercase tracking-widest transition-colors",
-                step === i + 1 ? "text-white" : "text-zinc-600"
+                step === i + 1 ? "text-foreground" : "text-text-tertiary"
               )}>
                 {label}
               </span>
@@ -323,12 +324,12 @@ export default function AgentWorkspace() {
       </div>
 
       {/* Step Content */}
-      <Card glass className="border-zinc-800/50 p-10 min-h-[400px]">
+      <Card className="p-10 min-h-[400px]">
         {step === 1 && (
           <div className="animate-slide-up">
             <div className="mb-8">
-               <h2 className="text-2xl font-bold text-white mb-2">Configure Interaction</h2>
-               <p className="text-zinc-400 font-medium">Define parameters for your elite AI curator.</p>
+               <h2 className="text-2xl font-black text-foreground mb-2">Configure Interaction</h2>
+               <p className="text-text-secondary font-medium">Define parameters for your elite AI curator.</p>
             </div>
             <DynamicForm
               fields={fields}
@@ -343,7 +344,7 @@ export default function AgentWorkspace() {
                 loading={loading}
                 className="h-14 px-10 rounded-full font-black uppercase tracking-widest shadow-[0_0_20px_rgba(33,196,93,0.3)]"
               >
-                Synthesize Prompt
+                Generate Prompt
               </Button>
             </div>
           </div>
@@ -352,10 +353,11 @@ export default function AgentWorkspace() {
         {step === 2 && (
           <div className="animate-slide-up">
             <div className="mb-8">
-               <h2 className="text-2xl font-bold text-white mb-2">Review Blueprint</h2>
-               <p className="text-zinc-400 font-medium">Verify the detailed instructions before execution.</p>
+               <h2 className="text-2xl font-black text-foreground mb-2">Review Blueprint</h2>
+               <p className="text-text-secondary font-medium">Verify the detailed instructions before execution.</p>
             </div>
             <PromptPreview
+              key={generatedPrompt}
               generatedPrompt={generatedPrompt}
               onSubmit={handleSubmitToAI}
               onBack={() => setStep(1)}
@@ -371,10 +373,10 @@ export default function AgentWorkspace() {
 
         {step === 3 && (
           <div className="animate-slide-up">
-            <div className="mb-8 border-b border-zinc-800/50 pb-6 flex items-center justify-between">
+            <div className="mb-8 border-b border-border pb-6 flex items-center justify-between">
                <div>
-                  <h2 className="text-2xl font-bold text-white mb-1">Curation Complete</h2>
-                  <p className="text-zinc-400 font-medium">Review the optimized response from your agent.</p>
+                  <h2 className="text-2xl font-black text-foreground mb-1">Curation Complete</h2>
+                  <p className="text-text-secondary font-medium">Review the optimized response from your agent.</p>
                </div>
                <Badge className="bg-primary-500/10 text-primary-500 border-primary-500/20 rounded-full px-4 py-1.5 font-bold uppercase tracking-tighter">Verified Result</Badge>
             </div>

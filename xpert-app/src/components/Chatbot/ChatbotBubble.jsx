@@ -4,22 +4,21 @@ function ChatbotBubble({ isOpen, toggle, unreadCount }) {
   return (
     <button
       onClick={toggle}
-      className={`fixed z-50 rounded-full shadow-xl flex items-center justify-center transition-all duration-300 transform hover:scale-105 active:scale-95 ${
-        isOpen
-          ? 'bg-gray-100 dark:bg-gray-800 text-gray-500 hover:bg-gray-200 dark:hover:bg-gray-700'
-          : 'bg-primary-100 hover:bg-primary-200 text-primary-600'
-      }`}
+      className={`fixed z-[60] rounded-full shadow-xl flex items-center justify-center transition-all duration-300 transform hover:scale-105 active:scale-95 border ${isOpen
+        ? 'bg-white dark:bg-black !text-primary-500 border-gray-200 dark:border-primary-500'
+        : 'bg-primary-100 dark:bg-black hover:bg-primary-200 dark:hover:bg-primary-900/10 !text-primary-600 dark:!text-primary-500 border-primary-500'
+        }`}
       style={{
         bottom: '24px',
         right: '24px',
-        width: '48px',
-        height: '48px'
+        width: '56px', // Slightly larger for clarity
+        height: '56px'
       }}
       aria-label="Toggle Help Chatbot"
     >
       {isOpen ? (
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="#22c55e">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
         </svg>
       ) : (
         <React.Fragment>

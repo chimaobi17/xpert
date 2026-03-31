@@ -71,6 +71,7 @@ class AuthController extends Controller
     public function updateProfile(Request $request)
     {
         $validated = $request->validate([
+            'name' => ['sometimes', 'string', 'max:255'],
             'job_title' => ['sometimes', 'string', 'max:255'],
             'purpose' => ['sometimes', 'string', 'max:1000'],
             'field_of_specialization' => ['sometimes', 'in:technology,creative,business,research,language'],

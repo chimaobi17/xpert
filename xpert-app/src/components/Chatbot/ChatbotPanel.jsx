@@ -16,29 +16,32 @@ function ChatbotPanel({ messages, showQuickActions, onSend, onClose }) {
   return (
     <div className="flex flex-col h-full">
       {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b border-gray-100 dark:border-gray-800 bg-white/50 dark:bg-gray-900/50 rounded-t-2xl">
+      <div className="flex items-center justify-between p-4 border-b border-gray-100 dark:border-primary-500 bg-white dark:bg-black rounded-t-2xl">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-full bg-primary-100 flex items-center justify-center text-primary-600">
+          <div className="w-8 h-8 rounded-full bg-primary-100 dark:bg-black border border-primary-500 flex items-center justify-center text-primary-600 dark:text-primary-500">
             <CpuChipIcon className="h-5 w-5" />
           </div>
           <div>
-            <h3 className="text-sm font-semibold text-gray-800 dark:text-gray-200">XPERT Assistant</h3>
+            <h3 className="text-sm font-semibold text-primary-500 dark:text-primary-500">XPERT Assistant</h3>
             <p className="text-xs text-green-500 font-medium tracking-wide">● Online</p>
           </div>
         </div>
-        <button onClick={onClose} className="p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors">
-          <XMarkIcon className="h-5 w-5" />
+        <button
+          onClick={onClose}
+          className="hidden" // Removed as per user request
+        >
+          <XMarkIcon className="h-6 w-6 stroke-[3.5]" />
         </button>
       </div>
 
       <ChatbotContextHint />
 
       {/* Message List */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50/30 dark:bg-gray-900/30 backdrop-blur-sm">
+      <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50/50 dark:bg-black">
         {messages.map((msg, index) => (
           <ChatbotMessage key={index} message={msg} />
         ))}
-        
+
         {showQuickActions && (
           <div className="mt-4">
             <ChatbotQuickActions onSend={onSend} />

@@ -118,8 +118,8 @@ export default function AgentDiscover() {
                 className={clsx(
                   'rounded-full px-5 py-2 text-sm font-bold transition-all duration-300',
                   domain === d
-                    ? 'bg-primary-500 text-black shadow-[0_0_15px_rgba(33,196,93,0.3)]'
-                    : 'bg-surface-hover text-text-secondary hover:text-foreground'
+                    ? 'border-primary-500 bg-transparent text-primary-500 border'
+                    : 'bg-surface-hover text-text-secondary hover:text-foreground border border-transparent'
                 )}
               >
                 {d}

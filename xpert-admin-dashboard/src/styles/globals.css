@@ -105,3 +105,11 @@ select:focus {
 ::-webkit-scrollbar-thumb:hover {
   background: var(--color-text-secondary);
 }
+[data-theme="dark"] button:active,
+[data-theme="dark"] button:focus {
+  background-color: transparent !important;
+  border-color: #21c45d !important;
+  color: #21c45d !important;
+  box-shadow: 0 0 0 2px rgba(33, 196, 93, 0.4) !important;
+  outline: none !important;
+}
