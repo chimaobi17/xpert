@@ -21,23 +21,23 @@ return [
         'primary' => 'Qwen/Qwen2.5-Coder-32B-Instruct',
         'fallback' => 'meta-llama/Llama-3.2-1B-Instruct',
         'max_tokens' => 2048,
-        'timeout' => 30,
+        'timeout' => 60,
         'type' => 'text',
     ],
 
     'content_writer' => [
-        'primary' => 'Qwen/Qwen2.5-72B-Instruct',
-        'fallback' => 'Qwen/Qwen2.5-7B-Instruct',
+        'primary' => 'Qwen/Qwen2.5-7B-Instruct',
+        'fallback' => 'meta-llama/Llama-3.1-8B-Instruct',
         'max_tokens' => 4096,
-        'timeout' => 30,
+        'timeout' => 60,
         'type' => 'text',
     ],
 
     'business_analyst' => [
-        'primary' => 'Qwen/Qwen2.5-72B-Instruct',
+        'primary' => 'Qwen/Qwen2.5-7B-Instruct',
         'fallback' => 'meta-llama/Llama-3.3-70B-Instruct',
         'max_tokens' => 4096,
-        'timeout' => 30,
+        'timeout' => 60,
         'type' => 'text',
     ],
 
@@ -45,7 +45,7 @@ return [
         'primary' => 'Qwen/Qwen2.5-7B-Instruct',
         'fallback' => 'meta-llama/Llama-3.2-1B-Instruct',
         'max_tokens' => 4096,
-        'timeout' => 30,
+        'timeout' => 60,
         'type' => 'text',
     ],
 
@@ -58,10 +58,10 @@ return [
     ],
 
     'document_qa' => [
-        'primary' => 'Qwen/Qwen2.5-72B-Instruct',
-        'fallback' => 'Qwen/Qwen2.5-7B-Instruct',
+        'primary' => 'Qwen/Qwen2.5-7B-Instruct',
+        'fallback' => 'meta-llama/Llama-3.2-1B-Instruct',
         'max_tokens' => 4096,
-        'timeout' => 30,
+        'timeout' => 60,
         'type' => 'text',
     ],
 
@@ -94,50 +94,50 @@ return [
     // --- New Agent Categories (Text Generation, Free Tier) ---
 
     'email_writer' => [
-        'primary' => 'Qwen/Qwen2.5-72B-Instruct',
-        'fallback' => 'Qwen/Qwen2.5-7B-Instruct',
+        'primary' => 'Qwen/Qwen2.5-7B-Instruct',
+        'fallback' => 'meta-llama/Llama-3.1-8B-Instruct',
         'max_tokens' => 2048,
-        'timeout' => 30,
+        'timeout' => 60,
         'type' => 'text',
     ],
 
     'resume_builder' => [
-        'primary' => 'Qwen/Qwen2.5-72B-Instruct',
+        'primary' => 'Qwen/Qwen2.5-7B-Instruct',
         'fallback' => 'meta-llama/Llama-3.3-70B-Instruct',
         'max_tokens' => 4096,
-        'timeout' => 30,
+        'timeout' => 60,
         'type' => 'text',
     ],
 
     'social_media' => [
-        'primary' => 'Qwen/Qwen2.5-72B-Instruct',
-        'fallback' => 'Qwen/Qwen2.5-7B-Instruct',
+        'primary' => 'Qwen/Qwen2.5-7B-Instruct',
+        'fallback' => 'meta-llama/Llama-3.1-8B-Instruct',
         'max_tokens' => 2048,
-        'timeout' => 30,
+        'timeout' => 60,
         'type' => 'text',
     ],
 
     'academic_writer' => [
-        'primary' => 'Qwen/Qwen2.5-72B-Instruct',
+        'primary' => 'Qwen/Qwen2.5-7B-Instruct',
         'fallback' => 'meta-llama/Llama-3.3-70B-Instruct',
         'max_tokens' => 4096,
-        'timeout' => 30,
+        'timeout' => 60,
         'type' => 'text',
     ],
 
     'legal_assistant' => [
-        'primary' => 'Qwen/Qwen2.5-72B-Instruct',
+        'primary' => 'Qwen/Qwen2.5-7B-Instruct',
         'fallback' => 'meta-llama/Llama-3.3-70B-Instruct',
         'max_tokens' => 4096,
-        'timeout' => 30,
+        'timeout' => 60,
         'type' => 'text',
     ],
 
     'data_analyst' => [
-        'primary' => 'Qwen/Qwen2.5-72B-Instruct',
+        'primary' => 'Qwen/Qwen2.5-Coder-32B-Instruct',
         'fallback' => 'Qwen/Qwen2.5-7B-Instruct',
         'max_tokens' => 4096,
-        'timeout' => 30,
+        'timeout' => 60,
         'type' => 'text',
     ],
 
@@ -145,23 +145,23 @@ return [
         'primary' => 'Qwen/Qwen2.5-7B-Instruct',
         'fallback' => 'meta-llama/Llama-3.2-1B-Instruct',
         'max_tokens' => 2048,
-        'timeout' => 30,
+        'timeout' => 60,
         'type' => 'text',
     ],
 
     'meeting_summarizer' => [
-        'primary' => 'Qwen/Qwen2.5-72B-Instruct',
-        'fallback' => 'Qwen/Qwen2.5-7B-Instruct',
+        'primary' => 'Qwen/Qwen2.5-7B-Instruct',
+        'fallback' => 'meta-llama/Llama-3.2-1B-Instruct',
         'max_tokens' => 4096,
-        'timeout' => 30,
+        'timeout' => 60,
         'type' => 'text',
     ],
 
     'story_writer' => [
-        'primary' => 'Qwen/Qwen2.5-72B-Instruct',
-        'fallback' => 'Qwen/Qwen2.5-7B-Instruct',
+        'primary' => 'Qwen/Qwen2.5-7B-Instruct',
+        'fallback' => 'meta-llama/Llama-3.1-8B-Instruct',
         'max_tokens' => 4096,
-        'timeout' => 30,
+        'timeout' => 60,
         'type' => 'text',
     ],
 
@@ -169,15 +169,15 @@ return [
         'primary' => 'Qwen/Qwen2.5-Coder-32B-Instruct',
         'fallback' => 'Qwen/Qwen2.5-7B-Instruct',
         'max_tokens' => 4096,
-        'timeout' => 30,
+        'timeout' => 60,
         'type' => 'text',
     ],
 
     'pitch_deck' => [
-        'primary' => 'Qwen/Qwen2.5-72B-Instruct',
+        'primary' => 'Qwen/Qwen2.5-7B-Instruct',
         'fallback' => 'meta-llama/Llama-3.3-70B-Instruct',
         'max_tokens' => 4096,
-        'timeout' => 30,
+        'timeout' => 60,
         'type' => 'text',
     ],
 
@@ -185,7 +185,7 @@ return [
         'primary' => 'Qwen/Qwen2.5-7B-Instruct',
         'fallback' => 'meta-llama/Llama-3.2-1B-Instruct',
         'max_tokens' => 2048,
-        'timeout' => 30,
+        'timeout' => 60,
         'type' => 'text',
     ],
 
@@ -195,7 +195,7 @@ return [
         'primary' => 'Qwen/Qwen2.5-7B-Instruct',
         'fallback' => 'meta-llama/Llama-3.2-1B-Instruct',
         'max_tokens' => 4096,
-        'timeout' => 30,
+        'timeout' => 60,
         'type' => 'text',
     ],
 

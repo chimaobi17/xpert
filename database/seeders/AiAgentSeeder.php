@@ -300,6 +300,7 @@ class AiAgentSeeder extends Seeder
                             ['name' => 'task_type', 'type' => 'select', 'label' => 'Task Type', 'options' => ['Write SQL Query', 'Data Cleaning Script', 'Statistical Analysis', 'Dashboard Design', 'Data Interpretation'], 'required' => true],
                             ['name' => 'description', 'type' => 'textarea', 'label' => 'Describe Your Data/Goal', 'required' => true],
                             ['name' => 'tool', 'type' => 'select', 'label' => 'Preferred Tool', 'options' => ['SQL', 'Python (Pandas)', 'Excel', 'R', 'No Preference'], 'required' => true],
+                            ['name' => 'file', 'type' => 'file', 'label' => 'Upload Data (CSV, Excel, JSON, etc.)', 'accept' => '.csv,.xlsx,.json,.txt', 'max_size_mb' => 200, 'required' => false],
                             ['name' => 'columns', 'type' => 'textarea', 'label' => 'Data Columns (optional)', 'required' => false],
                         ],
                     ],

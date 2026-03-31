@@ -36,7 +36,7 @@ class HuggingFaceService
                 $models['primary'],
                 $prompt,
                 $models['max_tokens'] ?? 2048,
-                $models['timeout'] ?? 30,
+                $models['timeout'] ?? 60,
                 retries: 2
             );
 

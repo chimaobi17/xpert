@@ -15,6 +15,8 @@ class FileProcessorService
         'application/pdf' => 'parsePdf',
         'application/vnd.openxmlformats-officedocument.wordprocessingml.document' => 'parseDocx',
         'text/plain' => 'parseText',
+        'text/csv' => 'parseText',
+        'application/json' => 'parseText',
         'audio/mpeg' => 'storeOnly',
         'audio/wav' => 'storeOnly',
         'audio/x-wav' => 'storeOnly',
@@ -101,7 +103,7 @@ class FileProcessorService
         $text = file_get_contents($filePath);
 
         if ($text === false || empty(trim($text))) {
-            throw new FileParseException('The text file appears to be empty or unreadable.');
+            throw new FileParseException('The file appears to be empty or unreadable.');
         }
 
         return $text;

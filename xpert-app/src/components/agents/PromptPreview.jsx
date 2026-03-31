@@ -67,7 +67,7 @@ export default function PromptPreview({ generatedPrompt, onSubmit, onBack, loadi
       </div>
 
       {choice === 'generated' && (
-        <div className="rounded-2xl border border-border bg-surface-hover/30 p-6 animate-slide-up">
+        <div className="relative rounded-2xl border border-border bg-surface-hover/30 p-6 animate-slide-up group">
           <p className="text-[10px] font-black text-text-tertiary mb-3 uppercase tracking-widest">Optimized Intelligence Context</p>
           <pre className="text-sm text-foreground whitespace-pre-wrap font-sans leading-relaxed">{generatedPrompt}</pre>
         </div>

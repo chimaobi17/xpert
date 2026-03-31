@@ -105,7 +105,16 @@ export default function AiResponse({ response, responseType, tokensUsed, onSaveT
     <div className="flex flex-col" style={{ maxHeight: 'calc(100vh - 280px)' }}>
       {/* Scrollable AI content */}
       <div className="flex-1 overflow-y-auto min-h-0">
-        <div className="rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] p-4 sm:p-6 overflow-hidden">
+        <div className="relative rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] p-4 sm:p-6 overflow-hidden group">
+          {!isImage && showActions && (
+            <button
+              onClick={handleCopy}
+              className="absolute top-4 right-4 p-2 rounded-lg bg-surface-hover/50 text-text-tertiary hover:text-primary-500 hover:bg-primary-500/10 transition-all opacity-0 group-hover:opacity-100"
+              title="Copy response"
+            >
+              {copied ? <CheckIcon className="h-5 w-5 text-primary-500" /> : <ClipboardIcon className="h-5 w-5" />}
+            </button>
+          )}
           {isImage ? (
             <div className="flex justify-center">
               <img
@@ -140,12 +149,6 @@ export default function AiResponse({ response, responseType, tokensUsed, onSaveT
           )}
 
           <div className="grid grid-cols-2 sm:flex sm:flex-wrap gap-2 [&>button]:min-h-[44px]">
-            {!isImage && (
-              <Button variant="outline" size="sm" onClick={handleCopy}>
-                {copied ? <CheckIcon className="h-4 w-4" /> : <ClipboardIcon className="h-4 w-4" />}
-                {copied ? 'Copied' : 'Copy'}
-              </Button>
-            )}
             <Button
               variant={saved ? 'secondary' : 'outline'}
               size="sm"
@@ -155,6 +158,26 @@ export default function AiResponse({ response, responseType, tokensUsed, onSaveT
               {saved ? <BookmarkSolid className="h-4 w-4 text-primary-500" /> : <BookmarkOutline className="h-4 w-4" />}
               {saved ? 'Saved' : 'Save to Library'}
             </Button>
+            {isImage && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  const link = document.createElement('a');
+                  link.href = `data:image/jpeg;base64,${response}`;
+                  link.download = `xpert-ai-gen-${Date.now()}.jpg`;
+                  document.body.appendChild(link);
+                  link.click();
+                  document.body.removeChild(link);
+                  toast.success('Downloading masterpiece...');
+                }}
+              >
+                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                </svg>
+                Download Image
+              </Button>
+            )}
             {onBackToPrompt && (
               <Button variant="outline" size="sm" onClick={onBackToPrompt}>
                 Edit Prompt
