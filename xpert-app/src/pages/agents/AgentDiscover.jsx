@@ -60,7 +60,11 @@ export default function AgentDiscover() {
 
     const url = params.toString() ? `/agents/search?${params}` : '/agents';
     const res = await get(url);
-    if (res.ok) setAgents(res.data);
+    if (res.ok) {
+      setAgents(res.data);
+    } else {
+      setAgents([]);
+    }
     setLoading(false);
   }, [query, domain, tier]);
 
@@ -83,7 +87,7 @@ export default function AgentDiscover() {
       setAgents((prev) => prev.map((a) => (a.id === agent.id ? { ...a, is_added: true } : a)));
       setUserAgentCount((c) => c + 1);
       toast.success(`${agent.name} added to your workspace`);
-    } else if (res.error === 'agent_limit_reached') {
+    } else if (res.error?.error === 'agent_limit_reached') {
       setLimitModal(true);
     }
   }

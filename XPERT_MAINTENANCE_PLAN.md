@@ -82,6 +82,32 @@ Once the app is live, maintenance shifts to keeping the application updated, per
 
 ---
 
+## Phase 4: High Availability, Anti-Crash & Threat Logging
+
+To ensure that the application never goes down and that users can **always** make use of the AI elements in the future, the following safeguards and monitoring techniques must be repeatedly validated:
+
+### 4.1 Server Crash Prevention & High Availability
+- **Goal**: Prevent server lockups or outages caused by AI bottlenecks.
+- **Action**: 
+  - Restrict memory limits and configure strict execution timeouts (e.g., `max_execution_time=30s`) on all API endpoints targeting the AI engine. This ensures that stalled Hugging Face API queries do not exhaust or crash the main server container.
+  - Test the degradation system: Ensure heavy loads or failing API calls gracefully fail over to the background database queue without holding synchronous HTTP connections open indefinitely.
+  - Verify that the continuous `/api/health` health check is correctly configured on Render to automatically restart crashed or unresponsive server containers.
+
+### 4.2 Anti-Hooking & Bot Mitigation
+- **Goal**: Stop malicious traffic from eating up bandwidth and AI rate limits.
+- **Action**:
+  - Routinely monitor Cloudflare (Free Tier) proxying for Vercel and Render. Review Web Application Firewall (WAF) and Bot Management logs to block malicious scraping tools and hooking scripts.
+  - Perform regular penetration tests to confirm strict API Origin validation aggressively rejects any requests originating outside the authorized frontend domains.
+
+### 4.3 Cyber Attack & Distributed Error Logging
+- **Goal**: Maintain full visibility into active system threats and unhandled bugs.
+- **Action**:
+  - Actively monitor the consolidated logging for suspected cyber attacks: brute-force login attempts, massive 404 scans, repeated 429s (Rate Limit Exceeded), and 401/403 anomalies.
+  - Periodically review the dedicated `security` logging channel in `config/logging.php` to analyze preserved threat data (Timestamp, Source IP, Target Path, Attack Type).
+  - Verify that critical unhandled errors and cyber attack logs (`CRITICAL` and `EMERGENCY`) stream reliably to the designated Discord webhook so admins can intervene immediately before a crash escalates.
+
+---
+
 ## Summary Checklist for Claude Code
 
 When explicitly asked to perform Maintenance, Claude Code should:
