@@ -7,13 +7,26 @@ use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\UsageController;
 use App\Http\Controllers\Api\UserAgentController;
 use App\Http\Controllers\Api\Admin\AdminController;
+use App\Http\Middleware\AiTimeout;
 use Illuminate\Support\Facades\Route;
 
 // Public routes (no auth required)
-Route::get('/health', fn () => response()->json([
-    'status' => 'ok',
-    'timestamp' => now()->toISOString(),
-]));
+Route::get('/health', function () {
+    $checks = ['status' => 'ok', 'timestamp' => now()->toISOString()];
+
+    // Verify database is reachable
+    try {
+        \DB::connection()->getPdo();
+        $checks['database'] = 'connected';
+    } catch (\Throwable $e) {
+        $checks['database'] = 'unreachable';
+        $checks['status'] = 'degraded';
+    }
+
+    $code = $checks['status'] === 'ok' ? 200 : 503;
+
+    return response()->json($checks, $code);
+});
 
 Route::middleware('throttle:10,1')->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
@@ -38,7 +51,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/agents/search', [AgentController::class, 'search']);
     Route::get('/agents/{agent}', [AgentController::class, 'show']);
     Route::post('/agents/{agent}/generate', [AgentController::class, 'generate']);
-    Route::post('/agents/{agent}/submit', [AgentController::class, 'submit']);
+    Route::post('/agents/{agent}/submit', [AgentController::class, 'submit'])->middleware(AiTimeout::class);
 
     // Library
     Route::get('/library', [LibraryController::class, 'index']);

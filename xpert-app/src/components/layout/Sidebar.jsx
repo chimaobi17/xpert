@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import clsx from 'clsx';
 import {
   HomeIcon,
@@ -25,6 +25,7 @@ const navItems = [
 
 export default function Sidebar({ open, onClose }) {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [tokensUsed, setTokensUsed] = useState(0);
   const [agentCount, setAgentCount] = useState(0);
 
@@ -94,7 +95,7 @@ export default function Sidebar({ open, onClose }) {
             </div>
             {isFree && (
               <button 
-                onClick={() => window.location.href='/settings?tab=plan'} 
+                onClick={() => navigate('/settings?tab=plan')}
                 className="w-full mt-6 py-3.5 rounded-full bg-foreground text-background text-xs font-black uppercase tracking-widest hover:scale-[1.02] active:scale-95 transition-all shadow-xl"
               >
                 Upgrade System

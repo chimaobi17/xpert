@@ -52,7 +52,7 @@ export default function Navbar({ onMenuToggle }) {
         <button
           onClick={toggleTheme}
           className="rounded-2xl p-2.5 text-text-secondary hover:text-foreground hover:bg-surface-hover transition-all border-none"
-          title="Toggle Phase"
+          title="Toggle Theme"
         >
           {theme === 'dark' ? <SunIcon className="h-5 w-5" /> : <MoonIcon className="h-5 w-5" />}
         </button>

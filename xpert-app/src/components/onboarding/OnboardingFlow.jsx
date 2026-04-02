@@ -55,22 +55,13 @@ export default function OnboardingFlow({ onComplete }) {
     setLoading(true);
     setError(null);
     try {
-      const res = await patch('/user/profile', form);
-      // Wait for user refresh to ensure state is synced before closing
-      await refreshUser();
-      onComplete?.();
+      await patch('/user/profile', form);
+      try { await refreshUser(); } catch { /* ignore */ }
     } catch (err) {
       console.error('Onboarding submit error:', err);
-      // Fallback: even if profile update fails, mark as onboarded if possible or just let them in
-      try {
-         await api.patch('/user/onboarded', {});
-         await refreshUser();
-         onComplete?.();
-      } catch (e) {
-         setError('Connection lost. Please try again.');
-      }
     } finally {
       setLoading(false);
+      onComplete?.();
     }
   }
 
