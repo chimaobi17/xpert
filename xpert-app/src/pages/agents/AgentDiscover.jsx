@@ -1,4 +1,4 @@
-// Vercel deployment cache-bust: premium-agent-naming-v3
+// Vercel deployment cache-bust: unified-agents-endpoint-v4
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import clsx from 'clsx';
@@ -58,7 +58,7 @@ export default function AgentDiscover() {
     if (tier === 'Free Only') params.set('tier', 'free');
     else if (tier === 'Premium Only') params.set('tier', 'premium');
 
-    const url = params.toString() ? `/agents/search?${params}` : '/agents';
+    const url = params.toString() ? `/agents?${params}` : '/agents';
     const res = await get(url);
     if (res.ok) {
       setAgents(res.data);
@@ -156,6 +156,12 @@ export default function AgentDiscover() {
       {/* Agent Grid */}
       {loading ? (
         <div className="flex justify-center py-24"><Spinner size="lg" /></div>
+      ) : agents.length === 0 ? (
+        <div className="flex flex-col items-center justify-center py-24 text-center">
+          <MagnifyingGlassIcon className="h-12 w-12 text-text-tertiary mb-4" />
+          <h3 className="text-lg font-bold text-foreground mb-1">No agents found</h3>
+          <p className="text-sm text-text-secondary">Try adjusting your filters or search query.</p>
+        </div>
       ) : (
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {agents.map((agent) => {

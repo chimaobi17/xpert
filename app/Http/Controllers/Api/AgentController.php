@@ -25,20 +25,6 @@ class AgentController extends Controller
 
     public function index(Request $request)
     {
-        $agents = AiAgent::with('latestTemplate')->get();
-
-        // Add is_added flag for authenticated user
-        $userAgentIds = $request->user()->agents()->pluck('ai_agents.id')->toArray();
-
-        $agents->each(function ($agent) use ($userAgentIds) {
-            $agent->is_added = in_array($agent->id, $userAgentIds);
-        });
-
-        return response()->json($agents);
-    }
-
-    public function search(Request $request)
-    {
         $request->validate([
             'q' => ['sometimes', 'string', 'max:255'],
             'domain' => ['sometimes', 'string', 'in:Technology,Creative,Business,Research,Language'],
@@ -70,6 +56,7 @@ class AgentController extends Controller
 
         $agents = $query->get();
 
+        // Add is_added flag for authenticated user
         $userAgentIds = $request->user()->agents()->pluck('ai_agents.id')->toArray();
 
         $agents->each(function ($agent) use ($userAgentIds) {
@@ -77,6 +64,14 @@ class AgentController extends Controller
         });
 
         return response()->json($agents);
+    }
+
+    /**
+     * @deprecated Use index() with query params instead. Kept for backwards compatibility.
+     */
+    public function search(Request $request)
+    {
+        return $this->index($request);
     }
 
     public function show(AiAgent $agent)
