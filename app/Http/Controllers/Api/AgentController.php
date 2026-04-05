@@ -46,13 +46,11 @@ class AgentController extends Controller
             $query->where('domain', $request->domain);
         }
 
-        if ($request->filled('tier')) {
-            $isPremium = $request->input('tier') === 'premium';
-            
-            if (\DB::connection()->getDriverName() === 'pgsql') {
-                $query->whereRaw('is_premium_only = ?::boolean', [$isPremium ? 'true' : 'false']);
+        if ($request->filled('tier') && $request->tier !== 'all') {
+            if ($request->tier === 'premium') {
+                $query->whereRaw('is_premium_only');
             } else {
-                $query->where('is_premium_only', $isPremium);
+                $query->whereRaw('NOT is_premium_only');
             }
         }
 
