@@ -414,6 +414,44 @@ class AiAgentSeeder extends Seeder
                     ],
                 ],
             ],
+            [
+                'name' => 'Tone Transformer',
+                'domain' => 'Language',
+                'category' => 'tone_transformer',
+                'system_prompt' => 'You are an expert writing tone specialist. You take any text and transform it to match a specific tone — formal, casual, persuasive, friendly, academic, or professional. You preserve the original meaning while completely changing the voice and style. You handle documents, emails, messages, and any written content.',
+                'is_premium_only' => false,
+                'template' => [
+                    'template_body' => "Transform the following text to a {{target_tone}} tone.\n\n{{#if context}}Context: {{context}}{{/if}}\n\nOriginal Text:\n{{original_text}}\n\nInstructions:\n- Preserve the core meaning and all key information.\n- Completely shift the tone to {{target_tone}}.\n- Adjust vocabulary, sentence structure, and phrasing to match the target tone.\n- If the text contains technical terms, keep them but adjust surrounding language.\n- Output the transformed text only, no explanations unless asked.",
+                    'field_schema' => [
+                        'fields' => [
+                            ['name' => 'original_text', 'type' => 'textarea', 'label' => 'Paste your text here', 'required' => true],
+                            ['name' => 'target_tone', 'type' => 'select', 'label' => 'Target Tone', 'options' => ['Formal / Professional', 'Casual / Friendly', 'Persuasive / Sales', 'Academic / Scholarly', 'Empathetic / Supportive', 'Concise / Executive Summary'], 'required' => true],
+                            ['name' => 'context', 'type' => 'text', 'label' => 'Context (optional — e.g., "email to a client")', 'required' => false],
+                            ['name' => 'file', 'type' => 'file', 'label' => 'Or upload a document', 'required' => false],
+                        ],
+                    ],
+                ],
+            ],
+            [
+                'name' => 'Graphics Design Assistant',
+                'domain' => 'Creative',
+                'category' => 'graphics_designer',
+                'system_prompt' => 'You are a professional graphics design AI. You generate high-quality images from detailed text descriptions. You understand design principles including composition, color theory, typography concepts, and visual hierarchy. You create logos, social media graphics, illustrations, banners, and marketing visuals.',
+                'is_premium_only' => true,
+                'template' => [
+                    'template_body' => "Create a {{design_type}} with the following details:\n\nDescription: {{description}}\nStyle: {{style}}\n{{#if color_palette}}Color Palette: {{color_palette}}{{/if}}\n{{#if dimensions}}Dimensions: {{dimensions}}{{/if}}\n\nDesign it professionally with clean composition and visual appeal.",
+                    'field_schema' => [
+                        'fields' => [
+                            ['name' => 'design_type', 'type' => 'select', 'label' => 'Design Type', 'options' => ['Social Media Post', 'Banner / Header', 'Logo Concept', 'Illustration', 'Poster', 'Infographic Layout', 'Product Mockup'], 'required' => true],
+                            ['name' => 'description', 'type' => 'textarea', 'label' => 'Describe what you want', 'required' => true],
+                            ['name' => 'style', 'type' => 'select', 'label' => 'Visual Style', 'options' => ['Minimalist', 'Bold & Vibrant', 'Corporate / Clean', 'Vintage / Retro', 'Futuristic', 'Hand-Drawn / Sketch', 'Flat Design'], 'required' => true],
+                            ['name' => 'color_palette', 'type' => 'text', 'label' => 'Color Palette (optional — e.g., "blue and gold")', 'required' => false],
+                            ['name' => 'dimensions', 'type' => 'select', 'label' => 'Dimensions', 'options' => ['Square (1:1)', 'Landscape (16:9)', 'Portrait (9:16)', 'Wide Banner (3:1)'], 'required' => false],
+                            ['name' => 'file', 'type' => 'file', 'label' => 'Upload reference image (optional)', 'required' => false],
+                        ],
+                    ],
+                ],
+            ],
         ];
 
         foreach ($agents as $agentData) {

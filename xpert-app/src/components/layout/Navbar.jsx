@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   SunIcon,
@@ -20,6 +20,12 @@ export default function Navbar({ onMenuToggle }) {
   const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [time, setTime] = useState(new Date());
+
+  useEffect(() => {
+    const tick = setInterval(() => setTime(new Date()), 1000);
+    return () => clearInterval(tick);
+  }, []);
 
   async function handleLogout() {
     await logout();
@@ -56,6 +62,10 @@ export default function Navbar({ onMenuToggle }) {
         >
           {theme === 'dark' ? <SunIcon className="h-5 w-5" /> : <MoonIcon className="h-5 w-5" />}
         </button>
+
+        <div className="hidden sm:flex items-center rounded-2xl px-3 py-2 text-xs font-bold text-text-secondary tabular-nums tracking-wide">
+          {time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+        </div>
 
         <Link
           to="/notifications"

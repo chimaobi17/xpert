@@ -36,9 +36,17 @@ class AuthController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'email' => ['required', 'string', 'email', 'max:255'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
+
+        // Anti-enumeration: return generic error if email exists
+        if (User::where('email', $request->email)->exists()) {
+            return response()->json([
+                'error' => 'registration_failed',
+                'message' => 'Unable to complete registration. Please try a different email or log in.',
+            ], 422);
+        }
 
         $user = User::create([
             'name' => $request->name,

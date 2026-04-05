@@ -199,6 +199,24 @@ return [
         'type' => 'text',
     ],
 
+    // --- Tone & Graphics Agents ---
+
+    'tone_transformer' => [
+        'primary' => 'Qwen/Qwen2.5-7B-Instruct',
+        'fallback' => 'meta-llama/Llama-3.1-8B-Instruct',
+        'max_tokens' => 4096,
+        'timeout' => 60,
+        'type' => 'text',
+    ],
+
+    'graphics_designer' => [
+        'primary' => 'stabilityai/stable-diffusion-xl-base-1.0',
+        'fallback' => 'runwayml/stable-diffusion-v1-5',
+        'max_tokens' => 512,
+        'timeout' => 60,
+        'type' => 'image',
+    ],
+
     // --- Embeddings ---
 
     'embeddings' => [

@@ -10,6 +10,7 @@ import Spinner from '../../components/ui/Spinner';
 import DynamicForm from '../../components/agents/DynamicForm';
 import PromptPreview from '../../components/agents/PromptPreview';
 import AiResponse from '../../components/agents/AiResponse';
+import FeedbackModal from '../../components/feedback/FeedbackModal';
 import toast from 'react-hot-toast';
 
 const STORAGE_PREFIX = 'agent_workspace_';
@@ -43,6 +44,7 @@ export default function AgentWorkspace() {
   const [aiResponse, setAiResponse] = useState(restored?.aiResponse || '');
   const [responseType, setResponseType] = useState(restored?.responseType || 'text');
   const [savedLibraryId, setSavedLibraryId] = useState(restored?.savedLibraryId || null);
+  const [showFeedback, setShowFeedback] = useState(false);
   const [loading, setLoading] = useState(false);
   const [stopped, setStopped] = useState(false);
   const abortRef = useRef(null);
@@ -181,6 +183,7 @@ export default function AgentWorkspace() {
       setAiResponse(res.data.response);
       setResponseType(res.data.type || 'text');
       setStep(3);
+      setTimeout(() => setShowFeedback(true), 2000);
     } else if (res.error?.error !== 'cancelled') {
       const message = res.data?.message || res.error?.message || 'AI is temporarily unavailable. Please try again.';
       if (res.error?.retry) {
@@ -410,6 +413,13 @@ export default function AgentWorkspace() {
           </button>
         </div>
       )}
+
+      <FeedbackModal
+        isOpen={showFeedback}
+        onClose={() => setShowFeedback(false)}
+        agentId={agent?.id}
+        agentName={agent?.name}
+      />
     </div>
   );
 }

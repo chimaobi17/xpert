@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\LibraryController;
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\UsageController;
 use App\Http\Controllers\Api\UserAgentController;
+use App\Http\Controllers\Api\FeedbackController;
 use App\Http\Controllers\Api\Admin\AdminController;
 use App\Http\Middleware\AiTimeout;
 use Illuminate\Support\Facades\Route;
@@ -63,6 +64,12 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Notifications
     Route::get('/notifications', [NotificationController::class, 'index']);
+    Route::patch('/notifications/{notification}/read', [NotificationController::class, 'markRead']);
+    Route::post('/notifications/read-all', [NotificationController::class, 'markAllRead']);
+
+    // Feedback
+    Route::get('/feedback', [FeedbackController::class, 'index']);
+    Route::post('/feedback', [FeedbackController::class, 'store']);
 
     // Feature flags
     Route::get('/config/features', fn () => response()->json([
@@ -87,6 +94,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/agents', [AdminController::class, 'createAgent']);
         Route::patch('/agents/{agent}', [AdminController::class, 'updateAgent']);
         Route::get('/logs', [AdminController::class, 'logs']);
+        Route::get('/feedback', [FeedbackController::class, 'adminIndex']);
+        Route::post('/announcements', [NotificationController::class, 'broadcast']);
 
         // Chatbot Knowledge CRUD
         Route::get('/chatbot/knowledge', [\App\Http\Controllers\ChatbotKnowledgeController::class, 'index']);

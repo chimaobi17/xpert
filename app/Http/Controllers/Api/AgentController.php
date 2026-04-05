@@ -11,6 +11,7 @@ use App\Services\HuggingFaceService;
 use App\Services\PromptEngineService;
 use App\Services\QuotaService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 
 class AgentController extends Controller
@@ -30,6 +31,20 @@ class AgentController extends Controller
             'domain' => ['sometimes', 'string', 'in:Technology,Creative,Business,Research,Language'],
             'tier' => ['sometimes', 'string', 'in:free,premium,all'],
         ]);
+
+        // Use cached agent list when no filters are applied
+        $hasFilters = $request->filled('q') || $request->filled('domain') || $request->filled('tier');
+
+        if (!$hasFilters) {
+            $agents = Cache::remember('agents_list', 300, function () {
+                return AiAgent::with('latestTemplate')->get();
+            });
+
+            $userAgentIds = $request->user()->agents()->pluck('ai_agents.id')->toArray();
+            $agents->each(fn ($agent) => $agent->is_added = in_array($agent->id, $userAgentIds));
+
+            return response()->json($agents);
+        }
 
         $query = AiAgent::with('latestTemplate');
 
