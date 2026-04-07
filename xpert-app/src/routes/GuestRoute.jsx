@@ -13,7 +13,7 @@ export default function GuestRoute() {
     );
   }
 
-  if (user) return <Navigate to="/dashboard" replace />;
+  if (user) return <Navigate to="/agents/discover" replace />;
 
   return <Outlet />;
 }

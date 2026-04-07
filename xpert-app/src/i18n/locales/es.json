@@ -1,0 +1,93 @@
+{
+  "nav": {
+    "dashboard": "Panel",
+    "discover": "Descubrir agentes",
+    "workspace": "Mi espacio",
+    "library": "Biblioteca",
+    "notifications": "Notificaciones",
+    "settings": "Configuración",
+    "logout": "Cerrar sesión",
+    "profile": "Perfil",
+    "upgrade": "Mejorar plan"
+  },
+  "auth": {
+    "login": "Iniciar sesión",
+    "register": "Registrarse",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "confirm_password": "Confirmar contraseña",
+    "name": "Nombre completo",
+    "forgot_password": "¿Olvidaste tu contraseña?",
+    "no_account": "¿No tienes cuenta?",
+    "have_account": "¿Ya tienes cuenta?",
+    "mfa_title": "Autenticación de dos factores",
+    "mfa_subtitle": "Ingresa el código de 6 dígitos para continuar",
+    "mfa_code": "Código de verificación",
+    "mfa_verify": "Verificar"
+  },
+  "agents": {
+    "discover_title": "Descubrir agentes",
+    "discover_subtitle": "Encuentra el agente de IA perfecto para tu tarea",
+    "search_placeholder": "Buscar agentes...",
+    "all_domains": "Todos los dominios",
+    "all_tiers": "Todos los niveles",
+    "free_only": "Solo gratuitos",
+    "premium_only": "Solo premium",
+    "add_agent": "Agregar al espacio",
+    "remove_agent": "Eliminar",
+    "added": "Agregado",
+    "use_ai": "Usar IA",
+    "generate": "Generar prompt",
+    "submit": "Enviar a la IA",
+    "no_agents": "No se encontraron agentes",
+    "upload_file": "Subir archivo (opcional)",
+    "premium_badge": "Premium",
+    "free_badge": "Gratis"
+  },
+  "common": {
+    "loading": "Cargando...",
+    "error": "Algo salió mal",
+    "retry": "Reintentar",
+    "cancel": "Cancelar",
+    "save": "Guardar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "close": "Cerrar",
+    "copy": "Copiar",
+    "copied": "¡Copiado!",
+    "search": "Buscar",
+    "filter": "Filtrar",
+    "submit": "Enviar",
+    "skip": "Omitir",
+    "next": "Siguiente",
+    "back": "Atrás",
+    "welcome": "Bienvenido",
+    "thinking": "Pensando..."
+  },
+  "feedback": {
+    "title": "¿Cómo fue esta respuesta?",
+    "subtitle": "Tus comentarios nos ayudan a mejorar",
+    "comment_placeholder": "¿Algún pensamiento adicional? (opcional)",
+    "submit": "Enviar",
+    "skip": "Omitir"
+  },
+  "settings": {
+    "title": "Configuración",
+    "profile_tab": "Perfil",
+    "preferences_tab": "Preferencias",
+    "plan_tab": "Plan",
+    "security_tab": "Seguridad",
+    "language": "Idioma",
+    "theme": "Tema",
+    "dark_mode": "Modo oscuro",
+    "light_mode": "Modo claro",
+    "system_mode": "Sistema"
+  },
+  "plan": {
+    "free": "Gratis",
+    "standard": "Estándar",
+    "premium": "Premium",
+    "current_plan": "Plan actual",
+    "upgrade": "Mejorar"
+  }
+}

@@ -108,7 +108,7 @@ class HuggingFaceService
         return null;
     }
 
-    public function generateImage(string $category, string $prompt, ?int $userId = null): ?string
+    public function generateImage(string $category, string $prompt, ?int $userId = null, ?string $referenceImageBase64 = null): ?string
     {
         $models = config("ai_models.{$category}");
 
@@ -117,11 +117,16 @@ class HuggingFaceService
         }
 
         try {
+            $payload = ['inputs' => $prompt];
+
+            // If a reference image was uploaded, include it for image-to-image models
+            if ($referenceImageBase64) {
+                $payload['image'] = $referenceImageBase64;
+            }
+
             $response = Http::withToken(config('services.huggingface.api_key'))
                 ->timeout($models['timeout'] ?? 60)
-                ->post($this->imageBaseUrl . $models['primary'], [
-                    'inputs' => $prompt,
-                ]);
+                ->post($this->imageBaseUrl . $models['primary'], $payload);
 
             if ($response->status() === 401 || $response->status() === 403) {
                 throw new InvalidApiKeyException('Invalid HuggingFace API key');

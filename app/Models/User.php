@@ -23,11 +23,14 @@ class User extends Authenticatable
         'banned_until',
         'ban_reason',
         'is_onboarded',
+        'two_factor_secret',
+        'two_factor_enabled',
     ];
 
     protected $hidden = [
         'password',
         'remember_token',
+        'two_factor_secret',
     ];
 
     protected $appends = ['onboarding_complete'];
@@ -39,6 +42,7 @@ class User extends Authenticatable
             'password' => 'hashed',
             'banned_until' => 'datetime',
             'is_onboarded' => 'boolean',
+            'two_factor_enabled' => 'boolean',
         ];
     }
 

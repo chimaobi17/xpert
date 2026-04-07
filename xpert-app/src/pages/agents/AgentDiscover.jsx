@@ -94,33 +94,33 @@ export default function AgentDiscover() {
 
   return (
     <div className="animate-fade-in text-foreground">
-      <div className="mb-10">
-        <h1 className="text-4xl font-bold text-foreground tracking-tight">Discover Agents</h1>
-        <p className="text-lg text-text-secondary mt-2 font-medium">
-          The most powerful AI curators, ready for your workspace.
+      <div className="mb-6 sm:mb-10">
+        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground tracking-tight">Find an AI Helper</h1>
+        <p className="text-sm sm:text-lg text-text-secondary mt-1 sm:mt-2 font-medium">
+          Pick a helper for any task — writing, design, research, translation, and more.
         </p>
       </div>
 
       {/* Search & Filters Stack */}
-      <div className="flex flex-col gap-6 mb-12">
+      <div className="flex flex-col gap-4 sm:gap-6 mb-8 sm:mb-12">
         <div className="max-w-2xl">
           <Input
             icon={MagnifyingGlassIcon}
-            placeholder="Search agents by name or description..."
+            placeholder="What do you need help with?"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            className="bg-background border-border rounded-2xl h-14 text-base"
+            className="bg-background border-border rounded-2xl h-12 sm:h-14 text-sm sm:text-base"
           />
         </div>
 
-        <div className="flex flex-wrap items-center justify-between gap-6">
+        <div className="flex flex-wrap items-center justify-between gap-3 sm:gap-6">
           <div className="flex flex-wrap gap-2">
             {domains.map((d) => (
               <button
                 key={d}
                 onClick={() => setDomain(d)}
                 className={clsx(
-                  'rounded-full px-5 py-2 text-sm font-bold transition-all duration-300',
+                  'rounded-full px-3 py-1.5 sm:px-5 sm:py-2 text-xs sm:text-sm font-bold transition-all duration-300',
                   domain === d
                     ? 'border-primary-500 bg-transparent text-primary-500 border'
                     : 'bg-surface-hover text-text-secondary hover:text-foreground border border-transparent'
@@ -136,7 +136,7 @@ export default function AgentDiscover() {
               value={tier}
               onChange={(e) => setTier(e.target.value)}
               className={clsx(
-                'appearance-none rounded-full border border-border px-6 py-2 text-sm font-bold transition-all pr-12',
+                'appearance-none rounded-full border border-border px-3 sm:px-6 py-1.5 sm:py-2 text-xs sm:text-sm font-bold transition-all pr-8 sm:pr-12',
                 'bg-background text-foreground cursor-pointer hover:border-primary-500/50'
               )}
             >
@@ -163,7 +163,7 @@ export default function AgentDiscover() {
           <p className="text-sm text-text-secondary">Try adjusting your filters or search query.</p>
         </div>
       ) : (
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
           {agents.map((agent) => {
             const locked = agent.is_premium_only && user?.plan_level === 'free';
 
@@ -186,12 +186,12 @@ export default function AgentDiscover() {
                            <LockClosedIcon className="h-8 w-8 text-primary-500" />
                         </div>
                         <h4 className="text-xl font-bold text-foreground mb-1">{agent.name}</h4>
-                        <p className="text-[10px] uppercase tracking-widest text-primary-500 font-bold mb-6">{agent.domain} ELITE</p>
-                        <Button 
+                        <p className="text-[10px] uppercase tracking-widest text-primary-500 font-bold mb-6">{agent.domain}</p>
+                        <Button
                           onClick={() => setUpgradeModal(true)}
                           className="w-full rounded-2xl h-12 font-bold shadow-lg scale-90"
                         >
-                          Unlock Agent
+                          Unlock This Helper
                         </Button>
                       </div>
                     </div>
@@ -230,7 +230,7 @@ export default function AgentDiscover() {
                           className="w-full rounded-2xl h-11 font-bold border-border/50 hover:border-primary-500/50"
                           onClick={() => handleAddAgent(agent)}
                         >
-                          <PlusIcon className="h-4 w-4" /> Add to Workspace
+                          <PlusIcon className="h-4 w-4" /> Add to My Helpers
                         </Button>
                       )}
                     </div>
@@ -248,9 +248,9 @@ export default function AgentDiscover() {
           <div className="bg-primary-500/10 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
              <RectangleStackIcon className="h-10 w-10 text-primary-500" />
           </div>
-          <h3 className="text-2xl font-bold text-foreground mb-3 tracking-tight">Full Workspace</h3>
+          <h3 className="text-2xl font-bold text-foreground mb-3 tracking-tight">Helper Limit Reached</h3>
           <p className="text-base text-text-secondary mb-8 font-medium">
-            Free plan users can curate up to 3 agents. Upgrade to curate an unlimited library.
+            Free plan users can add up to 3 helpers. Upgrade to add unlimited helpers.
           </p>
           <Button 
              className="w-full h-14 rounded-full font-bold text-lg shadow-[0_0_20px_rgba(33,196,93,0.3)]" 
@@ -267,9 +267,9 @@ export default function AgentDiscover() {
           <div className="bg-gradient-to-tr from-primary-600 to-emerald-400 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 shadow-[0_0_30px_rgba(33,196,93,0.4)]">
              <SparklesIcon className="h-10 w-10 text-black" />
           </div>
-          <h3 className="text-2xl font-bold text-foreground mb-3 tracking-tight">Unlock Ultimate Power</h3>
+          <h3 className="text-2xl font-bold text-foreground mb-3 tracking-tight">Unlock Premium Helpers</h3>
           <p className="text-base text-text-secondary mb-8 font-medium">
-            Access advanced translation, ultra-fast generation, and our most capable premium curators.
+            Get access to advanced translation, image generation, and our most powerful AI helpers.
           </p>
           <div className="grid gap-4 mb-8">
             <div className="rounded-3xl border border-border p-6 text-left bg-surface-hover/50">

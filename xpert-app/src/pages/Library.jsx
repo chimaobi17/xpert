@@ -56,9 +56,9 @@ export default function Library() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-4xl font-black text-foreground tracking-tight">Prompt Library</h1>
-        <p className="text-lg text-text-secondary mt-2 font-medium">
-          Your elite repository of AI blueprints and curated intelligence.
+        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-foreground tracking-tight">Saved Results</h1>
+        <p className="text-sm sm:text-lg text-text-secondary mt-1 sm:mt-2 font-medium">
+          Everything you've saved from your AI helpers — all in one place.
         </p>
       </div>
 

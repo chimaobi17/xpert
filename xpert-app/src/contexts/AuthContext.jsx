@@ -25,6 +25,22 @@ export function AuthProvider({ children }) {
 
   async function login(email, password) {
     const res = await api.post('/login', { email, password });
+
+    // If 2FA is required, return the response without setting user
+    if (res.data.requires_2fa) {
+      return res.data;
+    }
+
+    if (res.data.token) {
+      localStorage.setItem('auth_token', res.data.token);
+    }
+    sessionStorage.removeItem('xpert_onboarding_shown');
+    setUser(res.data.user || res.data);
+    return res.data;
+  }
+
+  async function verifyMfa(userId, code) {
+    const res = await api.post('/mfa/verify-login', { user_id: userId, code });
     if (res.data.token) {
       localStorage.setItem('auth_token', res.data.token);
     }
@@ -66,7 +82,7 @@ export function AuthProvider({ children }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, register, logout, refreshUser, updateUser }}>
+    <AuthContext.Provider value={{ user, loading, login, verifyMfa, register, logout, refreshUser, updateUser }}>
       {children}
     </AuthContext.Provider>
   );

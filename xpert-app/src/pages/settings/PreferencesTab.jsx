@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+import { useTranslation } from 'react-i18next';
 import useTheme from '../../hooks/useTheme';
 import Card from '../../components/ui/Card';
 
@@ -10,6 +11,7 @@ const themeOptions = [
 
 export default function PreferencesTab() {
   const { preference, setTheme } = useTheme();
+  const { i18n } = useTranslation();
 
   return (
     <div className="space-y-6">
@@ -42,12 +44,12 @@ export default function PreferencesTab() {
         <h3 className="text-sm font-semibold text-[var(--color-text)] mb-4">Default Language</h3>
         <select
           className="block w-full rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-2 text-sm text-[var(--color-text)]"
-          defaultValue="en"
+          value={i18n.language?.split('-')[0] || 'en'}
+          onChange={(e) => i18n.changeLanguage(e.target.value)}
         >
           <option value="en">English</option>
-          <option value="fr">French</option>
-          <option value="es">Spanish</option>
-          <option value="de">German</option>
+          <option value="fr">Fran&ccedil;ais</option>
+          <option value="es">Espa&ntilde;ol</option>
         </select>
       </Card>
     </div>

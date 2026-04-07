@@ -23,7 +23,9 @@ export default function AiResponse({ response, responseType, tokensUsed, onSaveT
     stoppedRef.current = stopped;
   }, [stopped]);
 
-  const isImage = responseType === 'image';
+  // Auto-detect base64 image payloads (e.g., from old sessions or cache)
+  const isImage = responseType === 'image' || 
+    (typeof response === 'string' && response.length > 100 && (response.startsWith('/9j/') || response.startsWith('iVBORw0K')));
 
   // Cleanup helper
   function stopInterval() {

@@ -41,9 +41,13 @@ class AgentController extends Controller
             });
 
             $userAgentIds = $request->user()->agents()->pluck('ai_agents.id')->toArray();
-            $agents->each(fn ($agent) => $agent->is_added = in_array($agent->id, $userAgentIds));
+            $agentsArray = $agents->map(function ($agent) use ($userAgentIds) {
+                $arr = $agent->toArray();
+                $arr['is_added'] = in_array($agent->id, $userAgentIds);
+                return $arr;
+            });
 
-            return response()->json($agents);
+            return response()->json($agentsArray);
         }
 
         $query = AiAgent::with('latestTemplate');
@@ -74,11 +78,13 @@ class AgentController extends Controller
         // Add is_added flag for authenticated user
         $userAgentIds = $request->user()->agents()->pluck('ai_agents.id')->toArray();
 
-        $agents->each(function ($agent) use ($userAgentIds) {
-            $agent->is_added = in_array($agent->id, $userAgentIds);
+        $agentsArray = $agents->map(function ($agent) use ($userAgentIds) {
+            $arr = $agent->toArray();
+            $arr['is_added'] = in_array($agent->id, $userAgentIds);
+            return $arr;
         });
 
-        return response()->json($agents);
+        return response()->json($agentsArray);
     }
 
     /**
@@ -109,6 +115,7 @@ class AgentController extends Controller
         ]);
 
         $fileContent = null;
+        $uploadedFileId = null;
 
         if ($request->hasFile('file')) {
             $user = $request->user();
@@ -124,8 +131,24 @@ class AgentController extends Controller
                 ], 413);
             }
 
-            $uploaded = $this->fileProcessor->process($request->file('file'), $user->id);
-            $fileContent = $uploaded->parsed_content;
+            try {
+                $uploaded = $this->fileProcessor->process($request->file('file'), $user->id);
+                $uploadedFileId = $uploaded->id;
+
+                // Use parsed text content if available; otherwise build a file description
+                // so text agents still know a file was uploaded
+                $fileContent = $uploaded->parsed_content
+                    ?? $this->fileProcessor->getFileDescription($uploaded);
+            } catch (\Throwable $e) {
+                Log::warning('file_upload_error', [
+                    'user_id' => $user->id,
+                    'file' => $request->file('file')->getClientOriginalName(),
+                    'error' => $e->getMessage(),
+                ]);
+                // Don't block the request — proceed without file content
+                $fileContent = '[File was uploaded but could not be processed: '
+                    . $request->file('file')->getClientOriginalName() . ']';
+            }
         }
 
         $generatedPrompt = $this->promptEngine->generate(
@@ -140,6 +163,7 @@ class AgentController extends Controller
             'agent_id' => $agent->id,
             'agent_name' => $agent->name,
             'tokens_estimated' => $this->promptEngine->estimateTokens($generatedPrompt),
+            'uploaded_file_id' => $uploadedFileId,
         ]);
     }
 
@@ -172,6 +196,9 @@ class AgentController extends Controller
         $promptText = $request->prompt_text;
         $tokensEstimated = $this->promptEngine->estimateTokens($promptText);
 
+        // Determine type before checking cache so frontend knows how to render cached result
+        $modelType = config("ai_models.{$agent->category}.type", 'text');
+
         // Check cache
         $cacheKey = $this->cacheService->generateKey($agent->id, $promptText);
         $cachedResponse = $this->cacheService->get($cacheKey);
@@ -198,16 +225,31 @@ class AgentController extends Controller
                 'response' => $cachedResponse,
                 'tokens_used' => $tokensEstimated,
                 'cached' => true,
+                'type' => $modelType,
             ]);
         }
 
-        // Call AI
-        $modelType = config("ai_models.{$agent->category}.type", 'text');
-
         $aiResponse = null;
 
+        // Load reference image if uploaded and this is an image generation agent
+        $referenceImageBase64 = null;
+        if ($request->filled('uploaded_file_id') && $modelType === 'image') {
+            $uploadedFile = \App\Models\UploadedFile::where('id', $request->uploaded_file_id)
+                ->where('user_id', $user->id)
+                ->first();
+
+            if ($uploadedFile && $this->fileProcessor->isImageMime($uploadedFile->mime_type)) {
+                $referenceImageBase64 = $this->fileProcessor->getImageBase64($uploadedFile);
+            }
+        }
+
         if ($modelType === 'image') {
-            $imageBase64 = $this->huggingFace->generateImage($agent->category, $promptText, $user->id);
+            $imageBase64 = $this->huggingFace->generateImage(
+                $agent->category,
+                $promptText,
+                $user->id,
+                $referenceImageBase64
+            );
 
             if ($imageBase64) {
                 $aiResponse = $imageBase64;

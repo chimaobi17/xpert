@@ -75,7 +75,7 @@ export default function OnboardingFlow({ onComplete }) {
       <div className="fixed inset-0 bg-black/80 backdrop-blur-md" />
       <div
         className={clsx(
-          'relative z-10 w-full max-w-lg rounded-super p-8 md:p-12 shadow-2xl glass',
+          'relative z-10 w-full max-w-lg rounded-super p-5 sm:p-8 md:p-12 shadow-2xl glass',
           'animate-fade-in'
         )}
       >
@@ -89,7 +89,7 @@ export default function OnboardingFlow({ onComplete }) {
           <p className="text-xs font-bold uppercase tracking-[0.2em] text-primary-500 mb-2">
             Welcome, {user?.name || 'Explorer'}
           </p>
-          <h2 className="text-3xl font-bold text-white tracking-tight leading-tight">{steps[step].title}</h2>
+          <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-white tracking-tight leading-tight">{steps[step].title}</h2>
           <p className="text-base text-zinc-400 mt-2 font-medium">{steps[step].subtitle}</p>
         </div>
 
@@ -145,7 +145,7 @@ export default function OnboardingFlow({ onComplete }) {
           )}
         </div>
 
-        <div className="mt-12 flex items-center justify-between gap-4">
+        <div className="mt-8 sm:mt-12 flex items-center justify-between gap-3 sm:gap-4">
           <div className="flex items-center gap-4">
             {step > 0 && (
               <button 

@@ -14,10 +14,10 @@ import useAuth from '../../hooks/useAuth';
 import { get } from '../../lib/apiClient';
 
 const navItems = [
-  { to: '/dashboard', label: 'Dashboard', icon: HomeIcon },
-  { to: '/workspace', label: 'My Workspace', icon: RectangleStackIcon },
-  { to: '/agents/discover', label: 'Discover Agents', icon: MagnifyingGlassCircleIcon },
-  { to: '/library', label: 'Prompt Library', icon: BookOpenIcon },
+  { to: '/dashboard', label: 'Home', icon: HomeIcon },
+  { to: '/workspace', label: 'My Helpers', icon: RectangleStackIcon },
+  { to: '/agents/discover', label: 'Find Helpers', icon: MagnifyingGlassCircleIcon },
+  { to: '/library', label: 'Saved Results', icon: BookOpenIcon },
   { to: '/notifications', label: 'Notifications', icon: BellIcon },
   { to: '/help', label: 'Help', icon: QuestionMarkCircleIcon },
   { to: '/settings', label: 'Settings', icon: Cog6ToothIcon },
@@ -51,11 +51,11 @@ export default function Sidebar({ open, onClose }) {
       )}
       <aside
         className={clsx(
-          'fixed inset-y-0 left-0 z-30 flex w-80 flex-col bg-background transition-transform duration-500 ease-in-out lg:static lg:translate-x-0 pt-0 border-r border-border/30',
+          'fixed inset-y-0 left-0 z-30 flex w-72 sm:w-80 flex-col bg-background transition-transform duration-500 ease-in-out lg:static lg:translate-x-0 pt-0 border-r border-border/30',
           open ? 'translate-x-0' : '-translate-x-full'
         )}
       >
-        <nav className="flex-1 space-y-2 px-6 py-10">
+        <nav className="flex-1 space-y-2 px-4 sm:px-6 py-6 sm:py-10">
           {navItems.map((item) => (
             <NavLink
               key={item.to}
@@ -77,7 +77,7 @@ export default function Sidebar({ open, onClose }) {
         </nav>
 
         <div className="p-6 pb-10">
-          <div className="rounded-[2.5rem] bg-surface-hover p-7 border border-border/50 glass">
+          <div className="rounded-[2rem] sm:rounded-[2.5rem] bg-surface-hover p-5 sm:p-7 border border-border/50 glass">
             <div className="flex items-center justify-between mb-4">
               <p className="text-[10px] font-black uppercase tracking-[0.3em] text-text-tertiary">{planLabel}</p>
               <span className="text-[10px] font-bold text-primary-500 bg-primary-500/10 px-2 py-0.5 rounded-full">ACTIVE</span>
@@ -98,7 +98,7 @@ export default function Sidebar({ open, onClose }) {
                 onClick={() => navigate('/settings?tab=plan')}
                 className="w-full mt-6 py-3.5 rounded-full bg-foreground text-background text-xs font-black uppercase tracking-widest hover:scale-[1.02] active:scale-95 transition-all shadow-xl"
               >
-                Upgrade System
+                Upgrade Plan
               </button>
             )}
           </div>

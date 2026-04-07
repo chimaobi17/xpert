@@ -83,9 +83,9 @@ export default function Workspace() {
         <h1 className="text-2xl font-bold text-[var(--color-text)] mb-6">My Workspace</h1>
         <EmptyState
           icon={RectangleStackIcon}
-          title="No agents yet"
-          description="Discover AI agents and add them to your workspace to get started."
-          actionLabel="Discover Agents"
+          title="No helpers yet"
+          description="Browse our AI helpers and pick the ones you need to get started."
+          actionLabel="Browse Helpers"
           onAction={() => navigate('/agents/discover')}
         />
       </div>
@@ -94,33 +94,33 @@ export default function Workspace() {
 
   return (
     <div className="animate-fade-in">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 sm:gap-6 mb-8 sm:mb-12">
         <div>
-          <h1 className="text-4xl font-bold text-foreground tracking-tight">My Workspace</h1>
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground tracking-tight">My Workspace</h1>
           <p className="text-lg text-text-secondary font-medium mt-2">
-            Managing <span className="text-primary-500 font-bold">{myAgents.length}</span> active curators.
+            You have <span className="text-primary-500 font-bold">{myAgents.length}</span> AI helper{myAgents.length !== 1 ? 's' : ''} ready to go.
           </p>
         </div>
         <Link to="/agents/discover">
           <Button size="lg" className="rounded-full shadow-lg">
             <PlusCircleIcon className="h-6 w-6 mr-1" />
-            Deploy More
+            Add More
           </Button>
         </Link>
       </div>
 
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
         {myAgents.map((agent) => (
           <div key={agent.id} className="group relative">
             <Card
               hoverable
               glass
               onClick={() => navigate(`/agents/${agent.id}`, { state: { from: '/workspace' } })}
-              className="relative h-full border-border/50 hover:border-primary-500/50 transition-all duration-500 flex flex-col p-8"
+              className="relative h-full border-border/50 hover:border-primary-500/50 transition-all duration-500 flex flex-col p-4 sm:p-6 lg:p-8"
             >
-              <div className="flex items-start justify-between mb-8">
-                <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-surface-hover text-primary-500 shadow-sm group-hover:scale-110 transition-all duration-500">
-                  <CodeBracketIcon className="h-7 w-7" />
+              <div className="flex items-start justify-between mb-4 sm:mb-8">
+                <div className="flex h-11 w-11 sm:h-14 sm:w-14 shrink-0 items-center justify-center rounded-2xl bg-surface-hover text-primary-500 shadow-sm group-hover:scale-110 transition-all duration-500">
+                  <CodeBracketIcon className="h-5 w-5 sm:h-7 sm:w-7" />
                 </div>
                 <div className="flex items-center gap-3">
                   {agent.is_premium_only && (
@@ -139,7 +139,7 @@ export default function Workspace() {
               </div>
               
               <div className="min-w-0 flex-1">
-                <h3 className="text-2xl font-black text-foreground tracking-tight truncate mb-1">
+                <h3 className="text-lg sm:text-2xl font-black text-foreground tracking-tight truncate mb-1">
                   {agent.name}
                 </h3>
                 <p className="text-[10px] font-black uppercase tracking-[0.2em] text-text-tertiary mb-6">{agent.domain}</p>

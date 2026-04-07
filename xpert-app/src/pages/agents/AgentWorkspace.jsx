@@ -44,6 +44,7 @@ export default function AgentWorkspace() {
   const [aiResponse, setAiResponse] = useState(restored?.aiResponse || '');
   const [responseType, setResponseType] = useState(restored?.responseType || 'text');
   const [savedLibraryId, setSavedLibraryId] = useState(restored?.savedLibraryId || null);
+  const [uploadedFileId, setUploadedFileId] = useState(restored?.uploadedFileId || null);
   const [showFeedback, setShowFeedback] = useState(false);
   const [loading, setLoading] = useState(false);
   const [stopped, setStopped] = useState(false);
@@ -52,9 +53,9 @@ export default function AgentWorkspace() {
   // Persist state to sessionStorage on every meaningful change
   const saveState = useCallback(() => {
     writeSession(storageKey, {
-      step, formValues, generatedPrompt, aiResponse, responseType, savedLibraryId,
+      step, formValues, generatedPrompt, aiResponse, responseType, savedLibraryId, uploadedFileId,
     });
-  }, [storageKey, step, formValues, generatedPrompt, aiResponse, responseType, savedLibraryId]);
+  }, [storageKey, step, formValues, generatedPrompt, aiResponse, responseType, savedLibraryId, uploadedFileId]);
 
   useEffect(() => {
     if (!loadingAgent && agent) saveState();
@@ -62,7 +63,7 @@ export default function AgentWorkspace() {
 
   // Also save on unmount (captures final state before component is destroyed)
   const stateRef = useRef();
-  stateRef.current = { step, formValues, generatedPrompt, aiResponse, responseType, savedLibraryId };
+  stateRef.current = { step, formValues, generatedPrompt, aiResponse, responseType, savedLibraryId, uploadedFileId };
 
   useEffect(() => {
     return () => {
@@ -154,6 +155,9 @@ export default function AgentWorkspace() {
 
     if (res.ok) {
       setGeneratedPrompt(res.data.prompt);
+      if (res.data.uploaded_file_id) {
+        setUploadedFileId(res.data.uploaded_file_id);
+      }
       setStep(2);
     } else if (res.validationErrors) {
       setFormErrors(res.validationErrors);
@@ -172,6 +176,7 @@ export default function AgentWorkspace() {
     const res = await post(`/agents/${id}/submit`, {
       prompt_text: finalPrompt,
       prompt_type: promptType,
+      uploaded_file_id: uploadedFileId || undefined,
     }, { signal: controller.signal });
 
     // If aborted, don't update state
@@ -259,11 +264,12 @@ export default function AgentWorkspace() {
     setGeneratedPrompt('');
     setAiResponse('');
     setSavedLibraryId(null);
+    setUploadedFileId(null);
     setStopped(false);
     sessionStorage.removeItem(storageKey);
   }
 
-  const stepLabels = ['Fill Form', 'Review Prompt', 'AI Response'];
+  const stepLabels = ['Your Details', 'Review', 'Your Result'];
 
   // Stop button visible only when actively loading or streaming (not after completion)
   const showStopButton = loading || (step === 3 && !stopped && aiResponse && responseType !== 'image');
@@ -271,16 +277,16 @@ export default function AgentWorkspace() {
   return (
     <div className="animate-fade-in max-w-5xl mx-auto">
       {/* Header */}
-      <div className="flex items-center gap-6 mb-10">
+      <div className="flex items-center gap-3 sm:gap-6 mb-6 sm:mb-10">
         <button
           onClick={handleBack}
-          className="rounded-2xl p-3 text-text-tertiary bg-surface-hover hover:bg-neutral-100 dark:hover:bg-zinc-800 hover:text-foreground transition-all border border-border"
+          className="rounded-2xl p-2.5 sm:p-3 text-text-tertiary bg-surface-hover hover:bg-neutral-100 dark:hover:bg-zinc-800 hover:text-foreground transition-all border border-border shrink-0"
         >
-          <ArrowLeftIcon className="h-6 w-6" />
+          <ArrowLeftIcon className="h-5 w-5 sm:h-6 sm:w-6" />
         </button>
-        <div>
-          <div className="flex items-center gap-3">
-            <h1 className="text-3xl font-black text-foreground tracking-tight">{agent.name}</h1>
+        <div className="min-w-0">
+          <div className="flex items-center gap-2 sm:gap-3">
+            <h1 className="text-xl sm:text-2xl lg:text-3xl font-black text-foreground tracking-tight truncate">{agent.name}</h1>
             {agent.is_premium_only && (
               <Badge variant="premium" size="sm" className="rounded-full px-3 py-1 bg-gradient-to-r from-amber-400 to-orange-500 text-black border-none font-bold uppercase tracking-tighter italic">
                 Premium
@@ -292,7 +298,7 @@ export default function AgentWorkspace() {
       </div>
 
       {/* Step Indicator */}
-      <div className="flex items-center justify-between gap-4 mb-12 px-2">
+      <div className="flex items-center justify-between gap-2 sm:gap-4 mb-8 sm:mb-12 px-0 sm:px-2">
         {stepLabels.map((label, i) => (
           <div key={label} className="flex-1 group">
             <div className="relative mb-4">
@@ -316,7 +322,7 @@ export default function AgentWorkspace() {
                 {step > i + 1 ? "✓" : i + 1}
               </div>
               <span className={clsx(
-                "text-xs font-black uppercase tracking-widest transition-colors",
+                "text-[10px] sm:text-xs font-black uppercase tracking-wider sm:tracking-widest transition-colors",
                 step === i + 1 ? "text-foreground" : "text-text-tertiary"
               )}>
                 {label}
@@ -327,12 +333,12 @@ export default function AgentWorkspace() {
       </div>
 
       {/* Step Content */}
-      <Card className="p-10 min-h-[400px]">
+      <Card className="p-4 sm:p-6 lg:p-10 min-h-[280px] sm:min-h-[400px]">
         {step === 1 && (
           <div className="animate-slide-up">
             <div className="mb-8">
-               <h2 className="text-2xl font-black text-foreground mb-2">Configure Interaction</h2>
-               <p className="text-text-secondary font-medium">Define parameters for your elite AI curator.</p>
+               <h2 className="text-lg sm:text-2xl font-black text-foreground mb-1 sm:mb-2">Tell Us What You Need</h2>
+               <p className="text-text-secondary font-medium">Fill in the details below and we'll handle the rest.</p>
             </div>
             <DynamicForm
               fields={fields}
@@ -341,13 +347,13 @@ export default function AgentWorkspace() {
               errors={formErrors}
               disabled={loading}
             />
-            <div className="mt-10 flex justify-end">
-              <Button 
-                onClick={handleGeneratePrompt} 
+            <div className="mt-6 sm:mt-10 flex justify-end">
+              <Button
+                onClick={handleGeneratePrompt}
                 loading={loading}
-                className="h-14 px-10 rounded-full font-black uppercase tracking-widest shadow-[0_0_20px_rgba(33,196,93,0.3)]"
+                className="h-12 sm:h-14 px-6 sm:px-10 rounded-full font-black uppercase tracking-widest shadow-[0_0_20px_rgba(33,196,93,0.3)]"
               >
-                Generate Prompt
+                Continue
               </Button>
             </div>
           </div>
@@ -356,8 +362,8 @@ export default function AgentWorkspace() {
         {step === 2 && (
           <div className="animate-slide-up">
             <div className="mb-8">
-               <h2 className="text-2xl font-black text-foreground mb-2">Review Blueprint</h2>
-               <p className="text-text-secondary font-medium">Verify the detailed instructions before execution.</p>
+               <h2 className="text-lg sm:text-2xl font-black text-foreground mb-1 sm:mb-2">Review Before Sending</h2>
+               <p className="text-text-secondary font-medium">Check the instructions below, then send to AI when ready.</p>
             </div>
             <PromptPreview
               key={generatedPrompt}
@@ -378,10 +384,10 @@ export default function AgentWorkspace() {
           <div className="animate-slide-up">
             <div className="mb-8 border-b border-border pb-6 flex items-center justify-between">
                <div>
-                  <h2 className="text-2xl font-black text-foreground mb-1">Curation Complete</h2>
-                  <p className="text-text-secondary font-medium">Review the optimized response from your agent.</p>
+                  <h2 className="text-lg sm:text-2xl font-black text-foreground mb-1">Here's Your Result</h2>
+                  <p className="text-text-secondary font-medium">Your AI helper has finished. See the result below.</p>
                </div>
-               <Badge className="bg-primary-500/10 text-primary-500 border-primary-500/20 rounded-full px-4 py-1.5 font-bold uppercase tracking-tighter">Verified Result</Badge>
+               <Badge className="bg-primary-500/10 text-primary-500 border-primary-500/20 rounded-full px-4 py-1.5 font-bold uppercase tracking-tighter">Done</Badge>
             </div>
             <AiResponse
               response={aiResponse}

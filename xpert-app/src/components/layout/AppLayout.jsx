@@ -13,11 +13,11 @@ export default function AppLayout() {
       <div className="flex flex-1 overflow-hidden relative">
         {/* Global Ambient Glow */}
         <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-primary-500/5 blur-[120px] rounded-full pointer-events-none z-0 dark:opacity-50 opacity-20" />
-        
+
         <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-        
+
         <main className="flex-1 overflow-y-auto bg-background relative z-10 custom-scrollbar">
-          <div className="mx-auto max-w-7xl px-6 py-8 pb-32 lg:px-12 lg:py-12 lg:pb-24">
+          <div className="mx-auto max-w-7xl px-4 py-4 pb-20 sm:px-6 sm:py-6 sm:pb-24 lg:px-12 lg:py-12 lg:pb-24">
             <Outlet />
           </div>
         </main>

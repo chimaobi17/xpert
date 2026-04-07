@@ -217,6 +217,14 @@ return [
         'type' => 'image',
     ],
 
+    'photography' => [
+        'primary' => 'black-forest-labs/FLUX.1-dev',
+        'fallback' => 'stabilityai/stable-diffusion-xl-base-1.0',
+        'max_tokens' => 512,
+        'timeout' => 90,
+        'type' => 'image',
+    ],
+
     // --- Embeddings ---
 
     'embeddings' => [

@@ -81,9 +81,9 @@ function ChatbotWidget() {
       {/* Expanded Panel Details */}
       <div
         className={`fixed z-50 transition-all duration-300 transform origin-bottom-right shadow-2xl
-          bottom-[90px] right-0 sm:right-6
-          w-full sm:w-[380px] h-[75vh] sm:h-[500px]
-          rounded-t-2xl sm:rounded-2xl
+          bottom-[90px] right-2 sm:right-6
+          w-[calc(100%-1rem)] sm:w-[380px] h-[calc(100vh-160px)] sm:h-[500px]
+          rounded-2xl
           ${isOpen
             ? 'scale-100 opacity-100 translate-y-0'
             : 'scale-90 opacity-0 translate-y-10 pointer-events-none'

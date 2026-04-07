@@ -4,6 +4,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import { ThemeProvider } from './contexts/ThemeContext';
 import App from './App';
+import './i18n';
 import './styles/globals.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(

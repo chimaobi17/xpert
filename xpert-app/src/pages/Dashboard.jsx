@@ -68,7 +68,7 @@ export default function Dashboard() {
 
   const stats = [
     {
-      label: 'Tokens Used Today',
+      label: 'Usage Today',
       value: formatNumber(tokensUsed),
       sub: `/ ${formatNumber(tokenQuota)}`,
       icon: BoltIcon,
@@ -82,7 +82,7 @@ export default function Dashboard() {
       pct: requestLimit === 0 ? 0 : (requestsToday / requestLimit) * 100,
     },
     {
-      label: 'Saved Prompts',
+      label: 'Saved Results',
       value: savedPrompts,
       sub: 'in library',
       icon: ClockIcon,
@@ -96,27 +96,27 @@ export default function Dashboard() {
         <OnboardingFlow onComplete={() => { setShowOnboarding(false); loadDashboardData(); }} />
       )}
 
-      <div className="mb-10">
-        <h1 className="text-4xl font-black text-foreground tracking-tight">
+      <div className="mb-6 sm:mb-10">
+        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-foreground tracking-tight">
           {getGreeting()}, {user?.name?.split(' ')[0] || 'there'}
         </h1>
         <p className="text-lg text-text-secondary mt-2 font-medium">
-          Your elite AI workspace is ready for deployment.
+          Here's what's happening today.
         </p>
       </div>
 
       {/* Stats Cards */}
-      <div className="grid gap-6 sm:grid-cols-3 mb-10 text-foreground">
+      <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 mb-8 sm:mb-10 text-foreground">
         {stats.map((stat) => (
-          <Card key={stat.label} hoverable glass className="transition-all group p-8">
-            <div className="flex items-center gap-6">
-              <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-surface-hover text-primary-500 shadow-sm group-hover:scale-110 transition-all duration-500">
-                <stat.icon className="h-8 w-8" />
+          <Card key={stat.label} hoverable glass className="transition-all group p-4 sm:p-6 lg:p-8">
+            <div className="flex items-center gap-4 sm:gap-6">
+              <div className="flex h-12 w-12 sm:h-16 sm:w-16 shrink-0 items-center justify-center rounded-2xl bg-surface-hover text-primary-500 shadow-sm group-hover:scale-110 transition-all duration-500">
+                <stat.icon className="h-6 w-6 sm:h-8 sm:w-8" />
               </div>
               <div className="min-w-0">
-                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-text-tertiary mb-2">{stat.label}</p>
+                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-text-tertiary mb-1 sm:mb-2">{stat.label}</p>
                 <div className="flex items-baseline gap-2 flex-wrap">
-                  <span className="text-4xl font-black text-foreground">{stat.value}</span>
+                  <span className="text-2xl sm:text-3xl lg:text-4xl font-black text-foreground">{stat.value}</span>
                   <span className="text-xs font-bold text-text-tertiary mb-1 truncate">{stat.sub}</span>
                 </div>
               </div>
@@ -135,18 +135,18 @@ export default function Dashboard() {
 
       {/* Upgrade Banner for Free Users */}
       {user?.plan_level === 'free' && (
-        <div className="mb-12 relative overflow-hidden rounded-[2.5rem] bg-gradient-to-br from-primary-600/20 to-emerald-400/5 border border-primary-500/20 glass p-8 lg:p-12 group hover:border-primary-500/40 transition-all">
+        <div className="mb-8 sm:mb-12 relative overflow-hidden rounded-[1.5rem] sm:rounded-[2.5rem] bg-gradient-to-br from-primary-600/20 to-emerald-400/5 border border-primary-500/20 glass p-5 sm:p-8 lg:p-12 group hover:border-primary-500/40 transition-all">
           <div className="absolute -top-24 -right-24 h-64 w-64 bg-primary-500/10 blur-[100px] rounded-full group-hover:bg-primary-500/20 transition-all duration-700" />
           <div className="relative flex flex-col md:flex-row items-center justify-between gap-8">
             <div className="text-center md:text-left flex-1 max-w-xl">
-              <Badge variant="premium" className="mb-4 rounded-full px-4 py-1.5 bg-gradient-to-r from-amber-400 to-orange-500 text-black border-none font-black uppercase tracking-tighter italic">Limited Access</Badge>
-              <h3 className="text-3xl font-black text-white leading-tight mb-3">Ascend to Unlimited Intelligence</h3>
+              <Badge variant="premium" className="mb-4 rounded-full px-4 py-1.5 bg-gradient-to-r from-amber-400 to-orange-500 text-black border-none font-black uppercase tracking-tighter italic">Free Plan</Badge>
+              <h3 className="text-xl sm:text-2xl lg:text-3xl font-black text-white leading-tight mb-3">Get More Out of Xpert</h3>
               <p className="text-lg text-zinc-400 font-medium">
-                Unlock 6x high-tier token capacity, priority server allocation, and our entire library of premium curators.
+                More daily usage, faster responses, and access to all AI helpers — including image generation.
               </p>
             </div>
             <Link to="/settings?tab=plan" className="w-full md:w-auto">
-              <Button className="w-full h-16 px-10 rounded-full font-black uppercase tracking-widest text-lg shadow-[0_0_30px_rgba(33,196,93,0.3)] hover:scale-105 active:scale-95 transition-all">
+              <Button className="w-full h-12 sm:h-16 px-6 sm:px-10 rounded-full font-black uppercase tracking-widest text-sm sm:text-lg shadow-[0_0_30px_rgba(33,196,93,0.3)] hover:scale-105 active:scale-95 transition-all">
                 <ArrowUpCircleIcon className="h-6 w-6 mr-2" /> Upgrade Plan
               </Button>
             </Link>
@@ -154,18 +154,18 @@ export default function Dashboard() {
         </div>
       )}
 
-      <div className="grid gap-10 lg:grid-cols-2">
+      <div className="grid gap-6 sm:gap-10 lg:grid-cols-2">
         {/* Quick Access */}
         <div>
           <div className="flex items-center justify-between mb-6">
-             <h2 className="text-xl font-bold text-foreground tracking-tight">Deployed Agents</h2>
+             <h2 className="text-xl font-bold text-foreground tracking-tight">Your AI Helpers</h2>
              <Link to="/workspace" className="text-xs font-black uppercase tracking-widest text-primary-500 hover:text-foreground transition-colors">View All</Link>
           </div>
           {loadingData ? (
              <div className="flex flex-col items-center justify-center py-20 glass rounded-[2rem] border border-zinc-800/50">
                <Spinner />
                <p className="mt-4 text-xs font-bold text-zinc-500 uppercase tracking-widest animate-pulse mt-6">
-                 Waking up server environment...
+                 Loading your dashboard...
                </p>
              </div>
           ) : (
@@ -176,14 +176,14 @@ export default function Dashboard() {
                   hoverable
                   glass
                   onClick={() => navigate(`/agents/${agent.id}`, { state: { from: '/dashboard' } })}
-                  className="!p-8 flex items-center gap-6 group border-border/50 hover:border-primary-500/30"
+                  className="!p-4 sm:!p-6 lg:!p-8 flex items-center gap-4 sm:gap-6 group border-border/50 hover:border-primary-500/30"
                 >
-                  <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-surface-hover text-primary-500 shadow-sm group-hover:scale-110 transition-all duration-500">
-                    <CodeBracketIcon className="h-8 w-8" />
+                  <div className="flex h-12 w-12 sm:h-16 sm:w-16 shrink-0 items-center justify-center rounded-2xl bg-surface-hover text-primary-500 shadow-sm group-hover:scale-110 transition-all duration-500">
+                    <CodeBracketIcon className="h-6 w-6 sm:h-8 sm:w-8" />
                   </div>
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2 mb-1">
-                      <h3 className="text-xl font-bold text-foreground tracking-tight truncate">{agent.name}</h3>
+                      <h3 className="text-base sm:text-xl font-bold text-foreground tracking-tight truncate">{agent.name}</h3>
                       {agent.is_premium_only && (
                          <Badge variant="premium" size="sm">Elite</Badge>
                       )}
@@ -204,8 +204,8 @@ export default function Dashboard() {
                   <span className="text-2xl font-light">+</span>
                 </div>
                 <div>
-                  <span className="text-sm font-bold text-text-secondary group-hover:text-foreground transition-colors">Curate more agents</span>
-                  <span className="text-[10px] font-bold text-text-tertiary block uppercase tracking-widest">Discover library</span>
+                  <span className="text-sm font-bold text-text-secondary group-hover:text-foreground transition-colors">Add more helpers</span>
+                  <span className="text-[10px] font-bold text-text-tertiary block uppercase tracking-widest">Browse all</span>
                 </div>
               </Card>
             </div>
@@ -214,11 +214,11 @@ export default function Dashboard() {
 
         {/* Neural Network Activity */}
         <div>
-          <h2 className="text-xl font-bold text-white mb-6 tracking-tight italic">Recent Interactions</h2>
+          <h2 className="text-xl font-bold text-foreground mb-6 tracking-tight">Recent Activity</h2>
           {myAgents.length === 0 && !loadingData ? (
              <Card className="text-center py-20">
-               <p className="text-sm font-bold text-text-tertiary uppercase tracking-widest">No neural pathways mapped yet.</p>
-               <Button variant="outline" className="mt-8 rounded-full h-12 px-8 font-bold" onClick={() => navigate('/agents/discover')}>Curate first agent</Button>
+               <p className="text-sm font-bold text-text-tertiary uppercase tracking-widest">No activity yet.</p>
+               <Button variant="outline" className="mt-8 rounded-full h-12 px-8 font-bold" onClick={() => navigate('/agents/discover')}>Find your first helper</Button>
              </Card>
           ) : (
             <Card className="text-center py-20 group">
@@ -226,9 +226,9 @@ export default function Dashboard() {
                   <ChartBarIcon className="h-8 w-8 text-text-tertiary" />
                </div>
                <p className="text-sm font-bold text-text-tertiary uppercase tracking-widest">
-                Interaction mapping active...
+                Your recent activity will show up here.
               </p>
-              <p className="text-xs text-text-tertiary font-medium mt-2">Activity logs will stream here during deployment.</p>
+              <p className="text-xs text-text-tertiary font-medium mt-2">Use an AI helper to see your history.</p>
             </Card>
           )}
         </div>

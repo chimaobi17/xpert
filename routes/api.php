@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\UsageController;
 use App\Http\Controllers\Api\UserAgentController;
 use App\Http\Controllers\Api\FeedbackController;
+use App\Http\Controllers\Api\MfaController;
 use App\Http\Controllers\Api\Admin\AdminController;
 use App\Http\Middleware\AiTimeout;
 use Illuminate\Support\Facades\Route;
@@ -32,6 +33,7 @@ Route::get('/health', function () {
 Route::middleware('throttle:10,1')->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
     Route::post('/register', [AuthController::class, 'register']);
+    Route::post('/mfa/verify-login', [MfaController::class, 'verifyLogin']);
 });
 
 // Authenticated routes
@@ -41,6 +43,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::patch('/user/profile', [AuthController::class, 'updateProfile']);
     Route::patch('/user/onboarded', [AuthController::class, 'markOnboarded']);
+
+    // MFA
+    Route::post('/mfa/enable', [MfaController::class, 'enable']);
+    Route::post('/mfa/verify', [MfaController::class, 'verify']);
+    Route::post('/mfa/disable', [MfaController::class, 'disable']);
 
     // User's agents (workspace)
     Route::get('/user/agents', [UserAgentController::class, 'index']);
