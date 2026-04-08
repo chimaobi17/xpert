@@ -21,8 +21,8 @@ export default function LandingNavbar() {
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
       isScrolled 
-        ? 'bg-background/80 backdrop-blur-xl border-b border-border/50 py-3 shadow-sm' 
-        : 'bg-background/40 backdrop-blur-md py-6'
+        ? 'glass border-b border-border/50 py-3 shadow-2xl' 
+        : 'bg-background/20 backdrop-blur-xl py-6'
     }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center">
@@ -74,7 +74,7 @@ export default function LandingNavbar() {
 
       {/* Mobile Menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden absolute top-0 left-0 right-0 bg-background border-b border-border p-4 animate-fade-in">
+        <div className="md:hidden absolute top-0 left-0 right-0 glass border-b border-border/50 p-4 animate-fade-in shadow-2xl">
           <div className="flex justify-between items-center mb-8">
             <img src={logoFull} alt="Xpert" className="h-10" />
             <button onClick={() => setMobileMenuOpen(false)}>
