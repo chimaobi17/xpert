@@ -14,6 +14,7 @@ import Button from '../components/ui/Button';
 
 export default function Landing() {
   const [activeStep, setActiveStep] = useState(0);
+  const [zoomedImage, setZoomedImage] = useState(null);
 
   const workflowSteps = [
     {
@@ -209,7 +210,10 @@ export default function Landing() {
                       </div>
 
                       {/* Mobile Screenshot (Visible only on mobile below the text) */}
-                      <div className={`lg:hidden mt-4 mb-8 transition-all duration-700 overflow-hidden rounded-[2rem] border border-primary-500/20 shadow-2xl ${activeStep === i ? 'max-h-[600px] opacity-100 scale-100' : 'max-h-0 opacity-0 scale-95'}`}>
+                      <div 
+                        className={`lg:hidden mt-4 mb-8 transition-all duration-700 overflow-hidden rounded-[2rem] border border-primary-500/20 shadow-2xl relative group/img ${activeStep === i ? 'max-h-[600px] opacity-100 scale-100' : 'max-h-0 opacity-0 scale-95'}`}
+                        onClick={() => setZoomedImage(item.image)}
+                      >
                         <div className="relative aspect-[4/3] overflow-hidden">
                           <img
                             src={item.image}
@@ -217,6 +221,11 @@ export default function Landing() {
                             className={`w-full h-full object-cover object-top transition-transform duration-[2s] ease-out ${activeStep === i ? 'scale-125' : 'scale-100'}`}
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-background/60 via-transparent to-transparent pointer-events-none" />
+                          
+                          {/* Zoom Indicator */}
+                          <div className="absolute top-4 right-4 p-2 rounded-full bg-black/50 backdrop-blur-md text-white border border-white/10 opacity-0 group-focus/img:opacity-100 transition-opacity">
+                            <SparklesIcon className="h-4 w-4" />
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -291,6 +300,25 @@ export default function Landing() {
       </main>
 
       <LandingFooter />
+
+      {/* Image Lightbox for Mobile Zoom */}
+      {zoomedImage && (
+        <div 
+          className="fixed inset-0 z-[200] bg-black/95 backdrop-blur-xl flex items-center justify-center p-4 animate-fade-in"
+          onClick={() => setZoomedImage(null)}
+        >
+          <div className="relative max-w-full max-h-full">
+            <img 
+              src={zoomedImage} 
+              alt="Zoomed Review" 
+              className="rounded-2xl shadow-[0_0_50px_rgba(31,196,95,0.2)] border border-primary-500/20 object-contain w-full h-full max-h-[85vh]"
+            />
+            <div className="absolute -top-12 left-1/2 -translate-x-1/2 text-white/50 text-sm font-bold flex items-center gap-2">
+              <span className="bg-primary-500/20 text-primary-500 px-3 py-1 rounded-full border border-primary-500/30">Tap anywhere to close</span>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Cookie Consent Banner */}
       <CookieBanner />
