@@ -312,9 +312,6 @@ export default function Landing() {
               alt="Zoomed Review" 
               className="rounded-2xl shadow-[0_0_50px_rgba(31,196,95,0.2)] border border-primary-500/20 object-contain w-full h-full max-h-[85vh]"
             />
-            <div className="absolute -top-12 left-1/2 -translate-x-1/2 text-white/50 text-sm font-bold flex items-center gap-2">
-              <span className="bg-primary-500/20 text-primary-500 px-3 py-1 rounded-full border border-primary-500/30">Tap anywhere to close</span>
-            </div>
           </div>
         </div>
       )}
