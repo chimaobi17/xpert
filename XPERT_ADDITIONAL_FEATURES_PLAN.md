@@ -192,10 +192,10 @@ The practical implication for how you pitch this: don’t say “a better prompt
 **Goal**: Resolve latency issues using automated strategies and data retrieval optimization.
 - **Plan**: 
   1. [x] Determine that **Eager Loading** is superior for the Agent library to avoid N+1 queries on `latestTemplate`.
-  2. [ ] Implement an automated **warm-up routine** (heartbeat) to prevent Render.com "cold starts". (Plan created in `XPERT_PERFORMANCE_PLAN.md`).
-  3. [ ] Align Backend (Render) and Frontend (Vercel) to the same AWS/GCP region.
-  4. [ ] Implement **Response Caching** middleware for static Agent data.
-  5. [ ] Add **Payload Monitoring** to log alerts if API response time exceeds 800ms.
+  2. [x] Implement an automated **warm-up routine** (heartbeat) to prevent Render.com "cold starts". (Implemented in `.github/workflows/warmup.yml`).
+  3. [x] Align Backend (Render) and Frontend (Vercel) to the same AWS/GCP region (`us-east-1`).
+  4. [x] Implement **Response Caching** middleware for static Agent data. (Implemented in `AgentController.php`).
+  5. [x] Add **Payload Monitoring** to log alerts if API response time exceeds 500ms. (Implemented in `AppServiceProvider.php`).
 
 ### Phase 30: Professional Landing Page & Footer ✅
 **Goal**: Design a high-conversion landing page with full legal and nav coverage.
