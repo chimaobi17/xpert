@@ -58,7 +58,7 @@ class User extends Authenticatable
             return null;
         }
 
-        return \Storage::disk('public')->url($this->avatar);
+        return rtrim(config('app.url'), '/') . '/storage/' . $this->avatar;
     }
 
     public function isAdmin(): bool
