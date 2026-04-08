@@ -273,10 +273,9 @@ export default function Landing() {
         {/* CTA Section */}
         <section className="py-24">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="relative rounded-[3rem] bg-primary-600 px-8 py-16 sm:px-16 sm:py-24 overflow-hidden text-center text-white shadow-2xl shadow-primary-500/40">
-              <div className="absolute inset-0 bg-gradient-to-br from-primary-600 to-primary-700" />
-              <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl" />
-              <div className="absolute bottom-0 left-0 w-64 h-64 bg-black/10 rounded-full translate-y-1/2 -translate-x-1/2 blur-3xl" />
+            <div className="relative rounded-[3rem] border-2 border-primary-500/50 bg-transparent px-8 py-16 sm:px-16 sm:py-24 overflow-hidden text-center text-white shadow-2xl shadow-primary-500/10">
+              <div className="absolute top-0 right-0 w-64 h-64 bg-primary-500/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl" />
+              <div className="absolute bottom-0 left-0 w-64 h-64 bg-primary-500/5 rounded-full translate-y-1/2 -translate-x-1/2 blur-3xl" />
 
               <div className="relative z-10">
                 <h2 className="text-4xl sm:text-6xl font-black mb-8">Ready to work <br className="sm:hidden" /> with Xpert?</h2>
