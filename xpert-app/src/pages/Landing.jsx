@@ -273,9 +273,9 @@ export default function Landing() {
         {/* CTA Section */}
         <section className="py-24">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="relative rounded-[3rem] border-2 border-primary-500/50 glass px-8 py-16 sm:px-16 sm:py-24 overflow-hidden text-center text-white shadow-2xl shadow-primary-500/10">
-              <div className="absolute top-0 right-0 w-64 h-64 bg-primary-500/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl" />
-              <div className="absolute bottom-0 left-0 w-64 h-64 bg-primary-500/5 rounded-full translate-y-1/2 -translate-x-1/2 blur-3xl" />
+            <div className="relative rounded-[3rem] border-2 border-primary-500/50 glass px-8 py-16 sm:px-16 sm:py-24 overflow-hidden text-center shadow-2xl shadow-primary-500/10">
+              <div className="absolute top-0 right-0 w-64 h-64 bg-primary-500/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl opacity-50 dark:opacity-100" />
+              <div className="absolute bottom-0 left-0 w-64 h-64 bg-primary-500/5 rounded-full translate-y-1/2 -translate-x-1/2 blur-3xl opacity-50 dark:opacity-100" />
 
               <div className="relative z-10">
                 <h2 className="text-4xl sm:text-6xl font-black mb-8 text-primary-600 dark:text-primary-500">Ready to work <br className="sm:hidden" /> with Xpert?</h2>
@@ -284,7 +284,7 @@ export default function Landing() {
                 </p>
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                   <Link to="/register">
-                    <Button variant="outline" size="lg" className="glass border-white/20 text-white hover:bg-white/10 rounded-full px-12 text-lg font-bold transition-all shadow-xl shadow-black/20">
+                    <Button variant="outline" size="lg" className="glass border-primary-500/20 dark:border-white/20 text-primary-600 dark:text-white hover:bg-primary-500/5 dark:hover:bg-white/10 rounded-full px-12 text-lg font-bold transition-all shadow-xl shadow-primary-500/5 dark:shadow-black/20">
                       Join for Free
                     </Button>
                   </Link>
