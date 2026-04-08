@@ -161,3 +161,18 @@ The practical implication for how you pitch this: don’t say “a better prompt
 - [x] **25.4 Settings Integration**: "Take a Tour" button in Settings > Preferences allows users to re-trigger the tour at any time. Resets tour state on click.
 - [x] **25.5 Tour Context**: `TourContext` in `AppLayout.jsx` enables any component to programmatically start the tour.
 - **Tour completion state** persisted in `localStorage` (`xpert_tour_completed`, `xpert_tour_dismissed`).
+
+### Phase 26: Full Translation & Signup Language Preference
+**Goal**: Make the app translation functional and allow users to select their preferred language during registration so the app immediately reflects their locale.
+- **26.1 Database Schema Update**: Create a new migration to add a `language_preference` string column to the `users` table (defaulting to 'en'). Add it to the `$fillable` array in the `User` model.
+- **26.2 Auth API Update**: Modify `AuthController@register` and `updateProfile` to accept and validate the `language_preference` field and save it to the database for the user.
+- **26.3 Signup UI Modification**: Update `Register.jsx` to include a "Preferred Language" dropdown (e.g., English, French, Spanish). Ensure this value is passed to the `register` hook during form submission.
+- **26.4 Frontend Global i18n Sync**: 
+  - Wrap all remaining hardcoded strings in the application components with appropriate translation tags (`t('key')`) to ensure the entire app functionality translates to any selected language natively.
+
+### Phase 27: High-Capacity File Intelligence & CV Builder Upgrade
+**Goal**: Support massive document analysis (up to 200MB) and enterprise-grade resume rewriting.
+- [ ] **27.1 Multi-File Processing**: Update `AgentController` to detect and parse all uploaded files in a single request.
+- [ ] **27.2 Smart Truncation Engine**: Update `PromptEngineService` to support 200k+ character documents with intelligent context window management.
+- [ ] **27.3 Model Migration**: Upgrade the CV Builder agent to the `Qwen2.5-Coder-32B` model for superior analysis of complex resume structures.
+- [ ] **27.4 UI Feedback**: Update the frontend to show all attached filenames in the Step 2 "Review Prompt" screen.

@@ -24,18 +24,19 @@ Claude Code must NOT build any of these during Phases 1–12.
 
 ---
 
-## 2. Advanced File Processing
+## 2. High-Capacity File Processing & CV Builder Optimization
 
-**Trigger**: User feedback requesting better file understanding, or OCR demand.
+**Trigger**: Users uploading larger documents (>2MB) or requesting higher-quality resume analysis.
 
 **Features**:
-- **OCR for images**: Integrate Tesseract OCR (free, open-source) to extract text from PNG/JPG uploads. Update `FileProcessorService` to detect image MIME types and route through OCR.
-- **Scanned PDF support**: PDFs with images-as-pages (common with scans) → rasterize pages → OCR each page → concatenate text.
-- **Audio/Video transcription**: Accept `.mp3`, `.wav`, `.mp4` uploads. Use OpenAI Whisper (local, free via `openai/whisper` Python package) for transcription. Store transcript in `parsed_content`. Requires Python sidecar or microservice.
-- **Spreadsheet intelligence**: For XLSX/CSV uploads, instead of raw text extraction, generate a structured summary: column names, row count, sample data, detected data types. This gives the AI better context than raw cell dumps.
-- **Multi-file RAG**: For Document Q&A agent, implement basic Retrieval-Augmented Generation: chunk file contents → embed with `BAAI/bge-small-en-v1.5` → store embeddings → retrieve relevant chunks per user question → inject into prompt. Dramatically improves accuracy on long documents.
+- **Multi-File Context**: Allow users to upload multiple documents per request. The backend will parse all files and inject them into a structured prompt context.
+- **Large Document Support (Smart Truncation)**: Implement a 200k-character context window per file with automatic truncation. Increase global PHP/Laravel upload limits to 25MB-200MB.
+- **Advanced AI Models**: Upgrade specialized agents (like CV Builder) to higher-parameter models (e.g., Qwen2.5-Coder-32B) to improve complex analysis and rewrite accuracy.
+- **OCR for images**: Integrate Tesseract OCR to extract text from PNG/JPG uploads.
+- **Scanned PDF support**: Rasterize and OCR scanned PDFs.
+- **Audio/Video transcription**: Support Whisper-based transcription for media files.
 
-**Dependencies**: OCR requires system-level Tesseract installation. Audio requires Python runtime. RAG requires embedding storage (could use SQLite with vector extension, or upgrade to pgvector on PostgreSQL).
+**Dependencies**: Requires 32B+ model hosting on Hugging Face. Requires server-side Tesseract for OCR.
 
 ---
 
@@ -137,17 +138,7 @@ Claude Code must NOT build any of these during Phases 1–12.
 
 ---
 
-## 10. Multi-Language Interface
 
-**Trigger**: Non-English user growth.
-
-**Features**:
-- i18n support: all UI strings externalized to translation files.
-- Languages: English, French, Spanish, Arabic, Chinese (start with these five).
-- Language auto-detection from browser locale.
-- Chatbot knowledge base entries per language.
-
-**Dependencies**: Translation files. RTL layout support for Arabic. Chatbot knowledge duplication per language.
 
 ---
 

@@ -12,199 +12,45 @@ These issues have already been resolved and deployed to production. **Do NOT re-
 
 ### Fix A: Skip button error toast suppressed
 - **Files changed:** `xpert-app/src/components/onboarding/OnboardingFlow.jsx`
-- **What was done:** Switched from `patch()` (apiClient with auto-toast) to `api.patch()` (raw axios, silent). The skip button now closes the onboarding modal without showing any error toast, even when the backend returns 500.
+- **What was done:** Switched from `patch()` to `api.patch()`. The skip button now closes without error toasts.
 
 ### Fix B: Onboarding shows for every new user
 - **Files changed:** `xpert-app/src/contexts/AuthContext.jsx`
-- **What was done:** Added `sessionStorage.removeItem('xpert_onboarding_shown')` to `login()`, `register()`, and `logout()` functions. This ensures the session flag is cleared on every fresh sign-in so new users always see the onboarding modal.
+- **What was done:** Added `sessionStorage.removeItem('xpert_onboarding_shown')` on auth state changes.
+
+### Fix C: Backend support for multi-file processing
+- **Files changed:** `AgentController.php`, `PromptEngineService.php`
+- **What was done:** Implemented logic to extract and process multiple file uploads from any request field, allowing the AI to reference multiple documents simultaneously. (Note: Currently being refined for performance).
 
 ---
 
 ## 🔧 Outstanding Bugs (Implement These)
 
-## Bug 1: "Stop Generating" shows full response instead of stopping at exact point
+### Bug 1: File Upload Limits & Stability (Large Files)
+- **Status:** PENDING
+- **Issue:** Users cannot upload files larger than the default 2MB PHP limit. AI agents (like Content Writer) fail to recognize large document context.
+- **Requirement:** Increase file size limits to 25MB-200MB (plan-based) and implement smart truncation to stay within AI context windows (e.g., Qwen 32k limits).
 
-**File:** `xpert-app/src/components/agents/AiResponse.jsx`
+### Bug 2: CV Builder Agent Performance & Reliability
+- **Status:** PENDING
+- **Issue:** The CV Builder fails to accurately parse complex PDF resumes or provide high-quality rewrites using the default 7B model.
+- **Requirement:** Migrate to a higher-capacity model (e.g., Qwen2.5-Coder-32B), increase token limits to 8192, and optimize the prompt template for resume analysis.
 
-**Current Behavior:** When the user clicks "Stop Generating", the streaming animation stops but `setDisplayedText(response)` is called, which reveals the **entire** AI response. The user sees the full answer even though they clicked stop.
+### Bug 3: "Stop Generating" shows full response instead of stopping at exact point
+- **File:** `xpert-app/src/components/agents/AiResponse.jsx`
+- **Requirement:** Freeze the text at the exact character position when "Stop" is clicked. (See detailed steps in previous version).
 
-**Expected Behavior:** When "Stop Generating" is clicked, the text should freeze at the **exact character position** it was at when the user clicked stop. The partial text should remain visible — do NOT reveal the full response.
+### Bug 4: AI Response output overflows outside its container on mobile
+- **Files:** `AiResponse.jsx`, `globals.css`
+- **Requirement:** Ensure code blocks and long words wrap or scroll horizontally within their cards.
 
-### Steps to Fix:
-1. In the `useEffect` that listens for `stopped` (around line 80-86), change `setDisplayedText(response || '')` to `setDisplayedText(prev => prev)` — keep whatever was already displayed.
-2. In the `setInterval` callback (around line 57-62), when `stoppedRef.current` is true, do NOT call `setDisplayedText(response)`. Instead, call `stopInterval()` and `setStreaming(false)` without changing `displayedText`.
-3. Ensure the action buttons (Copy, Save, Regenerate, etc.) still appear after stopping, even with partial text.
-4. Update `handleCopy` to copy `displayedText` (the partial text) instead of `response` (the full text), so the user copies what they actually see.
+### Bug 5: AI Response content should be scrollable with action buttons pinned
+- **File:** `AiResponse.jsx`
+- **Requirement:** Make the markdown area scrollable within a fixed height, keeping Copy/Regenerate buttons always visible at the bottom.
 
----
-
-## Bug 2: AI Response output overflows outside its container on mobile
-
-**Files:**
-- `xpert-app/src/components/agents/AiResponse.jsx`
-- `xpert-app/src/styles/globals.css` (or `index.css`)
-
-**Current Behavior:** On mobile devices, the AI response text (rendered as Markdown) **breaks out of its container** and extends beyond the screen width. This is especially bad when the AI outputs:
-- Code blocks with long lines (they push the entire page wider)
-- Long URLs or file paths that don't break
-- Tables that are wider than the viewport
-- Inline code that doesn't wrap
-
-The user has to scroll horizontally on the whole page just to read the response, which is a broken experience. **The AI output must stay within the card/container boundaries on every screen size.**
-
-**Expected Behavior:**
-- The entire AI response (text, code, tables, images) must be **fully contained** within its parent card on all devices
-- Code blocks should scroll **horizontally within themselves** (not push the page wider)
-- Long words, URLs, and file paths should **wrap/break** to fit the container
-- Tables should scroll within their own container
-- The response should look clean and readable on a 375px-wide phone screen
-
-### Steps to Fix:
-
-1. **In `AiResponse.jsx`** — Update the response container div (around line 107) to constrain overflow:
-   ```jsx
-   <div className="rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] p-4 sm:p-6 overflow-hidden">
-   ```
-
-2. **In `AiResponse.jsx`** — Update the prose/markdown wrapper (around line 118) to prevent overflow:
-   ```jsx
-   <div className="prose prose-sm max-w-none text-[var(--color-text)] overflow-x-auto break-words [&_pre]:overflow-x-auto [&_pre]:max-w-full [&_table]:block [&_table]:overflow-x-auto">
-   ```
-
-3. **In globals.css / index.css** — Add these rules to globally fix markdown rendering on mobile:
-   ```css
-   /* ===== AI RESPONSE — MOBILE CONTAINMENT ===== */
-   /* Prevent AI response output from overflowing its container */
-   .prose {
-     overflow-wrap: break-word;
-     word-break: break-word;
-   }
-   .prose pre {
-     overflow-x: auto;
-     max-width: 100%;
-     white-space: pre;          /* keep code formatting */
-     word-break: normal;        /* don't break code mid-word */
-   }
-   .prose code {
-     word-break: break-all;     /* inline code can break */
-     white-space: pre-wrap;
-   }
-   .prose pre code {
-     word-break: normal;        /* code inside pre blocks shouldn't force-break */
-     white-space: pre;
-   }
-   .prose p,
-   .prose li,
-   .prose blockquote {
-     overflow-wrap: break-word;
-     word-break: break-word;
-   }
-   .prose img {
-     max-width: 100%;
-     height: auto;
-   }
-   .prose table {
-     display: block;
-     overflow-x: auto;
-     max-width: 100%;
-     white-space: nowrap;
-   }
-   .prose a {
-     word-break: break-all;     /* URLs should break to fit */
-   }
-
-   /* Reduce padding on mobile for more content space */
-   @media (max-width: 640px) {
-     .prose pre {
-       padding: 0.75rem;
-       font-size: 0.75rem;
-       border-radius: 0.5rem;
-     }
-   }
-   ```
-
-4. **IMPORTANT — Test this fix by:**
-   - Opening Chrome DevTools → Toggle device toolbar → iPhone 12 Pro (390px)
-   - Navigate to an agent workspace, generate a prompt that will produce code (e.g., "Write a function that fetches data from an API with error handling")
-   - Verify the code block scrolls horizontally WITHIN the card, not the page
-   - Verify regular text wraps properly and stays inside the card
-
----
-
-## Bug 3: AI Response content should be scrollable with action buttons pinned at the bottom
-
-**File:** `xpert-app/src/components/agents/AiResponse.jsx`
-
-**Current Behavior:** When the AI returns a long response, the entire page scrolls. The action buttons (Copy, Save to Library, Edit Prompt, Regenerate, New Prompt) are at the very bottom of the response. The user has to scroll all the way past the AI output before they can take their next action — this is very annoying on mobile especially.
-
-**Expected Behavior:** 
-- The **AI response content** (the markdown area) should be **scrollable within its own container** with a max height
-- The **action buttons** (Copy, Save, Edit Prompt, Regenerate, New Prompt) should be **pinned/fixed below the scroll area**, always visible to the user
-- The user should be able to read the response by scrolling within the content area, while always having access to Copy/Regenerate/New Prompt without scrolling
-
-### Steps to Fix:
-
-1. **Restructure the AiResponse layout** — Wrap the response content in a scrollable container and keep buttons outside it:
-   ```jsx
-   return (
-     <div className="flex flex-col" style={{ maxHeight: 'calc(100vh - 280px)' }}>
-       {/* Scrollable AI content */}
-       <div className="flex-1 overflow-y-auto min-h-0">
-         <div className="rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] p-4 sm:p-6">
-           {isImage ? (
-             <div className="flex justify-center">
-               <img src={`data:image/jpeg;base64,${response}`} alt="AI generated image" className="max-w-full rounded-lg shadow-md" />
-             </div>
-           ) : (
-             <>
-               <div className="prose prose-sm max-w-none text-[var(--color-text)] overflow-x-auto break-words">
-                 <ReactMarkdown>{displayedText}</ReactMarkdown>
-               </div>
-               {streaming && !stopped && (
-                 <div className="flex items-center gap-3 mt-3">
-                   <span className="inline-block w-2 h-4 bg-primary-500 animate-pulse" />
-                   <span className="text-xs text-[var(--color-text-tertiary)]">Generating...</span>
-                 </div>
-               )}
-             </>
-           )}
-         </div>
-       </div>
-
-       {/* Fixed action buttons — always visible below the scroll area */}
-       {showActions && (
-         <div className="flex-shrink-0 pt-4 border-t border-[var(--color-border)] mt-4 bg-[var(--color-bg-secondary)]">
-           {!isImage && (
-             <div className="flex items-center justify-between text-xs text-[var(--color-text-tertiary)] mb-3">
-               <span>Estimated tokens: ~{tokensUsed || Math.ceil(response.length / 4)}</span>
-             </div>
-           )}
-           <div className="grid grid-cols-2 sm:flex sm:flex-wrap gap-2 [&>button]:min-h-[44px]">
-             {/* ... action buttons here (Copy, Save, Edit Prompt, Regenerate, New Prompt) ... */}
-           </div>
-         </div>
-       )}
-     </div>
-   );
-   ```
-
-2. **Key details:**
-   - `maxHeight: calc(100vh - 280px)` accounts for the navbar, step indicator, and card heading. Adjust the `280px` value if needed.
-   - `flex-1 overflow-y-auto min-h-0` makes the content area scrollable while respecting the flex container.
-   - The action buttons are in `flex-shrink-0` so they never get pushed off-screen.
-   - On mobile, use `grid grid-cols-2` for the action buttons so they're easy to tap.
-
-3. **Also add mobile touch-friendly sizing** for the action buttons:
-   - All buttons should have `min-h-[44px]` for proper touch targets on mobile
-   - Use `grid grid-cols-2 sm:flex sm:flex-wrap gap-2` to stack buttons in a 2-column grid on mobile
-
----
-
-## Bug 4: Chatbot FAB overlaps "Generate Prompt" button on mobile
-
----
-
-## Bug 5: Chatbot FAB overlaps "Generate Prompt" button on mobile
+### Bug 6: Chatbot FAB overlaps "Generate Prompt" button on mobile
+- **File:** `AppLayout.jsx`
+- **Requirement:** Add bottom padding to account for the floating bubble.
 
 **File:** `xpert-app/src/components/Chatbot/ChatbotBubble.jsx` and `xpert-app/src/components/layout/AppLayout.jsx`
 

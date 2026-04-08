@@ -218,10 +218,10 @@ return [
     ],
 
     'photography' => [
-        'primary' => 'black-forest-labs/FLUX.1-dev',
+        'primary' => 'black-forest-labs/FLUX.1-schnell',
         'fallback' => 'stabilityai/stable-diffusion-xl-base-1.0',
         'max_tokens' => 512,
-        'timeout' => 90,
+        'timeout' => 120,
         'type' => 'image',
     ],
 

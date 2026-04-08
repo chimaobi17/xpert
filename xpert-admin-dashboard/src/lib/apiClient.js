@@ -3,7 +3,19 @@ import api from './axios';
 export async function apiCall(method, url, data = null, options = {}) {
   try {
     const config = { method, url, ...options };
-    if (data) config.data = data;
+    
+    if (data) {
+      if (data instanceof FormData) {
+        config.data = data;
+        // Let axios handle the Content-Type with boundary for FormData
+        if (config.headers) {
+          delete config.headers['Content-Type'];
+        }
+      } else {
+        config.data = data;
+      }
+    }
+
     const response = await api(config);
     return { ok: true, data: response.data };
   } catch (err) {

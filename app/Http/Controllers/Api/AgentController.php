@@ -243,19 +243,37 @@ class AgentController extends Controller
             }
         }
 
-        if ($modelType === 'image') {
-            $imageBase64 = $this->huggingFace->generateImage(
-                $agent->category,
-                $promptText,
-                $user->id,
-                $referenceImageBase64
-            );
-
-            if ($imageBase64) {
-                $aiResponse = $imageBase64;
+        try {
+            if ($modelType === 'image') {
+                $aiResponse = $this->huggingFace->generateImage(
+                    $agent->category,
+                    $promptText,
+                    $user->id,
+                    $referenceImageBase64
+                );
+            } else {
+                $aiResponse = $this->huggingFace->generate($agent->category, $promptText, $user->id);
             }
-        } else {
-            $aiResponse = $this->huggingFace->generate($agent->category, $promptText, $user->id);
+        } catch (\App\Exceptions\AiUnavailableException $e) {
+            return response()->json([
+                'error' => 'ai_unavailable',
+                'message' => $e->getMessage(),
+                'retry' => true,
+                'upgrade' => false,
+            ], 503);
+        } catch (\App\Exceptions\RateLimitException $e) {
+            return response()->json([
+                'error' => 'rate_limited',
+                'message' => $e->getMessage(),
+                'retry' => true,
+                'upgrade' => (str_contains($e->getMessage(), 'credits depleted')),
+            ], 429);
+        } catch (\Throwable $e) {
+            Log::error('ai_submit_failed', [
+                'user_id' => $user->id,
+                'category' => $agent->category,
+                'error' => $e->getMessage(),
+            ]);
         }
 
         // Log the prompt
@@ -272,7 +290,7 @@ class AgentController extends Controller
         if (! $aiResponse) {
             return response()->json([
                 'error' => 'ai_unavailable',
-                'message' => 'Your request has been queued and will be processed shortly.',
+                'message' => 'The AI system is temporarily busy. Please try again in a few moments.',
                 'retry' => true,
                 'upgrade' => false,
             ], 503);

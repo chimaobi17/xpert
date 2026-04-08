@@ -25,19 +25,47 @@ class PromptEngineService
         $systemPrompt = $agent->system_prompt;
         $body = $this->replacePlaceholders($template->template_body, $userInputs);
 
-        if ($fileContent) {
-            $body .= "\n\n--- ATTACHED DOCUMENT ---\n" . $fileContent;
+        // Optimization: Image models (SDXL, Flux) prefer pure descriptors over conversational instructions.
+        $modelType = config("ai_models.{$agent->category}.type", 'text');
+        if ($modelType === 'image') {
+            $assembled = $this->cleanImagePrompt($body);
+        } else {
+            if ($fileContent) {
+                $body .= "\n\n--- ATTACHED DOCUMENT ---\n" . $fileContent;
+            }
+            $assembled = $systemPrompt . "\n\n" . $body;
         }
 
-        $assembled = $systemPrompt . "\n\n" . $body;
-
         $maxChars = $this->planMaxChars[$planLevel] ?? $this->planMaxChars['free'];
-
+        
         if (strlen($assembled) > $maxChars) {
             throw new PromptTooLongException("Prompt exceeds the {$maxChars} character limit for your {$planLevel} plan.");
         }
 
         return $assembled;
+    }
+
+    /**
+     * Clean up a structured template body for image generation models.
+     * Removes labels and extra whitespace to create a direct visual prompt.
+     */
+    protected function cleanImagePrompt(string $body): string
+    {
+        // Remove labels (e.g., "Photography Style: Portrait" -> "Portrait")
+        $cleaned = preg_replace('/^[\w\s\/]+:\s*/m', '', $body);
+        
+        // Remove boilerplate
+        $cleaned = preg_replace('/Generate a photorealistic image of:\s*/i', '', $cleaned);
+        $cleaned = preg_replace('/Make it look like a real photograph taken with a professional camera\./i', '', $cleaned);
+        $cleaned = preg_replace('/Use natural lighting and realistic textures\./i', '', $cleaned);
+        $cleaned = preg_replace('/Make it look professionally with clean composition and visual appeal\./i', '', $cleaned);
+        $cleaned = preg_replace('/Generate a detailed visual description suitable for (image|logo) generation\./i', '', $cleaned);
+        
+        // Normalize whitespace and replace newlines with commas for better prompt flow
+        $cleaned = str_replace("\n", ", ", $cleaned);
+        $cleaned = preg_replace('/\s+/', ' ', $cleaned);
+        
+        return trim($cleaned, " ,");
     }
 
     protected function replacePlaceholders(string $templateBody, array $inputs): string

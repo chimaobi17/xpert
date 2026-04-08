@@ -30,7 +30,8 @@ export async function apiCall(method, url, data = null, options = {}) {
     if (data) {
       if (data instanceof FormData) {
         config.data = data;
-        config.headers = { ...config.headers, 'Content-Type': 'multipart/form-data' };
+        // Let axios handle the Content-Type with boundary for FormData
+        delete config.headers['Content-Type'];
       } else {
         config.data = data;
       }

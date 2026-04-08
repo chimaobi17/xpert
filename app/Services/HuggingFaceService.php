@@ -140,12 +140,21 @@ class HuggingFaceService
                 throw new RateLimitException(60, 'HF rate limit hit');
             }
 
+            if ($response->status() === 503) {
+                $errorData = $response->json();
+                $errorMsg = $errorData['error'] ?? 'Your request has been queued and will be processed shortly.';
+                if (isset($errorData['estimated_time'])) {
+                    $errorMsg .= ' Estimated loading time: ' . round($errorData['estimated_time']) . 's';
+                }
+                throw new AiUnavailableException($errorMsg);
+            }
+
             if ($response->successful() && $response->header('content-type') && str_contains($response->header('content-type'), 'image')) {
                 return base64_encode($response->body());
             }
 
             return null;
-        } catch (InvalidApiKeyException | RateLimitException $e) {
+        } catch (InvalidApiKeyException | RateLimitException | AiUnavailableException $e) {
             throw $e;
         } catch (\Throwable $e) {
             Log::error('ai_image_failed', [

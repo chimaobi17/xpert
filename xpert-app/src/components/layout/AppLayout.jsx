@@ -1,11 +1,21 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
+import clsx from 'clsx';
 import Navbar from './Navbar';
 import Sidebar from './Sidebar';
 import ChatbotWidget from '../Chatbot/ChatbotWidget';
 
 export default function AppLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  useEffect(() => {
+    if (sidebarOpen && window.innerWidth < 1024) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => { document.body.style.overflow = ''; };
+  }, [sidebarOpen]);
 
   return (
     <div className="flex h-screen flex-col bg-background selection:bg-primary-500/30 selection:text-primary-500 transition-colors duration-500">
@@ -16,7 +26,10 @@ export default function AppLayout() {
 
         <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
-        <main className="flex-1 overflow-y-auto bg-background relative z-10 scrollbar-hide">
+        <main className={clsx(
+          'flex-1 bg-background relative z-10 scrollbar-hide',
+          sidebarOpen ? 'overflow-hidden' : 'overflow-y-auto'
+        )}>
           <div className="mx-auto max-w-7xl px-4 py-4 pb-20 sm:px-6 sm:py-6 sm:pb-24 lg:px-12 lg:py-12 lg:pb-24">
             <Outlet />
           </div>

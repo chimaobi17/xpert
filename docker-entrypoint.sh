@@ -24,6 +24,9 @@ php artisan config:cache || echo "==> config:cache failed, continuing..."
 echo "==> Caching views..."
 php artisan view:cache || echo "==> view:cache failed, continuing..."
 
+echo "==> Linking storage..."
+php artisan storage:link --force || echo "==> storage:link skipped (likely already exists)"
+
 # Run migrations
 echo "==> Running migrations..."
 php artisan migrate --force || { echo "==> ERROR: Migration failed. Deployment truncated."; exit 1; }
