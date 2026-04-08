@@ -26,12 +26,18 @@ RUN composer install --no-dev --optimize-autoloader --no-scripts --no-interactio
 COPY . .
 
 # Dump optimized autoloader with full app context
-RUN composer dump-autoload --optimize
+RUN composer dump-autoload --optimize --classmap-authoritative
 
 # Prepare Laravel directories and permissions
 RUN mkdir -p storage/framework/cache/data storage/framework/sessions storage/framework/views storage/logs bootstrap/cache database \
     && chmod -R 775 storage bootstrap/cache \
     && touch database/database.sqlite
+
+# Build-time optimization: Pre-cache Laravel components
+# This shifts overhead from the "start" phase to the "build" phase
+RUN php artisan config:cache \
+    && php artisan route:cache \
+    && php artisan view:cache
 
 EXPOSE 8000
 

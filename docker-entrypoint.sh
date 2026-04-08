@@ -16,24 +16,22 @@ if [ -z "$APP_KEY" ]; then
     php artisan key:generate --force || echo "==> key:generate failed"
 fi
 
-# Clear old cached config then re-cache with current env vars
-echo "==> Caching config..."
-php artisan config:clear || true
-php artisan config:cache || echo "==> config:cache failed, continuing..."
+# Link storage
+php artisan storage:link --force || echo "==> storage:link skipped"
 
-echo "==> Caching views..."
-php artisan view:cache || echo "==> view:cache failed, continuing..."
+# Run migrations (This is the only necessary runtime DB task)
+echo "==> Syncing database..."
+php artisan migrate --force
 
-echo "==> Linking storage..."
-php artisan storage:link --force || echo "==> storage:link skipped (likely already exists)"
-
-# Run migrations
-echo "==> Running migrations..."
-php artisan migrate --force || { echo "==> ERROR: Migration failed. Deployment truncated."; exit 1; }
-
-# Seed only if DB is empty (prevents duplicate seeding on redeploys)
-echo "==> Seeding database..."
-php artisan db:seed --force 2>/dev/null || echo "==> Seeding skipped or already done"
+# Intelligent seeding: Only seed if the database appears empty
+# This saves time on every redeploy
+AGENT_COUNT=$(php artisan tinker --execute="echo App\Models\AiAgent::count();")
+if [ "$AGENT_COUNT" -eq "0" ]; then
+    echo "==> First run detected. Seeding initial data..."
+    php artisan db:seed --force
+else
+    echo "==> Database already populated. Skipping seed."
+fi
 
 echo "==> Starting server on port ${PORT:-8000}..."
 exec php artisan serve --host=0.0.0.0 --port="${PORT:-8000}"
