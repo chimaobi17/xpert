@@ -19,26 +19,32 @@ export default function Landing() {
   const workflowSteps = [
     {
       step: '01',
-      title: 'Pick your Helper',
-      desc: 'Choose a specialized AI expert from our library that fits your goal.',
-      image: '/screenshots/helper_library.png'
+      title: 'Find an AI Helper',
+      desc: 'Explore our vast library of specialized AI experts. Filter by category, tier, or search for any specific task you need to conquer.',
+      image: '/screenshots/helper_find.png'
     },
     {
       step: '02',
-      title: 'Input & Upload',
-      desc: 'Add your details and upload relevant files for the AI to analyze.',
-      image: '/screenshots/helper_input.png'
+      title: 'Pick your Helper',
+      desc: 'Browse your personal library of specialized AI experts, ready to scale your workflow instantly.',
+      image: '/screenshots/helper_library.png'
     },
     {
       step: '03',
-      title: 'Refine the Prompt',
-      desc: 'Review the AI-generated prompt. Stay in control by editing it or writing your own.',
-      image: '/screenshots/helper_refine.png'
+      title: 'Input & Upload',
+      desc: 'Fill in simple details and upload files. No prompt engineering skills required—just tell us what you need.',
+      image: '/screenshots/helper_input.png'
     },
     {
       step: '04',
+      title: 'Review & Refine',
+      desc: 'Review the AI-crafted prompt. Choose to send it as-is, edit for perfection, or write your own from scratch.',
+      image: '/screenshots/helper_refine.png'
+    },
+    {
+      step: '05',
       title: 'Get Results',
-      desc: 'Receive high-quality insights instantly, ready to download or save to your library.',
+      desc: 'Receive high-quality insights instantly, ready to download or save directly to your workspace.',
       image: '/screenshots/helper_results.png'
     }
   ];
@@ -98,18 +104,22 @@ export default function Landing() {
             </div>
 
             {/* Dashboard Preview Mockup */}
-            <div className="mt-20 relative max-w-5xl mx-auto px-4 sm:px-0 animate-fade-in-up delay-500">
-              <div className="relative rounded-3xl border border-primary-500/30 bg-surface p-2 shadow-[0_0_50px_-12px_rgba(34,197,94,0.3)] overflow-hidden">
-                <div className="bg-background rounded-2xl overflow-hidden aspect-video relative flex items-center justify-center border border-border/50">
+            <div className="mt-20 relative max-w-6xl mx-auto px-4 sm:px-0 animate-fade-in-up delay-500">
+              <div className="relative rounded-3xl bg-white dark:bg-surface p-1 shadow-[0_0_80px_-15px_rgba(34,197,94,0.4)] overflow-hidden">
+                <div className="bg-white dark:bg-background rounded-2xl overflow-hidden relative flex items-center justify-center min-h-[300px] lg:min-h-[500px]">
+                  {/* Light Mode Hero - Full Find Helper View */}
+                  <img
+                    src="/screenshots/light_helper_find.png"
+                    alt="Xpert Find Helper Preview Light"
+                    className="w-full h-auto object-contain block dark:hidden shadow-[0_30px_60px_rgba(0,0,0,0.12)] [image-rendering:-webkit-optimize-contrast]"
+                  />
+                  {/* Dark Mode Hero */}
                   <img
                     src="/screenshots/hero.png"
-                    alt="Xpert Dashboard Preview"
-                    className="w-full h-full object-cover"
-                    onError={(e) => {
-                      e.target.style.display = 'none';
-                    }}
+                    alt="Xpert Dashboard Preview Dark"
+                    className="w-full h-full object-contain hidden dark:block"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-background/20 to-transparent pointer-events-none" />
+                  <div className="absolute inset-0 bg-transparent dark:bg-gradient-to-t dark:from-background/20 dark:to-transparent pointer-events-none" />
                 </div>
               </div>
               {/* Floating Elements Decorations */}
@@ -210,18 +220,25 @@ export default function Landing() {
                       </div>
 
                       {/* Mobile Screenshot (Visible only on mobile below the text) */}
-                      <div 
-                        className={`lg:hidden mt-4 mb-8 transition-all duration-700 overflow-hidden rounded-[2rem] border border-primary-500/20 shadow-2xl relative group/img ${activeStep === i ? 'max-h-[600px] opacity-100 scale-100' : 'max-h-0 opacity-0 scale-95'}`}
+                      <div
+                        className={`lg:hidden mt-4 mb-8 transition-all duration-700 overflow-hidden rounded-[2rem] shadow-2xl relative group/img ${activeStep === i ? 'max-h-[600px] opacity-100 scale-100' : 'max-h-0 opacity-0 scale-95'}`}
                         onClick={() => setZoomedImage(item.image)}
                       >
-                        <div className="relative aspect-[4/3] overflow-hidden">
+                        <div className="relative aspect-[16/10]">
+                          {/* Light Mode Screenshot */}
+                          <img
+                            src={item.image.replace('helper_', 'light_helper_')}
+                            alt={`${item.title} Light`}
+                            className={`w-full h-full object-contain object-center transition-transform duration-[2s] ease-out block dark:hidden shadow-[0_20px_40px_rgba(0,0,0,0.08)] [image-rendering:-webkit-optimize-contrast] ${activeStep === i ? 'scale-105' : 'scale-100'}`}
+                          />
+                          {/* Dark Mode Screenshot */}
                           <img
                             src={item.image}
-                            alt={item.title}
-                            className={`w-full h-full object-cover object-top transition-transform duration-[2s] ease-out ${activeStep === i ? 'scale-125' : 'scale-100'}`}
+                            alt={`${item.title} Dark`}
+                            className={`w-full h-full object-contain object-center transition-transform duration-[2s] ease-out hidden dark:block shadow-[0_20px_40px_rgba(0,0,0,0.08)] [image-rendering:-webkit-optimize-contrast] ${activeStep === i ? 'scale-105' : 'scale-100'}`}
                           />
-                          <div className="absolute inset-0 bg-gradient-to-t from-background/60 via-transparent to-transparent pointer-events-none" />
-                          
+                          <div className="absolute inset-0 bg-transparent dark:bg-gradient-to-t dark:from-background/60 dark:via-transparent dark:to-transparent pointer-events-none" />
+
                           {/* Zoom Indicator */}
                           <div className="absolute top-4 right-4 p-2.5 rounded-full bg-black/60 backdrop-blur-md text-primary-500 border border-primary-500/30 opacity-100 transition-opacity shadow-[0_0_15px_rgba(31,196,95,0.3)] animate-pulse">
                             <SparklesIcon className="h-5 w-5" />
@@ -243,19 +260,23 @@ export default function Landing() {
 
               {/* Desktop Image Preview */}
               <div className="hidden lg:block relative">
-                <div className="aspect-[4/3] rounded-[3rem] bg-gradient-to-br from-primary-500/20 to-blue-500/20 border border-primary-500/30 overflow-hidden flex items-center justify-center p-6">
+                <div className="aspect-video rounded-[3rem] bg-background border border-primary-500/20 overflow-hidden flex items-center justify-center p-4 shadow-2xl">
                   <div className="w-full h-full rounded-2xl bg-background shadow-2xl border border-border overflow-hidden relative group">
+                    {/* Light Mode Screenshot */}
+                    <img
+                      src={workflowSteps[activeStep].image.replace('helper_', 'light_helper_')}
+                      alt="App Screenshot Light"
+                      className="w-full h-full object-contain animate-fade-in hover:scale-105 transition-transform duration-700 ease-out cursor-pointer block dark:hidden [image-rendering:-webkit-optimize-contrast]"
+                      key={`light-${activeStep}`}
+                    />
+                    {/* Dark Mode Screenshot */}
                     <img
                       src={workflowSteps[activeStep].image}
-                      alt="App Screenshot"
-                      className="w-full h-full object-cover animate-fade-in hover:scale-105 transition-transform duration-700 ease-out cursor-pointer"
-                      key={activeStep}
-                      onError={(e) => {
-                        e.target.onerror = null;
-                        e.target.src = 'https://via.placeholder.com/800x600/111/fff?text=Screenshot+Coming+Soon';
-                      }}
+                      alt="App Screenshot Dark"
+                      className="w-full h-full object-contain animate-fade-in hover:scale-105 transition-transform duration-700 ease-out cursor-pointer hidden dark:block [image-rendering:-webkit-optimize-contrast]"
+                      key={`dark-${activeStep}`}
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-background/40 to-transparent pointer-events-none" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-background/5 to-transparent dark:from-background/40 pointer-events-none" />
                   </div>
                 </div>
 
@@ -302,15 +323,22 @@ export default function Landing() {
 
       {/* Image Lightbox for Mobile Zoom */}
       {zoomedImage && (
-        <div 
+        <div
           className="fixed inset-0 z-[200] bg-black/95 backdrop-blur-xl flex items-center justify-center p-4 animate-fade-in"
           onClick={() => setZoomedImage(null)}
         >
           <div className="relative max-w-full max-h-full">
-            <img 
-              src={zoomedImage} 
-              alt="Zoomed Review" 
-              className="rounded-2xl shadow-[0_0_50px_rgba(31,196,95,0.2)] border border-primary-500/20 object-contain w-full h-full max-h-[85vh]"
+            {/* Light Mode Zoom */}
+            <img
+              src={zoomedImage?.replace('helper_', 'light_helper_')}
+              alt="Zoomed Review Light"
+              className="block dark:hidden rounded-2xl shadow-[0_0_50px_rgba(31,196,95,0.05)] object-contain w-full h-full max-h-[85vh] [image-rendering:-webkit-optimize-contrast]"
+            />
+            {/* Dark Mode Zoom */}
+            <img
+              src={zoomedImage}
+              alt="Zoomed Review Dark"
+              className="hidden dark:block rounded-2xl shadow-[0_0_50px_rgba(31,196,95,0.2)] object-contain w-full h-full max-h-[85vh] [image-rendering:-webkit-optimize-contrast]"
             />
           </div>
         </div>
