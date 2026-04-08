@@ -16,27 +16,27 @@ export default function Landing() {
   const [activeStep, setActiveStep] = useState(0);
 
   const workflowSteps = [
-    { 
-      step: '01', 
-      title: 'Pick your Helper', 
+    {
+      step: '01',
+      title: 'Pick your Helper',
       desc: 'Choose a specialized AI expert from our library that fits your goal.',
       image: '/screenshots/helper_library.png'
     },
-    { 
-      step: '02', 
-      title: 'Input & Upload', 
+    {
+      step: '02',
+      title: 'Input & Upload',
       desc: 'Add your details and upload relevant files for the AI to analyze.',
       image: '/screenshots/helper_input.png'
     },
-    { 
-      step: '03', 
-      title: 'Refine the Prompt', 
+    {
+      step: '03',
+      title: 'Refine the Prompt',
       desc: 'Review the AI-generated prompt. Stay in control by editing it or writing your own.',
       image: '/screenshots/helper_refine.png'
     },
-    { 
-      step: '04', 
-      title: 'Get Results', 
+    {
+      step: '04',
+      title: 'Get Results',
       desc: 'Receive high-quality insights instantly, ready to download or save to your library.',
       image: '/screenshots/helper_results.png'
     }
@@ -67,9 +67,9 @@ export default function Landing() {
           </div>
 
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary-500/10 border border-primary-500/20 text-primary-500 text-xs font-bold uppercase tracking-widest mb-8 animate-fade-in-up">
-              <SparklesIcon className="h-4 w-4" />
-              <span>The Next Generation of AI</span>
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary-500/10 border border-primary-500/20 text-primary-500 text-[10px] sm:text-xs font-bold uppercase tracking-[0.2em] mb-8 animate-fade-in-up shadow-[0_0_20px_rgba(31,196,95,0.1)]">
+              <SparklesIcon className="h-3.5 w-3.5 animate-pulse drop-shadow-[0_0_5px_rgba(31,196,95,0.8)]" />
+              <span className="mt-0.5">The Next Generation of AI</span>
             </div>
 
             <h1 className="text-5xl sm:text-7xl lg:text-8xl font-black tracking-tight mb-8 animate-fade-in-up delay-100">
@@ -100,9 +100,9 @@ export default function Landing() {
             <div className="mt-20 relative max-w-5xl mx-auto px-4 sm:px-0 animate-fade-in-up delay-500">
               <div className="relative rounded-3xl border border-primary-500/30 bg-surface p-2 shadow-[0_0_50px_-12px_rgba(34,197,94,0.3)] overflow-hidden">
                 <div className="bg-background rounded-2xl overflow-hidden aspect-video relative flex items-center justify-center border border-border/50">
-                  <img 
-                    src="/screenshots/hero.png" 
-                    alt="Xpert Dashboard Preview" 
+                  <img
+                    src="/screenshots/hero.png"
+                    alt="Xpert Dashboard Preview"
                     className="w-full h-full object-cover"
                     onError={(e) => {
                       e.target.style.display = 'none';
@@ -170,8 +170,8 @@ export default function Landing() {
                 }
               ].map((feature, i) => (
                 <div key={i} className="p-8 rounded-[2rem] bg-background border border-border hover:border-primary-500/50 transition-all group cursor-default">
-                  <div className={`w-14 h-14 rounded-2xl ${feature.color}/10 flex items-center justify-center ${feature.color.replace('bg-', 'text-')} mb-6 group-hover:scale-110 transition-transform`}>
-                    <feature.icon className="h-8 w-8" />
+                  <div className={`w-14 h-14 rounded-2xl ${feature.color}/10 flex items-center justify-center ${feature.color.replace('bg-', 'text-')} mb-6 group-hover:scale-110 transition-transform shadow-lg shadow-black/5`}>
+                    <feature.icon className="h-8 w-8 drop-shadow-[0_0_8px_currentColor]" />
                   </div>
                   <h3 className="text-xl font-bold mb-4">{feature.title}</h3>
                   <p className="text-text-secondary leading-relaxed">{feature.desc}</p>
@@ -185,8 +185,8 @@ export default function Landing() {
         <section id="how-it-works" className="py-24 sm:py-32">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16 lg:hidden">
-               <h2 className="text-4xl font-bold mb-4">Precision AI Workflow</h2>
-               <p className="text-text-secondary">A simple 4-step process to get expert results.</p>
+              <h2 className="text-4xl font-bold mb-4">Precision AI Workflow</h2>
+              <p className="text-text-secondary">A simple 4-step process to get expert results.</p>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
@@ -195,7 +195,7 @@ export default function Landing() {
                 <div className="space-y-4 lg:space-y-6">
                   {workflowSteps.map((item, i) => (
                     <div key={i} className="group">
-                      <div 
+                      <div
                         className={`flex gap-6 p-6 rounded-[2rem] transition-all cursor-pointer ${activeStep === i ? 'bg-surface border border-primary-500/20 shadow-xl shadow-primary-500/5' : 'hover:bg-surface/50 border border-transparent'}`}
                         onMouseEnter={() => setActiveStep(i)}
                       >
@@ -207,20 +207,22 @@ export default function Landing() {
                           <p className="text-text-secondary text-sm sm:text-base">{item.desc}</p>
                         </div>
                       </div>
-                      
+
                       {/* Mobile Screenshot (Visible only on mobile below the text) */}
-                      <div className={`lg:hidden mt-4 mb-8 transition-all duration-500 overflow-hidden rounded-2xl border border-border shadow-lg ${activeStep === i ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'}`}
-                           onClick={() => setActiveStep(i)}>
-                        <img 
-                          src={item.image} 
-                          alt={item.title}
-                          className="w-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
-                        />
+                      <div className={`lg:hidden mt-4 mb-8 transition-all duration-700 overflow-hidden rounded-[2rem] border border-primary-500/20 shadow-2xl ${activeStep === i ? 'max-h-[600px] opacity-100 scale-100' : 'max-h-0 opacity-0 scale-95'}`}>
+                        <div className="relative aspect-[4/3] overflow-hidden">
+                          <img
+                            src={item.image}
+                            alt={item.title}
+                            className={`w-full h-full object-cover object-top transition-transform duration-[2s] ease-out ${activeStep === i ? 'scale-125' : 'scale-100'}`}
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-background/60 via-transparent to-transparent pointer-events-none" />
+                        </div>
                       </div>
                     </div>
                   ))}
                 </div>
-                
+
                 <div className="mt-12 text-center lg:text-left">
                   <Link to="/register">
                     <Button size="lg" className="rounded-full px-12 group shadow-xl shadow-primary-500/20">
@@ -234,8 +236,8 @@ export default function Landing() {
               <div className="hidden lg:block relative">
                 <div className="aspect-[4/3] rounded-[3rem] bg-gradient-to-br from-primary-500/20 to-blue-500/20 border border-primary-500/30 overflow-hidden flex items-center justify-center p-6">
                   <div className="w-full h-full rounded-2xl bg-background shadow-2xl border border-border overflow-hidden relative group">
-                    <img 
-                      src={workflowSteps[activeStep].image} 
+                    <img
+                      src={workflowSteps[activeStep].image}
                       alt="App Screenshot"
                       className="w-full h-full object-cover animate-fade-in hover:scale-105 transition-transform duration-700 ease-out cursor-pointer"
                       key={activeStep}
@@ -247,10 +249,10 @@ export default function Landing() {
                     <div className="absolute inset-0 bg-gradient-to-t from-background/40 to-transparent pointer-events-none" />
                   </div>
                 </div>
-                
+
                 {/* Visual indicator of active step */}
                 <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 flex gap-2">
-                  {[0,1,2,3].map(i => (
+                  {[0, 1, 2, 3].map(i => (
                     <div key={i} className={`h-1.5 rounded-full transition-all duration-300 ${activeStep === i ? 'w-8 bg-primary-500' : 'w-2 bg-primary-500/20'}`} />
                   ))}
                 </div>
@@ -313,8 +315,8 @@ function CookieBanner() {
     <div className="fixed bottom-6 left-6 right-6 md:left-auto md:max-w-md z-[100] animate-fade-in-up">
       <div className="bg-surface border border-border p-6 rounded-[2rem] shadow-2xl">
         <div className="flex gap-4 items-start pb-4">
-          <div className="w-12 h-12 rounded-2xl bg-primary-500/10 flex items-center justify-center text-primary-500 shrink-0">
-            <SparklesIcon className="h-6 w-6" />
+          <div className="w-12 h-12 rounded-2xl bg-primary-500/10 flex items-center justify-center text-primary-500 shrink-0 shadow-lg shadow-primary-500/5">
+            <SparklesIcon className="h-6 w-6 animate-pulse drop-shadow-[0_0_5px_rgba(31,196,95,0.5)]" />
           </div>
           <div>
             <h4 className="font-bold mb-1">We value your privacy</h4>
