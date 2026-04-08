@@ -23,14 +23,22 @@ php artisan storage:link --force || echo "==> storage:link skipped"
 echo "==> Syncing database..."
 php artisan migrate --force
 
+# Robust Caching: Re-cache with current runtime env vars
+echo "==> Optimizing configuration..."
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+
 # Intelligent seeding: Only seed if the database appears empty
-# This saves time on every redeploy
-AGENT_COUNT=$(php artisan tinker --execute="echo App\Models\AiAgent::count();")
-if [ "$AGENT_COUNT" -eq "0" ]; then
+# Use a more robust check that handles potential errors
+AGENT_COUNT=$(php artisan tinker --execute="echo App\Models\AiAgent::count();" 2>/dev/null | tail -n 1)
+
+# Check if AGENT_COUNT is a valid number
+if [[ "$AGENT_COUNT" =~ ^[0-9]+$ ]] && [ "$AGENT_COUNT" -eq "0" ]; then
     echo "==> First run detected. Seeding initial data..."
     php artisan db:seed --force
 else
-    echo "==> Database already populated. Skipping seed."
+    echo "==> Database already populated or check skipped ($AGENT_COUNT)."
 fi
 
 echo "==> Starting server on port ${PORT:-8000}..."

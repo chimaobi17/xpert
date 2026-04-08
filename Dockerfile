@@ -33,12 +33,6 @@ RUN mkdir -p storage/framework/cache/data storage/framework/sessions storage/fra
     && chmod -R 775 storage bootstrap/cache \
     && touch database/database.sqlite
 
-# Build-time optimization: Pre-cache Laravel components
-# This shifts overhead from the "start" phase to the "build" phase
-RUN php artisan config:cache \
-    && php artisan route:cache \
-    && php artisan view:cache
-
 EXPOSE 8000
 
 COPY docker-entrypoint.sh /usr/local/bin/
