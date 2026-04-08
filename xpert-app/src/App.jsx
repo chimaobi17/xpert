@@ -4,6 +4,7 @@ import { Toaster, toast } from 'react-hot-toast';
 import { registerApiHandlers } from './lib/apiClient';
 import ProtectedRoute from './routes/ProtectedRoute';
 import GuestRoute from './routes/GuestRoute';
+import useAuth from './hooks/useAuth';
 import AppLayout from './components/layout/AppLayout';
 import Spinner from './components/ui/Spinner';
 
@@ -77,6 +78,24 @@ function ApiHandlerRegistration() {
   return null;
 }
 
+function RootRoute() {
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    return (
+      <div className="flex h-screen items-center justify-center bg-[var(--color-bg)]">
+        <Spinner size="lg" className="text-primary-500" />
+      </div>
+    );
+  }
+
+  if (user) {
+    return <Navigate to="/agents/discover" replace />;
+  }
+
+  return <Landing />;
+}
+
 export default function App() {
   return (
     <>
@@ -116,7 +135,7 @@ export default function App() {
             </Route>
           </Route>
 
-          <Route path="/" element={<Landing />} />
+          <Route path="/" element={<RootRoute />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Suspense>
