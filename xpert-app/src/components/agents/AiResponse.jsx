@@ -108,15 +108,6 @@ export default function AiResponse({ response, responseType, tokensUsed, onSaveT
       {/* Scrollable AI content */}
       <div className="flex-1 overflow-y-auto min-h-0">
         <div className="relative rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] p-4 sm:p-6 overflow-hidden group">
-          {!isImage && showActions && (
-            <button
-              onClick={handleCopy}
-              className="absolute top-4 right-4 p-2 rounded-lg bg-surface-hover/50 text-text-tertiary hover:text-primary-500 hover:bg-primary-500/10 transition-all opacity-0 group-hover:opacity-100"
-              title="Copy response"
-            >
-              {copied ? <CheckIcon className="h-5 w-5 text-primary-500" /> : <ClipboardIcon className="h-5 w-5" />}
-            </button>
-          )}
           {isImage ? (
             <div className="flex justify-center">
               <img
@@ -151,6 +142,17 @@ export default function AiResponse({ response, responseType, tokensUsed, onSaveT
           )}
 
           <div className="grid grid-cols-2 sm:flex sm:flex-wrap gap-2 [&>button]:min-h-[44px]">
+            {!isImage && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleCopy}
+                className="flex items-center gap-2"
+              >
+                {copied ? <CheckIcon className="h-4 w-4 text-primary-500" /> : <ClipboardIcon className="h-4 w-4" />}
+                {copied ? 'Copied' : 'Copy Insight'}
+              </Button>
+            )}
             <Button
               variant={saved ? 'secondary' : 'outline'}
               size="sm"

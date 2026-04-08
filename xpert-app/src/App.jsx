@@ -8,6 +8,7 @@ import AppLayout from './components/layout/AppLayout';
 import Spinner from './components/ui/Spinner';
 
 // Lazy-loaded pages for code splitting
+const Landing = lazy(() => import('./pages/Landing'));
 const Login = lazy(() => import('./pages/auth/Login'));
 const Register = lazy(() => import('./pages/auth/Register'));
 const ForgotPassword = lazy(() => import('./pages/auth/ForgotPassword'));
@@ -115,7 +116,7 @@ export default function App() {
             </Route>
           </Route>
 
-          <Route path="/" element={<Navigate to="/agents/discover" replace />} />
+          <Route path="/" element={<Landing />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Suspense>

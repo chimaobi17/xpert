@@ -176,3 +176,37 @@ The practical implication for how you pitch this: don’t say “a better prompt
 - [ ] **27.2 Smart Truncation Engine**: Update `PromptEngineService` to support 200k+ character documents with intelligent context window management.
 - [ ] **27.3 Model Migration**: Upgrade the CV Builder agent to the `Qwen2.5-Coder-32B` model for superior analysis of complex resume structures.
 - [ ] **27.4 UI Feedback**: Update the frontend to show all attached filenames in the Step 2 "Review Prompt" screen.
+
+### Phase 28: AI Response Polish & Landing Page Flow (Fixes #19, #22) ✅
+**Goal**: Improve mobile usability of AI responses and implement a professional entry point.
+- [x] **28.1 AI Response Copy Icon**: 
+  - Remove the floating absolute-positioned copy icon from the top-right of AI responses in `AiResponse.jsx`.
+  - Add a dedicated "Copy Text" button alongside "Save to Library" at the bottom of the response.
+  - Ensure the button is full-width or well-arranged on mobile for easy thumb access.
+- [x] **28.2 Landing Page Redirection**:
+  - Create a new `Landing.jsx` page acting as the site root (`/`).
+  - Update `App.jsx` to render `Landing` at path `/` instead of redirecting to `/agents/discover`.
+  - Add a "Get Started" CTA that directs to `/register`.
+
+### Phase 29: Performance Optimization & Deployment Pipeline ✅
+**Goal**: Resolve latency issues using automated strategies and data retrieval optimization.
+- **Plan**: 
+  1. [x] Determine that **Eager Loading** is superior for the Agent library to avoid N+1 queries on `latestTemplate`.
+  2. [ ] Implement an automated **warm-up routine** (heartbeat) to prevent Render.com "cold starts". (Plan created in `XPERT_PERFORMANCE_PLAN.md`).
+  3. [ ] Align Backend (Render) and Frontend (Vercel) to the same AWS/GCP region.
+  4. [ ] Implement **Response Caching** middleware for static Agent data.
+  5. [ ] Add **Payload Monitoring** to log alerts if API response time exceeds 800ms.
+
+### Phase 30: Professional Landing Page & Footer ✅
+**Goal**: Design a high-conversion landing page with full legal and nav coverage.
+- [x] **30.1 Landing Page Design**: Professional flow inspired by `simplifiai.com.ng`.
+  - Section for "How it Works".
+  - Section for "Featured Agents".
+  - Prominent "Sign In" button in Nav.
+  - Theme Toggle (Dark/Light) icon in Landing Nav.
+- [x] **30.2 Global Footer**:
+  - Full footer with links to FAQs, Services, Terms, Cookie Policy, and Privacy Policy.
+  - Newsletter signup form (mock).
+- [x] **30.3 Legal Compliance**:
+  - Cookie consent banner on first visit.
+  - Privacy policy and Terms of Service acceptance in registration.

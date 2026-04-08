@@ -10,7 +10,7 @@ class UserAgentController extends Controller
 {
     public function index(Request $request)
     {
-        $agents = $request->user()->agents()->get();
+        $agents = $request->user()->agents()->with('latestTemplate')->get();
 
         return response()->json($agents);
     }
