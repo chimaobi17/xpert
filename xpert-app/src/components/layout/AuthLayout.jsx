@@ -1,23 +1,8 @@
-import { Link } from 'react-router-dom';
-import { ChevronLeftIcon } from '@heroicons/react/24/outline';
 import logoFull from '../../assets/logo-full.svg';
 
 export default function AuthLayout({ children }) {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4 sm:px-6 relative overflow-hidden transition-colors duration-500">
-      {/* Back to Home Link */}
-      <div className="absolute top-8 left-8 z-50">
-        <Link 
-          to="/" 
-          className="flex items-center gap-2 text-sm font-semibold text-text-secondary hover:text-primary-500 transition-all group"
-        >
-          <div className="p-2 rounded-full bg-surface/50 border border-border/50 group-hover:border-primary-500/50 backdrop-blur-md">
-            <ChevronLeftIcon className="h-4 w-4" />
-          </div>
-          <span>Back to Home</span>
-        </Link>
-      </div>
-
       {/* Environmental Glow */}
       <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-primary-500/5 blur-[120px] rounded-full pointer-events-none dark:opacity-100 opacity-30" />
       <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-emerald-500/5 blur-[120px] rounded-full pointer-events-none dark:opacity-100 opacity-30" />
