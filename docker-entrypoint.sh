@@ -29,16 +29,14 @@ php artisan config:cache
 php artisan route:cache
 php artisan view:cache
 
-# Intelligent seeding: Only seed if the database appears empty
-# Use a more robust check that handles potential errors
-AGENT_COUNT=$(php artisan tinker --execute="echo App\Models\AiAgent::count();" 2>/dev/null | tail -n 1)
-
-# Check if AGENT_COUNT is a valid number
-if [[ "$AGENT_COUNT" =~ ^[0-9]+$ ]] && [ "$AGENT_COUNT" -eq "0" ]; then
-    echo "==> First run detected. Seeding initial data..."
-    php artisan db:seed --force
+# Intelligent seeding: Skip heavy DB checks if we already have a success flag
+if [ ! -f storage/framework/.seeded ]; then
+    echo "==> First run check..."
+    # Faster check using a simple artisan command if needed, or just seed
+    php artisan db:seed --force && touch storage/framework/.seeded
+    echo "==> Database seeded."
 else
-    echo "==> Database already populated or check skipped ($AGENT_COUNT)."
+    echo "==> Application already initialized. Skipping seed."
 fi
 
 echo "==> Starting server on port ${PORT:-8000}..."
