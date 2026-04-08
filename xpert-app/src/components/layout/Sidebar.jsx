@@ -38,6 +38,15 @@ export default function Sidebar({ open, onClose }) {
   const [tokensUsed, setTokensUsed] = useState(0);
   const [agentCount, setAgentCount] = useState(0);
 
+  useEffect(() => {
+    if (open && window.innerWidth < 1024) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => { document.body.style.overflow = ''; };
+  }, [open]);
+
   const planLabel = user?.plan_level === 'premium' ? 'Premium' : user?.plan_level === 'standard' ? 'Standard' : 'Free';
   const quotaMax = user?.plan_level === 'premium' ? 1000000 : user?.plan_level === 'standard' ? 150000 : 25000;
   const isFree = user?.plan_level === 'free' || !user?.plan_level;

@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import clsx from 'clsx';
 
 const sizes = {
@@ -7,6 +8,8 @@ const sizes = {
 };
 
 export default function Avatar({ name, src, size = 'md', className }) {
+  const [imgError, setImgError] = useState(false);
+
   const initials = name
     ? name
         .split(' ')
@@ -16,11 +19,12 @@ export default function Avatar({ name, src, size = 'md', className }) {
         .slice(0, 2)
     : '?';
 
-  if (src) {
+  if (src && !imgError) {
     return (
       <img
         src={src}
         alt={name}
+        onError={() => setImgError(true)}
         className={clsx('rounded-full object-cover', sizes[size], className)}
       />
     );

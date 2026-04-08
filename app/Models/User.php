@@ -58,7 +58,7 @@ class User extends Authenticatable
             return null;
         }
 
-        return asset('storage/' . $this->avatar);
+        return \Storage::disk('public')->url($this->avatar);
     }
 
     public function isAdmin(): bool
