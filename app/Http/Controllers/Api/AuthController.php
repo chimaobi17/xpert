@@ -130,18 +130,15 @@ class AuthController extends Controller
             'avatar' => ['required', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
         ]);
 
-        $user = $request->user();
+        $file = $request->file('avatar');
+        $mime = $file->getMimeType();
+        $base64 = base64_encode(file_get_contents($file->getRealPath()));
 
-        // Delete old avatar
-        if ($user->avatar) {
-            \Storage::disk('public')->delete($user->avatar);
-        }
-
-        $user->update([
-            'avatar' => $request->file('avatar')->store('avatars', 'public'),
+        $request->user()->update([
+            'avatar' => "data:{$mime};base64,{$base64}",
         ]);
 
-        return response()->json($user->fresh());
+        return response()->json($request->user()->fresh());
     }
 
     public function markOnboarded(Request $request)
