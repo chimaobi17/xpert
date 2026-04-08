@@ -221,21 +221,21 @@ export default function Landing() {
 
                       {/* Mobile Screenshot (Visible only on mobile below the text) */}
                       <div
-                        className={`lg:hidden mt-4 mb-8 transition-all duration-700 overflow-hidden rounded-[2rem] shadow-2xl relative group/img ${activeStep === i ? 'max-h-[600px] opacity-100 scale-100' : 'max-h-0 opacity-0 scale-95'}`}
+                        className={`lg:hidden mt-4 mb-8 transition-all duration-700 overflow-hidden rounded-[2rem] shadow-2xl relative group/img ${activeStep === i ? 'max-h-[800px] opacity-100 scale-100' : 'max-h-0 opacity-0 scale-95'}`}
                         onClick={() => setZoomedImage(item.image)}
                       >
-                        <div className="relative aspect-[16/10]">
+                        <div className="relative w-full">
                           {/* Light Mode Screenshot */}
                           <img
                             src={item.image.replace('helper_', 'light_helper_')}
                             alt={`${item.title} Light`}
-                            className={`w-full h-full object-contain object-center transition-transform duration-[2s] ease-out block dark:hidden shadow-[0_20px_40px_rgba(0,0,0,0.08)] [image-rendering:-webkit-optimize-contrast] ${activeStep === i ? 'scale-105' : 'scale-100'}`}
+                            className={`w-full h-auto block dark:hidden shadow-[0_20px_40px_rgba(0,0,0,0.08)] [image-rendering:-webkit-optimize-contrast] ${activeStep === i ? 'scale-105' : 'scale-100'} transition-transform duration-[2s] ease-out`}
                           />
                           {/* Dark Mode Screenshot */}
                           <img
                             src={item.image}
                             alt={`${item.title} Dark`}
-                            className={`w-full h-full object-contain object-center transition-transform duration-[2s] ease-out hidden dark:block shadow-[0_20px_40px_rgba(0,0,0,0.08)] [image-rendering:-webkit-optimize-contrast] ${activeStep === i ? 'scale-105' : 'scale-100'}`}
+                            className={`w-full h-auto hidden dark:block shadow-[0_20px_40px_rgba(0,0,0,0.08)] [image-rendering:-webkit-optimize-contrast] ${activeStep === i ? 'scale-105' : 'scale-100'} transition-transform duration-[2s] ease-out`}
                           />
                           <div className="absolute inset-0 bg-transparent dark:bg-gradient-to-t dark:from-background/60 dark:via-transparent dark:to-transparent pointer-events-none" />
 
