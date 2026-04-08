@@ -1,4 +1,5 @@
 FROM alpine:3.21
+# Cache buster to force fresh build: 1775659100
 
 # Install pre-compiled PHP 8.4 packages (no C compilation — fast builds on free tier)
 RUN apk add --no-cache \
