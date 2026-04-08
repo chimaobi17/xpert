@@ -1,53 +1,43 @@
-# STAGE 1: Builder
-FROM alpine:3.21 AS builder
+# Use the ultra-fast ServerSideUp PHP 8.4 image
+# This image comes pre-optimized for Laravel and includes Nginx + FPM
+FROM serversideup/php:8.4-fpm-nginx AS base
 
-WORKDIR /app
+# Switch to root to install dependencies fast
+USER root
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libpq-dev \
+    && docker-php-ext-install pdo_pgsql \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Install build dependencies
-RUN apk add --no-cache \
-    php84 php84-phar php84-openssl php84-curl php84-mbstring \
-    php84-tokenizer php84-session php84-ctype php84-xml \
-    curl unzip git bc
+# Switch back to the specialized 'www-data' user
+USER www-data
 
-# Install Composer
-RUN curl -sS https://getcomposer.org/installer | php84 -- --install-dir=/usr/local/bin --filename=composer
+WORKDIR /var/www/html
 
-# Install dependencies (cached layer)
-COPY composer.json composer.lock ./
-RUN composer install --no-dev --optimize-autoloader --no-scripts --no-interaction --ignore-platform-reqs
+# Copy only composer files first for maximum caching
+COPY --chown=www-data:www-data composer.json composer.lock ./
 
-# Copy app code and dump final autoloader
-COPY . .
+# Fast non-interactive install
+RUN composer install --no-dev --optimize-autoloader --no-scripts --no-interaction
+
+# Copy the rest of the application
+COPY --chown=www-data:www-data . .
+
+# Final optimization
 RUN composer dump-autoload --optimize --classmap-authoritative
 
-# STAGE 2: Runtime
-FROM alpine:3.21
-
-WORKDIR /app
-
-# Install ONLY runtime PHP 8.4 packages (No dev tools, no composer)
-RUN apk add --no-cache \
-    php84 php84-pdo php84-pdo_pgsql php84-pgsql php84-mbstring \
-    php84-bcmath php84-zip php84-xml php84-curl php84-tokenizer \
-    php84-session php84-ctype php84-fileinfo php84-dom \
-    php84-openssl php84-iconv php84-simplexml php84-xmlwriter \
-    php84-xmlreader php84-sodium php84-gd php84-intl php84-opcache \
-    php84-pdo_sqlite php84-posix php84-pcntl \
-    bash
-
-# Symlink php
-RUN ln -sf /usr/bin/php84 /usr/bin/php
-
-# Copy ONLY necessary files from builder
-COPY --from=builder /app /app
-
-# Final permission and storage setup
+# Setup environment and permissions
 RUN mkdir -p storage/framework/cache/data storage/framework/sessions storage/framework/views storage/logs bootstrap/cache \
-    && chmod -R 775 storage bootstrap/cache \
-    && touch database/database.sqlite
+    && chmod -R 775 storage bootstrap/cache
 
-EXPOSE 8000
+# Reveal the port Render expects
+EXPOSE 8080
 
+# The base image handles the Nginx + FPM startup automatically.
+# We just need to ensure our custom entrypoint runs for migrations.
+USER root
 COPY docker-entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
+# Use the image's built-in startup logic but wrap it in our entrypoint
 ENTRYPOINT ["docker-entrypoint.sh"]
