@@ -1,43 +1,43 @@
-# Use the ultra-fast ServerSideUp PHP 8.4 image
-# This image comes pre-optimized for Laravel and includes Nginx + FPM
-FROM serversideup/php:8.4-fpm-nginx AS base
+# Use Alpine 3.21 for the fastest possible build times (Zero Compilation)
+FROM alpine:3.21
 
-# Switch to root to install dependencies fast
-USER root
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    libpq-dev \
-    && docker-php-ext-install pdo_pgsql \
-    && apt-get clean && rm -rf /var/lib/apt/lists/*
+# Install pre-compiled PHP 8.4 packages (Installs in seconds, No 'docker-php-ext-install' compile time)
+RUN apk add --no-cache \
+    php84 php84-fpm php84-pdo php84-pdo_pgsql php84-pgsql php84-mbstring \
+    php84-bcmath php84-zip php84-xml php84-curl php84-tokenizer \
+    php84-session php84-ctype php84-fileinfo php84-dom php84-phar \
+    php84-openssl php84-iconv php84-simplexml php84-xmlwriter \
+    php84-xmlreader php84-sodium php84-gd php84-intl php84-opcache \
+    php84-pdo_sqlite php84-pcntl php84-posix \
+    curl unzip bash bash-completion
 
-# Switch back to the specialized 'www-data' user
-USER www-data
+# Symlink php
+RUN ln -sf /usr/bin/php84 /usr/bin/php
 
-WORKDIR /var/www/html
+# Install Composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-# Copy only composer files first for maximum caching
-COPY --chown=www-data:www-data composer.json composer.lock ./
+WORKDIR /app
 
-# Fast non-interactive install
-RUN composer install --no-dev --optimize-autoloader --no-scripts --no-interaction
+# Optimize layer caching
+COPY composer.json composer.lock ./
+RUN composer install --no-dev --optimize-autoloader --no-scripts --no-interaction --ignore-platform-reqs
 
-# Copy the rest of the application
-COPY --chown=www-data:www-data . .
+# Copy application source (excluding 200MB+ of frontend via .dockerignore)
+COPY . .
 
-# Final optimization
+# Final internal optimization
 RUN composer dump-autoload --optimize --classmap-authoritative
 
-# Setup environment and permissions
+# Permissions and structure
 RUN mkdir -p storage/framework/cache/data storage/framework/sessions storage/framework/views storage/logs bootstrap/cache \
-    && chmod -R 775 storage bootstrap/cache
+    && chmod -R 775 storage bootstrap/cache \
+    && touch database/database.sqlite
 
-# Reveal the port Render expects
-EXPOSE 8080
+EXPOSE 8000
 
-# The base image handles the Nginx + FPM startup automatically.
-# We just need to ensure our custom entrypoint runs for migrations.
-USER root
 COPY docker-entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
-# Use the image's built-in startup logic but wrap it in our entrypoint
+# Use standard artisan serve for simplicity and speed on Render Free Tier
 ENTRYPOINT ["docker-entrypoint.sh"]
