@@ -60,11 +60,11 @@ export default function Sidebar({ open, onClose }) {
       )}
       <aside
         className={clsx(
-          'fixed inset-y-0 left-0 z-30 flex w-72 sm:w-80 flex-col bg-background transition-transform duration-500 ease-in-out lg:static lg:translate-x-0 pt-0 border-r border-border/30 overflow-hidden',
+          'fixed inset-y-0 left-0 z-30 flex w-72 sm:w-80 flex-col bg-background transition-transform duration-500 ease-in-out lg:static lg:translate-x-0 pt-16 lg:pt-0 border-r border-border/30 overflow-hidden',
           open ? 'translate-x-0' : '-translate-x-full'
         )}
       >
-        <nav className="flex-1 overflow-y-auto space-y-2 px-4 sm:px-6 py-6 sm:py-10">
+        <nav className="flex-1 overflow-y-auto scrollbar-hide space-y-2 px-4 sm:px-6 py-6 sm:py-10">
           {navItems.map((item) => (
             <NavLink
               key={item.to}

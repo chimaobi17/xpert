@@ -122,12 +122,12 @@ export default function Login() {
           required
         />
 
-        <div className="flex items-center justify-between">
-          <label className="flex items-center gap-2 text-sm text-[var(--color-text-secondary)]">
-            <input type="checkbox" className="rounded border-[var(--color-border)] text-primary-500 focus:ring-primary-500" />
+        <div className="flex items-center justify-between flex-nowrap">
+          <label className="flex items-center gap-2 text-xs sm:text-sm text-[var(--color-text-secondary)] whitespace-nowrap min-h-0">
+            <input type="checkbox" className="rounded border-[var(--color-border)] text-primary-500 focus:ring-primary-500 min-h-0" />
             Remember me
           </label>
-          <Link to="/forgot-password" className="text-sm text-primary-600 hover:text-primary-700">
+          <Link to="/forgot-password" className="text-xs sm:text-sm text-primary-600 hover:text-primary-700 whitespace-nowrap min-h-0">
             Forgot password?
           </Link>
         </div>

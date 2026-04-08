@@ -6,7 +6,7 @@ import api from '../../lib/axios';
 import Input from '../ui/Input';
 import Select from '../ui/Select';
 import Button from '../ui/Button';
-import logoIcon from '../../assets/logo-icon.svg';
+import logoFull from '../../assets/logo-full.svg';
 
 const specializations = ['technology', 'creative', 'business', 'research', 'language'];
 
@@ -82,7 +82,7 @@ export default function OnboardingFlow({ onComplete }) {
       >
         <div className="mb-8 text-center">
           <div className="mx-auto mb-6 flex items-center justify-center">
-            <img src={logoIcon} alt="Xpert" className="h-14" />
+            <img src={logoFull} alt="Xpert" className="h-16 mx-auto" />
           </div>
           <p className="text-xs font-bold uppercase tracking-[0.2em] text-primary-500 mb-2">
             Welcome, {user?.name || 'Explorer'}

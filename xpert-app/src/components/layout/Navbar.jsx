@@ -79,7 +79,7 @@ export default function Navbar({ onMenuToggle }) {
           {dropdownOpen && (
             <>
               <div className="fixed inset-0 z-40" onClick={() => setDropdownOpen(false)} />
-              <div role="menu" className="absolute right-0 z-50 mt-4 w-56 sm:w-64 max-w-[calc(100vw-2rem)] rounded-[2rem] border border-white/10 bg-transparent backdrop-blur-xl p-2 shadow-2xl animate-fade-in overflow-hidden">
+              <div role="menu" className="absolute right-0 z-50 mt-4 w-56 sm:w-64 max-w-[calc(100vw-2rem)] rounded-[2rem] border border-border bg-background p-2 shadow-2xl animate-fade-in overflow-hidden">
                 <div className="px-5 py-5 border-b border-border/50">
                   <p className="text-sm font-bold text-foreground tracking-tight mb-0.5">{user?.name}</p>
                   <p className="text-xs font-medium text-text-secondary truncate">{user?.email}</p>

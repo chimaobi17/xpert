@@ -10,7 +10,7 @@ export default function AuthLayout({ children }) {
       <div className="w-full max-w-[480px] z-10">
         <div className="mb-8 sm:mb-12 text-center">
           <div className="mx-auto mb-4 sm:mb-6 flex items-center justify-center group">
-            <img src={logoFull} alt="Xpert" className="h-14 sm:h-24 group-hover:scale-105 transition-transform duration-500" />
+            <img src={logoFull} alt="Xpert" className="h-20 sm:h-24 group-hover:scale-105 transition-transform duration-500" />
           </div>
           <p className="text-text-tertiary font-bold uppercase tracking-[0.2em] text-[10px]">Premium AI Management Platform</p>
         </div>
