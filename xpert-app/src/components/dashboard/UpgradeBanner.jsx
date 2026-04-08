@@ -9,8 +9,8 @@ export default function UpgradeBanner() {
     <div className="rounded-xl border border-primary-200 bg-gradient-to-r from-primary-50 to-emerald-50 p-5">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-start gap-3">
-          <div className="rounded-lg bg-primary-100 p-2">
-            <SparklesIcon className="h-5 w-5 text-primary-600" />
+          <div className="rounded-lg bg-primary-500/10 p-2 shadow-[0_0_10px_rgba(31,196,95,0.15)] animate-pulse">
+            <SparklesIcon className="h-5 w-5 text-primary-500" />
           </div>
           <div>
             <h3 className="text-sm font-semibold text-primary-800">Upgrade to Standard</h3>
