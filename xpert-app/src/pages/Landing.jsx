@@ -278,8 +278,8 @@ export default function Landing() {
               <div className="absolute bottom-0 left-0 w-64 h-64 bg-primary-500/5 rounded-full translate-y-1/2 -translate-x-1/2 blur-3xl" />
 
               <div className="relative z-10">
-                <h2 className="text-4xl sm:text-6xl font-black mb-8 text-primary-500">Ready to work <br className="sm:hidden" /> with Xpert?</h2>
-                <p className="text-primary-400 text-lg sm:text-xl max-w-xl mx-auto mb-12">
+                <h2 className="text-4xl sm:text-6xl font-black mb-8 text-primary-600 dark:text-primary-500">Ready to work <br className="sm:hidden" /> with Xpert?</h2>
+                <p className="text-primary-700 dark:text-white/90 text-lg sm:text-xl max-w-xl mx-auto mb-12">
                   Join thousands of users who are already using specialized AI to scale their productivity.
                 </p>
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
