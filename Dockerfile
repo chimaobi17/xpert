@@ -1,7 +1,6 @@
 FROM alpine:3.21
-# Cache buster to force fresh build: 1775659100
 
-# Install pre-compiled PHP 8.4 packages (no C compilation — fast builds on free tier)
+# Install pre-compiled PHP 8.4 packages
 RUN apk add --no-cache \
     php84 php84-pdo php84-pdo_pgsql php84-pgsql php84-mbstring \
     php84-bcmath php84-zip php84-xml php84-curl php84-tokenizer \
@@ -19,14 +18,14 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 
 WORKDIR /app
 
-# Install dependencies (cached layer)
+# Install dependencies
 COPY composer.json composer.lock ./
 RUN composer install --no-dev --optimize-autoloader --no-scripts --no-interaction --ignore-platform-reqs
 
 # Copy application code
 COPY . .
 
-# Dump optimized autoloader with full app context
+# Dump optimized autoloader
 RUN composer dump-autoload --optimize --classmap-authoritative
 
 # Prepare Laravel directories and permissions
