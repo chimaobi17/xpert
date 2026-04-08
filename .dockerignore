@@ -1,9 +1,12 @@
 node_modules
-xpert-app/node_modules
-xpert-admin-dashboard/node_modules
-xpert-app/dist
-xpert-admin-dashboard/dist
+vendor
+xpert-app
+xpert-admin-dashboard
 .git
+.vercel
+.gemini
+.claude
+.github
 .env
 .env.local
 vendor

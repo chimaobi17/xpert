@@ -496,6 +496,9 @@ class AiAgentSeeder extends Seeder
             $templateData = $agentData['template'];
             unset($agentData['template']);
 
+            // Ensure strict boolean for PostgreSQL
+            $agentData['is_premium_only'] = (bool) ($agentData['is_premium_only'] ?? false);
+
             $agent = AiAgent::updateOrCreate(
                 ['name' => $agentData['name']],
                 $agentData

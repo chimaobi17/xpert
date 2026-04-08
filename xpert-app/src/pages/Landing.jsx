@@ -223,8 +223,8 @@ export default function Landing() {
                           <div className="absolute inset-0 bg-gradient-to-t from-background/60 via-transparent to-transparent pointer-events-none" />
                           
                           {/* Zoom Indicator */}
-                          <div className="absolute top-4 right-4 p-2 rounded-full bg-black/50 backdrop-blur-md text-white border border-white/10 opacity-0 group-focus/img:opacity-100 transition-opacity">
-                            <SparklesIcon className="h-4 w-4" />
+                          <div className="absolute top-4 right-4 p-2.5 rounded-full bg-black/60 backdrop-blur-md text-primary-500 border border-primary-500/30 opacity-100 transition-opacity shadow-[0_0_15px_rgba(31,196,95,0.3)] animate-pulse">
+                            <SparklesIcon className="h-5 w-5" />
                           </div>
                         </div>
                       </div>
