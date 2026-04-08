@@ -26,7 +26,7 @@ export default function PreferencesTab() {
               className={clsx(
                 'flex-1 p-4 flex flex-col items-center justify-center transition-all duration-500',
                 preference === opt.id
-                  ? 'border-primary-500 bg-transparent ring-1 ring-primary-500 shadow-[0_0_20px_rgba(33,196,93,0.15)]'
+                  ? 'border-primary-500 bg-transparent ring-1 ring-primary-500 shadow-[0_0_20px_rgba(31,196,95,0.15)]'
                   : 'border-gray-100 dark:border-border hover:border-primary-500/50'
               )}
             >

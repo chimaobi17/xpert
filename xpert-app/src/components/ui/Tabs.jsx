@@ -2,7 +2,7 @@ import clsx from 'clsx';
 
 export default function Tabs({ tabs, activeTab, onChange, className }) {
   return (
-    <div className={clsx('flex gap-1 border-b border-[var(--color-border)] overflow-x-auto scrollbar-none', className)}>
+    <div className={clsx('flex gap-1 border-b border-[var(--color-border)] overflow-x-auto scrollbar-hide', className)}>
       {tabs.map((tab) => (
         <button
           key={tab.id}

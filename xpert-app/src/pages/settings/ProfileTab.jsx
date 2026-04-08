@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { CameraIcon } from '@heroicons/react/24/solid';
 import useAuth from '../../hooks/useAuth';
-import { patch } from '../../lib/apiClient';
+import { patch, post } from '../../lib/apiClient';
 import Input from '../../components/ui/Input';
 import Button from '../../components/ui/Button';
 import Avatar from '../../components/ui/Avatar';
@@ -14,6 +15,8 @@ export default function ProfileTab() {
   const [purpose, setPurpose] = useState('');
   const [specialization, setSpecialization] = useState('technology');
   const [loading, setLoading] = useState(false);
+  const [avatarUploading, setAvatarUploading] = useState(false);
+  const fileInputRef = useRef(null);
 
   useEffect(() => {
     if (user) {
@@ -24,18 +27,46 @@ export default function ProfileTab() {
     }
   }, [user]);
 
+  async function handleAvatarChange(e) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > 2 * 1024 * 1024) {
+      toast.error('Image must be under 2MB');
+      return;
+    }
+
+    setAvatarUploading(true);
+    const formData = new FormData();
+    formData.append('avatar', file);
+
+    const res = await post('/user/avatar', formData);
+    if (res.ok) {
+      updateUser(res.data);
+      toast.success('Profile picture updated');
+    }
+    setAvatarUploading(false);
+    e.target.value = '';
+  }
+
   async function handleSave(e) {
     e.preventDefault();
     setLoading(true);
-    const res = await patch('/user/profile', { 
-      name,
-      job_title: jobTitle,
-      purpose,
-      field_of_specialization: specialization
-    });
-    if (res.ok) {
-      updateUser(res.data);
-      toast.success('Profile updated');
+    try {
+      const res = await patch('/user/profile', {
+        name,
+        job_title: jobTitle,
+        purpose,
+        field_of_specialization: specialization
+      });
+      if (res.ok) {
+        updateUser(res.data);
+        toast.success('Profile updated');
+      } else {
+        toast.error(res.error?.message || 'Failed to save profile');
+      }
+    } catch {
+      toast.error('Failed to save profile');
     }
     setLoading(false);
   }
@@ -43,7 +74,27 @@ export default function ProfileTab() {
   return (
     <div className="max-w-lg space-y-6">
       <div className="flex items-center gap-4">
-        <Avatar name={user?.name} size="lg" />
+        <div className="relative group">
+          <Avatar name={user?.name} src={user?.avatar_url} size="lg" />
+          <button
+            type="button"
+            onClick={() => fileInputRef.current?.click()}
+            disabled={avatarUploading}
+            className="absolute inset-0 flex items-center justify-center rounded-full bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer border-none"
+          >
+            {avatarUploading
+              ? <div className="h-5 w-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+              : <CameraIcon className="h-5 w-5 text-white" />
+            }
+          </button>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/jpeg,image/png,image/webp"
+            onChange={handleAvatarChange}
+            className="hidden"
+          />
+        </div>
         <div>
           <div className="flex items-center gap-2">
             <p className="text-sm font-medium text-[var(--color-text)]">{user?.name}</p>
@@ -55,6 +106,13 @@ export default function ProfileTab() {
             </Badge>
           </div>
           <p className="text-xs text-[var(--color-text-secondary)]">{user?.email}</p>
+          <button
+            type="button"
+            onClick={() => fileInputRef.current?.click()}
+            className="text-xs text-primary-500 hover:text-primary-600 font-medium mt-1 border-none bg-transparent cursor-pointer p-0"
+          >
+            Change photo
+          </button>
         </div>
       </div>
 

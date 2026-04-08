@@ -307,7 +307,7 @@ export default function AgentWorkspace() {
                 step > i + 1 ? "bg-primary-500" : step === i + 1 ? "bg-primary-500/30" : "bg-surface-hover"
               )} />
               {step === i + 1 && (
-                <div className="absolute top-0 left-0 h-1 bg-primary-500 animate-pulse-slow shadow-[0_0_10px_rgba(33,196,93,0.5)]" style={{ width: '100%' }} />
+                <div className="absolute top-0 left-0 h-1 bg-primary-500 animate-pulse-slow shadow-[0_0_10px_rgba(31,196,95,0.5)]" style={{ width: '100%' }} />
               )}
             </div>
             <div className="flex items-center gap-3">
@@ -316,7 +316,7 @@ export default function AgentWorkspace() {
                 step > i + 1
                   ? "bg-primary-500 text-black"
                   : step === i + 1
-                    ? "bg-surface-hover text-primary-500 border border-primary-500/30 shadow-[0_0_15px_rgba(33,196,93,0.1)]"
+                    ? "bg-surface-hover text-primary-500 border border-primary-500/30 shadow-[0_0_15px_rgba(31,196,95,0.1)]"
                     : "bg-surface-hover/50 text-text-tertiary border border-border/30"
               )}>
                 {step > i + 1 ? "✓" : i + 1}
@@ -351,7 +351,7 @@ export default function AgentWorkspace() {
               <Button
                 onClick={handleGeneratePrompt}
                 loading={loading}
-                className="h-12 sm:h-14 px-6 sm:px-10 rounded-full font-black uppercase tracking-widest shadow-[0_0_20px_rgba(33,196,93,0.3)]"
+                className="h-12 sm:h-14 px-6 sm:px-10 rounded-full font-black uppercase tracking-widest shadow-[0_0_20px_rgba(31,196,95,0.3)]"
               >
                 Continue
               </Button>

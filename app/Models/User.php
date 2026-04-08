@@ -17,6 +17,7 @@ class User extends Authenticatable
         'password',
         'role',
         'plan_level',
+        'avatar',
         'job_title',
         'purpose',
         'field_of_specialization',
@@ -33,7 +34,7 @@ class User extends Authenticatable
         'two_factor_secret',
     ];
 
-    protected $appends = ['onboarding_complete'];
+    protected $appends = ['onboarding_complete', 'avatar_url'];
 
     protected function casts(): array
     {
@@ -49,6 +50,15 @@ class User extends Authenticatable
     public function getOnboardingCompleteAttribute(): bool
     {
         return (bool) $this->is_onboarded;
+    }
+
+    public function getAvatarUrlAttribute(): ?string
+    {
+        if (! $this->avatar) {
+            return null;
+        }
+
+        return asset('storage/' . $this->avatar);
     }
 
     public function isAdmin(): bool

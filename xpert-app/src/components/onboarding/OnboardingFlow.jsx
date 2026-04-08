@@ -6,6 +6,7 @@ import api from '../../lib/axios';
 import Input from '../ui/Input';
 import Select from '../ui/Select';
 import Button from '../ui/Button';
+import logoIcon from '../../assets/logo-icon.svg';
 
 const specializations = ['technology', 'creative', 'business', 'research', 'language'];
 
@@ -80,11 +81,8 @@ export default function OnboardingFlow({ onComplete }) {
         )}
       >
         <div className="mb-8 text-center">
-          <div className="mx-auto h-16 w-16 mb-6 flex items-center justify-center rounded-2xl bg-primary-500/10 shadow-[0_0_20px_rgba(33,196,93,0.2)]">
-            <svg className="h-10 w-10" viewBox="0 0 48 48" fill="none">
-              <path d="M12 8L24 25L12 42" stroke="#21c45d" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
-              <path d="M36 8L24 25L36 42" stroke="#21c45d" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
+          <div className="mx-auto mb-6 flex items-center justify-center">
+            <img src={logoIcon} alt="Xpert" className="h-14" />
           </div>
           <p className="text-xs font-bold uppercase tracking-[0.2em] text-primary-500 mb-2">
             Welcome, {user?.name || 'Explorer'}
@@ -176,7 +174,7 @@ export default function OnboardingFlow({ onComplete }) {
               onClick={handleSubmit} 
               loading={loading} 
               disabled={!canProceed}
-              className="px-8 rounded-full font-bold shadow-[0_0_20px_rgba(33,196,93,0.3)]"
+              className="px-8 rounded-full font-bold shadow-[0_0_20px_rgba(31,196,95,0.3)]"
             >
               Get Started
             </Button>

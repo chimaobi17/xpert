@@ -55,7 +55,7 @@ export default function PromptPreview({ generatedPrompt, onSubmit, onBack, loadi
               className={clsx(
                 'p-6 h-full flex flex-col justify-start transition-all duration-500',
                 choice === opt.id
-                  ? 'border-primary-500 bg-transparent ring-1 ring-primary-500 shadow-[0_0_20px_rgba(33,196,93,0.15)]'
+                  ? 'border-primary-500 bg-transparent ring-1 ring-primary-500 shadow-[0_0_20px_rgba(31,196,95,0.15)]'
                   : 'border-gray-100 dark:border-border hover:border-primary-500/50'
               )}
             >

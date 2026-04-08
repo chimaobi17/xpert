@@ -81,15 +81,15 @@ function ChatbotWidget() {
       {/* Expanded Panel Details */}
       <div
         className={`fixed z-50 transition-all duration-300 transform origin-bottom-right shadow-2xl
-          bottom-[90px] right-2 sm:right-6
-          w-[calc(100%-1rem)] sm:w-[380px] h-[calc(100vh-160px)] sm:h-[500px]
+          bottom-[80px] right-2 sm:right-6
+          w-[calc(100%-1.5rem)] max-w-[320px] sm:max-w-none sm:w-[380px] h-[60vh] sm:h-[500px]
           rounded-2xl
           ${isOpen
             ? 'scale-100 opacity-100 translate-y-0'
             : 'scale-90 opacity-0 translate-y-10 pointer-events-none'
           }`}
       >
-        <div className="w-full h-full bg-white dark:bg-black rounded-2xl border border-gray-200 dark:border-primary-500 overflow-hidden flex flex-col shadow-[0_0_50px_rgba(33,196,93,0.15)]">
+        <div className="w-full h-full bg-white dark:bg-black rounded-2xl border border-gray-200 dark:border-primary-500 overflow-hidden flex flex-col shadow-[0_0_50px_rgba(31,196,95,0.15)]">
           <ChatbotPanel 
             messages={messages} 
             showQuickActions={showQuickActions}

@@ -1,3 +1,5 @@
+import logoFull from '../../assets/logo-full.svg';
+
 export default function AuthLayout({ children }) {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4 sm:px-6 relative overflow-hidden transition-colors duration-500">
@@ -8,14 +10,8 @@ export default function AuthLayout({ children }) {
       <div className="w-full max-w-[480px] z-10">
         <div className="mb-8 sm:mb-12 text-center">
           <div className="mx-auto mb-4 sm:mb-6 flex items-center justify-center group">
-            <div className="bg-surface-hover p-4 sm:p-6 rounded-2xl sm:rounded-3xl border border-border group-hover:border-primary-500/30 transition-all duration-500 shadow-2xl">
-              <svg className="h-10 w-10 sm:h-16 sm:w-16 group-hover:scale-110 transition-transform duration-500" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 8L24 25L12 42" stroke="#21c45d" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round"/>
-                <path d="M36 8L24 25L36 42" stroke="#21c45d" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-            </div>
+            <img src={logoFull} alt="Xpert" className="h-14 sm:h-24 group-hover:scale-105 transition-transform duration-500" />
           </div>
-          <h1 className="text-2xl sm:text-4xl font-bold text-foreground tracking-tight mb-2 uppercase">XPERT</h1>
           <p className="text-text-tertiary font-bold uppercase tracking-[0.2em] text-[10px]">Premium AI Management Platform</p>
         </div>
 

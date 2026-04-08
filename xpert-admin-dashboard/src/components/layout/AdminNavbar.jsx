@@ -9,6 +9,8 @@ import {
 import useAuth from '../../hooks/useAuth';
 import useTheme from '../../hooks/useTheme';
 import Avatar from '../ui/Avatar';
+import logoFull from '../../assets/logo-full.svg';
+import logoIcon from '../../assets/logo-icon.svg';
 
 
 export default function AdminNavbar({ onMenuToggle }) {
@@ -32,11 +34,8 @@ export default function AdminNavbar({ onMenuToggle }) {
           <Bars3Icon className="h-5 w-5" />
         </button>
         <div className="flex items-center gap-2">
-          <svg className="h-8 w-8" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 8L24 25L12 42" stroke="#22c55e" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"/>
-            <path d="M36 8L24 25L36 42" stroke="#22c55e" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
-          <span className="text-xl font-bold text-[var(--color-text)] hidden sm:block">XPERT</span>
+          <img src={logoFull} alt="Xpert" className="hidden sm:block h-14" />
+          <img src={logoIcon} alt="Xpert" className="block sm:hidden h-12" />
           <span className="rounded-md bg-primary-100 px-2 py-0.5 text-xs font-semibold text-primary-700 hidden sm:block">
             Admin
           </span>

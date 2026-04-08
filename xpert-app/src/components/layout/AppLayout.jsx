@@ -16,7 +16,7 @@ export default function AppLayout() {
 
         <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
-        <main className="flex-1 overflow-y-auto bg-background relative z-10 custom-scrollbar">
+        <main className="flex-1 overflow-y-auto bg-background relative z-10 scrollbar-hide">
           <div className="mx-auto max-w-7xl px-4 py-4 pb-20 sm:px-6 sm:py-6 sm:pb-24 lg:px-12 lg:py-12 lg:pb-24">
             <Outlet />
           </div>

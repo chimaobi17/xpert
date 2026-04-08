@@ -3,11 +3,13 @@
 @tailwind utilities;
 
 :root {
-  --color-primary: #21c45d; /* Xpert Green */
+  --color-primary: #1FC45F;
+  /* Xpert Green */
   --color-primary-hover: #16a34a;
-  --color-primary-light: rgba(33, 196, 93, 0.1);
+  --color-primary-light: rgba(31, 196, 95, 0.1);
   --color-primary-dark: #15803d;
-  --color-bg: #000000; /* Pitch Black */
+  --color-bg: #000000;
+  /* Pitch Black */
   --color-bg-secondary: #000000;
   --color-surface: #0a0a0a;
   --color-surface-hover: #121212;
@@ -15,19 +17,20 @@
   --color-text-secondary: #a1a1aa;
   --color-text-tertiary: #52525b;
   --color-border: #1a1a1a;
-  --color-border-focus: #21c45d;
+  --color-border-focus: #1FC45F;
   --color-danger: #ef4444;
   --color-warning: #f59e0b;
   --color-info: #3b82f6;
-  --color-success: #21c45d;
+  --color-success: #1FC45F;
 }
 
 [data-theme="light"] {
-  --color-primary: #21c45d;
+  --color-primary: #1FC45F;
   --color-primary-hover: #16a34a;
-  --color-primary-light: rgba(33, 196, 93, 0.05);
+  --color-primary-light: rgba(31, 196, 95, 0.05);
   --color-primary-dark: #15803d;
-  --color-bg: #ffffff; /* pure white */
+  --color-bg: #ffffff;
+  /* pure white */
   --color-bg-secondary: #f9f9f9;
   --color-surface: #ffffff;
   --color-surface-hover: #f3f4f6;
@@ -35,11 +38,11 @@
   --color-text-secondary: #4b5563;
   --color-text-tertiary: #9ca3af;
   --color-border: #e5e7eb;
-  --color-border-focus: #21c45d;
+  --color-border-focus: #1FC45F;
   --color-danger: #ef4444;
   --color-warning: #f59e0b;
   --color-info: #3b82f6;
-  --color-success: #21c45d;
+  --color-success: #1FC45F;
 }
 
 .glass {
@@ -101,9 +104,25 @@ select:focus {
   background: var(--color-text-secondary);
 }
 
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+}
+
 @keyframes fade-in {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .animate-fade-in {
@@ -115,36 +134,43 @@ select:focus {
   overflow-wrap: break-word;
   word-break: break-word;
 }
+
 .prose pre {
   overflow-x: auto;
   max-width: 100%;
   white-space: pre;
   word-break: normal;
 }
+
 .prose code {
   word-break: break-all;
   white-space: pre-wrap;
 }
+
 .prose pre code {
   word-break: normal;
   white-space: pre;
 }
+
 .prose p,
 .prose li,
 .prose blockquote {
   overflow-wrap: break-word;
   word-break: break-word;
 }
+
 .prose img {
   max-width: 100%;
   height: auto;
 }
+
 .prose table {
   display: block;
   overflow-x: auto;
   max-width: 100%;
   white-space: nowrap;
 }
+
 .prose a {
   word-break: break-all;
 }
@@ -163,17 +189,24 @@ select:focus {
   max-width: 100%;
   font-size: 0.75rem;
 }
+
 .chatbot-markdown code {
   word-break: break-all;
 }
 
 /* ===== MOBILE RESPONSIVE FIXES ===== */
-html, body {
+html,
+body {
   overflow-x: hidden;
 }
 
 @media (max-width: 640px) {
-  button, a, select, input, textarea {
+
+  button,
+  a,
+  select,
+  input,
+  textarea {
     min-height: 44px;
     font-size: max(1rem, 16px);
   }
@@ -184,7 +217,7 @@ html, body {
 }
 
 /* Aggressive Dark Mode Overrides */
-[data-theme="dark"] input, 
+[data-theme="dark"] input,
 [data-theme="dark"] textarea,
 [data-theme="dark"] select,
 [data-theme="dark"] option {
@@ -195,7 +228,7 @@ html, body {
 
 /* Specific fix for Autofills/System-default whites */
 [data-theme="dark"] input:-webkit-autofill,
-[data-theme="dark"] input:-webkit-autofill:hover, 
+[data-theme="dark"] input:-webkit-autofill:hover,
 [data-theme="dark"] input:-webkit-autofill:focus {
   -webkit-text-fill-color: #ffffff !important;
   -webkit-box-shadow: 0 0 0px 1000px #000000 inset !important;
@@ -209,15 +242,9 @@ html, body {
   background-color: var(--color-bg) !important;
 }
 
-[data-theme="dark"] button:active,
-[data-theme="dark"] button:focus {
-  background-color: transparent !important;
-  border-color: #21c45d !important;
-  color: #21c45d !important;
-  box-shadow: 0 0 0 2px rgba(33, 196, 93, 0.4) !important;
-}
 
 @supports (padding-bottom: env(safe-area-inset-bottom)) {
+
   .fixed.bottom-4,
   .fixed.bottom-6 {
     padding-bottom: env(safe-area-inset-bottom);

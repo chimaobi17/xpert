@@ -10,17 +10,26 @@ import {
   Cog6ToothIcon,
   QuestionMarkCircleIcon,
 } from '@heroicons/react/24/outline';
+import {
+  HomeIcon as HomeIconSolid,
+  RectangleStackIcon as RectangleStackIconSolid,
+  MagnifyingGlassCircleIcon as MagnifyingGlassCircleIconSolid,
+  BookOpenIcon as BookOpenIconSolid,
+  BellIcon as BellIconSolid,
+  Cog6ToothIcon as Cog6ToothIconSolid,
+  QuestionMarkCircleIcon as QuestionMarkCircleIconSolid,
+} from '@heroicons/react/24/solid';
 import useAuth from '../../hooks/useAuth';
 import { get } from '../../lib/apiClient';
 
 const navItems = [
-  { to: '/dashboard', label: 'Home', icon: HomeIcon },
-  { to: '/workspace', label: 'My Helpers', icon: RectangleStackIcon },
-  { to: '/agents/discover', label: 'Find Helpers', icon: MagnifyingGlassCircleIcon },
-  { to: '/library', label: 'Saved Results', icon: BookOpenIcon },
-  { to: '/notifications', label: 'Notifications', icon: BellIcon },
-  { to: '/help', label: 'Help', icon: QuestionMarkCircleIcon },
-  { to: '/settings', label: 'Settings', icon: Cog6ToothIcon },
+  { to: '/dashboard', label: 'Home', icon: HomeIcon, activeIcon: HomeIconSolid },
+  { to: '/workspace', label: 'My Helpers', icon: RectangleStackIcon, activeIcon: RectangleStackIconSolid },
+  { to: '/agents/discover', label: 'Find Helpers', icon: MagnifyingGlassCircleIcon, activeIcon: MagnifyingGlassCircleIconSolid },
+  { to: '/library', label: 'Saved Results', icon: BookOpenIcon, activeIcon: BookOpenIconSolid },
+  { to: '/notifications', label: 'Notifications', icon: BellIcon, activeIcon: BellIconSolid },
+  { to: '/help', label: 'Help', icon: QuestionMarkCircleIcon, activeIcon: QuestionMarkCircleIconSolid },
+  { to: '/settings', label: 'Settings', icon: Cog6ToothIcon, activeIcon: Cog6ToothIconSolid },
 ];
 
 export default function Sidebar({ open, onClose }) {
@@ -51,11 +60,11 @@ export default function Sidebar({ open, onClose }) {
       )}
       <aside
         className={clsx(
-          'fixed inset-y-0 left-0 z-30 flex w-72 sm:w-80 flex-col bg-background transition-transform duration-500 ease-in-out lg:static lg:translate-x-0 pt-0 border-r border-border/30',
+          'fixed inset-y-0 left-0 z-30 flex w-72 sm:w-80 flex-col bg-background transition-transform duration-500 ease-in-out lg:static lg:translate-x-0 pt-0 border-r border-border/30 overflow-hidden',
           open ? 'translate-x-0' : '-translate-x-full'
         )}
       >
-        <nav className="flex-1 space-y-2 px-4 sm:px-6 py-6 sm:py-10">
+        <nav className="flex-1 overflow-y-auto space-y-2 px-4 sm:px-6 py-6 sm:py-10">
           {navItems.map((item) => (
             <NavLink
               key={item.to}
@@ -65,13 +74,20 @@ export default function Sidebar({ open, onClose }) {
                 clsx(
                   'group relative flex items-center gap-4 rounded-2xl px-5 py-4 text-sm font-bold transition-all duration-300',
                   isActive
-                    ? 'bg-primary-500 text-black shadow-[0_0_20px_rgba(33,196,93,0.3)]'
+                    ? 'bg-primary-500 text-black shadow-[0_0_20px_rgba(31,196,95,0.3)]'
                     : 'text-text-secondary hover:bg-surface-hover hover:text-foreground'
                 )
               }
             >
-              <item.icon className={clsx("h-6 w-6 transition-transform group-hover:scale-110")} />
-              <span className="tracking-tight">{item.label}</span>
+              {({ isActive }) => (
+                <>
+                  {isActive
+                    ? <item.activeIcon className="h-6 w-6" />
+                    : <item.icon className="h-6 w-6 transition-transform group-hover:scale-110" />
+                  }
+                  <span className="tracking-tight">{item.label}</span>
+                </>
+              )}
             </NavLink>
           ))}
         </nav>
@@ -84,7 +100,7 @@ export default function Sidebar({ open, onClose }) {
             </div>
             <div className="h-2 w-full rounded-full bg-border/20 overflow-hidden mb-4">
               <div 
-                className="h-full rounded-full bg-primary-500 shadow-[0_0_15px_rgba(33,196,93,0.5)] transition-all duration-1000 ease-out" 
+                className="h-full rounded-full bg-primary-500 shadow-[0_0_15px_rgba(31,196,95,0.5)] transition-all duration-1000 ease-out" 
                 style={{ width: `${pct}%` }} 
               />
             </div>

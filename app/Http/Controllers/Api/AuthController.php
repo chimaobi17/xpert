@@ -88,9 +88,9 @@ class AuthController extends Controller
     public function updateProfile(Request $request)
     {
         $validated = $request->validate([
-            'name' => ['sometimes', 'string', 'max:255'],
-            'job_title' => ['sometimes', 'string', 'max:255'],
-            'purpose' => ['sometimes', 'string', 'max:1000'],
+            'name' => ['sometimes', 'nullable', 'string', 'max:255'],
+            'job_title' => ['sometimes', 'nullable', 'string', 'max:255'],
+            'purpose' => ['sometimes', 'nullable', 'string', 'max:1000'],
             'field_of_specialization' => ['sometimes', 'in:technology,creative,business,research,language'],
         ]);
 
@@ -120,6 +120,26 @@ class AuthController extends Controller
         } catch (\Exception $e) {
             \Log::warning('Marking user as onboarded failed: ' . $e->getMessage());
         }
+
+        return response()->json($user->fresh());
+    }
+
+    public function updateAvatar(Request $request)
+    {
+        $request->validate([
+            'avatar' => ['required', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
+        ]);
+
+        $user = $request->user();
+
+        // Delete old avatar
+        if ($user->avatar) {
+            \Storage::disk('public')->delete($user->avatar);
+        }
+
+        $user->update([
+            'avatar' => $request->file('avatar')->store('avatars', 'public'),
+        ]);
 
         return response()->json($user->fresh());
     }

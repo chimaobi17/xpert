@@ -124,7 +124,7 @@ export default function Dashboard() {
             {stat.pct !== null && (
               <div className="mt-8 h-1.5 w-full rounded-full bg-surface-hover overflow-hidden">
                 <div
-                  className="h-full rounded-full bg-primary-500 shadow-[0_0_15px_rgba(33,196,93,0.5)] transition-all duration-1000"
+                  className="h-full rounded-full bg-primary-500 shadow-[0_0_15px_rgba(31,196,95,0.5)] transition-all duration-1000"
                   style={{ width: `${Math.min(stat.pct, 100)}%` }}
                 />
               </div>
@@ -146,7 +146,7 @@ export default function Dashboard() {
               </p>
             </div>
             <Link to="/settings?tab=plan" className="w-full md:w-auto">
-              <Button className="w-full h-12 sm:h-16 px-6 sm:px-10 rounded-full font-black uppercase tracking-widest text-sm sm:text-lg shadow-[0_0_30px_rgba(33,196,93,0.3)] hover:scale-105 active:scale-95 transition-all">
+              <Button className="w-full h-12 sm:h-16 px-6 sm:px-10 rounded-full font-black uppercase tracking-widest text-sm sm:text-lg shadow-[0_0_30px_rgba(31,196,95,0.3)] hover:scale-105 active:scale-95 transition-all">
                 <ArrowUpCircleIcon className="h-6 w-6 mr-2" /> Upgrade Plan
               </Button>
             </Link>

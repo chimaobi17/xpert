@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import Spinner from './Spinner';
 
 const variants = {
-  primary: 'bg-primary-500 text-black font-black uppercase tracking-widest shadow-[0_0_30px_rgba(33,196,93,0.3)] hover:scale-105 hover:bg-white active:scale-95 transition-all outline-none',
+  primary: 'bg-primary-500 text-black font-black uppercase tracking-widest shadow-[0_0_30px_rgba(31,196,95,0.3)] hover:scale-105 hover:bg-white active:scale-95 transition-all outline-none',
   secondary: 'bg-surface-hover text-foreground font-bold glass border-border/50 hover:bg-surface hover:text-foreground active:scale-95 border transition-all',
   outline: 'border border-border text-text-secondary font-bold hover:border-primary-500 hover:text-primary-500 hover:bg-primary-500/5 active:scale-95 transition-all',
   ghost: 'text-text-secondary hover:text-foreground hover:bg-surface-hover font-bold active:scale-95 transition-all',

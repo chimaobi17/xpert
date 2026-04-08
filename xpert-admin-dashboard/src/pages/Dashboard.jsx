@@ -83,8 +83,8 @@ export default function Dashboard() {
               <div key={service} className="flex items-center justify-between rounded-lg bg-[var(--color-bg)] p-3">
                 <span className="text-sm text-[var(--color-text)]">{service}</span>
                 <div className="flex items-center gap-1.5">
-                  <CheckCircleIcon className="h-4 w-4 text-green-500" />
-                  <span className="text-xs font-medium text-green-600">Healthy</span>
+                  <CheckCircleIcon className="h-4 w-4 text-primary-500" />
+                  <span className="text-xs font-medium text-primary-600">Healthy</span>
                 </div>
               </div>
             ))}

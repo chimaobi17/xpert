@@ -172,7 +172,7 @@ export default function AgentDiscover() {
                 <Card 
                    className={clsx(
                      "relative h-full overflow-hidden transition-all duration-500",
-                     locked ? "border-border/50" : "border-border hover:border-primary-500/50 hover:shadow-[0_0_30px_rgba(33,196,93,0.1)]"
+                     locked ? "border-border/50" : "border-border hover:border-primary-500/50 hover:shadow-[0_0_30px_rgba(31,196,95,0.1)]"
                    )}
                    glass
                 >
@@ -253,7 +253,7 @@ export default function AgentDiscover() {
             Free plan users can add up to 3 helpers. Upgrade to add unlimited helpers.
           </p>
           <Button 
-             className="w-full h-14 rounded-full font-bold text-lg shadow-[0_0_20px_rgba(33,196,93,0.3)]" 
+             className="w-full h-14 rounded-full font-bold text-lg shadow-[0_0_20px_rgba(31,196,95,0.3)]" 
              onClick={() => { setLimitModal(false); navigate('/settings?tab=plan'); }}
           >
             Upgrade Now
@@ -264,7 +264,7 @@ export default function AgentDiscover() {
       {/* Upgrade Modal */}
       <Modal isOpen={upgradeModal} onClose={() => setUpgradeModal(false)} title="Upgrade Your Plan" isSolid>
         <div className="text-center p-2">
-          <div className="bg-gradient-to-tr from-primary-600 to-emerald-400 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 shadow-[0_0_30px_rgba(33,196,93,0.4)]">
+          <div className="bg-gradient-to-tr from-primary-600 to-emerald-400 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 shadow-[0_0_30px_rgba(31,196,95,0.4)]">
              <SparklesIcon className="h-10 w-10 text-black" />
           </div>
           <h3 className="text-2xl font-bold text-foreground mb-3 tracking-tight">Unlock Premium Helpers</h3>
@@ -279,7 +279,7 @@ export default function AgentDiscover() {
               </div>
               <p className="text-sm text-text-secondary">150K tokens/day, Priority Support</p>
             </div>
-            <div className="rounded-3xl border-2 border-primary-500 p-6 text-left bg-primary-500/5 shadow-[0_0_15px_rgba(33,196,93,0.1)]">
+            <div className="rounded-3xl border-2 border-primary-500 p-6 text-left bg-primary-500/5 shadow-[0_0_15px_rgba(31,196,95,0.1)]">
               <div className="flex justify-between items-center mb-1">
                  <p className="font-bold text-xl text-primary-500">Premium</p>
                  <Badge variant="premium" size="sm" className="rounded-full px-3 py-1 scale-90">Elite</Badge>
@@ -288,7 +288,7 @@ export default function AgentDiscover() {
             </div>
           </div>
           <Button 
-             className="w-full h-14 rounded-full font-bold text-lg shadow-[0_0_20px_rgba(33,196,93,0.3)]" 
+             className="w-full h-14 rounded-full font-bold text-lg shadow-[0_0_20px_rgba(31,196,95,0.3)]" 
              onClick={() => { setUpgradeModal(false); navigate('/settings?tab=plan'); }}
           >
             Start Your Free Trial

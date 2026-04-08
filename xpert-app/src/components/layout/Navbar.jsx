@@ -14,6 +14,8 @@ import useAuth from '../../hooks/useAuth';
 import useTheme from '../../hooks/useTheme';
 import Avatar from '../ui/Avatar';
 import Badge from '../ui/Badge';
+import logoFull from '../../assets/logo-full.svg';
+import logoIcon from '../../assets/logo-icon.svg';
 
 export default function Navbar({ onMenuToggle }) {
   const { user, logout } = useAuth();
@@ -35,16 +37,9 @@ export default function Navbar({ onMenuToggle }) {
         >
           <Bars3Icon className="h-6 w-6 font-bold" />
         </button>
-        <Link to="/dashboard" className="flex items-center gap-3 group">
-          <div className="bg-background/50 p-2 rounded-xl group-hover:bg-surface-hover transition-all">
-            <svg className="h-7 w-7 transition-transform group-hover:scale-110" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 8L24 25L12 42" stroke="#21c45d" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M36 8L24 25L36 42" stroke="#21c45d" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </div>
-          <div className="flex flex-col">
-            <span className="text-xl font-bold text-foreground hidden sm:block tracking-tight leading-none uppercase">XPERT</span>
-          </div>
+        <Link to="/dashboard" className="flex items-center group">
+          <img src={logoFull} alt="Xpert" className="hidden sm:block h-14 transition-transform group-hover:scale-105" />
+          <img src={logoIcon} alt="Xpert" className="block sm:hidden h-12 transition-transform group-hover:scale-105" />
         </Link>
       </div>
 
@@ -64,7 +59,7 @@ export default function Navbar({ onMenuToggle }) {
           className="relative rounded-2xl p-2.5 text-text-secondary hover:text-foreground hover:bg-surface-hover transition-all border-none"
         >
           <BellIcon className="h-5 w-5" />
-          <span className="absolute right-2.5 top-2.5 h-2 w-2 rounded-full bg-primary-500 shadow-[0_0_10px_rgba(33,196,93,0.5)] border border-background" />
+          <span className="absolute right-2.5 top-2.5 h-2 w-2 rounded-full bg-primary-500 shadow-[0_0_10px_rgba(31,196,95,0.5)] border border-background" />
         </Link>
 
         <div className="relative ml-2">
@@ -72,19 +67,19 @@ export default function Navbar({ onMenuToggle }) {
             onClick={() => setDropdownOpen(!dropdownOpen)}
             className="flex items-center gap-3 rounded-2xl p-1.5 pr-4 hover:bg-surface-hover transition-all border-none group"
           >
-            <Avatar name={user?.name} size="sm" className="rounded-xl group-hover:scale-105 transition-transform" />
+            <Avatar name={user?.name} src={user?.avatar_url} size="sm" className="rounded-xl group-hover:scale-105 transition-transform" />
             <div className="hidden md:flex flex-col items-start px-2">
-               <p className="text-sm font-bold text-foreground leading-none mb-0.5">{user?.name?.split(' ')[0]}</p>
-               <p className="text-[10px] font-bold uppercase tracking-widest text-text-tertiary scale-90 origin-left opacity-70">
-                 {user?.plan_level === 'premium' ? 'ELITE' : 'CITIZEN'}
-               </p>
+              <p className="text-sm font-bold text-foreground leading-none mb-0.5">{user?.name?.split(' ')[0]}</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-text-tertiary scale-90 origin-left opacity-70">
+                {user?.plan_level === 'premium' ? 'ELITE' : 'CITIZEN'}
+              </p>
             </div>
           </button>
 
           {dropdownOpen && (
             <>
               <div className="fixed inset-0 z-40" onClick={() => setDropdownOpen(false)} />
-              <div role="menu" className="absolute right-0 z-50 mt-4 w-56 sm:w-64 max-w-[calc(100vw-2rem)] rounded-[2rem] border border-border bg-background p-2 shadow-2xl glass animate-fade-in overflow-hidden">
+              <div role="menu" className="absolute right-0 z-50 mt-4 w-56 sm:w-64 max-w-[calc(100vw-2rem)] rounded-[2rem] border border-white/10 bg-transparent backdrop-blur-xl p-2 shadow-2xl animate-fade-in overflow-hidden">
                 <div className="px-5 py-5 border-b border-border/50">
                   <p className="text-sm font-bold text-foreground tracking-tight mb-0.5">{user?.name}</p>
                   <p className="text-xs font-medium text-text-secondary truncate">{user?.email}</p>

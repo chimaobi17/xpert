@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { ShieldExclamationIcon } from '@heroicons/react/24/outline';
 import useAuth from '../hooks/useAuth';
 import Button from '../components/ui/Button';
+import logoIcon from '../assets/logo-icon.svg';
 
 export default function BlockedScreen() {
   const { user, logout } = useAuth();
@@ -15,10 +16,7 @@ export default function BlockedScreen() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-[var(--color-bg)] px-4">
       <div className="w-full max-w-md text-center">
-        <svg className="mx-auto h-12 w-12 mb-4" viewBox="0 0 48 48" fill="none">
-          <path d="M12 8L24 25L12 42" stroke="#22c55e" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"/>
-          <path d="M36 8L24 25L36 42" stroke="#22c55e" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"/>
-        </svg>
+        <img src={logoIcon} alt="Xpert" className="mx-auto h-14 mb-4" />
 
         <div className="rounded-xl border border-red-200 bg-red-50 p-8">
           <ShieldExclamationIcon className="h-16 w-16 text-red-500 mx-auto mb-4" />
