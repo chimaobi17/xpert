@@ -9,7 +9,6 @@ php artisan migrate --force
 # Robust Caching
 php artisan config:cache
 php artisan route:cache
-php artisan view:cache
 
 # Intelligent seeding
 if [ ! -f storage/framework/.seeded ]; then
