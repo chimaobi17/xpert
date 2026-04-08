@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import clsx from 'clsx';
 
 const sizes = {
@@ -7,6 +8,13 @@ const sizes = {
 };
 
 export default function Avatar({ name, src, size = 'md', className }) {
+  const [imgError, setImgError] = useState(false);
+
+  // Reset error state when src changes
+  useEffect(() => {
+    setImgError(false);
+  }, [src]);
+
   const initials = name
     ? name
         .split(' ')
@@ -16,11 +24,17 @@ export default function Avatar({ name, src, size = 'md', className }) {
         .slice(0, 2)
     : '?';
 
-  if (src) {
+  if (src && !imgError) {
+    const VITE_API_URL = import.meta.env.VITE_API_URL || '';
+    const finalSrc = src.includes('xpert.test') && VITE_API_URL 
+      ? src.replace(/https?:\/\/xpert\.test/, VITE_API_URL) 
+      : src;
+
     return (
       <img
-        src={src}
+        src={finalSrc}
         alt={name}
+        onError={() => setImgError(true)}
         className={clsx('rounded-full object-cover', sizes[size], className)}
       />
     );
