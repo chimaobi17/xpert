@@ -273,7 +273,7 @@ export default function Landing() {
         {/* CTA Section */}
         <section className="py-24">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="relative rounded-[3rem] border-2 border-primary-500/50 bg-transparent px-8 py-16 sm:px-16 sm:py-24 overflow-hidden text-center text-white shadow-2xl shadow-primary-500/10">
+            <div className="relative rounded-[3rem] border-2 border-primary-500/50 glass px-8 py-16 sm:px-16 sm:py-24 overflow-hidden text-center text-white shadow-2xl shadow-primary-500/10">
               <div className="absolute top-0 right-0 w-64 h-64 bg-primary-500/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl" />
               <div className="absolute bottom-0 left-0 w-64 h-64 bg-primary-500/5 rounded-full translate-y-1/2 -translate-x-1/2 blur-3xl" />
 
