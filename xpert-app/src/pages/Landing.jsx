@@ -284,7 +284,7 @@ export default function Landing() {
                 </p>
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                   <Link to="/register">
-                    <Button variant="outline" size="lg" className="bg-white text-primary-600 border-white hover:bg-primary-50 rounded-full px-12 text-lg font-bold">
+                    <Button variant="outline" size="lg" className="glass border-white/20 text-white hover:bg-white/10 rounded-full px-12 text-lg font-bold transition-all shadow-xl shadow-black/20">
                       Join for Free
                     </Button>
                   </Link>
