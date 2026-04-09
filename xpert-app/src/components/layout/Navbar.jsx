@@ -29,7 +29,7 @@ export default function Navbar({ onMenuToggle }) {
   }
 
   return (
-    <header className="sticky top-0 z-40 flex h-16 sm:h-20 items-center justify-between glass px-4 sm:px-6 lg:px-10 transition-all duration-300 border-b border-border/30">
+    <header className="sticky top-0 z-40 flex h-16 sm:h-20 items-center justify-between glass !border-x-0 !border-t-0 border-b border-border/30 px-4 sm:px-6 lg:px-10 transition-all duration-300">
       <div className="flex items-center gap-4">
         <button
           onClick={onMenuToggle}

@@ -168,36 +168,17 @@ export default function AgentDiscover() {
             const locked = agent.is_premium_only && user?.plan_level === 'free';
 
             return (
-              <div key={agent.id} className="group relative">
-                <Card 
+                <div 
                    className={clsx(
-                     "relative h-full overflow-hidden transition-all duration-500",
-                     locked ? "border-border/50" : "border-border hover:border-primary-500/50 hover:shadow-[0_0_30px_rgba(31,196,95,0.1)]"
+                     "relative h-full rounded-2xl border border-border transition-all duration-500 overflow-hidden bg-surface group",
+                     !locked && "hover:border-primary-500/50 hover:shadow-[0_0_30px_rgba(31,196,95,0.1)]"
                    )}
-                   glass
                 >
-                  {locked && (
-                    <div className={clsx(
-                      'absolute inset-0 z-20 flex items-center justify-center backdrop-blur-xl',
-                      'bg-background/80 dark:bg-black/60'
-                    )}>
-                      <div className="text-center p-6 w-full transform transition-transform group-hover:scale-105">
-                        <div className="bg-primary-500/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 border-none">
-                           <LockClosedIcon className="h-8 w-8 text-primary-500" />
-                        </div>
-                        <h4 className="text-xl font-bold text-foreground mb-1">{agent.name}</h4>
-                        <p className="text-[10px] uppercase tracking-widest text-primary-500 font-bold mb-6">{agent.domain}</p>
-                        <Button
-                          onClick={() => setUpgradeModal(true)}
-                          className="w-full rounded-2xl h-12 font-bold shadow-lg scale-90"
-                        >
-                          Unlock This Helper
-                        </Button>
-                      </div>
-                    </div>
-                  )}
-
-                  <div className="flex flex-col h-full">
+                  {/* Content Layer (Blurred if locked) */}
+                  <div className={clsx(
+                    "flex flex-col h-full p-6 transition-all duration-500",
+                    locked && "blur-[6px] opacity-40 scale-[0.98] pointer-events-none select-none"
+                  )}>
                     <div className="flex items-start justify-between mb-6">
                       <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-surface-hover text-primary-500 shadow-sm group-hover:scale-110 transition-transform">
                         <CodeBracketIcon className="h-6 w-6" />
@@ -235,15 +216,42 @@ export default function AgentDiscover() {
                       )}
                     </div>
                   </div>
-                </Card>
-              </div>
+
+                  {/* Premium Lock Overlay */}
+                  {locked && (
+                    <div className="absolute inset-0 z-20 flex flex-col items-center justify-center p-6 text-center animate-fade-in">
+                      <div className="mb-4 rounded-2xl bg-primary-500/10 p-3 shadow-xl shadow-primary-500/5">
+                        <LockClosedIcon className="h-8 w-8 text-primary-500" />
+                      </div>
+                      
+                      <div className="space-y-1 mb-6">
+                        <h4 className="text-xl font-black text-foreground tracking-tight">{agent.name}</h4>
+                        <div className="flex justify-center">
+                          <Badge variant="premium" size="sm" className="uppercase tracking-widest text-[9px] py-0.5">
+                            {agent.domain} • ELITE
+                          </Badge>
+                        </div>
+                      </div>
+
+                      <div className="w-full px-4">
+                        <Button
+                          onClick={() => setUpgradeModal(true)}
+                          className="w-full rounded-xl h-12 font-black shadow-lg shadow-primary-500/20"
+                        >
+                          Unlock Helper
+                        </Button>
+                        <p className="mt-3 text-[10px] font-bold text-text-tertiary uppercase tracking-widest opacity-60">Elite Plan Required</p>
+                      </div>
+                    </div>
+                  )}
+                </div>
             );
           })}
         </div>
       )}
 
       {/* Agent Limit Modal */}
-      <Modal isOpen={limitModal} onClose={() => setLimitModal(false)} title="Agent Limit Reached" isSolid>
+      <Modal isOpen={limitModal} onClose={() => setLimitModal(false)} title="Agent Limit Reached" isSolid size="sm">
         <div className="text-center p-2">
           <div className="bg-primary-500/10 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
              <RectangleStackIcon className="h-10 w-10 text-primary-500" />
@@ -262,7 +270,7 @@ export default function AgentDiscover() {
       </Modal>
 
       {/* Upgrade Modal */}
-      <Modal isOpen={upgradeModal} onClose={() => setUpgradeModal(false)} title="Upgrade Your Plan" isSolid>
+      <Modal isOpen={upgradeModal} onClose={() => setUpgradeModal(false)} title="Upgrade Your Plan" isSolid size="sm">
         <div className="text-center p-2">
           <div className="bg-gradient-to-tr from-primary-600 to-emerald-400 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 shadow-[0_0_30px_rgba(31,196,95,0.4)]">
              <SparklesIcon className="h-10 w-10 text-black" />
@@ -271,20 +279,20 @@ export default function AgentDiscover() {
           <p className="text-base text-text-secondary mb-8 font-medium">
             Get access to advanced translation, image generation, and our most powerful AI helpers.
           </p>
-          <div className="grid gap-4 mb-8">
-            <div className="rounded-3xl border border-border p-6 text-left bg-surface-hover/50">
-              <div className="flex justify-between items-center mb-1">
-                 <p className="font-bold text-lg text-foreground">Standard</p>
-                 <span className="text-[10px] font-bold text-text-tertiary uppercase tracking-widest italic">Personal</span>
+          <div className="grid gap-3 mb-6">
+            <div className="rounded-2xl border border-border p-4 text-left bg-surface-hover/50">
+              <div className="flex justify-between items-center mb-0.5">
+                 <p className="font-bold text-base text-foreground">Standard</p>
+                 <span className="text-[9px] font-bold text-text-tertiary uppercase tracking-widest italic">Personal</span>
               </div>
-              <p className="text-sm text-text-secondary">150K tokens/day, Priority Support</p>
+              <p className="text-xs text-text-secondary">150K tokens/day, Priority Support</p>
             </div>
-            <div className="rounded-3xl border-2 border-primary-500 p-6 text-left bg-primary-500/5 shadow-[0_0_15px_rgba(31,196,95,0.1)]">
-              <div className="flex justify-between items-center mb-1">
-                 <p className="font-bold text-xl text-primary-500">Premium</p>
-                 <Badge variant="premium" size="sm" className="rounded-full px-3 py-1 scale-90">Elite</Badge>
+            <div className="rounded-2xl border-2 border-primary-500 p-4 text-left bg-primary-500/5 shadow-[0_0_15px_rgba(31,196,95,0.1)]">
+              <div className="flex justify-between items-center mb-0.5">
+                 <p className="font-bold text-lg text-primary-500">Premium</p>
+                 <Badge variant="premium" size="sm" className="rounded-full px-2 py-0.5 scale-90">Elite</Badge>
               </div>
-              <p className="text-sm text-foreground font-medium opacity-90">1M tokens/day, All Agents, Image Generation</p>
+              <p className="text-xs text-foreground font-medium opacity-90">Tokens, All Agents, Image Gen</p>
             </div>
           </div>
           <Button 
