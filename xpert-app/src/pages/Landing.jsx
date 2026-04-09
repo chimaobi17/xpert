@@ -197,7 +197,7 @@ export default function Landing() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16 lg:hidden">
               <h2 className="text-4xl font-bold mb-4">Precision AI Workflow</h2>
-              <p className="text-text-secondary">A simple 4-step process to get expert results.</p>
+              <p className="text-text-secondary">A simple 5-step process to get expert results.</p>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
