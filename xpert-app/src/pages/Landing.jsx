@@ -295,11 +295,14 @@ export default function Landing() {
         </section>
 
         {/* CTA Section */}
-        <section className="py-24">
+        <section className="py-24 relative overflow-hidden">
+          {/* Background Glow for CTA */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] sm:w-[600px] h-[300px] sm:h-[600px] bg-primary-500/10 blur-[80px] sm:blur-[120px] rounded-full pointer-events-none" />
+
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="relative rounded-[3rem] border-2 border-primary-500/50 glass px-8 py-16 sm:px-16 sm:py-24 overflow-hidden text-center shadow-2xl shadow-primary-500/10">
-              <div className="absolute top-0 right-0 w-64 h-64 bg-primary-500/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl opacity-50 dark:opacity-100" />
-              <div className="absolute bottom-0 left-0 w-64 h-64 bg-primary-500/5 rounded-full translate-y-1/2 -translate-x-1/2 blur-3xl opacity-50 dark:opacity-100" />
+            <div className="relative rounded-[2.5rem] sm:rounded-[4rem] border border-primary-500/30 glass px-6 py-12 sm:px-16 sm:py-24 overflow-hidden text-center shadow-2xl shadow-primary-500/10">
+              <div className="absolute top-0 right-0 w-64 h-64 bg-primary-500/10 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl opacity-50" />
+              <div className="absolute bottom-0 left-0 w-64 h-64 bg-primary-500/10 rounded-full translate-y-1/2 -translate-x-1/2 blur-3xl opacity-50" />
 
               <div className="relative z-10">
                 <h2 className="text-4xl sm:text-6xl font-black mb-8 text-primary-600 dark:text-primary-500">Ready to work <br className="sm:hidden" /> with Xpert?</h2>
