@@ -43,8 +43,8 @@ export default function LandingFooter() {
               <img src={logoFull} alt="Xpert" className="h-10 sm:h-12" />
             </Link>
             <p className="text-text-secondary text-sm leading-relaxed max-w-xs">
-              Empowering everyone with the power of AI. No prompting skills required. 
-              Just upload your files and let Xpert handle the rest.
+              Empowering everyone with the power of AI. No prompting skills required.
+              Just upload your files, fill in the necessary details and let Xpert handle the rest.
             </p>
             <div className="flex space-x-5">
               {/* Social Icons Placeholder */}

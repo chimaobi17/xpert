@@ -85,7 +85,7 @@ export default function Landing() {
             </h1>
 
             <p className="max-w-2xl mx-auto text-lg sm:text-xl text-text-secondary leading-relaxed mb-12 animate-fade-in-up delay-200">
-              Skip the prompts. Just upload your documents and let our specialized AI Helpers
+              Skip the prompts. Just upload your documents, fill in the necessary details and let our specialized AI Helpers
               transform your data into insights, graphics, and results in seconds.
             </p>
 
