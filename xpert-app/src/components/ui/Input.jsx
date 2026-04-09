@@ -6,7 +6,7 @@ export default function Input({ label, error, icon: Icon, className, id, ...prop
   return (
     <div className={clsx('space-y-2', className)}>
       {label && (
-        <label htmlFor={inputId} className="block text-xs font-black uppercase tracking-widest text-text-tertiary ml-1">
+        <label htmlFor={inputId} className="block text-xs font-black uppercase tracking-widest text-text-tertiary ml-1 break-words whitespace-normal">
           {label}
         </label>
       )}
