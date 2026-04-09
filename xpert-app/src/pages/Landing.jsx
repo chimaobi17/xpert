@@ -214,19 +214,20 @@ export default function Landing() {
                       <div
                         className={`flex gap-4 sm:gap-6 p-6 cursor-pointer`}
                       >
-                        <span className={`text-4xl font-black transition-colors ${activeStep === i ? 'text-primary-500' : 'text-primary-500/20'}`}>
-                          {item.step}
-                        </span>
+                        <div className="relative">
+                          <span className={`text-4xl font-black transition-colors ${activeStep === i ? 'text-primary-500' : 'text-primary-500/20'}`}>
+                            {item.step}
+                          </span>
+                          {activeStep !== i && (
+                            <div className="absolute -top-2 -right-2 p-1.5 rounded-full bg-primary-500/10 text-primary-500 animate-bounce">
+                              <CursorArrowRippleIcon className="h-4 w-4" />
+                            </div>
+                          )}
+                        </div>
                         <div>
                           <h4 className="text-xl font-bold mb-2">{item.title}</h4>
                           <p className="text-text-secondary text-sm sm:text-base">{item.desc}</p>
                         </div>
-
-                        {activeStep !== i && (
-                          <div className="absolute bottom-6 right-6 p-2 rounded-full bg-primary-500/10 text-primary-500 animate-bounce shadow-lg shadow-primary-500/5 sm:block hidden lg:block">
-                            <CursorArrowRippleIcon className="h-5 w-5" />
-                          </div>
-                        )}
                       </div>
 
                       {/* Mobile Screenshot (Visible only on mobile below the text) */}
