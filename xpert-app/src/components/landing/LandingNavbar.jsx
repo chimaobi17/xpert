@@ -24,7 +24,7 @@ export default function LandingNavbar() {
         ? 'bg-background border-b border-border/50 py-4 shadow-2xl' 
         : isScrolled 
           ? 'glass !border-x-0 !border-t-0 border-b border-border/50 py-3 shadow-2xl' 
-          : 'bg-background/20 backdrop-blur-xl border-b border-border/10 py-6'
+          : 'bg-transparent py-6'
     }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center">
