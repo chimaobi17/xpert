@@ -10,6 +10,7 @@ import {
   ChartBarIcon,
   DocumentMagnifyingGlassIcon,
   UserGroupIcon,
+  LockClosedIcon,
 } from '@heroicons/react/24/outline';
 import useAuth from '../hooks/useAuth';
 import { get } from '../lib/apiClient';
@@ -170,31 +171,64 @@ export default function Dashboard() {
              </div>
           ) : (
             <div className="grid gap-4 sm:grid-cols-2">
-              {myAgents.map((agent) => (
-                <Card
+                <div
                   key={agent.id}
-                  hoverable
-                  glass
-                  onClick={() => navigate(`/agents/${agent.id}`, { state: { from: '/dashboard' } })}
-                  className="!p-4 sm:!p-6 lg:!p-8 flex items-center gap-4 sm:gap-6 group border-border/50 hover:border-primary-500/30"
+                  className="group relative"
                 >
-                  <div className="flex h-12 w-12 sm:h-16 sm:w-16 shrink-0 items-center justify-center rounded-2xl bg-surface-hover text-primary-500 shadow-sm group-hover:scale-110 transition-all duration-500">
-                    <CodeBracketIcon className="h-6 w-6 sm:h-8 sm:w-8" />
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <div className="flex items-center gap-2 mb-1">
-                      <h3 className="text-base sm:text-xl font-bold text-foreground tracking-tight truncate">{agent.name}</h3>
-                      {agent.is_premium_only && (
-                         <Badge variant="premium" size="sm">Elite</Badge>
-                      )}
+                  <Card
+                    hoverable
+                    glass
+                    onClick={() => {
+                      if (agent.is_premium_only && user?.plan_level === 'free') {
+                        navigate('/settings?tab=plan');
+                      } else {
+                        navigate(`/agents/${agent.id}`, { state: { from: '/dashboard' } });
+                      }
+                    }}
+                    className={clsx(
+                      "!p-4 sm:!p-6 lg:!p-8 h-full flex items-center gap-4 sm:gap-6 border-border/50 hover:border-primary-500/30 overflow-hidden relative",
+                      agent.is_premium_only && user?.plan_level === 'free' && "cursor-default border-primary-500/20 shadow-[0_0_20px_rgba(31,196,95,0.05)]"
+                    )}
+                  >
+                    {/* Content Layer (Blurred if locked) */}
+                    <div className={clsx(
+                      "flex items-center gap-4 sm:gap-6 flex-1 transition-all duration-500",
+                      agent.is_premium_only && user?.plan_level === 'free' && "blur-[6px] opacity-30 pointer-events-none"
+                    )}>
+                      <div className="flex h-12 w-12 sm:h-16 sm:w-16 shrink-0 items-center justify-center rounded-2xl bg-surface-hover text-primary-500 shadow-sm group-hover:scale-110 transition-all duration-500">
+                        <CodeBracketIcon className="h-6 w-6 sm:h-8 sm:w-8" />
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-2 mb-1">
+                          <h3 className="text-base sm:text-lg font-bold text-foreground tracking-tight truncate">{agent.name}</h3>
+                          {agent.is_premium_only && (
+                             <Badge variant="premium" size="sm" className="scale-75 origin-left">Elite</Badge>
+                          )}
+                        </div>
+                        <p className="text-[9px] font-black uppercase tracking-[0.2em] text-text-tertiary mb-2">{agent.domain}</p>
+                        <p className="text-xs text-text-secondary leading-relaxed opacity-80 group-hover:opacity-100 transition-opacity truncate pr-4">
+                           {agent.description?.slice(0, 100) || agent.system_prompt?.slice(0, 100)}...
+                        </p>
+                      </div>
                     </div>
-                    <p className="text-[10px] font-black uppercase tracking-[0.2em] text-text-tertiary mb-3">{agent.domain}</p>
-                    <p className="text-sm text-text-secondary leading-relaxed opacity-80 group-hover:opacity-100 transition-opacity truncate pr-4">
-                       {agent.description?.slice(0, 100) || agent.system_prompt?.slice(0, 100)}...
-                    </p>
-                  </div>
-                </Card>
-              ))}
+
+                    {/* Premium Lock Overlay for Dashboard */}
+                    {agent.is_premium_only && user?.plan_level === 'free' && (
+                      <div className="absolute inset-0 z-20 flex flex-col items-center justify-center p-4 text-center animate-fade-in bg-background/10">
+                        <div className="bg-primary-500/10 p-2.5 rounded-xl mb-3 shadow-lg shadow-primary-500/5">
+                           <LockClosedIcon className="h-6 w-6 text-primary-500" />
+                        </div>
+                        <h4 className="text-sm font-black text-foreground mb-4">{agent.name}</h4>
+                        <Button 
+                          onClick={(e) => { e.stopPropagation(); navigate('/settings?tab=plan'); }}
+                          className="h-9 px-6 rounded-full text-[10px] font-black uppercase tracking-widest shadow-lg shadow-primary-500/20"
+                        >
+                          Unlock
+                        </Button>
+                      </div>
+                    )}
+                  </Card>
+                </div>
               <Card
                 hoverable
                 onClick={() => navigate('/agents/discover')}
