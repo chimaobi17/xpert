@@ -106,18 +106,18 @@ export default function Landing() {
             {/* Dashboard Preview Mockup */}
             <div className="mt-20 relative max-w-6xl mx-auto px-4 sm:px-0 animate-fade-in-up delay-500">
               <div className="relative rounded-3xl bg-white dark:bg-surface p-1 shadow-[0_0_80px_-15px_rgba(34,197,94,0.4)] overflow-hidden">
-                <div className="bg-white dark:bg-background rounded-2xl overflow-hidden relative flex items-center justify-center min-h-[300px] lg:min-h-[500px]">
+                <div className="bg-white dark:bg-background rounded-2xl overflow-hidden relative flex items-center justify-center">
                   {/* Light Mode Hero - Full Find Helper View */}
                   <img
                     src="/screenshots/light_helper_find.png"
                     alt="Xpert Find Helper Preview Light"
-                    className="w-full h-auto object-contain block dark:hidden shadow-[0_30px_60px_rgba(0,0,0,0.12)] [image-rendering:-webkit-optimize-contrast]"
+                    className="w-full h-auto block dark:hidden shadow-[0_30px_60px_rgba(0,0,0,0.12)] [image-rendering:-webkit-optimize-contrast]"
                   />
                   {/* Dark Mode Hero */}
                   <img
-                    src="/screenshots/hero.png"
+                    src="/screenshots/hero_content_writer.png"
                     alt="Xpert Dashboard Preview Dark"
-                    className="w-full h-full object-contain hidden dark:block"
+                    className="w-full h-auto hidden dark:block"
                   />
                   <div className="absolute inset-0 bg-transparent dark:bg-gradient-to-t dark:from-background/20 dark:to-transparent pointer-events-none" />
                 </div>
@@ -205,10 +205,13 @@ export default function Landing() {
                 <h2 className="text-4xl sm:text-5xl font-bold mb-10 hidden lg:block">Precision AI workflow.</h2>
                 <div className="space-y-4 lg:space-y-6">
                   {workflowSteps.map((item, i) => (
-                    <div key={i} className="group">
+                    <div
+                      key={i}
+                      className={`group transition-all duration-500 rounded-[2.5rem] border ${activeStep === i ? 'bg-surface border-primary-500/20 shadow-2xl shadow-primary-500/5' : 'border-transparent hover:bg-surface/30'}`}
+                      onMouseEnter={() => setActiveStep(i)}
+                    >
                       <div
-                        className={`flex gap-6 p-6 rounded-[2rem] transition-all cursor-pointer ${activeStep === i ? 'bg-surface border border-primary-500/20 shadow-xl shadow-primary-500/5' : 'hover:bg-surface/50 border border-transparent'}`}
-                        onMouseEnter={() => setActiveStep(i)}
+                        className={`flex gap-4 sm:gap-6 p-6 cursor-pointer`}
                       >
                         <span className={`text-4xl font-black transition-colors ${activeStep === i ? 'text-primary-500' : 'text-primary-500/20'}`}>
                           {item.step}
@@ -221,7 +224,7 @@ export default function Landing() {
 
                       {/* Mobile Screenshot (Visible only on mobile below the text) */}
                       <div
-                        className={`lg:hidden mt-4 mb-8 transition-all duration-700 overflow-hidden rounded-[2rem] shadow-2xl relative group/img ${activeStep === i ? 'max-h-[800px] opacity-100 scale-100' : 'max-h-0 opacity-0 scale-95'}`}
+                        className={`lg:hidden transition-all duration-700 overflow-hidden relative group/img ${activeStep === i ? 'max-h-[800px] opacity-100 scale-100' : 'max-h-0 opacity-0 scale-95'}`}
                         onClick={() => setZoomedImage(item.image)}
                       >
                         <div className="relative w-full">
@@ -229,13 +232,13 @@ export default function Landing() {
                           <img
                             src={item.image.replace('helper_', 'light_helper_')}
                             alt={`${item.title} Light`}
-                            className={`w-full h-auto block dark:hidden shadow-[0_20px_40px_rgba(0,0,0,0.08)] [image-rendering:-webkit-optimize-contrast] ${activeStep === i ? 'scale-105' : 'scale-100'} transition-transform duration-[2s] ease-out`}
+                            className={`w-full h-auto block dark:hidden [image-rendering:-webkit-optimize-contrast] ${activeStep === i ? 'scale-105' : 'scale-100'} transition-transform duration-[2s] ease-out`}
                           />
                           {/* Dark Mode Screenshot */}
                           <img
                             src={item.image}
                             alt={`${item.title} Dark`}
-                            className={`w-full h-auto hidden dark:block shadow-[0_20px_40px_rgba(0,0,0,0.08)] [image-rendering:-webkit-optimize-contrast] ${activeStep === i ? 'scale-105' : 'scale-100'} transition-transform duration-[2s] ease-out`}
+                            className={`w-full h-auto hidden dark:block [image-rendering:-webkit-optimize-contrast] ${activeStep === i ? 'scale-105' : 'scale-100'} transition-transform duration-[2s] ease-out`}
                           />
                           <div className="absolute inset-0 bg-transparent dark:bg-gradient-to-t dark:from-background/60 dark:via-transparent dark:to-transparent pointer-events-none" />
 
