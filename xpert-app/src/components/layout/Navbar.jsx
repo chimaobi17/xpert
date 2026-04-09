@@ -9,6 +9,7 @@ import {
   Cog6ToothIcon,
   UserCircleIcon,
   ArrowUpCircleIcon,
+  XMarkIcon,
 } from '@heroicons/react/24/outline';
 import useAuth from '../../hooks/useAuth';
 import useTheme from '../../hooks/useTheme';
@@ -80,6 +81,13 @@ export default function Navbar({ onMenuToggle }) {
             <>
               <div className="fixed inset-0 z-40" onClick={() => setDropdownOpen(false)} />
               <div role="menu" className="absolute right-0 z-50 mt-4 w-56 sm:w-64 max-w-[calc(100vw-2rem)] rounded-[2rem] border border-border bg-background p-2 shadow-2xl animate-fade-in overflow-hidden">
+                <button
+                  onClick={() => setDropdownOpen(false)}
+                  className="absolute top-4 left-4 p-1.5 rounded-full bg-surface-hover text-text-tertiary hover:text-foreground transition-all"
+                  title="Close Menu"
+                >
+                  <XMarkIcon className="h-5 w-5" />
+                </button>
                 <div className="px-5 py-5 border-b border-border/50">
                   <p className="text-sm font-bold text-foreground tracking-tight mb-0.5">{user?.name}</p>
                   <p className="text-xs font-medium text-text-secondary truncate">{user?.email}</p>
