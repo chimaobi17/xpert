@@ -111,37 +111,37 @@ export default function Landing() {
                   <img
                     src="/screenshots/light_helper_find.png"
                     alt="Xpert Find Helper Preview Light"
-                    className="w-full h-auto block dark:hidden shadow-[0_30px_60px_rgba(0,0,0,0.12)] [image-rendering:-webkit-optimize-contrast]"
+                    className="w-full h-auto block dark:hidden shadow-[0_30px_60px_rgba(0,0,0,0.12)] [image-rendering:-webkit-optimize-contrast] contrast-[1.02]"
                   />
                   {/* Dark Mode Hero */}
                   <img
                     src="/screenshots/hero_content_writer.png"
                     alt="Xpert Dashboard Preview Dark"
-                    className="w-full h-auto hidden dark:block"
+                    className="w-full h-auto hidden dark:block [image-rendering:-webkit-optimize-contrast] brightness-[1.05] contrast-[1.02]"
                   />
-                  <div className="absolute inset-0 bg-transparent dark:bg-gradient-to-t dark:from-background/20 dark:to-transparent pointer-events-none" />
+                  <div className="absolute inset-0 bg-transparent dark:bg-gradient-to-t dark:from-background/10 dark:to-transparent pointer-events-none" />
                 </div>
               </div>
               {/* Floating Elements Decorations */}
-              <div className="absolute -top-10 -right-10 hidden lg:block p-4 bg-surface border border-border rounded-2xl shadow-xl animate-bounce-subtle">
+              <div className="absolute -top-4 -right-2 sm:-top-10 sm:-right-10 p-3 sm:p-4 bg-surface/80 backdrop-blur-md border border-border rounded-2xl shadow-xl animate-bounce-subtle z-20">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-green-500/20 flex items-center justify-center text-green-500">
-                    <ShieldCheckIcon className="h-6 w-6" />
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-green-500/20 flex items-center justify-center text-green-500">
+                    <ShieldCheckIcon className="h-5 w-5 sm:h-6 sm:w-6" />
                   </div>
                   <div>
-                    <p className="text-xs font-bold text-foreground">Secure & Private</p>
-                    <p className="text-[10px] text-text-tertiary">Enterprise encryption</p>
+                    <p className="text-[10px] sm:text-xs font-bold text-foreground">Secure & Private</p>
+                    <p className="text-[8px] sm:text-[10px] text-text-tertiary uppercase tracking-wider font-black">Enterprise Grade</p>
                   </div>
                 </div>
               </div>
-              <div className="absolute -bottom-10 -left-10 hidden lg:block p-4 bg-surface border border-border rounded-2xl shadow-xl animate-bounce-subtle delay-1000">
+              <div className="absolute -bottom-4 -left-2 sm:-bottom-10 sm:-left-10 p-3 sm:p-4 bg-surface/80 backdrop-blur-md border border-border rounded-2xl shadow-xl animate-bounce-subtle delay-1000 z-20">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-500">
-                    <GlobeAltIcon className="h-6 w-6" />
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-500">
+                    <GlobeAltIcon className="h-5 w-5 sm:h-6 sm:w-6" />
                   </div>
                   <div>
-                    <p className="text-xs font-bold text-foreground">Global Reach</p>
-                    <p className="text-[10px] text-text-tertiary">20+ Languages supported</p>
+                    <p className="text-[10px] sm:text-xs font-bold text-foreground">Global Reach</p>
+                    <p className="text-[8px] sm:text-[10px] text-text-tertiary uppercase tracking-wider font-black">20+ Languages</p>
                   </div>
                 </div>
               </div>
@@ -238,9 +238,9 @@ export default function Landing() {
                           <img
                             src={item.image}
                             alt={`${item.title} Dark`}
-                            className={`w-full h-auto hidden dark:block [image-rendering:-webkit-optimize-contrast] ${activeStep === i ? 'scale-105' : 'scale-100'} transition-transform duration-[2s] ease-out`}
+                            className={`w-full h-auto hidden dark:block [image-rendering:-webkit-optimize-contrast] brightness-[1.05] contrast-[1.02] ${activeStep === i ? 'scale-105' : 'scale-100'} transition-transform duration-[2s] ease-out`}
                           />
-                          <div className="absolute inset-0 bg-transparent dark:bg-gradient-to-t dark:from-background/60 dark:via-transparent dark:to-transparent pointer-events-none" />
+                          <div className="absolute inset-0 bg-transparent dark:bg-gradient-to-t dark:from-background/30 dark:via-transparent dark:to-transparent pointer-events-none" />
 
                           {/* Zoom Indicator */}
                           <div className="absolute top-4 right-4 p-2.5 rounded-full bg-black/60 backdrop-blur-md text-primary-500 border border-primary-500/30 opacity-100 transition-opacity shadow-[0_0_15px_rgba(31,196,95,0.3)] animate-pulse">
