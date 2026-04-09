@@ -53,7 +53,7 @@ export default function PromptPreview({ generatedPrompt, onSubmit, onBack, loadi
               hoverable
               onClick={() => setChoice(opt.id)}
               className={clsx(
-                'p-6 h-full flex flex-col justify-start transition-all duration-500',
+                'p-4 sm:p-6 h-full flex flex-col justify-start transition-all duration-500',
                 choice === opt.id
                   ? 'border-primary-500 bg-transparent ring-1 ring-primary-500 shadow-[0_0_20px_rgba(31,196,95,0.15)]'
                   : 'border-gray-100 dark:border-border hover:border-primary-500/50'
@@ -67,9 +67,9 @@ export default function PromptPreview({ generatedPrompt, onSubmit, onBack, loadi
       </div>
 
       {choice === 'generated' && (
-        <div className="relative rounded-2xl border border-border bg-surface-hover/30 p-6 animate-slide-up group">
+        <div className="relative rounded-2xl border border-border bg-surface-hover/30 p-4 sm:p-6 animate-slide-up group overflow-hidden">
           <p className="text-[10px] font-black text-text-tertiary mb-3 uppercase tracking-widest">Optimized Intelligence Context</p>
-          <pre className="text-sm text-foreground whitespace-pre-wrap font-sans leading-relaxed">{generatedPrompt}</pre>
+          <pre className="text-sm text-foreground whitespace-pre-wrap break-words font-sans leading-relaxed overflow-x-auto">{generatedPrompt}</pre>
         </div>
       )}
 

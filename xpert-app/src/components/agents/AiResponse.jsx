@@ -118,7 +118,7 @@ export default function AiResponse({ response, responseType, tokensUsed, onSaveT
             </div>
           ) : (
             <>
-              <div className="prose prose-sm max-w-none text-[var(--color-text)] overflow-x-auto break-words [&_pre]:overflow-x-auto [&_pre]:max-w-full [&_table]:block [&_table]:overflow-x-auto">
+              <div className="prose prose-sm max-w-none text-[var(--color-text)] overflow-x-auto break-words break-all [&_pre]:overflow-x-auto [&_pre]:max-w-full [&_table]:block [&_table]:overflow-x-auto">
                 <ReactMarkdown>{displayedText}</ReactMarkdown>
               </div>
               {streaming && !stopped && (
@@ -137,7 +137,7 @@ export default function AiResponse({ response, responseType, tokensUsed, onSaveT
         <div className="flex-shrink-0 pt-4 border-t border-border mt-4">
           {!isImage && (
             <div className="flex items-center justify-between text-xs text-text-tertiary mb-3">
-              <span className="font-bold uppercase tracking-widest text-[10px]">Estimated tokens: ~{tokensUsed || Math.ceil(response.length / 4)}</span>
+              <span className="font-bold uppercase tracking-widest text-[10px] whitespace-nowrap truncate mr-2">Estimated tokens: ~{tokensUsed || Math.ceil(response.length / 4)}</span>
             </div>
           )}
 

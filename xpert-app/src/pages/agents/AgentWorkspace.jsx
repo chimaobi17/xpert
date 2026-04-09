@@ -285,22 +285,22 @@ export default function AgentWorkspace() {
           <ArrowLeftIcon className="h-5 w-5 sm:h-6 sm:w-6" />
         </button>
         <div className="min-w-0">
-          <div className="flex items-center gap-2 sm:gap-3">
-            <h1 className="text-xl sm:text-2xl lg:text-3xl font-black text-foreground tracking-tight truncate">{agent.name}</h1>
+          <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+            <h1 className="text-lg sm:text-2xl lg:text-3xl font-black text-foreground tracking-tight truncate max-w-[200px] sm:max-w-none">{agent.name}</h1>
             {agent.is_premium_only && (
-              <Badge variant="premium" size="sm" className="rounded-full px-3 py-1 bg-gradient-to-r from-amber-400 to-orange-500 text-black border-none font-bold uppercase tracking-tighter italic">
+              <Badge variant="premium" size="sm" className="rounded-full px-2 sm:px-3 py-0.5 sm:py-1 bg-gradient-to-r from-amber-400 to-orange-500 text-black border-none font-bold uppercase tracking-tighter italic shrink-0">
                 Premium
               </Badge>
             )}
           </div>
-          <p className="text-sm text-text-tertiary font-bold uppercase tracking-[0.2em] mt-1">{agent.domain} • {agent.category}</p>
+          <p className="text-[10px] sm:text-sm text-text-tertiary font-bold uppercase tracking-[0.2em] mt-1 truncate">{agent.domain} • {agent.category}</p>
         </div>
       </div>
 
       {/* Step Indicator */}
-      <div className="flex items-center justify-between gap-2 sm:gap-4 mb-8 sm:mb-12 px-0 sm:px-2">
+      <div className="flex items-center justify-between gap-1 sm:gap-4 mb-8 sm:mb-12 px-0 sm:px-2">
         {stepLabels.map((label, i) => (
-          <div key={label} className="flex-1 group">
+          <div key={label} className="flex-1 group min-w-0">
             <div className="relative mb-4">
               <div className={clsx(
                 "h-1 rounded-full transition-all duration-700",
@@ -310,9 +310,9 @@ export default function AgentWorkspace() {
                 <div className="absolute top-0 left-0 h-1 bg-primary-500 animate-pulse-slow shadow-[0_0_10px_rgba(31,196,95,0.5)]" style={{ width: '100%' }} />
               )}
             </div>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 sm:gap-3 overflow-hidden">
               <div className={clsx(
-                "flex h-9 w-9 items-center justify-center rounded-xl text-sm font-black transition-all duration-500",
+                "flex h-7 w-7 sm:h-9 sm:w-9 shrink-0 items-center justify-center rounded-xl text-[10px] sm:text-sm font-black transition-all duration-500",
                 step > i + 1
                   ? "bg-primary-500 text-black"
                   : step === i + 1
@@ -322,7 +322,7 @@ export default function AgentWorkspace() {
                 {step > i + 1 ? "✓" : i + 1}
               </div>
               <span className={clsx(
-                "text-[10px] sm:text-xs font-black uppercase tracking-wider sm:tracking-widest transition-colors",
+                "text-[9px] sm:text-xs font-black uppercase tracking-wider sm:tracking-widest transition-colors truncate max-w-[60px] sm:max-w-none",
                 step === i + 1 ? "text-foreground" : "text-text-tertiary"
               )}>
                 {label}
