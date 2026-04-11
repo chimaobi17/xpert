@@ -12,12 +12,9 @@ export default function LandingNavbar({ isScrolled }) {
 
   return (
     <nav className={clsx(
-      "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
-      (mobileMenuOpen || isScrolled)
-        ? "glass !border-x-0 !border-t-0 py-3"
-        : "bg-transparent py-6",
-      /* Remove middle border when menu is open to unify the extension */
-      (mobileMenuOpen && !isScrolled) ? "border-b-0" : "border-b border-border/50 shadow-2xl"
+      "fixed top-0 left-0 right-0 z-50 transition-all duration-300 glass !border-x-0 !border-t-0 shadow-2xl",
+      (mobileMenuOpen || isScrolled) ? "py-3" : "py-6",
+      mobileMenuOpen ? "border-b-0" : "border-b border-border/50"
     )}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center">
@@ -67,7 +64,7 @@ export default function LandingNavbar({ isScrolled }) {
         </div>
       </div>
 
-      {/* Mobile Menu Dropdown - Identical Extension Styling */}
+      {/* Mobile Menu Dropdown extension */}
       {mobileMenuOpen && (
         <div className="md:hidden absolute top-full left-0 right-0 glass !border-x-0 !border-t-0 border-b border-border/50 p-4 animate-fade-in shadow-2xl">
           <div className="flex flex-col space-y-6 text-center pb-6 font-bold">
