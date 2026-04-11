@@ -26,31 +26,36 @@ class AgentController extends Controller
 
     public function index(Request $request)
     {
-        $request->validate([
-            'q' => ['sometimes', 'string', 'max:255', 'nullable'],
-            'domain' => ['sometimes', 'string', 'in:Technology,Creative,Business,Research,Language', 'nullable'],
-            'tier' => ['sometimes', 'string', 'in:free,premium,all', 'nullable'],
-        ]);
-
-        // Use cached agent list when no filters are applied
-        $hasFilters = $request->filled('q') || $request->filled('domain') || ($request->filled('tier') && $request->tier !== 'all');
-
-        if (!$hasFilters) {
-            $agents = Cache::remember('agents_list', 300, function () {
-                return AiAgent::with('latestTemplate')->get();
-            });
-
-            $userAgentIds = $request->user() ? $request->user()->agents()->allRelatedIds()->toArray() : [];
-            $agentsArray = $agents->map(function ($agent) use ($userAgentIds) {
-                $arr = $agent->toArray();
-                $arr['is_added'] = in_array($agent->id, $userAgentIds);
-                return $arr;
-            });
-
-            return response()->json($agentsArray);
-        }
-
         try {
+            $request->validate([
+                'q' => ['sometimes', 'string', 'max:255', 'nullable'],
+                'domain' => ['sometimes', 'string', 'in:Technology,Creative,Business,Research,Language', 'nullable'],
+                'tier' => ['sometimes', 'string', 'in:free,premium,all', 'nullable'],
+            ]);
+
+            $userAgentIds = $request->user() 
+                ? \Illuminate\Support\Facades\DB::table('user_agents')
+                    ->where('user_id', $request->user()->id)
+                    ->pluck('ai_agent_id')
+                    ->toArray() 
+                : [];
+
+            $hasFilters = $request->filled('q') || $request->filled('domain') || ($request->filled('tier') && $request->tier !== 'all');
+
+            if (!$hasFilters) {
+                $agents = Cache::remember('agents_list', 300, function () {
+                    return AiAgent::with('latestTemplate')->get();
+                });
+
+                $agentsArray = $agents->map(function ($agent) use ($userAgentIds) {
+                    $arr = $agent->toArray();
+                    $arr['is_added'] = in_array($agent->id, $userAgentIds);
+                    return $arr;
+                });
+
+                return response()->json($agentsArray);
+            }
+
             $query = AiAgent::with('latestTemplate');
 
             if ($request->filled('q')) {
@@ -72,8 +77,6 @@ class AgentController extends Controller
             }
 
             $agents = $query->get();
-            $userAgentIds = $request->user() ? $request->user()->agents()->allRelatedIds()->toArray() : [];
-
             $agentsArray = $agents->map(function ($agent) use ($userAgentIds) {
                 $arr = $agent->toArray();
                 $arr['is_added'] = in_array($agent->id, $userAgentIds);
@@ -82,14 +85,14 @@ class AgentController extends Controller
 
             return response()->json($agentsArray);
         } catch (\Throwable $e) {
-            Log::error('agent_filter_failed', [
+            Log::error('agent_index_failed', [
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
             ]);
 
             return response()->json([
-                'error' => 'filter_failed',
-                'message' => 'Filter trace: ' . $e->getMessage(),
+                'error' => 'server_error',
+                'message' => 'Query error: ' . $e->getMessage(),
                 'file' => $e->getFile(),
                 'line' => $e->getLine()
             ], 500);
@@ -106,9 +109,15 @@ class AgentController extends Controller
 
     public function show(AiAgent $agent)
     {
-        $agent->load('latestTemplate');
-
-        return response()->json($agent);
+        try {
+            $agent->load('latestTemplate');
+            return response()->json($agent);
+        } catch (\Throwable $e) {
+             return response()->json([
+                'error' => 'load_failed',
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
