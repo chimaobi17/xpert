@@ -20,7 +20,6 @@ import Card from '../components/ui/Card';
 import Badge from '../components/ui/Badge';
 import Button from '../components/ui/Button';
 import Spinner from '../components/ui/Spinner';
-import OnboardingFlow from '../components/onboarding/OnboardingFlow';
 
 const iconMap = {
   CodeBracketIcon, PencilSquareIcon, ChartBarIcon, DocumentMagnifyingGlassIcon, UserGroupIcon,
@@ -29,22 +28,12 @@ const iconMap = {
 export default function Dashboard() {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const [showOnboarding, setShowOnboarding] = useState(false);
   const [usage, setUsage] = useState(null);
   const [myAgents, setMyAgents] = useState([]);
   const [recentLogs, setRecentLogs] = useState([]);
   const [loadingData, setLoadingData] = useState(true);
 
-  useEffect(() => {
-    // Only trigger onboarding if the user hasn't seen it in this session 
-    // AND they aren't marked as onboarded in the database.
-    const hasSeenOnboarding = sessionStorage.getItem('xpert_onboarding_shown');
-    
-    if (user && !user.onboarding_complete && !hasSeenOnboarding) {
-      setShowOnboarding(true);
-      sessionStorage.setItem('xpert_onboarding_shown', 'true');
-    }
-  }, [user]);
+
 
   useEffect(() => {
     loadDashboardData();
@@ -94,9 +83,6 @@ export default function Dashboard() {
 
   return (
     <div className="animate-fade-in">
-      {showOnboarding && (
-        <OnboardingFlow onComplete={() => { setShowOnboarding(false); loadDashboardData(); }} />
-      )}
 
       <div className="mb-6 sm:mb-10">
         <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-foreground tracking-tight">

@@ -275,7 +275,7 @@ export default function AppGuide() {
               </div>
               <button 
                 onClick={skipGuide} 
-                className="p-2 -mr-2 rounded-xl text-text-tertiary hover:bg-surface-hover hover:text-foreground transition-all"
+                className="p-2 -mr-2 text-text-tertiary hover:text-primary-500 transition-all active:scale-95"
                 aria-label="Close Guide"
               >
                 <XMarkIcon className="h-5 w-5 sm:h-6 sm:w-6" />

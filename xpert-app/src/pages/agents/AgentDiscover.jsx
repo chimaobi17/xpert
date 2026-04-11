@@ -19,7 +19,6 @@ import Button from '../../components/ui/Button';
 import Input from '../../components/ui/Input';
 import Modal from '../../components/ui/Modal';
 import Spinner from '../../components/ui/Spinner';
-import OnboardingFlow from '../../components/onboarding/OnboardingFlow';
 import toast from 'react-hot-toast';
 
 const domains = ['All', 'Technology', 'Creative', 'Business', 'Research', 'Language'];
@@ -40,19 +39,12 @@ export default function AgentDiscover() {
   const [agents, setAgents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [userAgentCount, setUserAgentCount] = useState(0);
-  const [showOnboarding, setShowOnboarding] = useState(false);
   const [addingAgentId, setAddingAgentId] = useState(null);
 
   const isFree = user?.plan_level === 'free' || !user?.plan_level;
 
   // Show onboarding if user hasn't completed it
-  useEffect(() => {
-    const hasSeenOnboarding = sessionStorage.getItem('xpert_onboarding_shown');
-    if (user && !user.onboarding_complete && !hasSeenOnboarding) {
-      setShowOnboarding(true);
-      sessionStorage.setItem('xpert_onboarding_shown', 'true');
-    }
-  }, [user]);
+
 
   useEffect(() => {
     if (isFree) {
@@ -117,10 +109,6 @@ export default function AgentDiscover() {
 
   return (
     <div className="animate-fade-in text-foreground">
-      {showOnboarding && (
-        <OnboardingFlow onComplete={() => { setShowOnboarding(false); }} />
-      )}
-
       <div className="mb-6 sm:mb-10">
         <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground tracking-tight">Find an AI Helper</h1>
         <p className="text-sm sm:text-lg text-text-secondary mt-1 sm:mt-2 font-medium">

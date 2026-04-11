@@ -14,6 +14,9 @@ export default function Register() {
     email: '',
     password: '',
     password_confirmation: '',
+    job_title: '',
+    purpose: '',
+    field_of_specialization: '',
   });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
@@ -24,7 +27,8 @@ export default function Register() {
     setLoading(true);
 
     try {
-      await register(form.name, form.email, form.password, form.password_confirmation);
+      const { name, email, password, password_confirmation, ...extra } = form;
+      await register(name, email, password, password_confirmation, extra);
       navigate('/agents/discover');
     } catch (err) {
       const data = err.response?.data;
@@ -37,6 +41,15 @@ export default function Register() {
       setLoading(false);
     }
   }
+
+  const specializations = [
+    { value: '', label: 'Select Specialized Field (Optional)' },
+    { value: 'technology', label: 'Technology' },
+    { value: 'creative', label: 'Creative' },
+    { value: 'business', label: 'Business' },
+    { value: 'research', label: 'Research' },
+    { value: 'language', label: 'Language' },
+  ];
 
   return (
     <AuthLayout>
@@ -67,28 +80,61 @@ export default function Register() {
           error={errors.email}
           required
         />
-        <Input
-          label="Password"
-          type="password"
-          icon={LockClosedIcon}
-          placeholder="Create a password"
-          value={form.password}
-          onChange={(e) => setForm({ ...form, password: e.target.value })}
-          error={errors.password}
-          required
-        />
-        <Input
-          label="Confirm Password"
-          type="password"
-          icon={LockClosedIcon}
-          placeholder="Confirm your password"
-          value={form.password_confirmation}
-          onChange={(e) => setForm({ ...form, password_confirmation: e.target.value })}
-          error={errors.password_confirmation}
-          required
-        />
+        
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <Input
+            label="Password"
+            type="password"
+            icon={LockClosedIcon}
+            placeholder="Create a password"
+            value={form.password}
+            onChange={(e) => setForm({ ...form, password: e.target.value })}
+            error={errors.password}
+            required
+          />
+          <Input
+            label="Confirm Password"
+            type="password"
+            icon={LockClosedIcon}
+            placeholder="Confirm password"
+            value={form.password_confirmation}
+            onChange={(e) => setForm({ ...form, password_confirmation: e.target.value })}
+            error={errors.password_confirmation}
+            required
+          />
+        </div>
 
-        <Button type="submit" loading={loading} className="w-full">
+        <div className="pt-4 border-t border-border mt-6">
+          <p className="text-[10px] font-black uppercase tracking-[0.2em] text-primary-500 mb-6">Personalize your Workspace (Optional)</p>
+          <div className="space-y-4">
+            <Input
+              label="Job Title"
+              placeholder="e.g. Content Writer"
+              value={form.job_title}
+              onChange={(e) => setForm({ ...form, job_title: e.target.value })}
+            />
+            <Input
+              label="Main Goal with Xpert"
+              placeholder="e.g. Generate social media posts"
+              value={form.purpose}
+              onChange={(e) => setForm({ ...form, purpose: e.target.value })}
+            />
+            <div className="space-y-2">
+              <label className="block text-xs font-black uppercase tracking-widest text-text-tertiary ml-1">Specialization</label>
+              <select
+                className="block w-full rounded-2xl border border-border/80 bg-background px-4 py-3.5 text-sm text-foreground focus:border-primary-500/50 focus:ring-4 focus:ring-primary-500/10 transition-all duration-300"
+                value={form.field_of_specialization}
+                onChange={(e) => setForm({ ...form, field_of_specialization: e.target.value })}
+              >
+                {specializations.map((s) => (
+                  <option key={s.value} value={s.value}>{s.label}</option>
+                ))}
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <Button type="submit" loading={loading} className="w-full mt-6 scale-100">
           Create Account
         </Button>
       </form>
