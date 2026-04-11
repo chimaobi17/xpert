@@ -262,7 +262,7 @@ export default function AppGuide() {
             ? "rounded-[1.5rem] p-5 sm:p-6 min-h-fit max-h-[85vh]"
             : "sm:rounded-[2rem] sm:p-8 sm:min-h-[440px] sm:w-[480px]"
         )}>
-          <div className="flex-1 overflow-y-auto custom-scrollbar">
+          <div className="flex-1 overflow-y-auto sm:overflow-hidden custom-scrollbar">
             <div className="flex items-center justify-between mb-5 sm:mb-8">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-primary-500/10 flex items-center justify-center text-primary-500 shadow-lg shadow-primary-500/5 transition-transform hover:scale-105">
