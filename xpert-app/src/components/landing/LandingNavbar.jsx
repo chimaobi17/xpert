@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
+import clsx from 'clsx';
 import { SunIcon, MoonIcon, Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import useTheme from '../../hooks/useTheme';
 import logoFull from '../../assets/logo-full.svg';
 import Button from '../ui/Button';
