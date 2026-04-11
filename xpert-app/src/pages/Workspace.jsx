@@ -110,46 +110,101 @@ export default function Workspace() {
       </div>
 
       <div id="guide-workspace-grid" className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-        {myAgents.map((agent) => (
-          <div key={agent.id} className="group relative">
-            <Card
-              hoverable
-              glass
-              onClick={() => navigate(`/agents/${agent.id}`, { state: { from: '/workspace' } })}
-              className="relative h-full border-border/50 hover:border-primary-500/50 transition-all duration-500 flex flex-col p-4 sm:p-6 lg:p-8"
-            >
-              <div className="flex items-start justify-between mb-4 sm:mb-8">
-                <div className="flex h-11 w-11 sm:h-14 sm:w-14 shrink-0 items-center justify-center rounded-2xl bg-surface-hover text-primary-500 shadow-sm group-hover:scale-110 transition-all duration-500">
-                  <CodeBracketIcon className="h-5 w-5 sm:h-7 sm:w-7" />
+        {myAgents.map((agent) => {
+          const locked = agent.is_premium_only && user?.plan_level === 'free';
+          
+          return (
+            <div key={agent.id} className="group relative">
+              <Card
+                hoverable
+                glass
+                onClick={() => {
+                  if (locked) {
+                    navigate('/settings?tab=plan');
+                  } else {
+                    navigate(`/agents/${agent.id}`, { state: { from: '/workspace' } });
+                  }
+                }}
+                className={clsx(
+                  "relative h-full border-border/50 transition-all duration-500 flex flex-col p-4 sm:p-6 lg:p-8 overflow-hidden",
+                  !locked && "hover:border-primary-500/50"
+                )}
+              >
+                {/* Content Layer (Blurred if locked) */}
+                <div className={clsx(
+                  "flex flex-col h-full transition-all duration-500",
+                  locked && "blur-[8px] opacity-30 pointer-events-none select-none"
+                )}>
+                  <div className="flex items-start justify-between mb-4 sm:mb-8">
+                    <div className="flex h-11 w-11 sm:h-14 sm:w-14 shrink-0 items-center justify-center rounded-2xl bg-surface-hover text-primary-500 shadow-sm group-hover:scale-110 transition-all duration-500">
+                      <CodeBracketIcon className="h-5 w-5 sm:h-7 sm:w-7" />
+                    </div>
+                    <div className="flex items-center gap-3">
+                      {agent.is_premium_only && (
+                        <Badge variant="premium" size="sm" className="rounded-full px-3 py-1 bg-gradient-to-r from-amber-400 to-orange-500 text-black border-none font-bold uppercase tracking-tighter italic">
+                          Elite
+                        </Badge>
+                      )}
+                      <button
+                        onClick={(e) => { e.stopPropagation(); handleRemove(agent.id); }}
+                        className="rounded-full p-2.5 text-text-tertiary hover:text-red-500 hover:bg-red-500/10 transition-all opacity-0 group-hover:opacity-100"
+                        title="Remove Agent"
+                      >
+                        <TrashIcon className="h-5 w-5" />
+                      </button>
+                    </div>
+                  </div>
+                  
+                  <div className="min-w-0 flex-1">
+                    <h3 className="text-lg sm:text-2xl font-black text-foreground tracking-tight truncate mb-1">
+                      {agent.name}
+                    </h3>
+                    <p className="text-[10px] font-black uppercase tracking-[0.2em] text-text-tertiary mb-6">{agent.domain}</p>
+                    <p className="text-sm text-text-secondary font-medium leading-relaxed line-clamp-3 opacity-80 group-hover:opacity-100 transition-all duration-300">
+                       {agent.description || agent.system_prompt?.slice(0, 120)}...
+                    </p>
+                  </div>
                 </div>
-                <div className="flex items-center gap-3">
-                  {agent.is_premium_only && (
-                    <Badge variant="premium" size="sm" className="rounded-full px-3 py-1 bg-gradient-to-r from-amber-400 to-orange-500 text-black border-none font-bold uppercase tracking-tighter italic">
-                      Elite
-                    </Badge>
-                  )}
-                  <button
-                    onClick={(e) => { e.stopPropagation(); handleRemove(agent.id); }}
-                    className="rounded-full p-2.5 text-text-tertiary hover:text-red-500 hover:bg-red-500/10 transition-all opacity-0 group-hover:opacity-100"
-                    title="Remove Agent"
-                  >
-                    <TrashIcon className="h-5 w-5" />
-                  </button>
-                </div>
-              </div>
-              
-              <div className="min-w-0 flex-1">
-                <h3 className="text-lg sm:text-2xl font-black text-foreground tracking-tight truncate mb-1">
-                  {agent.name}
-                </h3>
-                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-text-tertiary mb-6">{agent.domain}</p>
-                <p className="text-sm text-text-secondary font-medium leading-relaxed line-clamp-3 opacity-80 group-hover:opacity-100 transition-all duration-300">
-                   {agent.description || agent.system_prompt?.slice(0, 120)}...
-                </p>
-              </div>
-            </Card>
-          </div>
-        ))}
+
+                {/* Premium Lock Overlay */}
+                {locked && (
+                  <div className="absolute inset-0 z-20 flex flex-col items-center justify-center p-6 text-center animate-fade-in bg-background/5">
+                    <div className="mb-4 rounded-2xl bg-primary-500/10 p-3 shadow-xl shadow-primary-500/5">
+                      <LockClosedIcon className="h-8 w-8 text-primary-500" />
+                    </div>
+
+                    <div className="space-y-1 mb-6">
+                      <h4 className="text-xl font-black text-foreground tracking-tight">{agent.name}</h4>
+                      <div className="flex justify-center">
+                        <Badge variant="premium" size="sm" className="uppercase tracking-widest text-[9px] py-0.5">
+                          {agent.domain} • ELITE
+                        </Badge>
+                      </div>
+                    </div>
+
+                    <div className="w-full px-4">
+                      <Button
+                        onClick={(e) => { e.stopPropagation(); navigate('/settings?tab=plan'); }}
+                        className="w-full rounded-xl h-12 font-black shadow-lg shadow-primary-500/20"
+                      >
+                        Unlock Helper
+                      </Button>
+                      <p className="mt-3 text-[10px] font-bold text-text-tertiary uppercase tracking-widest opacity-60">Elite Plan Required</p>
+                    </div>
+                    
+                    {/* Allow removal even if locked */}
+                    <button
+                      onClick={(e) => { e.stopPropagation(); handleRemove(agent.id); }}
+                      className="absolute top-4 right-4 rounded-full p-2.5 text-text-tertiary hover:text-red-500 transition-all opacity-60 hover:opacity-100"
+                    >
+                      <TrashIcon className="h-5 w-5" />
+                    </button>
+                  </div>
+                )}
+              </Card>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

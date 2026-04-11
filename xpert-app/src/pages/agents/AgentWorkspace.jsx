@@ -274,6 +274,8 @@ export default function AgentWorkspace() {
   // Stop button visible only when actively loading or streaming (not after completion)
   const showStopButton = loading || (step === 3 && !stopped && aiResponse && responseType !== 'image');
 
+  const locked = agent.is_premium_only && user?.plan_level === 'free';
+
   return (
     <div className="animate-fade-in max-w-5xl mx-auto">
       {/* Header */}
@@ -297,7 +299,47 @@ export default function AgentWorkspace() {
         </div>
       </div>
 
-      {/* Step Indicator */}
+      {locked ? (
+        <div className="flex flex-col items-center justify-center py-20 sm:py-32 px-6 text-center glass rounded-[2.5rem] border border-border/50 relative overflow-hidden">
+          {/* Decorative background blur */}
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-64 h-64 bg-primary-500/10 rounded-full blur-[80px] -z-10" />
+          
+          <div className="mb-8 rounded-[2rem] bg-gradient-to-br from-primary-500/20 to-primary-600/5 p-6 shadow-2xl shadow-primary-500/10 border border-primary-500/20">
+            <LockClosedIcon className="h-12 w-12 text-primary-500" />
+          </div>
+
+          <div className="max-w-md mx-auto mb-10">
+            <h2 className="text-3xl font-black text-foreground tracking-tight mb-4">Elite Helper Locked</h2>
+            <p className="text-text-secondary font-medium leading-relaxed">
+              The <span className="text-foreground font-bold">{agent.name}</span> AI helper is exclusive to our Elite members. Upgrade your plan to unlock this helper and dozens of other specialized AI experts.
+            </p>
+          </div>
+
+          <div className="flex flex-col sm:flex-row items-center gap-4 w-full max-w-sm mx-auto">
+            <Button 
+              onClick={() => navigate('/settings?tab=plan')}
+              size="lg"
+              className="w-full rounded-2xl h-14 font-black shadow-xl shadow-primary-500/20"
+            >
+              Upgrade to Unlock
+            </Button>
+            <Button 
+              variant="outline"
+              onClick={handleBack}
+              size="lg"
+              className="w-full rounded-2xl h-14 font-bold border-border/50"
+            >
+              Maybe Later
+            </Button>
+          </div>
+          
+          <div className="mt-8 flex items-center gap-2">
+            <Badge variant="premium" size="sm" className="uppercase tracking-widest text-[10px]">ELITE PLAN REQUIRED</Badge>
+          </div>
+        </div>
+      ) : (
+        <>
+          {/* Step Indicator */}
       <div className="flex items-center justify-between gap-1 sm:gap-4 mb-8 sm:mb-12 px-0 sm:px-2">
         {stepLabels.map((label, i) => (
           <div key={label} className="flex-1 group min-w-0">
@@ -428,6 +470,8 @@ export default function AgentWorkspace() {
         agentId={agent?.id}
         agentName={agent?.name}
       />
+        </>
+      )}
     </div>
   );
 }
