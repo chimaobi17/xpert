@@ -66,17 +66,17 @@ export default function OnboardingFlow({ onComplete }) {
     }
   }
 
-  const canProceed = 
+  const canProceed =
     (step === 0 && form.job_title.trim().length > 0) ||
     (step === 1 && form.purpose.trim().length > 0) ||
     (step === 2 && form.field_of_specialization !== '');
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <div className="fixed inset-0 bg-black/80 backdrop-blur-md" />
+      <div className="fixed inset-0 bg-black/60 backdrop-blur-md dark:bg-black/80" />
       <div
         className={clsx(
-          'relative z-10 w-full max-w-lg rounded-super p-5 sm:p-8 md:p-12 shadow-2xl glass',
+          'relative z-10 w-full max-lg rounded-super p-6 sm:p-10 md:p-12 shadow-2xl bg-background dark:bg-surface/90 dark:glass border border-border/50 dark:border-primary-500/50',
           'animate-fade-in'
         )}
       >
@@ -84,11 +84,11 @@ export default function OnboardingFlow({ onComplete }) {
           <div className="mx-auto mb-6 flex items-center justify-center">
             <img src={logoFull} alt="Xpert" className="h-16 mx-auto" />
           </div>
-          <p className="text-xs font-bold uppercase tracking-[0.2em] text-primary-500 mb-2">
+          <p className="text-[10px] font-black uppercase tracking-[0.2em] text-primary-500 mb-2">
             Welcome, {user?.name || 'Explorer'}
           </p>
-          <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-white tracking-tight leading-tight">{steps[step].title}</h2>
-          <p className="text-base text-zinc-400 mt-2 font-medium">{steps[step].subtitle}</p>
+          <h2 className="text-xl sm:text-2xl md:text-3xl font-black text-[var(--color-text)] tracking-tight leading-tight">{steps[step].title}</h2>
+          <p className="text-sm sm:text-base text-[var(--color-text-secondary)] mt-2 font-medium">{steps[step].subtitle}</p>
         </div>
 
         {/* Progress dots */}
@@ -98,7 +98,7 @@ export default function OnboardingFlow({ onComplete }) {
               key={i}
               className={clsx(
                 'h-1.5 rounded-full transition-all duration-500',
-                i === step ? 'w-10 bg-primary-500' : 'w-4 bg-zinc-800'
+                i === step ? 'w-10 bg-primary-500' : 'w-4 bg-[var(--color-border)]'
               )}
             />
           ))}
@@ -112,7 +112,7 @@ export default function OnboardingFlow({ onComplete }) {
                 placeholder="e.g. Full-Stack Developer, Product Manager"
                 value={form.job_title}
                 onChange={(e) => setForm({ ...form, job_title: e.target.value })}
-                className="bg-zinc-900/50 border-zinc-800"
+                className="bg-[var(--color-bg)] border-[var(--color-border)]"
               />
             </div>
           )}
@@ -123,7 +123,7 @@ export default function OnboardingFlow({ onComplete }) {
                 placeholder="e.g. Generate code faster, write better content"
                 value={form.purpose}
                 onChange={(e) => setForm({ ...form, purpose: e.target.value })}
-                className="bg-zinc-900/50 border-zinc-800"
+                className="bg-[var(--color-bg)] border-[var(--color-border)]"
               />
             </div>
           )}
@@ -134,7 +134,7 @@ export default function OnboardingFlow({ onComplete }) {
                 options={specializations}
                 value={form.field_of_specialization}
                 onChange={(e) => setForm({ ...form, field_of_specialization: e.target.value })}
-                className="bg-zinc-900/50 border-zinc-800"
+                className="bg-[var(--color-bg)] border-[var(--color-border)]"
               />
             </div>
           )}
@@ -146,9 +146,9 @@ export default function OnboardingFlow({ onComplete }) {
         <div className="mt-8 sm:mt-12 flex items-center justify-between gap-3 sm:gap-4">
           <div className="flex items-center gap-4">
             {step > 0 && (
-              <button 
+              <button
                 onClick={handleBack}
-                className="text-sm font-bold text-zinc-400 hover:text-white transition-colors px-4 py-2"
+                className="text-xs font-black uppercase tracking-widest text-[var(--color-text-secondary)] hover:text-primary-500 transition-colors px-4 py-2"
               >
                 Back
               </button>
@@ -156,23 +156,23 @@ export default function OnboardingFlow({ onComplete }) {
             <button
               onClick={handleSkip}
               disabled={loadingSkip}
-              className="text-sm font-bold text-zinc-500 hover:text-white transition-colors px-4 py-2"
+              className="text-xs font-black uppercase tracking-widest text-[var(--color-text-tertiary)] hover:text-primary-500 transition-colors px-4 py-2"
             >
               {loadingSkip ? 'Skipping...' : 'Skip'}
             </button>
           </div>
           {step < 2 ? (
-            <Button 
-              onClick={handleNext} 
+            <Button
+              onClick={handleNext}
               disabled={!canProceed}
               className="px-8 rounded-full font-bold"
             >
               Continue
             </Button>
           ) : (
-            <Button 
-              onClick={handleSubmit} 
-              loading={loading} 
+            <Button
+              onClick={handleSubmit}
+              loading={loading}
               disabled={!canProceed}
               className="px-8 rounded-full font-bold shadow-[0_0_20px_rgba(31,196,95,0.3)]"
             >

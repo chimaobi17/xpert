@@ -245,7 +245,7 @@ export default function AppGuide() {
         style={getPopoverStyle()}
       >
         <div className={clsx(
-          "bg-surface/90 glass border-2 border-primary-500/50 shadow-[0_40px_80px_rgba(0,0,0,0.6)] animate-fade-in-up flex flex-col justify-between overflow-hidden relative",
+          "bg-white dark:bg-surface border border-border/50 dark:border-border shadow-[0_40px_80px_rgba(0,0,0,0.6)] animate-fade-in-up flex flex-col justify-between overflow-hidden relative",
           isMobile
             ? "rounded-2xl p-3 min-h-fit max-h-[80vh] w-[calc(100%-1rem)] max-w-[300px]"
             : "sm:rounded-[2.5rem] sm:p-9 sm:min-h-[460px] sm:w-[480px]"
