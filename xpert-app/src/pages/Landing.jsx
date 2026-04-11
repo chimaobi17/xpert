@@ -77,7 +77,7 @@ export default function Landing() {
       <LandingNavbar isScrolled={isScrolled} />
 
       <main className={clsx(
-        "transition-all duration-[1200ms] origin-top ease-in-out",
+        "transition-all duration-1000 origin-top",
         isScrolled ? "blur-[1.5px] opacity-90 scale-[0.99]" : "blur-0 opacity-100 scale-100"
       )}>
         {/* Hero Section */}
