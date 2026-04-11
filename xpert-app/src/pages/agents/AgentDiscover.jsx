@@ -46,7 +46,7 @@ export default function AgentDiscover() {
     if (isFree) {
       get('/user/agents').then((res) => {
         if (res.ok) setUserAgentCount(res.data.length);
-      }).catch(() => {});
+      }).catch(() => { });
     }
   }, [isFree]);
 
@@ -105,6 +105,7 @@ export default function AgentDiscover() {
       <div className="flex flex-col gap-4 sm:gap-6 mb-8 sm:mb-12">
         <div className="max-w-2xl">
           <Input
+            id="guide-search"
             icon={MagnifyingGlassIcon}
             placeholder="What do you need help with?"
             value={query}
@@ -130,7 +131,7 @@ export default function AgentDiscover() {
               </button>
             ))}
           </div>
-          
+
           <div className="relative group">
             <select
               value={tier}
@@ -145,9 +146,9 @@ export default function AgentDiscover() {
               ))}
             </select>
             <div className="pointer-events-none absolute inset-y-0 right-4 flex items-center">
-               <svg className="h-4 w-4 text-text-tertiary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-               </svg>
+              <svg className="h-4 w-4 text-text-tertiary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
             </div>
           </div>
         </div>
@@ -163,88 +164,90 @@ export default function AgentDiscover() {
           <p className="text-sm text-text-secondary">Try adjusting your filters or search query.</p>
         </div>
       ) : (
-        <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-          {agents.map((agent) => {
+        <div id="guide-agents" className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+          {agents.map((agent, index) => {
             const locked = agent.is_premium_only && user?.plan_level === 'free';
 
             return (
-                <div 
-                   className={clsx(
-                     "relative h-full rounded-2xl border border-border transition-all duration-500 overflow-hidden bg-surface group",
-                     !locked && "hover:border-primary-500/50 hover:shadow-[0_0_30px_rgba(31,196,95,0.1)]"
-                   )}
-                >
-                  {/* Content Layer (Blurred if locked) */}
-                  <div className={clsx(
-                    "flex flex-col h-full p-6 transition-all duration-500",
-                    locked && "blur-[6px] opacity-40 scale-[0.98] pointer-events-none select-none"
-                  )}>
-                    <div className="flex items-start justify-between mb-6">
-                      <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-surface-hover text-primary-500 shadow-sm group-hover:scale-110 transition-transform">
-                        <CodeBracketIcon className="h-6 w-6" />
-                      </div>
-                      <div className="flex flex-col items-end gap-2">
-                        {agent.is_premium_only && (
-                          <Badge variant="premium" size="sm" className="rounded-full px-3 py-1 scale-90 origin-right">
-                            Premium
-                          </Badge>
-                        )}
-                        <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-text-tertiary">{agent.domain}</span>
-                      </div>
+              <div
+                key={agent.id}
+                id={index === 0 ? "guide-agent-card" : undefined}
+                className={clsx(
+                  "relative h-full rounded-2xl border border-border transition-all duration-500 overflow-hidden bg-surface group",
+                  !locked && "hover:border-primary-500/50 hover:shadow-[0_0_30px_rgba(31,196,95,0.1)]"
+                )}
+              >
+                {/* Content Layer (Blurred if locked) */}
+                <div className={clsx(
+                  "flex flex-col h-full p-6 transition-all duration-500",
+                  locked && "blur-[6px] opacity-40 scale-[0.98] pointer-events-none select-none"
+                )}>
+                  <div className="flex items-start justify-between mb-6">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-surface-hover text-primary-500 shadow-sm group-hover:scale-110 transition-transform">
+                      <CodeBracketIcon className="h-6 w-6" />
                     </div>
-
-                    <div className="flex-1">
-                      <h3 className="text-xl font-bold text-foreground mb-2 leading-tight">{agent.name}</h3>
-                      <p className="text-sm text-text-secondary font-medium leading-relaxed line-clamp-3">
-                        {agent.description || agent.system_prompt?.slice(0, 150) + '...'}
-                      </p>
-                    </div>
-
-                    <div className="mt-8 pt-4">
-                      {agent.is_added ? (
-                        <div className="flex items-center justify-center gap-2 text-primary-500 font-bold py-2">
-                          <CheckCircleIcon className="h-5 w-5" /> Enabled
-                        </div>
-                      ) : (
-                        <Button
-                          variant="outline"
-                          className="w-full rounded-2xl h-11 font-bold border-border/50 hover:border-primary-500/50"
-                          onClick={() => handleAddAgent(agent)}
-                        >
-                          <PlusIcon className="h-4 w-4" /> Add to My Helpers
-                        </Button>
+                    <div className="flex flex-col items-end gap-2">
+                      {agent.is_premium_only && (
+                        <Badge variant="premium" size="sm" className="rounded-full px-3 py-1 scale-90 origin-right">
+                          Premium
+                        </Badge>
                       )}
+                      <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-text-tertiary">{agent.domain}</span>
                     </div>
                   </div>
 
-                  {/* Premium Lock Overlay */}
-                  {locked && (
-                    <div className="absolute inset-0 z-20 flex flex-col items-center justify-center p-6 text-center animate-fade-in">
-                      <div className="mb-4 rounded-2xl bg-primary-500/10 p-3 shadow-xl shadow-primary-500/5">
-                        <LockClosedIcon className="h-8 w-8 text-primary-500" />
-                      </div>
-                      
-                      <div className="space-y-1 mb-6">
-                        <h4 className="text-xl font-black text-foreground tracking-tight">{agent.name}</h4>
-                        <div className="flex justify-center">
-                          <Badge variant="premium" size="sm" className="uppercase tracking-widest text-[9px] py-0.5">
-                            {agent.domain} • ELITE
-                          </Badge>
-                        </div>
-                      </div>
+                  <div className="flex-1">
+                    <h3 className="text-xl font-bold text-foreground mb-2 leading-tight">{agent.name}</h3>
+                    <p className="text-sm text-text-secondary font-medium leading-relaxed line-clamp-3">
+                      {agent.description || agent.system_prompt?.slice(0, 150) + '...'}
+                    </p>
+                  </div>
 
-                      <div className="w-full px-4">
-                        <Button
-                          onClick={() => setUpgradeModal(true)}
-                          className="w-full rounded-xl h-12 font-black shadow-lg shadow-primary-500/20"
-                        >
-                          Unlock Helper
-                        </Button>
-                        <p className="mt-3 text-[10px] font-bold text-text-tertiary uppercase tracking-widest opacity-60">Elite Plan Required</p>
+                  <div className="mt-8 pt-4">
+                    {agent.is_added ? (
+                      <div className="flex items-center justify-center gap-2 text-primary-500 font-bold py-2">
+                        <CheckCircleIcon className="h-5 w-5" /> Enabled
+                      </div>
+                    ) : (
+                      <Button
+                        variant="outline"
+                        className="w-full rounded-2xl h-11 font-bold border-border/50 hover:border-primary-500/50"
+                        onClick={() => handleAddAgent(agent)}
+                      >
+                        <PlusIcon className="h-4 w-4" /> Add to My Helpers
+                      </Button>
+                    )}
+                  </div>
+                </div>
+
+                {/* Premium Lock Overlay */}
+                {locked && (
+                  <div className="absolute inset-0 z-20 flex flex-col items-center justify-center p-6 text-center animate-fade-in">
+                    <div className="mb-4 rounded-2xl bg-primary-500/10 p-3 shadow-xl shadow-primary-500/5">
+                      <LockClosedIcon className="h-8 w-8 text-primary-500" />
+                    </div>
+
+                    <div className="space-y-1 mb-6">
+                      <h4 className="text-xl font-black text-foreground tracking-tight">{agent.name}</h4>
+                      <div className="flex justify-center">
+                        <Badge variant="premium" size="sm" className="uppercase tracking-widest text-[9px] py-0.5">
+                          {agent.domain} • ELITE
+                        </Badge>
                       </div>
                     </div>
-                  )}
-                </div>
+
+                    <div className="w-full px-4">
+                      <Button
+                        onClick={() => setUpgradeModal(true)}
+                        className="w-full rounded-xl h-12 font-black shadow-lg shadow-primary-500/20"
+                      >
+                        Unlock Helper
+                      </Button>
+                      <p className="mt-3 text-[10px] font-bold text-text-tertiary uppercase tracking-widest opacity-60">Elite Plan Required</p>
+                    </div>
+                  </div>
+                )}
+              </div>
             );
           })}
         </div>
@@ -254,15 +257,15 @@ export default function AgentDiscover() {
       <Modal isOpen={limitModal} onClose={() => setLimitModal(false)} title="Agent Limit Reached" isSolid size="sm">
         <div className="text-center p-2">
           <div className="bg-primary-500/10 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
-             <RectangleStackIcon className="h-10 w-10 text-primary-500" />
+            <RectangleStackIcon className="h-10 w-10 text-primary-500" />
           </div>
           <h3 className="text-2xl font-bold text-foreground mb-3 tracking-tight">Helper Limit Reached</h3>
           <p className="text-base text-text-secondary mb-8 font-medium">
             Free plan users can add up to 3 helpers. Upgrade to add unlimited helpers.
           </p>
-          <Button 
-             className="w-full h-14 rounded-full font-bold text-lg shadow-[0_0_20px_rgba(31,196,95,0.3)]" 
-             onClick={() => { setLimitModal(false); navigate('/settings?tab=plan'); }}
+          <Button
+            className="w-full h-14 rounded-full font-bold text-lg shadow-[0_0_20px_rgba(31,196,95,0.3)]"
+            onClick={() => { setLimitModal(false); navigate('/settings?tab=plan'); }}
           >
             Upgrade Now
           </Button>
@@ -273,7 +276,7 @@ export default function AgentDiscover() {
       <Modal isOpen={upgradeModal} onClose={() => setUpgradeModal(false)} title="Upgrade Your Plan" isSolid size="sm">
         <div className="text-center p-2">
           <div className="bg-gradient-to-tr from-primary-600 to-emerald-400 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 shadow-[0_0_30px_rgba(31,196,95,0.4)]">
-             <SparklesIcon className="h-10 w-10 text-black" />
+            <SparklesIcon className="h-10 w-10 text-black" />
           </div>
           <h3 className="text-2xl font-bold text-foreground mb-3 tracking-tight">Unlock Premium Helpers</h3>
           <p className="text-base text-text-secondary mb-8 font-medium">
@@ -282,22 +285,22 @@ export default function AgentDiscover() {
           <div className="grid gap-3 mb-6">
             <div className="rounded-2xl border border-border p-4 text-left bg-surface-hover/50">
               <div className="flex justify-between items-center mb-0.5">
-                 <p className="font-bold text-base text-foreground">Standard</p>
-                 <span className="text-[9px] font-bold text-text-tertiary uppercase tracking-widest italic">Personal</span>
+                <p className="font-bold text-base text-foreground">Standard</p>
+                <span className="text-[9px] font-bold text-text-tertiary uppercase tracking-widest italic">Personal</span>
               </div>
               <p className="text-xs text-text-secondary">150K tokens/day, Priority Support</p>
             </div>
             <div className="rounded-2xl border-2 border-primary-500 p-4 text-left bg-primary-500/5 shadow-[0_0_15px_rgba(31,196,95,0.1)]">
               <div className="flex justify-between items-center mb-0.5">
-                 <p className="font-bold text-lg text-primary-500">Premium</p>
-                 <Badge variant="premium" size="sm" className="rounded-full px-2 py-0.5 scale-90">Elite</Badge>
+                <p className="font-bold text-lg text-primary-500">Premium</p>
+                <Badge variant="premium" size="sm" className="rounded-full px-2 py-0.5 scale-90">Elite</Badge>
               </div>
               <p className="text-xs text-foreground font-medium opacity-90">Tokens, All Agents, Image Gen</p>
             </div>
           </div>
-          <Button 
-             className="w-full h-14 rounded-full font-bold text-lg shadow-[0_0_20px_rgba(31,196,95,0.3)]" 
-             onClick={() => { setUpgradeModal(false); navigate('/settings?tab=plan'); }}
+          <Button
+            className="w-full h-14 rounded-full font-bold text-lg shadow-[0_0_20px_rgba(31,196,95,0.3)]"
+            onClick={() => { setUpgradeModal(false); navigate('/settings?tab=plan'); }}
           >
             Start Your Free Trial
           </Button>

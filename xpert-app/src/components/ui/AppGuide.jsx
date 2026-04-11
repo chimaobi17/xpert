@@ -100,8 +100,15 @@ export default function AppGuide() {
     }
 
     const updateRect = () => {
-      let el = document.querySelector(step.target);
-      const isSidebarTarget = step.target?.includes('guide-discover') || step.target?.includes('guide-workspace') || step.target?.includes('guide-library');
+      let targetSelector = step.target;
+
+      // Unify Mobile Step 2 with Step 1 by explicitly pointing it at the Find Helpers sidebar tab
+      if (isMobile && step.target === '#guide-agent-card') {
+        targetSelector = '#guide-discover';
+      }
+
+      let el = document.querySelector(targetSelector);
+      const isSidebarTarget = targetSelector?.includes('guide-discover') || targetSelector?.includes('guide-workspace') || targetSelector?.includes('guide-library');
 
       if (el) {
         const rect = el.getBoundingClientRect();
@@ -245,7 +252,7 @@ export default function AppGuide() {
         style={getPopoverStyle()}
       >
         <div className={clsx(
-          "bg-white dark:bg-surface border border-border/50 dark:border-border shadow-[0_40px_80px_rgba(0,0,0,0.6)] animate-fade-in-up flex flex-col justify-between overflow-hidden relative",
+          "mx-auto bg-white dark:bg-surface border border-border/50 dark:border-border shadow-[0_40px_80px_rgba(0,0,0,0.6)] animate-fade-in-up flex flex-col justify-between overflow-hidden relative",
           isMobile
             ? "rounded-2xl p-3 min-h-fit max-h-[80vh] w-[calc(100%-1rem)] max-w-[300px]"
             : "sm:rounded-[2.5rem] sm:p-9 sm:min-h-[460px] sm:w-[480px]"
