@@ -200,8 +200,8 @@ export default function AppGuide() {
       };
     }
 
-    const popoverWidth = 340;
-    const popoverHeight = 420;
+    const popoverWidth = 480;
+    const popoverHeight = 460;
 
     let top = targetRect.bottom + 20;
     if (top + popoverHeight > window.innerHeight) {
