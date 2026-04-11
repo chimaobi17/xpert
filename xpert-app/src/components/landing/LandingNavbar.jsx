@@ -20,16 +20,14 @@ export default function LandingNavbar() {
 
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-      mobileMenuOpen 
-        ? 'bg-background border-b border-border/50 py-4 shadow-2xl' 
-        : isScrolled 
-          ? 'glass !border-x-0 !border-t-0 border-b border-border/50 py-3 shadow-2xl' 
-          : 'bg-transparent py-6'
+      mobileMenuOpen || isScrolled
+        ? 'glass !border-x-0 !border-t-0 border-b border-border/50 py-3 shadow-2xl'
+        : 'bg-transparent py-6'
     }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center">
           <div className="flex items-center">
-            <Link to="/" className="flex-shrink-0">
+            <Link to="/" className="flex-shrink-0" onClick={() => setMobileMenuOpen(false)}>
               <img src={logoFull} alt="Xpert" className="h-10 sm:h-12" />
             </Link>
           </div>
@@ -66,9 +64,9 @@ export default function LandingNavbar() {
             </button>
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 rounded-xl text-text-secondary"
+              className="p-2 rounded-xl text-text-secondary transition-transform"
             >
-              <Bars3Icon className="h-6 w-6" />
+              {mobileMenuOpen ? <XMarkIcon className="h-6 w-6" /> : <Bars3Icon className="h-6 w-6" />}
             </button>
           </div>
         </div>
@@ -76,20 +74,14 @@ export default function LandingNavbar() {
 
       {/* Mobile Menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden absolute top-0 left-0 right-0 bg-background border-b border-border/10 p-4 animate-fade-in shadow-[0_30px_60px_rgba(0,0,0,0.5)]">
-          <div className="flex justify-between items-center mb-8">
-            <img src={logoFull} alt="Xpert" className="h-10" />
-            <button onClick={() => setMobileMenuOpen(false)}>
-              <XMarkIcon className="h-6 w-6 text-text-secondary" />
-            </button>
-          </div>
-          <div className="flex flex-col space-y-6 text-center pb-8 font-bold">
+        <div className="md:hidden absolute top-full left-0 right-0 glass !border-x-0 !border-t-0 border-b border-border/50 p-4 animate-fade-in shadow-[0_30px_60px_rgba(0,0,0,0.5)]">
+          <div className="flex flex-col space-y-6 text-center pb-6 font-bold">
             <a href="#features" onClick={() => setMobileMenuOpen(false)} className="text-lg text-text-secondary">Features</a>
             <a href="#how-it-works" onClick={() => setMobileMenuOpen(false)} className="text-lg text-text-secondary">How it works</a>
             <a href="#faq" onClick={() => setMobileMenuOpen(false)} className="text-lg text-text-secondary">FAQ</a>
             <Link to="/login" onClick={() => setMobileMenuOpen(false)} className="text-lg text-text-secondary">Sign In</Link>
             <Link to="/register" onClick={() => setMobileMenuOpen(false)}>
-              <Button variant="primary" className="w-full rounded-full">Get Started</Button>
+              <Button variant="primary" className="w-full rounded-full mt-2">Get Started</Button>
             </Link>
           </div>
         </div>
