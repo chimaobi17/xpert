@@ -1,12 +1,15 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import clsx from 'clsx';
 import {
   CodeBracketIcon,
   PlusCircleIcon,
   RectangleStackIcon,
   TrashIcon,
+  LockClosedIcon,
 } from '@heroicons/react/24/outline';
 import { get, del } from '../lib/apiClient';
+import useAuth from '../hooks/useAuth';
 import Card from '../components/ui/Card';
 import Badge from '../components/ui/Badge';
 import Button from '../components/ui/Button';
@@ -34,6 +37,7 @@ function writeCache(data) {
 }
 
 export default function Workspace() {
+  const { user } = useAuth();
   const navigate = useNavigate();
   const cached = useRef(readCache()).current;
   const [myAgents, setMyAgents] = useState(cached || []);
