@@ -46,7 +46,7 @@ export default function PromptPreview({ generatedPrompt, onSubmit, onBack, loadi
     <div className="space-y-6">
       <div>
         <h3 className="text-sm font-semibold text-[var(--color-text)] mb-3">Choose how to proceed</h3>
-        <div className="grid gap-4 sm:grid-cols-3">
+        <div id="guide-review-options" className="grid gap-4 sm:grid-cols-3">
           {options.map((opt) => (
             <Card
               key={opt.id}
@@ -75,24 +75,24 @@ export default function PromptPreview({ generatedPrompt, onSubmit, onBack, loadi
 
       {choice === 'custom' && (
         <div className="animate-slide-up">
-           <Textarea
-             label="Your Custom Directives"
-             placeholder="Instruct your agent with precise documentation..."
-             value={customPrompt}
-             onChange={(e) => setCustomPrompt(e.target.value)}
-             rows={8}
-           />
+          <Textarea
+            label="Your Custom Directives"
+            placeholder="Instruct your agent with precise documentation..."
+            value={customPrompt}
+            onChange={(e) => setCustomPrompt(e.target.value)}
+            rows={8}
+          />
         </div>
       )}
 
       {choice === 'edited' && (
         <div className="animate-slide-up">
-           <Textarea
-             label="Refine Machine Blueprint"
-             value={editedPrompt}
-             onChange={(e) => setEditedPrompt(e.target.value)}
-             rows={8}
-           />
+          <Textarea
+            label="Refine Machine Blueprint"
+            value={editedPrompt}
+            onChange={(e) => setEditedPrompt(e.target.value)}
+            rows={8}
+          />
         </div>
       )}
 
@@ -111,6 +111,7 @@ export default function PromptPreview({ generatedPrompt, onSubmit, onBack, loadi
             </Button>
           )}
           <Button
+            id="guide-submit-ai"
             onClick={() => onSubmit(getFinalPrompt(), getPromptType())}
             disabled={!choice || !getFinalPrompt().trim() || loading}
             loading={loading}

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import clsx from 'clsx';
 import {
   SunIcon,
   MoonIcon,
@@ -10,9 +11,11 @@ import {
   UserCircleIcon,
   ArrowUpCircleIcon,
   XMarkIcon,
+  SparklesIcon,
 } from '@heroicons/react/24/outline';
 import useAuth from '../../hooks/useAuth';
 import useTheme from '../../hooks/useTheme';
+import { useAppGuide } from '../../contexts/AppGuideContext';
 import Avatar from '../ui/Avatar';
 import Badge from '../ui/Badge';
 import logoFull from '../../assets/logo-full.svg';
@@ -21,6 +24,7 @@ import logoIcon from '../../assets/logo-icon.svg';
 export default function Navbar({ onMenuToggle }) {
   const { user, logout } = useAuth();
   const { theme, toggleTheme } = useTheme();
+  const { startGuide } = useAppGuide();
   const navigate = useNavigate();
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
@@ -34,6 +38,7 @@ export default function Navbar({ onMenuToggle }) {
       <div className="flex items-center gap-4">
         <button
           onClick={onMenuToggle}
+          id="guide-menu-toggle"
           className="rounded-2xl p-2.5 text-text-secondary hover:bg-surface-hover lg:hidden transition-colors border-none"
         >
           <Bars3Icon className="h-6 w-6 font-bold" />
@@ -54,9 +59,18 @@ export default function Navbar({ onMenuToggle }) {
           {theme === 'dark' ? <SunIcon className="h-5 w-5" /> : <MoonIcon className="h-5 w-5" />}
         </button>
 
+        <button
+          onClick={startGuide}
+          id="guide-tour-start"
+          className="rounded-2xl p-2.5 text-primary-500 hover:bg-primary-500/10 transition-all border-none"
+          title="Start App Tour"
+        >
+          <SparklesIcon className="h-5 w-5 animate-pulse" />
+        </button>
+
         <Link
           to="/notifications"
-
+          id="guide-notifications"
           className="relative rounded-2xl p-2.5 text-text-secondary hover:text-foreground hover:bg-surface-hover transition-all border-none"
         >
           <BellIcon className="h-5 w-5" />

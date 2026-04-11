@@ -11,7 +11,7 @@ function ChatbotWidget() {
   const [messages, setMessages] = useState([]);
   const [showQuickActions, setShowQuickActions] = useState(true);
   const [unreadCount, setUnreadCount] = useState(0);
-  
+
   const navigate = useNavigate();
 
   // Initialize Knowledge Base & Welcome Msg on first open
@@ -19,14 +19,14 @@ function ChatbotWidget() {
     if (isOpen && knowledgeBase.length === 0) {
       // Lazy load KB
       api.get('/chatbot/knowledge')
-      .then(res => res.data)
-      .then(data => {
-        setKnowledgeBase(data.length > 0 ? data : FALLBACK_KNOWLEDGE);
-      })
-      .catch((err) => {
-        console.error("Failed to load knowledge base", err);
-        setKnowledgeBase(FALLBACK_KNOWLEDGE);
-      });
+        .then(res => res.data)
+        .then(data => {
+          setKnowledgeBase(data.length > 0 ? data : FALLBACK_KNOWLEDGE);
+        })
+        .catch((err) => {
+          console.error("Failed to load knowledge base", err);
+          setKnowledgeBase(FALLBACK_KNOWLEDGE);
+        });
 
       // Add welcome message
       if (messages.length === 0) {
@@ -46,14 +46,14 @@ function ChatbotWidget() {
   const handleSend = (text) => {
     // 1. Add User Message
     const userMsg = { role: 'user', content: text };
-    
+
     // 2. Match Bot Response
     const kb = knowledgeBase.length > 0 ? knowledgeBase : FALLBACK_KNOWLEDGE;
     const match = matchQuestion(text, kb);
-    
-    const botMsg = { 
-      role: 'bot', 
-      content: match.answer 
+
+    const botMsg = {
+      role: 'bot',
+      content: match.answer
     };
 
     setShowQuickActions(match.showQuickActions || false);
@@ -90,8 +90,8 @@ function ChatbotWidget() {
           }`}
       >
         <div className="w-full h-full bg-white dark:bg-black rounded-2xl border border-gray-200 dark:border-primary-500 overflow-hidden flex flex-col shadow-[0_0_50px_rgba(31,196,95,0.15)]">
-          <ChatbotPanel 
-            messages={messages} 
+          <ChatbotPanel
+            messages={messages}
             showQuickActions={showQuickActions}
             onSend={handleSend}
             onClose={() => setIsOpen(false)}

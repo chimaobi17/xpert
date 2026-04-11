@@ -59,6 +59,11 @@ const STEPS = [
     target: "#guide-ai-result",
   },
   {
+    title: "Step 10: Revisit Anytime",
+    content: "If you ever need a refresher, just click this Sparkles icon in the navigation menu to launch this guide again.",
+    target: "#guide-tour-start",
+  },
+  {
     title: "You're all set!",
     content: "Master AI productivity with Xpert. Start scaling your workflow today with our growing library of Helpers.",
     target: null,

@@ -24,9 +24,9 @@ import { get } from '../../lib/apiClient';
 
 const navItems = [
   { to: '/dashboard', label: 'Home', icon: HomeIcon, activeIcon: HomeIconSolid },
-  { to: '/workspace', label: 'My Helpers', icon: RectangleStackIcon, activeIcon: RectangleStackIconSolid },
-  { to: '/agents/discover', label: 'Find Helpers', icon: MagnifyingGlassCircleIcon, activeIcon: MagnifyingGlassCircleIconSolid },
-  { to: '/library', label: 'Saved Results', icon: BookOpenIcon, activeIcon: BookOpenIconSolid },
+  { to: '/workspace', label: 'My Helpers', icon: RectangleStackIcon, activeIcon: RectangleStackIconSolid, id: 'guide-workspace' },
+  { to: '/agents/discover', label: 'Find Helpers', icon: MagnifyingGlassCircleIcon, activeIcon: MagnifyingGlassCircleIconSolid, id: 'guide-discover' },
+  { to: '/library', label: 'Saved Results', icon: BookOpenIcon, activeIcon: BookOpenIconSolid, id: 'guide-library' },
   { to: '/notifications', label: 'Notifications', icon: BellIcon, activeIcon: BellIconSolid },
   { to: '/help', label: 'Help', icon: QuestionMarkCircleIcon, activeIcon: QuestionMarkCircleIconSolid },
   { to: '/settings', label: 'Settings', icon: Cog6ToothIcon, activeIcon: Cog6ToothIconSolid },
@@ -78,6 +78,7 @@ export default function Sidebar({ open, onClose }) {
             <NavLink
               key={item.to}
               to={item.to}
+              id={item.id}
               onClick={onClose}
               className={({ isActive }) =>
                 clsx(

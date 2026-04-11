@@ -24,7 +24,7 @@ export default function AiResponse({ response, responseType, tokensUsed, onSaveT
   }, [stopped]);
 
   // Auto-detect base64 image payloads (e.g., from old sessions or cache)
-  const isImage = responseType === 'image' || 
+  const isImage = responseType === 'image' ||
     (typeof response === 'string' && response.length > 100 && (response.startsWith('/9j/') || response.startsWith('iVBORw0K')));
 
   // Cleanup helper
@@ -107,7 +107,7 @@ export default function AiResponse({ response, responseType, tokensUsed, onSaveT
     <div className="flex flex-col" style={{ maxHeight: 'calc(100vh - 280px)' }}>
       {/* Scrollable AI content */}
       <div className="flex-1 overflow-y-auto min-h-0">
-        <div className="relative rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] p-4 sm:p-6 overflow-hidden group">
+        <div id="guide-ai-result" className="relative rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] p-4 sm:p-6 overflow-hidden group">
           {isImage ? (
             <div className="flex justify-center">
               <img

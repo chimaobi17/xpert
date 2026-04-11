@@ -4,9 +4,20 @@ import clsx from 'clsx';
 import Navbar from './Navbar';
 import Sidebar from './Sidebar';
 import ChatbotWidget from '../Chatbot/ChatbotWidget';
+import { AppGuideProvider, useAppGuide } from '../../contexts/AppGuideContext';
+import AppGuide from '../ui/AppGuide';
 
 export default function AppLayout() {
+  return (
+    <AppGuideProvider>
+      <AppLayoutContent />
+    </AppGuideProvider>
+  );
+}
+
+function AppLayoutContent() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const { hasSeenGuide, startGuide } = useAppGuide();
 
   useEffect(() => {
     if (sidebarOpen && window.innerWidth < 1024) {
@@ -17,8 +28,19 @@ export default function AppLayout() {
     return () => { document.body.style.overflow = ''; };
   }, [sidebarOpen]);
 
+  // Auto-start guide if not seen
+  useEffect(() => {
+    if (!hasSeenGuide) {
+      const timer = setTimeout(() => {
+        startGuide();
+      }, 1500); // 1.5s delay for smooth entrance
+      return () => clearTimeout(timer);
+    }
+  }, [hasSeenGuide]);
+
   return (
     <div className="flex h-screen flex-col bg-background selection:bg-primary-500/30 selection:text-primary-500 transition-colors duration-500">
+      <AppGuide />
       <Navbar onMenuToggle={() => setSidebarOpen(!sidebarOpen)} />
       <div className="flex flex-1 overflow-hidden relative">
         {/* Global Ambient Glow */}

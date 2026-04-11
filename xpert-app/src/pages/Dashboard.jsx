@@ -12,6 +12,7 @@ import {
   UserGroupIcon,
   LockClosedIcon,
 } from '@heroicons/react/24/outline';
+import clsx from 'clsx';
 import useAuth from '../hooks/useAuth';
 import { get } from '../lib/apiClient';
 import { getGreeting, formatDateTime, formatNumber } from '../lib/helpers';
@@ -171,6 +172,7 @@ export default function Dashboard() {
              </div>
           ) : (
             <div className="grid gap-4 sm:grid-cols-2">
+              {myAgents.map((agent) => (
                 <div
                   key={agent.id}
                   className="group relative"
@@ -229,6 +231,7 @@ export default function Dashboard() {
                     )}
                   </Card>
                 </div>
+              ))}
               <Card
                 hoverable
                 onClick={() => navigate('/agents/discover')}

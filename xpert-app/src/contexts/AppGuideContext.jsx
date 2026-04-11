@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import useAuth from '../hooks/useAuth';
 
 const AppGuideContext = createContext();
 
@@ -11,15 +12,16 @@ export const useAppGuide = () => {
 };
 
 export const AppGuideProvider = ({ children }) => {
+  const { user } = useAuth();
   const [currentStep, setCurrentStep] = useState(-1); // -1 means guide is not active
-  const [hasSeenGuide, setHasSeenGuide] = useState(false);
+  const [hasSeenGuide, setHasSeenGuide] = useState(true); // Default true until verified to prevent premature fires
 
   useEffect(() => {
-    const seen = localStorage.getItem('xpert_guide_seen');
-    if (seen) {
-      setHasSeenGuide(true);
+    if (user?.id) {
+      const seen = localStorage.getItem(`xpert_guide_seen_${user.id}`);
+      setHasSeenGuide(!!seen);
     }
-  }, []);
+  }, [user?.id]);
 
   const startGuide = () => {
     setCurrentStep(0);
@@ -35,13 +37,13 @@ export const AppGuideProvider = ({ children }) => {
 
   const skipGuide = () => {
     setCurrentStep(-1);
-    localStorage.setItem('xpert_guide_seen', 'true');
+    if (user?.id) localStorage.setItem(`xpert_guide_seen_${user.id}`, 'true');
     setHasSeenGuide(true);
   };
 
   const finishGuide = () => {
     setCurrentStep(-1);
-    localStorage.setItem('xpert_guide_seen', 'true');
+    if (user?.id) localStorage.setItem(`xpert_guide_seen_${user.id}`, 'true');
     setHasSeenGuide(true);
   };
 

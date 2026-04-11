@@ -337,10 +337,11 @@ export default function AgentWorkspace() {
         {step === 1 && (
           <div className="animate-slide-up">
             <div className="mb-8">
-               <h2 className="text-lg sm:text-2xl font-black text-foreground mb-1 sm:mb-2">Tell Us What You Need</h2>
-               <p className="text-text-secondary font-medium">Fill in the details below and we'll handle the rest.</p>
+              <h2 className="text-lg sm:text-2xl font-black text-foreground mb-1 sm:mb-2">Tell Us What You Need</h2>
+              <p className="text-text-secondary font-medium">Fill in the details below and we'll handle the rest.</p>
             </div>
             <DynamicForm
+              id="guide-agent-form"
               fields={fields}
               values={formValues}
               onChange={setFormValues}
@@ -349,6 +350,7 @@ export default function AgentWorkspace() {
             />
             <div className="mt-6 sm:mt-10 flex justify-end">
               <Button
+                id="guide-generate-btn"
                 onClick={handleGeneratePrompt}
                 loading={loading}
                 className="h-12 sm:h-14 px-6 sm:px-10 rounded-full font-black uppercase tracking-widest shadow-[0_0_20px_rgba(31,196,95,0.3)]"
@@ -362,8 +364,8 @@ export default function AgentWorkspace() {
         {step === 2 && (
           <div className="animate-slide-up">
             <div className="mb-8">
-               <h2 className="text-lg sm:text-2xl font-black text-foreground mb-1 sm:mb-2">Review Before Sending</h2>
-               <p className="text-text-secondary font-medium">Check the instructions below, then send to AI when ready.</p>
+              <h2 className="text-lg sm:text-2xl font-black text-foreground mb-1 sm:mb-2">Review Before Sending</h2>
+              <p className="text-text-secondary font-medium">Check the instructions below, then send to AI when ready.</p>
             </div>
             <PromptPreview
               key={generatedPrompt}
@@ -383,11 +385,11 @@ export default function AgentWorkspace() {
         {step === 3 && (
           <div className="animate-slide-up">
             <div className="mb-8 border-b border-border pb-6 flex items-center justify-between">
-               <div>
-                  <h2 className="text-lg sm:text-2xl font-black text-foreground mb-1">Here's Your Result</h2>
-                  <p className="text-text-secondary font-medium">Your AI helper has finished. See the result below.</p>
-               </div>
-               <Badge className="bg-primary-500/10 text-primary-500 border-primary-500/20 rounded-full px-4 py-1.5 font-bold uppercase tracking-tighter">Done</Badge>
+              <div>
+                <h2 className="text-lg sm:text-2xl font-black text-foreground mb-1">Here's Your Result</h2>
+                <p className="text-text-secondary font-medium">Your AI helper has finished. See the result below.</p>
+              </div>
+              <Badge className="bg-primary-500/10 text-primary-500 border-primary-500/20 rounded-full px-4 py-1.5 font-bold uppercase tracking-tighter">Done</Badge>
             </div>
             <AiResponse
               response={aiResponse}
