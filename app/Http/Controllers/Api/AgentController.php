@@ -50,37 +50,50 @@ class AgentController extends Controller
             return response()->json($agentsArray);
         }
 
-        $query = AiAgent::with('latestTemplate');
+        try {
+            $query = AiAgent::with('latestTemplate');
 
-        if ($request->filled('q')) {
-            $search = '%' . $request->q . '%';
-            $query->where(function ($q) use ($search) {
-                $q->where('name', 'like', $search)
-                  ->orWhere('domain', 'like', $search)
-                  ->orWhere('category', 'like', $search);
+            if ($request->filled('q')) {
+                $search = '%' . $request->q . '%';
+                $query->where(function ($q) use ($search) {
+                    $q->where('name', 'like', $search)
+                      ->orWhere('domain', 'like', $search)
+                      ->orWhere('category', 'like', $search);
+                });
+            }
+
+            if ($request->filled('domain') && $request->domain !== 'All') {
+                $query->where('domain', $request->domain);
+            }
+
+            if ($request->filled('tier') && $request->tier !== 'all') {
+                $isPremium = ($request->tier === 'premium') ? 1 : 0;
+                $query->where('is_premium_only', '=', $isPremium);
+            }
+
+            $agents = $query->get();
+            $userAgentIds = $request->user() ? $request->user()->agents()->allRelatedIds()->toArray() : [];
+
+            $agentsArray = $agents->map(function ($agent) use ($userAgentIds) {
+                $arr = $agent->toArray();
+                $arr['is_added'] = in_array($agent->id, $userAgentIds);
+                return $arr;
             });
+
+            return response()->json($agentsArray);
+        } catch (\Throwable $e) {
+            Log::error('agent_filter_failed', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+
+            return response()->json([
+                'error' => 'filter_failed',
+                'message' => 'Filter trace: ' . $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine()
+            ], 500);
         }
-
-        if ($request->filled('domain')) {
-            $query->where('domain', $request->domain);
-        }
-
-        if ($request->filled('tier') && $request->tier !== 'all') {
-            $query->where('is_premium_only', $request->tier === 'premium');
-        }
-
-        $agents = $query->get();
-
-        // Add is_added flag for authenticated user
-        $userAgentIds = $request->user() ? $request->user()->agents()->allRelatedIds()->toArray() : [];
-
-        $agentsArray = $agents->map(function ($agent) use ($userAgentIds) {
-            $arr = $agent->toArray();
-            $arr['is_added'] = in_array($agent->id, $userAgentIds);
-            return $arr;
-        });
-
-        return response()->json($agentsArray);
     }
 
     /**
