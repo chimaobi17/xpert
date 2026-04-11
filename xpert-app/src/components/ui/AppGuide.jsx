@@ -161,12 +161,12 @@ export default function AppGuide() {
       }
 
       // Mobile: 'Smart Below' - Go below if space exists, otherwise flip to top to stay in view
-      const cardHeightEstimate = 320; 
+      const cardHeightEstimate = 320;
       const spaceBelow = window.innerHeight - targetRect.bottom;
-      const topOffset = spaceBelow > cardHeightEstimate + 20 
-        ? targetRect.bottom + 8 
+      const topOffset = spaceBelow > cardHeightEstimate + 20
+        ? targetRect.bottom + 8
         : Math.max(8, targetRect.top - cardHeightEstimate - 8);
-      
+
       return {
         position: 'absolute',
         top: `${topOffset}px`,
@@ -246,8 +246,8 @@ export default function AppGuide() {
       >
         <div className={clsx(
           "bg-surface/90 glass border-2 border-primary-500/50 shadow-[0_40px_80px_rgba(0,0,0,0.6)] animate-fade-in-up flex flex-col justify-between overflow-hidden relative",
-          isMobile 
-            ? "rounded-2xl p-4 min-h-fit max-h-[80vh] w-[calc(100%-1rem)] max-w-[320px]" 
+          isMobile
+            ? "rounded-2xl p-3 min-h-fit max-h-[80vh] w-[calc(100%-1rem)] max-w-[300px]"
             : "sm:rounded-[2.5rem] sm:p-9 sm:min-h-[460px] sm:w-[480px]"
         )}>
           <div className="flex-1 overflow-y-auto custom-scrollbar pr-1">
@@ -275,27 +275,27 @@ export default function AppGuide() {
             </div>
           </div>
 
-          <div className="flex items-center justify-between gap-2 sm:gap-6 pt-4 sm:pt-6 mt-4 border-t border-primary-500/10 min-w-0">
+          <div className="flex items-center justify-between gap-1 sm:gap-6 pt-3 sm:pt-6 mt-3 sm:mt-4 border-t border-primary-500/10 min-w-0">
             <div className={clsx(isMobile && "flex-1")}>
               <button
                 onClick={prevStep}
                 disabled={currentStep === 0}
                 className={clsx(
-                  "text-[10px] sm:text-sm font-black uppercase tracking-widest transition-all h-9 sm:h-12 flex items-center justify-center flex-shrink-0 px-3 sm:px-4 w-full sm:w-auto",
+                  "text-[8px] sm:text-[10px] font-black uppercase tracking-widest transition-all h-7 sm:h-9 flex items-center justify-center flex-shrink-0 px-2 sm:px-3 w-full sm:w-auto",
                   currentStep === 0 ? "opacity-0 invisible" : "text-text-tertiary hover:text-foreground"
                 )}
               >
                 Back
               </button>
             </div>
-            <div className={clsx("flex items-center gap-2 sm:gap-6 min-w-0", isMobile && "flex-[2]")}>
-              <button onClick={skipGuide} className="text-[10px] sm:text-sm font-black uppercase tracking-widest text-text-tertiary hover:text-foreground px-2 sm:px-4 h-9 sm:h-12 flex items-center justify-center flex-shrink-0 flex-1 sm:flex-none">Skip</button>
+            <div className={clsx("flex items-center gap-1 sm:gap-4 min-w-0", isMobile && "flex-1")}>
+              <button onClick={skipGuide} className="text-[7.5px] sm:text-[10px] font-black uppercase tracking-widest text-text-tertiary hover:text-foreground px-0 sm:px-3 h-7 sm:h-9 flex items-center justify-center flex-shrink-0 flex-1 sm:flex-none">Skip</button>
               <Button
                 onClick={isLastStep ? finishGuide : nextStep}
-                className="px-3 sm:px-6 h-9 sm:h-12 rounded-full font-black text-[10px] sm:text-sm leading-none uppercase tracking-widest shadow-lg shadow-primary-500/20 whitespace-nowrap flex-shrink-0 flex-[2] sm:flex-none"
+                className="px-0 sm:px-4 h-7 sm:h-9 rounded-full font-black text-[7.5px] sm:text-[10px] leading-none uppercase tracking-widest shadow-lg shadow-primary-500/20 whitespace-nowrap flex-shrink-0 flex-1 sm:flex-none"
               >
                 {isLastStep ? 'Finish' : 'Next Step'}
-                {!isLastStep && <ChevronRightIcon className="h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0 ml-1.5" />}
+                {!isLastStep && !isMobile && <ChevronRightIcon className="h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0 ml-1.5" />}
               </Button>
             </div>
           </div>
