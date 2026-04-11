@@ -56,13 +56,20 @@ export default function OnboardingFlow({ onComplete }) {
     setLoading(true);
     setError(null);
     try {
-      await patch('/user/profile', form);
+      const res = await patch('/user/profile', form);
+      if (!res.ok) {
+        setError(res.error?.message || 'Failed to save profile. Please try again.');
+        setLoading(false);
+        return;
+      }
       try { await refreshUser(); } catch { /* ignore */ }
-    } catch (err) {
-      console.error('Onboarding submit error:', err);
-    } finally {
+      // Success - close modal
       setLoading(false);
       onComplete?.();
+    } catch (err) {
+      console.error('Onboarding submit error:', err);
+      setError('An error occurred. Please try again.');
+      setLoading(false);
     }
   }
 

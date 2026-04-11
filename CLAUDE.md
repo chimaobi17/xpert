@@ -1,5 +1,34 @@
 # XPERT - Claude Code Project Instructions
 
+## 🧠 Advanced MCP Plugins Enabled
+
+**Sequential Thinking**: Extended reasoning for complex problems  
+**Superpowers**: TDD, debugging, collaboration, best practices  
+**Context7**: Smart context management and token optimization  
+**Simplifier**: Code simplification and low-code patterns  
+
+See [.claude/rules/tools/](.claude/rules/tools/) for details on each:
+- [SEQUENTIAL_THINKING.md](.claude/rules/tools/SEQUENTIAL_THINKING.md) — Step-by-step reasoning
+- [SUPERPOWERS.md](.claude/rules/tools/SUPERPOWERS.md) — TDD & debugging workflows
+- [CONTEXT7.md](.claude/rules/tools/CONTEXT7.md) — Context & memory optimization
+- [SIMPLIFIER.md](.claude/rules/tools/SIMPLIFIER.md) — Code simplification patterns
+
+---
+
+## Quick Start - Project Rules & Monitoring
+
+All project standards, patterns, and monitoring logs are in [`.claude/rules/`](.claude/rules/README.md):
+
+- **Database Design**: [.claude/rules/database/SCHEMA.md](.claude/rules/database/SCHEMA.md)
+- **Frontend Design**: [.claude/rules/frontend/DESIGN_SYSTEM.md](.claude/rules/frontend/DESIGN_SYSTEM.md)
+- **Backend Standards**: [.claude/rules/backend/API_STANDARDS.md](.claude/rules/backend/API_STANDARDS.md)
+- **Coding Standards**: [.claude/rules/coding-standards/](coding-standards/)
+- **Architecture**: [.claude/rules/architecture/OVERVIEW.md](.claude/rules/architecture/OVERVIEW.md)
+- **Code Patterns**: [.claude/rules/patterns/REUSABLE_PATTERNS.md](.claude/rules/patterns/REUSABLE_PATTERNS.md)
+- **Session Logs**: [.claude/rules/logs/SESSION_LOG.md](.claude/rules/logs/SESSION_LOG.md) (auto-populated)
+- **Issues & Failures**: [.claude/rules/failures/KNOWN_ISSUES.md](.claude/rules/failures/KNOWN_ISSUES.md) (auto-populated)
+- **Performance Metrics**: [.claude/rules/performance/METRICS.md](.claude/rules/performance/METRICS.md) (auto-populated)
+
 ## Project Overview
 XPERT is a zero-cost AI prompt platform built on Laravel 12 + SQLite + Sanctum with two React SPAs (`xpert-app/` on port 5173, `xpert-admin-dashboard/` on port 5174). All AI runs on free Hugging Face Inference API models — **no OpenAI, no paid APIs**.
 
@@ -65,9 +94,11 @@ When reviewing code, check for:
 - Premium agents require Standard or Premium plan
 
 ## Commands
+
+### Development Servers
 ```bash
 # Backend
-php artisan serve                    # Start Laravel dev server
+php artisan serve                    # Start Laravel dev server (port 8000)
 php artisan migrate:fresh --seed     # Reset DB with seed data
 php artisan test                     # Run test suite
 php artisan route:list               # List all routes
@@ -80,6 +111,58 @@ cd xpert-app && npm run build        # Production build
 cd xpert-admin-dashboard && npm run dev    # Dev server on port 5174
 cd xpert-admin-dashboard && npm run build  # Production build
 ```
+
+### Project Rules & Monitoring
+```bash
+# Log session activity (auto-populate logs)
+python3 ~/.claude/scripts/rules-monitor.py . session '{"files_changed":[],"features":[],"bugs_fixed":[],"patterns":[],"next_steps":[]}'
+
+# Log a failure/issue
+python3 ~/.claude/scripts/rules-monitor.py . failure '{"title":"...","severity":"High","description":"...","root_cause":"...","impact":"...","status":"Open"}'
+
+# Log a new code pattern
+python3 ~/.claude/scripts/rules-monitor.py . pattern '{"name":"...","category":"Backend","description":"...","code":"...","when_to_use":"..."}'
+
+# Log performance metrics
+python3 ~/.claude/scripts/rules-monitor.py . performance '{"category":"frontend","metric":"Bundle size","value":"450KB","target":"<500KB","status":"ok"}'
+
+# Scan for patterns and errors
+python3 ~/.claude/scripts/rules-monitor.py . scan
+
+# Generate monitoring report
+python3 ~/.claude/scripts/rules-monitor.py . report
+```
+
+---
+
+## 🧠 Obsidian Second Brain Integration
+
+**Automated Vault Updates**: Every Claude session is automatically captured and added to your Obsidian vault at `/Users/chimzy/Documents/`.
+
+### One-time setup (already done):
+- ✅ Vault structure created (Topics, Chats, Insights, Tags)
+- ✅ 4 initial sessions processed
+- ✅ 3D graph generated (`XPERT-3D-Graph.html`)
+- ✅ HOW-TO-USE-3D-GRAPH.md guide created
+
+### Automatic vault updates:
+```bash
+# Auto-capture all new sessions
+python3 ~/.claude/scripts/vault-auto-update.py /Users/chimzy/Documents/workspace/xpert
+
+# Update with graph regeneration
+python3 ~/.claude/scripts/vault-auto-update.py /Users/chimzy/Documents/workspace/xpert --graph
+
+# Watch for changes in real-time
+python3 ~/.claude/scripts/vault-auto-update.py /Users/chimzy/Documents/workspace/xpert --watch
+```
+
+To regenerate the 3D graph after vault updates:
+```bash
+/graphify /Users/chimzy/Documents/workspace/xpert
+```
+
+**Usage**: Open the vault in Obsidian at `/Users/chimzy/Documents/` to browse all chats, topics, and insights with full wikilink navigation and 3D graph visualization.
 
 ---
 

@@ -19,13 +19,14 @@ import Button from '../../components/ui/Button';
 import Input from '../../components/ui/Input';
 import Modal from '../../components/ui/Modal';
 import Spinner from '../../components/ui/Spinner';
+import OnboardingFlow from '../../components/onboarding/OnboardingFlow';
 import toast from 'react-hot-toast';
 
 const domains = ['All', 'Technology', 'Creative', 'Business', 'Research', 'Language'];
 const tierFilters = ['All Tiers', 'Free Only', 'Premium Only'];
 
 export default function AgentDiscover() {
-  const { user } = useAuth();
+  const { user, refreshUser } = useAuth();
   const navigate = useNavigate();
   const [query, setQuery] = useState('');
   const [domain, setDomain] = useState(
@@ -39,8 +40,19 @@ export default function AgentDiscover() {
   const [agents, setAgents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [userAgentCount, setUserAgentCount] = useState(0);
+  const [showOnboarding, setShowOnboarding] = useState(false);
+  const [addingAgentId, setAddingAgentId] = useState(null);
 
   const isFree = user?.plan_level === 'free' || !user?.plan_level;
+
+  // Show onboarding if user hasn't completed it
+  useEffect(() => {
+    const hasSeenOnboarding = sessionStorage.getItem('xpert_onboarding_shown');
+    if (user && !user.onboarding_complete && !hasSeenOnboarding) {
+      setShowOnboarding(true);
+      sessionStorage.setItem('xpert_onboarding_shown', 'true');
+    }
+  }, [user]);
 
   useEffect(() => {
     if (isFree) {
@@ -82,18 +94,33 @@ export default function AgentDiscover() {
       setLimitModal(true);
       return;
     }
+
+    setAddingAgentId(agent.id);
     const res = await post(`/user/agents/${agent.id}`);
+    setAddingAgentId(null);
+
     if (res.ok) {
       setAgents((prev) => prev.map((a) => (a.id === agent.id ? { ...a, is_added: true } : a)));
       setUserAgentCount((c) => c + 1);
       toast.success(`${agent.name} added to your workspace`);
     } else if (res.error?.error === 'agent_limit_reached') {
       setLimitModal(true);
+    } else if (res.error?.error === 'agent_already_added') {
+      // apiClient already shows toast; no additional action needed
+    } else if (res.error?.error === 'premium_required') {
+      setUpgradeModal(true);
+    } else {
+      // Catch any other unexpected errors
+      toast.error(res.error?.message || 'Failed to add helper. Please try again.');
     }
   }
 
   return (
     <div className="animate-fade-in text-foreground">
+      {showOnboarding && (
+        <OnboardingFlow onComplete={() => { setShowOnboarding(false); }} />
+      )}
+
       <div className="mb-6 sm:mb-10">
         <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground tracking-tight">Find an AI Helper</h1>
         <p className="text-sm sm:text-lg text-text-secondary mt-1 sm:mt-2 font-medium">
@@ -217,6 +244,8 @@ export default function AgentDiscover() {
                         variant="outline"
                         className="w-full rounded-2xl h-11 font-bold border-border/50 hover:border-primary-500/50"
                         onClick={() => handleAddAgent(agent)}
+                        disabled={addingAgentId === agent.id}
+                        loading={addingAgentId === agent.id}
                       >
                         <PlusIcon className="h-4 w-4" /> Add to My Helpers
                       </Button>
