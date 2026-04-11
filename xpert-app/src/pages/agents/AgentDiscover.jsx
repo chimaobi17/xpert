@@ -184,7 +184,11 @@ export default function AgentDiscover() {
                 )}>
                   <div className="flex items-start justify-between mb-6">
                     <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-surface-hover text-primary-500 shadow-sm group-hover:scale-110 transition-transform">
-                      <CodeBracketIcon className="h-6 w-6" />
+                      {locked ? (
+                        <LockClosedIcon className="h-6 w-6" />
+                      ) : (
+                        <CodeBracketIcon className="h-6 w-6" />
+                      )}
                     </div>
                     <div className="flex flex-col items-end gap-2">
                       {agent.is_premium_only && (

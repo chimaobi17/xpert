@@ -137,7 +137,11 @@ export default function Workspace() {
                 )}>
                   <div className="flex items-start justify-between mb-4 sm:mb-8">
                     <div className="flex h-11 w-11 sm:h-14 sm:w-14 shrink-0 items-center justify-center rounded-2xl bg-surface-hover text-primary-500 shadow-sm group-hover:scale-110 transition-all duration-500">
-                      <CodeBracketIcon className="h-5 w-5 sm:h-7 sm:w-7" />
+                      {locked ? (
+                        <LockClosedIcon className="h-5 w-5 sm:h-7 sm:w-7" />
+                      ) : (
+                        <CodeBracketIcon className="h-5 w-5 sm:h-7 sm:w-7" />
+                      )}
                     </div>
                     <div className="flex items-center gap-3">
                       {agent.is_premium_only && (

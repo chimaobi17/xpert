@@ -198,7 +198,11 @@ export default function Dashboard() {
                       agent.is_premium_only && user?.plan_level === 'free' && "blur-[6px] opacity-30 pointer-events-none"
                     )}>
                       <div className="flex h-12 w-12 sm:h-16 sm:w-16 shrink-0 items-center justify-center rounded-2xl bg-surface-hover text-primary-500 shadow-sm group-hover:scale-110 transition-all duration-500">
-                        <CodeBracketIcon className="h-6 w-6 sm:h-8 sm:w-8" />
+                        {agent.is_premium_only && user?.plan_level === 'free' ? (
+                          <LockClosedIcon className="h-6 w-6 sm:h-8 sm:w-8" />
+                        ) : (
+                          <CodeBracketIcon className="h-6 w-6 sm:h-8 sm:w-8" />
+                        )}
                       </div>
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-2 mb-1">
