@@ -288,7 +288,7 @@ export default function AppGuide() {
                 Back
               </button>
             </div>
-            <div className={clsx("flex items-center gap-1 sm:gap-4 min-w-0", isMobile && "flex-1")}>
+            <div className={clsx("flex items-center gap-1 sm:gap-6 min-w-0", isMobile && "flex-1")}>
               <button onClick={skipGuide} className="text-[7.5px] sm:text-[10px] font-black uppercase tracking-widest text-text-tertiary hover:text-foreground px-0 sm:px-3 h-7 sm:h-9 flex items-center justify-center flex-shrink-0 flex-1 sm:flex-none">Skip</button>
               <Button
                 onClick={isLastStep ? finishGuide : nextStep}
