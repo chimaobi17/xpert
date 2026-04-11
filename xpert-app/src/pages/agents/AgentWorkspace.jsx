@@ -118,9 +118,22 @@ export default function AgentWorkspace() {
     );
   }
 
-  const template = agent.latest_template;
+  const template = agent.latest_template || agent.latestTemplate;
   const fieldSchema = template?.field_schema;
-  const fields = (typeof fieldSchema === 'string' ? JSON.parse(fieldSchema) : fieldSchema)?.fields || [];
+  
+  let fields = [];
+  try {
+    const parsed = (typeof fieldSchema === 'string' ? JSON.parse(fieldSchema) : fieldSchema);
+    fields = parsed?.fields || [];
+  } catch (e) {
+    console.error('Failed to parse field schema:', e);
+  }
+
+  // Handle special case where agent exists but has no template yet
+  if (fields.length === 0 && agent.system_prompt) {
+    // Show a default input field for helpers without a custom schema
+    fields = [{ name: 'input', label: 'What do you need?', type: 'textarea', required: true }];
+  }
 
   async function handleGeneratePrompt() {
     const errors = {};

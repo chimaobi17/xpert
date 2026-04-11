@@ -19,7 +19,10 @@ class UserAgentController extends Controller
     {
         $user = $request->user();
 
-        if ($user->agents()->where('ai_agents.id', $agent->id)->exists()) {
+        if (\Illuminate\Support\Facades\DB::table('user_agents')
+            ->where('user_id', $user->id)
+            ->where('ai_agent_id', $agent->id)
+            ->exists()) {
             return response()->json([
                 'error' => 'agent_already_added',
                 'message' => 'This agent is already in your workspace.',
