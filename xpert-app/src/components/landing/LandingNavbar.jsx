@@ -14,13 +14,15 @@ export default function LandingNavbar({ isScrolled }) {
     <nav className={clsx(
       "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
       (mobileMenuOpen || isScrolled)
-        ? "glass !border-x-0 !border-t-0 border-b border-border/50 py-3 shadow-2xl"
-        : "bg-transparent py-6"
+        ? "glass !border-x-0 !border-t-0 py-3"
+        : "bg-transparent py-6",
+      /* Remove middle border when menu is open to unify the extension */
+      (mobileMenuOpen && !isScrolled) ? "border-b-0" : "border-b border-border/50 shadow-2xl"
     )}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center">
           <div className="flex items-center">
-            <Link to="/" className="flex-shrink-0">
+            <Link to="/" className="flex-shrink-0" onClick={() => setMobileMenuOpen(false)}>
               <img src={logoFull} alt="Xpert" className="h-10 sm:h-12" />
             </Link>
           </div>
@@ -65,9 +67,9 @@ export default function LandingNavbar({ isScrolled }) {
         </div>
       </div>
 
-      {/* Mobile Menu Dropdown */}
+      {/* Mobile Menu Dropdown - Identical Extension Styling */}
       {mobileMenuOpen && (
-        <div className="md:hidden absolute top-full left-0 right-0 glass !border-x-0 !border-t-0 border-b border-border/50 p-4 animate-fade-in shadow-[0_30px_60px_rgba(0,0,0,0.5)]">
+        <div className="md:hidden absolute top-full left-0 right-0 glass !border-x-0 !border-t-0 border-b border-border/50 p-4 animate-fade-in shadow-2xl">
           <div className="flex flex-col space-y-6 text-center pb-6 font-bold">
             <a href="#features" onClick={() => setMobileMenuOpen(false)} className="text-lg text-text-secondary hover:text-primary-500">Features</a>
             <a href="#how-it-works" onClick={() => setMobileMenuOpen(false)} className="text-lg text-text-secondary hover:text-primary-500">How it works</a>
