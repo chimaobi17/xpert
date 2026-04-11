@@ -18,10 +18,11 @@ export default function Landing() {
   const [activeStep, setActiveStep] = useState(0);
   const [zoomedImage, setZoomedImage] = useState(null);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+      setIsScrolled(window.scrollY > 10);
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
@@ -74,9 +75,16 @@ export default function Landing() {
 
   return (
     <div className="min-h-screen bg-background text-foreground selection:bg-primary-500/30">
-      <LandingNavbar isScrolled={isScrolled} />
+      <LandingNavbar 
+        isScrolled={isScrolled} 
+        mobileMenuOpen={mobileMenuOpen}
+        setMobileMenuOpen={setMobileMenuOpen}
+      />
 
-      <main>
+      <main className={clsx(
+        "transition-all duration-500 ease-in-out origin-top",
+        mobileMenuOpen ? "blur-md opacity-50 scale-[0.98]" : "blur-0 opacity-100 scale-100"
+      )}>
         {/* Hero Section */}
         <section className="relative pt-32 pb-20 sm:pt-48 sm:pb-32 overflow-hidden">
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full -z-10">

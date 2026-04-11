@@ -6,9 +6,8 @@ import useTheme from '../../hooks/useTheme';
 import logoFull from '../../assets/logo-full.svg';
 import Button from '../ui/Button';
 
-export default function LandingNavbar({ isScrolled }) {
+export default function LandingNavbar({ isScrolled, mobileMenuOpen, setMobileMenuOpen }) {
   const { theme, toggleTheme } = useTheme();
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
     <nav className={clsx(
