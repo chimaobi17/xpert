@@ -16,6 +16,15 @@ import Button from '../components/ui/Button';
 export default function Landing() {
   const [activeStep, setActiveStep] = useState(0);
   const [zoomedImage, setZoomedImage] = useState(null);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const workflowSteps = [
     {
@@ -64,9 +73,12 @@ export default function Landing() {
 
   return (
     <div className="min-h-screen bg-background text-foreground selection:bg-primary-500/30">
-      <LandingNavbar />
+      <LandingNavbar isScrolled={isScrolled} />
 
-      <main>
+      <main className={clsx(
+        "transition-all duration-1000",
+        isScrolled ? "blur-[2px] opacity-90 scale-[0.99]" : "blur-0 opacity-100 scale-100"
+      )}>
         {/* Hero Section */}
         <section className="relative pt-32 pb-20 sm:pt-48 sm:pb-32 overflow-hidden">
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full -z-10">

@@ -6,18 +6,9 @@ import useTheme from '../../hooks/useTheme';
 import logoFull from '../../assets/logo-full.svg';
 import Button from '../ui/Button';
 
-export default function LandingNavbar() {
+export default function LandingNavbar({ isScrolled }) {
   const { theme, toggleTheme } = useTheme();
-  const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
