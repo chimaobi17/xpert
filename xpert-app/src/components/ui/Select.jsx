@@ -16,7 +16,7 @@ export default function Select({ label, options = [], error, className, id, ...p
           'block w-full rounded-2xl border bg-background px-4 py-3.5 text-sm text-foreground transition-all duration-300',
           error 
             ? 'border-red-500/50 focus:border-red-500 focus:ring-4 focus:ring-red-500/10' 
-            : 'border-border/80 focus:border-primary-500/50 focus:ring-4 focus:ring-primary-500/10'
+            : 'border-gray-200 dark:border-border focus:border-primary-500/50 focus:ring-4 focus:ring-primary-500/10'
         )}
         {...props}
       >
