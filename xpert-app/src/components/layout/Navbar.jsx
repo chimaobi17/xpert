@@ -34,7 +34,7 @@ export default function Navbar({ onMenuToggle }) {
   }
 
   return (
-    <header className="sticky top-0 z-40 flex h-16 sm:h-20 items-center justify-between glass !border-x-0 !border-t-0 border-b border-border/50 px-4 sm:px-6 lg:px-10 transition-all duration-300">
+    <header className="sticky top-0 z-40 flex h-16 sm:h-20 items-center justify-between glass !border-x-0 !border-t-0 border-b border-border/30 px-4 sm:px-6 lg:px-10 transition-all duration-300">
       <div className="flex items-center gap-4">
         <button
           onClick={onMenuToggle}
@@ -94,7 +94,7 @@ export default function Navbar({ onMenuToggle }) {
           {dropdownOpen && (
             <>
               <div className="fixed inset-0 z-40" onClick={() => setDropdownOpen(false)} />
-              <div role="menu" className="absolute right-0 z-50 mt-4 w-56 sm:w-64 max-w-[calc(100vw-2rem)] rounded-[2rem] border border-border/50 glass p-2 shadow-2xl animate-fade-in overflow-hidden">
+              <div role="menu" className="absolute right-0 z-50 mt-4 w-56 sm:w-64 max-w-[calc(100vw-2rem)] rounded-[2rem] border border-border bg-background p-2 shadow-2xl animate-fade-in overflow-hidden">
                 <button
                   onClick={() => setDropdownOpen(false)}
                   className="absolute top-3 right-4 p-2 rounded-full bg-surface-hover text-text-tertiary hover:text-foreground transition-all z-10"

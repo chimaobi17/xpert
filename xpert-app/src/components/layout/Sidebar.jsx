@@ -69,7 +69,7 @@ export default function Sidebar({ open, onClose }) {
       )}
       <aside
         className={clsx(
-          'fixed inset-y-0 left-0 z-50 flex w-72 sm:w-80 flex-col glass transition-transform duration-500 ease-in-out lg:static lg:translate-x-0 pt-0 lg:pt-0 border-r border-border/50 overflow-y-auto scrollbar-hide',
+          'fixed inset-y-0 left-0 z-50 flex w-72 sm:w-80 flex-col bg-background transition-transform duration-500 ease-in-out lg:static lg:translate-x-0 pt-0 lg:pt-0 border-r border-border/30 overflow-y-auto scrollbar-hide',
           open ? 'translate-x-0' : '-translate-x-full'
         )}
       >

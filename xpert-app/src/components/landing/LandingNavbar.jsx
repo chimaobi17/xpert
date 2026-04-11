@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import clsx from 'clsx';
 import { SunIcon, MoonIcon, Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { useState, useEffect } from 'react';
 import useTheme from '../../hooks/useTheme';
@@ -19,11 +20,21 @@ export default function LandingNavbar() {
   }, []);
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-      mobileMenuOpen || isScrolled
-        ? 'glass !border-x-0 !border-t-0 border-b border-border/50 py-3 shadow-2xl'
-        : 'bg-transparent py-6'
-    }`}>
+    <>
+      {/* Interaction Limiting Backdrop Blur - Blurs the landing page content when menu is open */}
+      <div 
+        className={clsx(
+          "fixed inset-0 bg-background/40 backdrop-blur-md z-[45] md:hidden transition-all duration-500",
+          mobileMenuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+        )}
+        onClick={() => setMobileMenuOpen(false)}
+      />
+
+      <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        mobileMenuOpen || isScrolled
+          ? 'glass !border-x-0 !border-t-0 border-b border-border/50 py-3 shadow-2xl'
+          : 'bg-transparent py-6'
+      }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center">
           <div className="flex items-center">
@@ -87,5 +98,6 @@ export default function LandingNavbar() {
         </div>
       )}
     </nav>
+    </>
   );
 }
