@@ -27,20 +27,20 @@ class AgentController extends Controller
     public function index(Request $request)
     {
         $request->validate([
-            'q' => ['sometimes', 'string', 'max:255'],
-            'domain' => ['sometimes', 'string', 'in:Technology,Creative,Business,Research,Language'],
-            'tier' => ['sometimes', 'string', 'in:free,premium,all'],
+            'q' => ['sometimes', 'string', 'max:255', 'nullable'],
+            'domain' => ['sometimes', 'string', 'in:Technology,Creative,Business,Research,Language', 'nullable'],
+            'tier' => ['sometimes', 'string', 'in:free,premium,all', 'nullable'],
         ]);
 
         // Use cached agent list when no filters are applied
-        $hasFilters = $request->filled('q') || $request->filled('domain') || $request->filled('tier');
+        $hasFilters = $request->filled('q') || $request->filled('domain') || ($request->filled('tier') && $request->tier !== 'all');
 
         if (!$hasFilters) {
             $agents = Cache::remember('agents_list', 300, function () {
                 return AiAgent::with('latestTemplate')->get();
             });
 
-            $userAgentIds = $request->user()->agents()->pluck('ai_agents.id')->toArray();
+            $userAgentIds = $request->user() ? $request->user()->agents()->allRelatedIds()->toArray() : [];
             $agentsArray = $agents->map(function ($agent) use ($userAgentIds) {
                 $arr = $agent->toArray();
                 $arr['is_added'] = in_array($agent->id, $userAgentIds);
@@ -72,7 +72,7 @@ class AgentController extends Controller
         $agents = $query->get();
 
         // Add is_added flag for authenticated user
-        $userAgentIds = $request->user()->agents()->pluck('ai_agents.id')->toArray();
+        $userAgentIds = $request->user() ? $request->user()->agents()->allRelatedIds()->toArray() : [];
 
         $agentsArray = $agents->map(function ($agent) use ($userAgentIds) {
             $arr = $agent->toArray();
