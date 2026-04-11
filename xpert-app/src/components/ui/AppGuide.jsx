@@ -167,7 +167,7 @@ export default function AppGuide() {
           top: '50%',
           left: '50%',
           transform: 'translate(-50%, -50%)',
-          width: 'calc(100% - 2rem)',
+          width: '92vw',
           maxWidth: '480px'
         };
       }
@@ -184,8 +184,8 @@ export default function AppGuide() {
         top: `${topOffset}px`,
         left: '50%',
         transform: 'translateX(-50%)',
-        width: 'calc(100% - 1rem)',
-        maxWidth: '320px'
+        width: '92vw',
+        maxWidth: '360px'
       };
     }
 
@@ -222,15 +222,15 @@ export default function AppGuide() {
 
   return createPortal(
     <div className="fixed inset-0 z-[100] pointer-events-none">
-      {/* Surgical Fix 4: Allow pointer events to reach the app BUT keep the Card interactive */}
+      {/* Interaction Limiting Overlay */}
       <div
         className={clsx(
           "absolute transition-opacity duration-500 inset-0",
           step.target
-            ? (isMobile ? "bg-black/5" : "bg-black/40 backdrop-blur-[2px]")
-            : "bg-black/80 backdrop-blur-md",
-          // Only allow background to capture clicks if no target is active (Welcome/Finish screens)
-          !step.target ? "pointer-events-auto" : "pointer-events-none"
+            ? (isMobile ? "bg-background/60 backdrop-blur-sm" : "bg-black/40 backdrop-blur-[2px]")
+            : "bg-background/80 backdrop-blur-md",
+          // On mobile, universally block all underlying clicks. On desktop, only block when there's no target.
+          (isMobile || !step.target) ? "pointer-events-auto" : "pointer-events-none"
         )}
         onClick={skipGuide}
       />
@@ -257,57 +257,66 @@ export default function AppGuide() {
         style={getPopoverStyle()}
       >
         <div className={clsx(
-          "mx-auto bg-white dark:bg-surface border border-border/50 dark:border-border shadow-[0_40px_80px_rgba(0,0,0,0.6)] animate-fade-in-up flex flex-col justify-between overflow-hidden relative",
+          "mx-auto bg-white dark:bg-surface border border-border/50 dark:border-border shadow-2xl animate-fade-in-up flex flex-col justify-between overflow-hidden relative w-full",
           isMobile
-            ? "rounded-2xl p-3 min-h-fit max-h-[80vh] w-[calc(100%-1rem)] max-w-[300px]"
-            : "sm:rounded-[2.5rem] sm:p-9 sm:min-h-[460px] sm:w-[480px]"
+            ? "rounded-[1.5rem] p-5 sm:p-6 min-h-fit max-h-[85vh]"
+            : "sm:rounded-[2rem] sm:p-8 sm:min-h-[440px] sm:w-[480px]"
         )}>
-          <div className="flex-1 overflow-y-auto custom-scrollbar pr-1">
-            <div className="flex items-center justify-between mb-4 sm:mb-8">
+          <div className="flex-1 overflow-y-auto custom-scrollbar">
+            <div className="flex items-center justify-between mb-5 sm:mb-8">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-primary-500/10 flex items-center justify-center text-primary-500 shadow-lg shadow-primary-500/5 transition-transform hover:scale-105">
                   <SparklesIcon className="h-5 w-5 sm:h-7 sm:w-7 animate-pulse" />
                 </div>
                 <div>
-                  <p className="text-[10px] sm:text-xs font-black uppercase tracking-[0.2em] text-primary-500 mb-0.5">XPERT Guide</p>
-                  <p className="text-[9px] sm:text-[11px] font-bold text-text-tertiary uppercase tracking-widest">Step {currentStep + 1} of {STEPS.length}</p>
+                  <p className="text-[clamp(0.65rem,2vw,0.75rem)] font-black uppercase tracking-[0.2em] text-primary-500 mb-0.5">XPERT Guide</p>
+                  <p className="text-[clamp(0.55rem,1.5vw,0.65rem)] font-bold text-text-tertiary uppercase tracking-widest">Step {currentStep + 1} of {STEPS.length}</p>
                 </div>
               </div>
-              <button onClick={skipGuide} className="p-1.5 rounded-lg text-text-tertiary hover:bg-surface-hover hover:text-foreground transition-all">
-                <XMarkIcon className="h-5 w-5" />
+              <button 
+                onClick={skipGuide} 
+                className="p-2 -mr-2 rounded-xl text-text-tertiary hover:bg-surface-hover hover:text-foreground transition-all"
+                aria-label="Close Guide"
+              >
+                <XMarkIcon className="h-5 w-5 sm:h-6 sm:w-6" />
               </button>
             </div>
 
-            <h3 className="text-xl sm:text-2xl font-black text-foreground mb-3 sm:mb-4 tracking-tight leading-tight">{step.title}</h3>
+            <h3 className="text-[clamp(1.25rem,4vw,1.5rem)] font-black text-foreground mb-3 sm:mb-4 tracking-tight leading-tight">
+              {step.title}
+            </h3>
 
             <div className="space-y-4 mb-4">
-              <p className="text-sm sm:text-base text-text-secondary leading-relaxed font-medium">
+              <p className="text-[clamp(0.875rem,2.5vw,1rem)] text-text-secondary leading-relaxed font-medium">
                 {step.content}
               </p>
             </div>
           </div>
 
-          <div className="flex items-center justify-between gap-1 sm:gap-6 pt-3 sm:pt-6 mt-3 sm:mt-4 border-t border-primary-500/10 min-w-0">
-            <div className={clsx(isMobile && "flex-1")}>
-              <button
-                onClick={prevStep}
-                disabled={currentStep === 0}
-                className={clsx(
-                  "text-[8px] sm:text-[10px] font-black uppercase tracking-widest transition-all h-7 sm:h-9 flex items-center justify-center flex-shrink-0 px-2 sm:px-3 w-full sm:w-auto",
-                  currentStep === 0 ? "opacity-0 invisible" : "text-text-tertiary hover:text-foreground"
-                )}
+          <div className="flex flex-row items-center justify-between gap-2 sm:gap-4 pt-4 sm:pt-6 mt-4 border-t border-primary-500/10 w-full">
+            <button
+              onClick={prevStep}
+              disabled={currentStep === 0}
+              className={clsx(
+                "py-2.5 sm:py-3 px-3 sm:px-4 w-1/3 text-[clamp(0.6rem,2vw,0.75rem)] font-black uppercase tracking-widest transition-all rounded-xl text-center",
+                currentStep === 0 ? "opacity-0 invisible pointer-events-none" : "text-text-tertiary hover:bg-surface-hover hover:text-foreground"
+              )}
+            >
+              Back
+            </button>
+            <div className="flex flex-row items-center justify-end gap-2 sm:gap-3 w-2/3">
+              <button 
+                onClick={skipGuide} 
+                className="py-2.5 sm:py-3 px-3 sm:px-4 flex-1 text-[clamp(0.6rem,2vw,0.75rem)] font-black uppercase tracking-widest text-text-tertiary hover:bg-surface-hover hover:text-foreground rounded-xl text-center transition-all"
               >
-                Back
+                Skip
               </button>
-            </div>
-            <div className={clsx("flex items-center gap-1 sm:gap-6 min-w-0", isMobile && "flex-1")}>
-              <button onClick={skipGuide} className="text-[7.5px] sm:text-[10px] font-black uppercase tracking-widest text-text-tertiary hover:text-foreground px-0 sm:px-3 h-7 sm:h-9 flex items-center justify-center flex-shrink-0 flex-1 sm:flex-none">Skip</button>
               <Button
                 onClick={isLastStep ? finishGuide : nextStep}
-                className="px-0 sm:px-4 h-7 sm:h-9 rounded-full font-black text-[7.5px] sm:text-[10px] leading-none uppercase tracking-widest shadow-lg shadow-primary-500/20 whitespace-nowrap flex-shrink-0 flex-1 sm:flex-none"
+                className="py-2.5 sm:py-3 px-4 sm:px-6 flex-1 rounded-2xl sm:rounded-full font-black text-[clamp(0.6rem,2vw,0.75rem)] leading-tight uppercase tracking-widest shadow-lg shadow-primary-500/20 whitespace-nowrap flex items-center justify-center m-0 transition-transform hover:scale-105 active:scale-95"
               >
-                {isLastStep ? 'Finish' : 'Next Step'}
-                {!isLastStep && !isMobile && <ChevronRightIcon className="h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0 ml-1.5" />}
+                {isLastStep ? 'Finish' : 'Next'}
+                {!isLastStep && <ChevronRightIcon className="h-3.5 w-3.5 sm:h-4 sm:w-4 ml-1.5 flex-shrink-0" />}
               </Button>
             </div>
           </div>
