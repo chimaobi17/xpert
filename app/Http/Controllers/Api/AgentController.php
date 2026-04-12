@@ -72,8 +72,8 @@ class AgentController extends Controller
             }
 
             if ($request->filled('tier') && $request->tier !== 'all') {
-                $isPremium = ($request->tier === 'premium') ? 1 : 0;
-                $query->where('is_premium_only', '=', $isPremium);
+                $isPremium = $request->tier === 'premium';
+                $query->where('is_premium_only', $isPremium);
             }
 
             $agents = $query->get();
