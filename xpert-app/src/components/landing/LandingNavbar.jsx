@@ -1,10 +1,26 @@
 import { Link } from 'react-router-dom';
 import clsx from 'clsx';
-import { SunIcon, MoonIcon, Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
+import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
 import useTheme from '../../hooks/useTheme';
 import logoFull from '../../assets/logo-full.svg';
 import Button from '../ui/Button';
+
+function SunriseIcon({ className }) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className={className}>
+      <path d="M12.001 0A12 12 0 1 0 24 11.999A12.01 12.01 0 0 0 12.001 0m0 2.464a9.53 9.53 0 0 1 9.514 8.889a9.5 9.5 0 0 1-.863 4.649H3.35a9.53 9.53 0 0 1 .616-9.14a9.53 9.53 0 0 1 8.036-4.398" />
+    </svg>
+  );
+}
+
+function MoonCircleIcon({ className }) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="currentColor" className={className}>
+      <circle cx="32" cy="32" r="30" />
+    </svg>
+  );
+}
 
 export default function LandingNavbar({ isScrolled, mobileMenuOpen, setMobileMenuOpen }) {
   const { theme, toggleTheme } = useTheme();
@@ -35,7 +51,7 @@ export default function LandingNavbar({ isScrolled, mobileMenuOpen, setMobileMen
               className="p-2 rounded-xl text-text-secondary hover:text-primary-500 hover:bg-primary-500/5 transition-all"
               title="Toggle Theme"
             >
-              {theme === 'dark' ? <SunIcon className="h-5 w-5" /> : <MoonIcon className="h-5 w-5" />}
+              {theme === 'dark' ? <SunriseIcon className="h-5 w-5 text-primary-500" /> : <SunriseIcon className="h-5 w-5 text-primary-500 rotate-180" />}
             </button>
 
             <Link to="/login">
@@ -51,7 +67,7 @@ export default function LandingNavbar({ isScrolled, mobileMenuOpen, setMobileMen
               onClick={toggleTheme}
               className="p-2 rounded-xl text-text-secondary hover:text-primary-500"
             >
-              {theme === 'dark' ? <SunIcon className="h-5 w-5" /> : <MoonIcon className="h-5 w-5" />}
+              {theme === 'dark' ? <SunriseIcon className="h-5 w-5 text-primary-500" /> : <SunriseIcon className="h-5 w-5 text-primary-500 rotate-180" />}
             </button>
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}

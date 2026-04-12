@@ -75,8 +75,8 @@ export default function Landing() {
 
   return (
     <div className="min-h-screen bg-background text-foreground selection:bg-primary-500/30">
-      <LandingNavbar 
-        isScrolled={isScrolled} 
+      <LandingNavbar
+        isScrolled={isScrolled}
         mobileMenuOpen={mobileMenuOpen}
         setMobileMenuOpen={setMobileMenuOpen}
       />
@@ -94,7 +94,7 @@ export default function Landing() {
 
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary-500/10 border border-primary-500/20 text-primary-500 text-[10px] sm:text-xs font-bold uppercase tracking-[0.2em] mb-8 animate-fade-in-up shadow-[0_0_20px_rgba(31,196,95,0.1)]">
-              <SparklesIcon className="h-3.5 w-3.5 animate-pulse drop-shadow-[0_0_5px_rgba(31,196,95,0.8)]" />
+              {/* <SparklesIcon className="h-3.5 w-3.5 animate-pulse drop-shadow-[0_0_5px_rgba(31,196,95,0.8)]" /> */}
               <span className="mt-0.5">The Next Generation of AI</span>
             </div>
 

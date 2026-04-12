@@ -47,6 +47,9 @@ class AuthController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'job_title' => ['sometimes', 'nullable', 'string', 'max:255'],
+            'purpose' => ['sometimes', 'nullable', 'string', 'max:1000'],
+            'field_of_specialization' => ['sometimes', 'nullable', 'in:technology,creative,business,research,language'],
         ]);
 
         // Anti-enumeration: return generic error if email exists
@@ -61,12 +64,25 @@ class AuthController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'job_title' => $request->job_title,
+            'purpose' => $request->purpose,
+            'field_of_specialization' => $request->field_of_specialization,
+            'is_onboarded' => $request->filled('field_of_specialization'),
         ]);
+
+        // Automatically assign default agents if specialization info is provided
+        if ($request->filled('field_of_specialization')) {
+            try {
+                $this->assignDefaultAgents($user, $request->field_of_specialization);
+            } catch (\Exception $e) {
+                \Log::warning('Initial agent assignment failed: ' . $e->getMessage());
+            }
+        }
 
         $token = $user->createToken('spa')->plainTextToken;
 
         return response()->json([
-            'user' => $user,
+            'user' => $user->fresh(),
             'token' => $token,
         ], 201);
     }

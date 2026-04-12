@@ -2,8 +2,6 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import clsx from 'clsx';
 import {
-  SunIcon,
-  MoonIcon,
   BellIcon,
   Bars3Icon,
   ArrowRightOnRectangleIcon,
@@ -20,6 +18,22 @@ import Avatar from '../ui/Avatar';
 import Badge from '../ui/Badge';
 import logoFull from '../../assets/logo-full.svg';
 import logoIcon from '../../assets/logo-icon.svg';
+
+function SunriseIcon({ className }) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className={className}>
+      <path d="M12.001 0A12 12 0 1 0 24 11.999A12.01 12.01 0 0 0 12.001 0m0 2.464a9.53 9.53 0 0 1 9.514 8.889a9.5 9.5 0 0 1-.863 4.649H3.35a9.53 9.53 0 0 1 .616-9.14a9.53 9.53 0 0 1 8.036-4.398" />
+    </svg>
+  );
+}
+
+function MoonCircleIcon({ className }) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="currentColor" className={className}>
+      <circle cx="32" cy="32" r="30" />
+    </svg>
+  );
+}
 
 export default function Navbar({ onMenuToggle }) {
   const { user, logout } = useAuth();
@@ -52,14 +66,14 @@ export default function Navbar({ onMenuToggle }) {
         </Link>
       </div>
 
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-3 sm:gap-5 lg:gap-6">
         <button
           onClick={toggleTheme}
 
           className="rounded-2xl p-2.5 text-text-secondary hover:text-foreground hover:bg-surface-hover transition-all border-none"
           title="Toggle Theme"
         >
-          {theme === 'dark' ? <SunIcon className="h-5 w-5" /> : <MoonIcon className="h-5 w-5" />}
+          {theme === 'dark' ? <SunriseIcon className="h-5 w-5 text-primary-500" /> : <SunriseIcon className="h-5 w-5 text-primary-500 rotate-180" />}
         </button>
 
         <button
@@ -80,7 +94,7 @@ export default function Navbar({ onMenuToggle }) {
           <span className="absolute right-2.5 top-2.5 h-2 w-2 rounded-full bg-primary-500 shadow-[0_0_10px_rgba(31,196,95,0.5)] border border-background" />
         </Link>
 
-        <div className="relative ml-2">
+        <div className="relative">
           <button
             onClick={() => setDropdownOpen(!dropdownOpen)}
             className="flex items-center gap-3 rounded-2xl p-1.5 pr-4 hover:bg-surface-hover transition-all border-none group"
