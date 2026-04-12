@@ -11,7 +11,7 @@ test('user can register with valid data', function () {
     ]);
 
     $response->assertStatus(201)
-        ->assertJsonStructure(['id', 'name', 'email']);
+        ->assertJsonStructure(['user' => ['id', 'name', 'email'], 'token']);
 
     $this->assertDatabaseHas('users', ['email' => 'test@example.com']);
 });
@@ -35,8 +35,7 @@ test('registration fails with duplicate email', function () {
     ]);
 
     $response->assertStatus(422)
-        ->assertJson(['error' => 'validation_failed'])
-        ->assertJsonStructure(['details' => ['email']]);
+        ->assertJson(['error' => 'registration_failed']);
 });
 
 test('user can login with correct credentials', function () {
@@ -45,16 +44,13 @@ test('user can login with correct credentials', function () {
         'password' => bcrypt('password123'),
     ]);
 
-    $response = $this->withHeaders([
-        'Origin' => 'http://localhost:5173',
-        'Referer' => 'http://localhost:5173',
-    ])->postJson('/api/login', [
+    $response = $this->postJson('/api/login', [
         'email' => 'login@example.com',
         'password' => 'password123',
     ]);
 
     $response->assertStatus(200)
-        ->assertJsonStructure(['id', 'name', 'email']);
+        ->assertJsonStructure(['user' => ['id', 'name', 'email'], 'token']);
 });
 
 test('login fails with wrong password', function () {
@@ -111,10 +107,10 @@ test('user can mark themselves as onboarded', function () {
 
 test('user can logout', function () {
     $user = User::factory()->create();
+    $token = $user->createToken('spa')->plainTextToken;
 
-    $response = $this->actingAs($user)->withHeaders([
-        'Origin' => 'http://localhost:5173',
-        'Referer' => 'http://localhost:5173',
+    $response = $this->withHeaders([
+        'Authorization' => 'Bearer ' . $token,
     ])->postJson('/api/logout');
 
     $response->assertStatus(200)
