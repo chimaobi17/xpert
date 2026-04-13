@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { MagnifyingGlassIcon, TrashIcon, ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/outline';
+import { MagnifyingGlassIcon, TrashIcon, ChevronDownIcon, ChevronUpIcon, ClipboardDocumentIcon, CheckIcon } from '@heroicons/react/24/outline';
 import { BookOpenIcon } from '@heroicons/react/24/outline';
 import { get, del } from '../lib/apiClient';
 import Input from '../components/ui/Input';
@@ -9,8 +9,10 @@ import Spinner from '../components/ui/Spinner';
 import EmptyState from '../components/ui/EmptyState';
 import Badge from '../components/ui/Badge';
 import Card from '../components/ui/Card';
+import Modal from '../components/ui/Modal';
+import Button from '../components/ui/Button';
 import toast from 'react-hot-toast';
-import { formatDate, truncate } from '../lib/helpers';
+import { timeAgo, truncate } from '../lib/helpers';
 
 export default function Library() {
   const navigate = useNavigate();
@@ -19,6 +21,8 @@ export default function Library() {
   const [search, setSearch] = useState('');
   const [filterAgent, setFilterAgent] = useState('All');
   const [expandedId, setExpandedId] = useState(null);
+  const [copiedId, setCopiedId] = useState(null);
+  const [deleteTarget, setDeleteTarget] = useState(null);
 
   useEffect(() => {
     loadLibrary();
@@ -41,12 +45,22 @@ export default function Library() {
     return matchesSearch && matchesAgent;
   });
 
-  async function handleDelete(id) {
-    const res = await del(`/library/${id}`);
+  async function handleCopy(item) {
+    const text = item.ai_response || item.final_prompt || '';
+    await navigator.clipboard.writeText(text);
+    setCopiedId(item.id);
+    toast.success('Copied to clipboard');
+    setTimeout(() => setCopiedId(null), 2000);
+  }
+
+  async function confirmDelete() {
+    if (!deleteTarget) return;
+    const res = await del(`/library/${deleteTarget}`);
     if (res.ok) {
-      setItems((prev) => prev.filter((i) => i.id !== id));
+      setItems((prev) => prev.filter((i) => i.id !== deleteTarget));
       toast.success('Prompt removed from library');
     }
+    setDeleteTarget(null);
   }
 
   if (loading) {
@@ -100,17 +114,29 @@ export default function Library() {
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-2">
                     <Badge variant="info" size="sm" className="rounded-full px-3">{item.agent?.name || 'Agent'}</Badge>
-                    <span className="text-[10px] font-black uppercase tracking-widest text-text-tertiary">{formatDate(item.created_at)}</span>
+                    <span className="text-[10px] font-black uppercase tracking-widest text-text-tertiary">{timeAgo(item.created_at)}</span>
                   </div>
                   <p className="text-sm font-bold text-foreground truncate">{item.original_input}</p>
                   {expandedId !== item.id && (
                     <p className="text-xs text-text-secondary mt-1 line-clamp-1">{truncate(item.ai_response || '', 100)}</p>
                   )}
                 </div>
-                <div className="flex items-center gap-3 ml-4">
+                <div className="flex items-center gap-2 ml-4">
                   <button
-                    onClick={(e) => { e.stopPropagation(); handleDelete(item.id); }}
+                    onClick={(e) => { e.stopPropagation(); handleCopy(item); }}
+                    className="rounded-xl p-2.5 text-text-tertiary hover:text-primary-500 hover:bg-primary-500/10 transition-all"
+                    title="Copy to clipboard"
+                  >
+                    {copiedId === item.id ? (
+                      <CheckIcon className="h-5 w-5 text-primary-500" />
+                    ) : (
+                      <ClipboardDocumentIcon className="h-5 w-5" />
+                    )}
+                  </button>
+                  <button
+                    onClick={(e) => { e.stopPropagation(); setDeleteTarget(item.id); }}
                     className="rounded-xl p-2.5 text-text-tertiary hover:text-red-500 hover:bg-red-500/10 transition-all"
+                    title="Delete"
                   >
                     <TrashIcon className="h-5 w-5" />
                   </button>
@@ -144,6 +170,34 @@ export default function Library() {
           ))}
         </div>
       )}
+
+      {/* Delete Confirmation Modal */}
+      <Modal isOpen={!!deleteTarget} onClose={() => setDeleteTarget(null)} title="Delete Saved Prompt" isSolid size="sm">
+        <div className="text-center p-1 sm:p-2">
+          <div className="bg-red-500/10 w-14 h-14 sm:w-16 sm:h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+            <TrashIcon className="h-7 w-7 sm:h-8 sm:w-8 text-red-500" />
+          </div>
+          <h3 className="text-lg sm:text-xl font-bold text-foreground mb-2 tracking-tight">Are you sure?</h3>
+          <p className="text-sm text-text-secondary mb-6 font-medium">
+            This action cannot be undone. This prompt will be permanently removed from your library.
+          </p>
+          <div className="flex flex-col-reverse gap-3 sm:flex-row sm:gap-3">
+            <Button
+              variant="outline"
+              className="flex-1 h-11 rounded-full font-bold"
+              onClick={() => setDeleteTarget(null)}
+            >
+              Cancel
+            </Button>
+            <Button
+              className="flex-1 h-11 rounded-full font-bold bg-red-500 hover:bg-red-600 shadow-[0_0_15px_rgba(239,68,68,0.3)]"
+              onClick={confirmDelete}
+            >
+              Delete
+            </Button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 }

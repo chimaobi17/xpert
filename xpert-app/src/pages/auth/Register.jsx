@@ -4,7 +4,7 @@ import useAuth from '../../hooks/useAuth';
 import AuthLayout from '../../components/layout/AuthLayout';
 import Input from '../../components/ui/Input';
 import Button from '../../components/ui/Button';
-import { UserIcon, EnvelopeIcon, LockClosedIcon } from '@heroicons/react/24/outline';
+import { UserIcon, EnvelopeIcon, LockClosedIcon, EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
 
 export default function Register() {
   const { register } = useAuth();
@@ -20,6 +20,8 @@ export default function Register() {
   });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -84,23 +86,43 @@ export default function Register() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Input
             label="Password"
-            type="password"
+            type={showPassword ? 'text' : 'password'}
             icon={LockClosedIcon}
             placeholder="Create a password"
             value={form.password}
             onChange={(e) => setForm({ ...form, password: e.target.value })}
             error={errors.password}
             required
+            suffix={
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="text-text-tertiary hover:text-foreground transition-colors"
+                tabIndex={-1}
+              >
+                {showPassword ? <EyeSlashIcon className="h-5 w-5" /> : <EyeIcon className="h-5 w-5" />}
+              </button>
+            }
           />
           <Input
             label="Confirm Password"
-            type="password"
+            type={showConfirmPassword ? 'text' : 'password'}
             icon={LockClosedIcon}
             placeholder="Confirm password"
             value={form.password_confirmation}
             onChange={(e) => setForm({ ...form, password_confirmation: e.target.value })}
             error={errors.password_confirmation}
             required
+            suffix={
+              <button
+                type="button"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                className="text-text-tertiary hover:text-foreground transition-colors"
+                tabIndex={-1}
+              >
+                {showConfirmPassword ? <EyeSlashIcon className="h-5 w-5" /> : <EyeIcon className="h-5 w-5" />}
+              </button>
+            }
           />
         </div>
 

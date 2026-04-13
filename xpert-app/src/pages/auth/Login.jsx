@@ -4,7 +4,7 @@ import useAuth from '../../hooks/useAuth';
 import AuthLayout from '../../components/layout/AuthLayout';
 import Input from '../../components/ui/Input';
 import Button from '../../components/ui/Button';
-import { EnvelopeIcon, LockClosedIcon, ShieldCheckIcon } from '@heroicons/react/24/outline';
+import { EnvelopeIcon, LockClosedIcon, ShieldCheckIcon, EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
 
 export default function Login() {
   const { login, verifyMfa } = useAuth();
@@ -14,6 +14,7 @@ export default function Login() {
   const [mfaUserId, setMfaUserId] = useState(null);
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -116,13 +117,23 @@ export default function Login() {
         />
         <Input
           label="Password"
-          type="password"
+          type={showPassword ? 'text' : 'password'}
           icon={LockClosedIcon}
           placeholder="Enter your password"
           value={form.password}
           onChange={(e) => setForm({ ...form, password: e.target.value })}
           error={errors.password}
           required
+          suffix={
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="text-text-tertiary hover:text-foreground transition-colors"
+              tabIndex={-1}
+            >
+              {showPassword ? <EyeSlashIcon className="h-5 w-5" /> : <EyeIcon className="h-5 w-5" />}
+            </button>
+          }
         />
 
         <div className="flex items-center justify-between flex-nowrap">

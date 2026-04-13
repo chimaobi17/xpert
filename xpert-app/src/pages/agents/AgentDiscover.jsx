@@ -276,16 +276,16 @@ export default function AgentDiscover() {
 
       {/* Agent Limit Modal */}
       <Modal isOpen={limitModal} onClose={() => setLimitModal(false)} title="Agent Limit Reached" isSolid size="sm">
-        <div className="text-center p-2">
-          <div className="bg-primary-500/10 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
-            <RectangleStackIcon className="h-10 w-10 text-primary-500" />
+        <div className="text-center p-1 sm:p-2">
+          <div className="bg-primary-500/10 w-14 h-14 sm:w-20 sm:h-20 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6">
+            <RectangleStackIcon className="h-7 w-7 sm:h-10 sm:w-10 text-primary-500" />
           </div>
-          <h3 className="text-2xl font-bold text-foreground mb-3 tracking-tight">Helper Limit Reached</h3>
-          <p className="text-base text-text-secondary mb-8 font-medium">
+          <h3 className="text-lg sm:text-2xl font-bold text-foreground mb-2 sm:mb-3 tracking-tight">Helper Limit Reached</h3>
+          <p className="text-sm sm:text-base text-text-secondary mb-5 sm:mb-8 font-medium">
             Free plan users can add up to 3 helpers. Upgrade to add unlimited helpers.
           </p>
           <Button
-            className="w-full h-14 rounded-full font-bold text-lg shadow-[0_0_20px_rgba(31,196,95,0.3)]"
+            className="w-full h-11 sm:h-14 rounded-full font-bold text-base sm:text-lg shadow-[0_0_20px_rgba(31,196,95,0.3)]"
             onClick={() => { setLimitModal(false); navigate('/settings?tab=plan'); }}
           >
             Upgrade Now
@@ -295,32 +295,32 @@ export default function AgentDiscover() {
 
       {/* Upgrade Modal */}
       <Modal isOpen={upgradeModal} onClose={() => setUpgradeModal(false)} title="Upgrade Your Plan" isSolid size="sm">
-        <div className="text-center p-2">
-          <div className="bg-gradient-to-tr from-primary-600 to-emerald-400 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 shadow-[0_0_30px_rgba(31,196,95,0.4)]">
-            <SparklesIcon className="h-10 w-10 text-black" />
+        <div className="text-center p-1 sm:p-2">
+          <div className="bg-gradient-to-tr from-primary-600 to-emerald-400 w-14 h-14 sm:w-20 sm:h-20 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6 shadow-[0_0_30px_rgba(31,196,95,0.4)]">
+            <SparklesIcon className="h-7 w-7 sm:h-10 sm:w-10 text-black" />
           </div>
-          <h3 className="text-2xl font-bold text-foreground mb-3 tracking-tight">Unlock Premium Helpers</h3>
-          <p className="text-base text-text-secondary mb-8 font-medium">
+          <h3 className="text-lg sm:text-2xl font-bold text-foreground mb-2 sm:mb-3 tracking-tight">Unlock Premium Helpers</h3>
+          <p className="text-sm sm:text-base text-text-secondary mb-5 sm:mb-8 font-medium">
             Get access to advanced translation, image generation, and our most powerful AI helpers.
           </p>
-          <div className="grid gap-3 mb-6">
-            <div className="rounded-2xl border border-border p-4 text-left bg-surface-hover/50">
+          <div className="grid gap-2 sm:gap-3 mb-4 sm:mb-6">
+            <div className="rounded-2xl border border-border p-3 sm:p-4 text-left bg-surface-hover/50">
               <div className="flex justify-between items-center mb-0.5">
-                <p className="font-bold text-base text-foreground">Standard</p>
+                <p className="font-bold text-sm sm:text-base text-foreground">Standard</p>
                 <span className="text-[9px] font-bold text-text-tertiary uppercase tracking-widest italic">Personal</span>
               </div>
-              <p className="text-xs text-text-secondary">150K tokens/day, Priority Support</p>
+              <p className="text-[11px] sm:text-xs text-text-secondary">150K tokens/day, Priority Support</p>
             </div>
-            <div className="rounded-2xl border-2 border-primary-500 p-4 text-left bg-primary-500/5 shadow-[0_0_15px_rgba(31,196,95,0.1)]">
+            <div className="rounded-2xl border-2 border-primary-500 p-3 sm:p-4 text-left bg-primary-500/5 shadow-[0_0_15px_rgba(31,196,95,0.1)]">
               <div className="flex justify-between items-center mb-0.5">
-                <p className="font-bold text-lg text-primary-500">Premium</p>
+                <p className="font-bold text-base sm:text-lg text-primary-500">Premium</p>
                 <Badge variant="premium" size="sm" className="rounded-full px-2 py-0.5 scale-90">Elite</Badge>
               </div>
-              <p className="text-xs text-foreground font-medium opacity-90">Tokens, All Agents, Image Gen</p>
+              <p className="text-[11px] sm:text-xs text-foreground font-medium opacity-90">Tokens, All Agents, Image Gen</p>
             </div>
           </div>
           <Button
-            className="w-full h-14 rounded-full font-bold text-lg shadow-[0_0_20px_rgba(31,196,95,0.3)]"
+            className="w-full h-11 sm:h-14 rounded-full font-bold text-base sm:text-lg shadow-[0_0_20px_rgba(31,196,95,0.3)]"
             onClick={() => { setUpgradeModal(false); navigate('/settings?tab=plan'); }}
           >
             Start Your Free Trial

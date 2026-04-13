@@ -109,7 +109,34 @@ export default function App() {
             backdropFilter: 'blur(8px)',
           },
         }}
-      />
+      >
+        {(t) => (
+          <div
+            className={`flex items-center gap-3 px-4 py-3 rounded-xl border shadow-lg transition-all ${
+              t.visible ? 'animate-enter' : 'animate-leave'
+            }`}
+            style={{
+              background: 'var(--color-surface)',
+              color: 'var(--color-text)',
+              border: '1px solid var(--color-border)',
+              backdropFilter: 'blur(8px)',
+            }}
+          >
+            {t.type === 'success' && <span className="text-primary-500 text-lg shrink-0">&#10003;</span>}
+            {t.type === 'error' && <span className="text-red-500 text-lg shrink-0">&#10007;</span>}
+            <span className="flex-1 text-sm font-medium">{typeof t.message === 'function' ? t.message(t) : t.message}</span>
+            <button
+              onClick={() => toast.dismiss(t.id)}
+              className="shrink-0 rounded-lg p-1 text-text-tertiary hover:text-foreground hover:bg-surface-hover transition-colors"
+              aria-label="Close notification"
+            >
+              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+        )}
+      </Toaster>
       <ApiHandlerRegistration />
       <ErrorBoundary>
       <Suspense fallback={<PageLoader />}>

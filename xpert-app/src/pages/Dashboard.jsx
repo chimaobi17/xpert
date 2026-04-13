@@ -123,19 +123,19 @@ export default function Dashboard() {
 
       {/* Upgrade Banner for Free Users */}
       {user?.plan_level === 'free' && (
-        <div className="mb-8 sm:mb-12 relative overflow-hidden rounded-[1.5rem] sm:rounded-[2.5rem] bg-gradient-to-br from-primary-600/20 to-emerald-400/5 border border-primary-500/20 glass p-5 sm:p-8 lg:p-12 group hover:border-primary-500/40 transition-all">
+        <div className="mb-6 sm:mb-12 relative overflow-hidden rounded-2xl sm:rounded-[2.5rem] bg-gradient-to-br from-primary-600/20 to-emerald-400/5 border border-primary-500/20 glass p-4 sm:p-8 lg:p-12 group hover:border-primary-500/40 transition-all">
           <div className="absolute -top-24 -right-24 h-64 w-64 bg-primary-500/10 blur-[100px] rounded-full group-hover:bg-primary-500/20 transition-all duration-700" />
-          <div className="relative flex flex-col md:flex-row items-center justify-between gap-8">
+          <div className="relative flex flex-col md:flex-row items-center justify-between gap-4 sm:gap-8">
             <div className="text-center md:text-left flex-1 max-w-xl">
-              <Badge variant="premium" className="mb-4 rounded-full px-4 py-1.5 bg-gradient-to-r from-amber-400 to-orange-500 text-black border-none font-black uppercase tracking-tighter italic">Free Plan</Badge>
-              <h3 className="text-xl sm:text-2xl lg:text-3xl font-black text-white leading-tight mb-3">Get More Out of Xpert</h3>
-              <p className="text-lg text-zinc-400 font-medium">
+              <Badge variant="premium" className="mb-3 sm:mb-4 rounded-full px-3 sm:px-4 py-1 sm:py-1.5 bg-gradient-to-r from-amber-400 to-orange-500 text-black border-none font-black uppercase tracking-tighter italic text-[10px] sm:text-xs">Free Plan</Badge>
+              <h3 className="text-lg sm:text-2xl lg:text-3xl font-black text-white leading-tight mb-2 sm:mb-3">Get More Out of Xpert</h3>
+              <p className="text-sm sm:text-lg text-zinc-400 font-medium">
                 More daily usage, faster responses, and access to all AI helpers — including image generation.
               </p>
             </div>
             <Link to="/settings?tab=plan" className="w-full md:w-auto">
-              <Button className="w-full h-12 sm:h-16 px-6 sm:px-10 rounded-full font-black uppercase tracking-widest text-sm sm:text-lg shadow-[0_0_30px_rgba(31,196,95,0.3)] hover:scale-105 active:scale-95 transition-all">
-                <ArrowUpCircleIcon className="h-6 w-6 mr-2" /> Upgrade Plan
+              <Button className="w-full h-11 sm:h-16 px-6 sm:px-10 rounded-full font-black uppercase tracking-widest text-xs sm:text-lg shadow-[0_0_30px_rgba(31,196,95,0.3)] hover:scale-105 active:scale-95 transition-all">
+                <ArrowUpCircleIcon className="h-5 w-5 sm:h-6 sm:w-6 mr-2" /> Upgrade Plan
               </Button>
             </Link>
           </div>
@@ -150,14 +150,14 @@ export default function Dashboard() {
              <Link to="/workspace" className="text-xs font-black uppercase tracking-widest text-primary-500 hover:text-foreground transition-colors">View All</Link>
           </div>
           {loadingData ? (
-             <div className="flex flex-col items-center justify-center py-20 glass rounded-[2rem] border border-zinc-800/50">
+             <div className="flex flex-col items-center justify-center py-12 sm:py-20 glass rounded-2xl sm:rounded-[2rem] border border-zinc-800/50">
                <Spinner />
-               <p className="mt-4 text-xs font-bold text-zinc-500 uppercase tracking-widest animate-pulse mt-6">
+               <p className="mt-4 text-xs font-bold text-zinc-500 uppercase tracking-widest animate-pulse sm:mt-6">
                  Loading your dashboard...
                </p>
              </div>
           ) : (
-            <div className="grid gap-4 sm:grid-cols-2">
+            <div className="grid gap-3 sm:gap-4 sm:grid-cols-2">
               {myAgents.map((agent) => (
                 <div
                   key={agent.id}
@@ -174,31 +174,31 @@ export default function Dashboard() {
                       }
                     }}
                     className={clsx(
-                      "!p-4 sm:!p-6 lg:!p-8 h-full flex items-center gap-4 sm:gap-6 border-border/50 hover:border-primary-500/30 overflow-hidden relative",
+                      "!p-3 sm:!p-6 lg:!p-8 h-full flex items-center gap-3 sm:gap-6 border-border/50 hover:border-primary-500/30 overflow-hidden relative",
                       agent.is_premium_only && user?.plan_level === 'free' && "cursor-default border-primary-500/20 shadow-[0_0_20px_rgba(31,196,95,0.05)]"
                     )}
                   >
                     {/* Content Layer (Blurred if locked) */}
                     <div className={clsx(
-                      "flex items-center gap-4 sm:gap-6 flex-1 transition-all duration-500",
+                      "flex items-center gap-3 sm:gap-6 flex-1 transition-all duration-500",
                       agent.is_premium_only && user?.plan_level === 'free' && "blur-[6px] opacity-30 pointer-events-none"
                     )}>
-                      <div className="flex h-12 w-12 sm:h-16 sm:w-16 shrink-0 items-center justify-center rounded-2xl bg-surface-hover text-primary-500 shadow-sm group-hover:scale-110 transition-all duration-500">
+                      <div className="flex h-10 w-10 sm:h-16 sm:w-16 shrink-0 items-center justify-center rounded-xl sm:rounded-2xl bg-surface-hover text-primary-500 shadow-sm group-hover:scale-110 transition-all duration-500">
                         {agent.is_premium_only && user?.plan_level === 'free' ? (
-                          <LockClosedIcon className="h-6 w-6 sm:h-8 sm:w-8" />
+                          <LockClosedIcon className="h-5 w-5 sm:h-8 sm:w-8" />
                         ) : (
-                          <CodeBracketIcon className="h-6 w-6 sm:h-8 sm:w-8" />
+                          <CodeBracketIcon className="h-5 w-5 sm:h-8 sm:w-8" />
                         )}
                       </div>
                       <div className="min-w-0 flex-1">
-                        <div className="flex items-center gap-2 mb-1">
-                          <h3 className="text-base sm:text-lg font-bold text-foreground tracking-tight truncate">{agent.name}</h3>
+                        <div className="flex items-center gap-2 mb-0.5 sm:mb-1">
+                          <h3 className="text-sm sm:text-lg font-bold text-foreground tracking-tight truncate">{agent.name}</h3>
                           {agent.is_premium_only && (
                              <Badge variant="premium" size="sm" className="scale-75 origin-left">Elite</Badge>
                           )}
                         </div>
-                        <p className="text-[9px] font-black uppercase tracking-[0.2em] text-text-tertiary mb-2">{agent.domain}</p>
-                        <p className="text-xs text-text-secondary leading-relaxed opacity-80 group-hover:opacity-100 transition-opacity truncate pr-4">
+                        <p className="text-[9px] font-black uppercase tracking-[0.2em] text-text-tertiary mb-1 sm:mb-2">{agent.domain}</p>
+                        <p className="text-[11px] sm:text-xs text-text-secondary leading-relaxed opacity-80 group-hover:opacity-100 transition-opacity truncate pr-4 hidden sm:block">
                            {agent.description?.slice(0, 100) || agent.system_prompt?.slice(0, 100)}...
                         </p>
                       </div>
@@ -206,14 +206,14 @@ export default function Dashboard() {
 
                     {/* Premium Lock Overlay for Dashboard */}
                     {agent.is_premium_only && user?.plan_level === 'free' && (
-                      <div className="absolute inset-0 z-20 flex flex-col items-center justify-center p-4 text-center animate-fade-in bg-background/10">
-                        <div className="bg-primary-500/10 p-2.5 rounded-xl mb-3 shadow-lg shadow-primary-500/5">
-                           <LockClosedIcon className="h-6 w-6 text-primary-500" />
+                      <div className="absolute inset-0 z-20 flex flex-col items-center justify-center p-3 sm:p-4 text-center animate-fade-in bg-background/10">
+                        <div className="bg-primary-500/10 p-2 sm:p-2.5 rounded-xl mb-2 sm:mb-3 shadow-lg shadow-primary-500/5">
+                           <LockClosedIcon className="h-5 w-5 sm:h-6 sm:w-6 text-primary-500" />
                         </div>
-                        <h4 className="text-sm font-black text-foreground mb-4">{agent.name}</h4>
-                        <Button 
+                        <h4 className="text-xs sm:text-sm font-black text-foreground mb-3 sm:mb-4">{agent.name}</h4>
+                        <Button
                           onClick={(e) => { e.stopPropagation(); navigate('/settings?tab=plan'); }}
-                          className="h-9 px-6 rounded-full text-[10px] font-black uppercase tracking-widest shadow-lg shadow-primary-500/20"
+                          className="h-8 sm:h-9 px-4 sm:px-6 rounded-full text-[10px] font-black uppercase tracking-widest shadow-lg shadow-primary-500/20"
                         >
                           Unlock
                         </Button>
@@ -225,9 +225,9 @@ export default function Dashboard() {
               <Card
                 hoverable
                 onClick={() => navigate('/agents/discover')}
-                className="!p-6 border-dashed hover:border-solid transition-all flex items-center gap-4 group bg-surface-hover/20"
+                className="!p-3 sm:!p-6 border-dashed hover:border-solid transition-all flex items-center gap-3 sm:gap-4 group bg-surface-hover/20"
               >
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-surface-hover border border-border text-text-tertiary group-hover:text-primary-500 transition-colors">
+                <div className="flex h-10 w-10 sm:h-12 sm:w-12 shrink-0 items-center justify-center rounded-xl bg-surface-hover border border-border text-text-tertiary group-hover:text-primary-500 transition-colors">
                   <span className="text-2xl font-light">+</span>
                 </div>
                 <div>

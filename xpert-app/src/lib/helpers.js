@@ -12,11 +12,30 @@ export function formatNumber(num) {
 }
 
 export function formatDate(dateStr) {
-  return new Date(dateStr).toLocaleDateString('en-US', {
+  if (!dateStr) return 'No date';
+  const date = new Date(dateStr);
+  if (isNaN(date.getTime()) || date.getFullYear() <= 1970) return 'No date';
+  return date.toLocaleDateString('en-US', {
     month: 'short',
     day: 'numeric',
     year: 'numeric',
   });
+}
+
+export function timeAgo(dateStr) {
+  if (!dateStr) return 'No date';
+  const date = new Date(dateStr);
+  if (isNaN(date.getTime()) || date.getFullYear() <= 1970) return 'No date';
+  const now = new Date();
+  const seconds = Math.floor((now - date) / 1000);
+  if (seconds < 60) return 'Just now';
+  const minutes = Math.floor(seconds / 60);
+  if (minutes < 60) return `${minutes} min${minutes > 1 ? 's' : ''} ago`;
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `${hours} hr${hours > 1 ? 's' : ''} ago`;
+  const days = Math.floor(hours / 24);
+  if (days < 7) return `${days} day${days > 1 ? 's' : ''} ago`;
+  return formatDate(dateStr);
 }
 
 export function formatDateTime(dateStr) {

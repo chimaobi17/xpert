@@ -33,6 +33,7 @@ class LibraryController extends Controller
             'original_input' => $request->original_input ?? '{}',
             'final_prompt' => $request->final_prompt,
             'ai_response' => $request->ai_response ?? '',
+            'created_at' => now(),
         ]);
 
         return response()->json($item, 201);
