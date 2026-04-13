@@ -22,6 +22,15 @@ These issues have already been resolved and deployed to production. **Do NOT re-
 - **Files changed:** `AgentController.php`, `PromptEngineService.php`
 - **What was done:** Implemented logic to extract and process multiple file uploads from any request field, allowing the AI to reference multiple documents simultaneously. (Note: Currently being refined for performance).
 
+### Fix D: AI Resilience & Prompt Standardization (Bug 17)
+- **Files changed:** `PromptEngineService.php`, `HuggingFaceService.php`, `AiAgentSeeder.php`, `ai_models.php`
+- **What was done:** 
+  1. **Structured Prompt Engine:** Refactored the engine for Premium users to curate user inputs and brand intelligence into a highly structured format (Role -> Task -> Context -> Instructions). This specifically fixates Premium Image Generation helpers (like AI Photographer and Logo Creator) by transforming structured metadata into high-fidelity, clean visual descriptors for superior model adherence.
+  2. **Tiered Resilience:** Integrated a 3-tier model fallback chain (Primary -> Fallback -> Recovery) and 5-attempt retry logic with exponential backoff to eliminate 503 "Busy" errors.
+  3. **User Feedback:** Optimized the AI response flow to provide clear, helpful status updates during peak loads: 
+     - *"The AI system is temporarily busy. Please try again in a few moments. Retrying may help."*
+     - *"Your request has been queued. Processing shortly."*
+
 ---
 
 ## 🔧 Outstanding Bugs (Implement These)
@@ -227,6 +236,70 @@ html, body {
 
 ---
 
+---
+
+## Bug 11: Reduce Upgrade Plan card size on mobile
+
+**File:** `xpert-app/src/pages/agents/AgentDiscover.jsx` (or the Upgrade Modal component)
+
+**Current Behavior:** When a user with a free plan tries to "Find Helper" (add an agent) and exceeds the limit, the upgrade plan modal/card is too large on mobile, causing poor UX.
+
+**Expected Behavior:** The upgrade plan card should have reduced padding, smaller font sizes, and a more compact layout on mobile screens (<640px).
+
+---
+
+## Bug 12: Add close button to "Helper Added" notification
+
+**File:** `xpert-app/src/components/notifications/NotificationToast.jsx` (or wherever the custom toast is implemented)
+
+**Current Behavior:** When a user adds a helper, a notification pops up but cannot be manually closed; it only disappears automatically.
+
+**Expected Behavior:** Add a visible "X" (Close) button to the notification popup so users can dismiss it immediately.
+
+---
+
+## Bug 13: Saved Prompts — Copy Feature & Delete Confirmation
+
+**File:** `xpert-app/src/pages/Library.jsx` or `xpert-app/src/components/library/SavedPromptCard.jsx`
+
+**Requirement:** 
+1. **Copy Feature:** Add a copy icon/button to each saved prompt card that allows the user to copy the prompt text to their clipboard with a "Copied!" feedback state.
+2. **Delete Confirmation:** Before deleting a saved prompt, trigger a confirmation modal (e.g., "Are you sure you want to delete this prompt? This action cannot be undone.") to prevent accidental deletions.
+
+---
+
+## Bug 14: Home Tab Mobile Responsiveness (Strict Fix)
+
+**File:** `xpert-app/src/pages/Dashboard.jsx`
+
+**Current Behavior:** The Home tab (Dashboard) has layout issues on mobile, including misaligned elements, overlapping text, or improper scaling.
+
+**Expected Behavior:** Implement a strictly responsive layout for the Dashboard. Ensure all cards stack correctly, padding is consistent, and the UI feels premium on all mobile screen widths.
+
+---
+
+## Bug 15: Fix "Jan 1 1970" Date Bug in Saved Results
+
+**File:** `xpert-app/src/pages/Library.jsx` and relevant Backend Controller.
+
+**Issue:** Saved results show a default Unix timestamp date (Jan 1, 1970) instead of the actual time they were created.
+
+**Expected Behavior:** The date displayed should be the exact real-time timestamp when the user saved the result. Ensure the backend returns the correct `created_at` date and the frontend formats it properly (e.g., "2 mins ago" or "Oct 12, 2023").
+
+---
+
+## Bug 16: Password Visibility Toggle (Eye Icon)
+
+**Files:** `xpert-app/src/pages/auth/Login.jsx`, `xpert-app/src/pages/auth/Register.jsx`
+
+**Requirement:** Add a "show/hide" eye icon to the password input field on all authentication forms. 
+- Clicking the icon should toggle the input `type` between `password` and `text`.
+- Use `EyeIcon` and `EyeSlashIcon` from `heroicons`.
+
+---
+
+---
+
 ## Deployment Checklist
 
 After implementing all fixes:
@@ -240,3 +313,6 @@ After implementing all fixes:
    - `/agents/{id}` — Step indicator compact, form usable, FAB not blocking buttons
    - `/agents/{id}` Step 3 — Stop button freezes text at click point, response text wraps properly
    - Chatbot widget — Full width on mobile, no overflow in messages
+   - Auth forms — Password toggle works
+   - Library — Copy works and delete prompts for confirmation
+   - Date formats — "Jan 1 1970" is replaced by real-time dates

@@ -23,17 +23,48 @@ class PromptEngineService
         }
 
         $systemPrompt = $agent->system_prompt;
+        
+        // Replace placeholders in the body first
         $body = $this->replacePlaceholders($template->template_body, $userInputs);
 
-        // Optimization: Image models (SDXL, Flux) prefer pure descriptors over conversational instructions.
         $modelType = config("ai_models.{$agent->category}.type", 'text');
+        
         if ($modelType === 'image') {
             $assembled = $this->cleanImagePrompt($body);
         } else {
-            if ($fileContent) {
-                $body .= "\n\n--- ATTACHED DOCUMENT ---\n" . $fileContent;
+            // Deduplicate metadata: don't repeat fields that were already used as {{placeholders}} in the body
+            $metadata = $this->formatMetadata($userInputs, $template->template_body);
+            
+            // Separate Instructions if present in the template body
+            $parts = explode('Instructions:', $body, 2);
+            $taskMain = trim($parts[0]);
+            $instructions = isset($parts[1]) ? trim($parts[1]) : '';
+
+            $blocks = [];
+            
+            // 1. Role (from system prompt)
+            if ($systemPrompt) {
+                $blocks[] = "[Expert Role]\n" . trim($systemPrompt);
             }
-            $assembled = $systemPrompt . "\n\n" . $body;
+
+            // 2. Task & Context (from template body minus instructions)
+            $blocks[] = trim($taskMain);
+            
+            // 3. Supplemental Intelligence Context (Curated Metadata)
+            if ($metadata) {
+                $blocks[] = "Intelligence Context:\n" . $metadata;
+            }
+
+            // 4. Instructions (Prioritized at the bottom)
+            if ($instructions) {
+                $blocks[] = "Instructions:\n" . trim($instructions);
+            }
+
+            if ($fileContent) {
+                $blocks[] = "--- ATTACHED DOCUMENT ---\n" . $fileContent;
+            }
+
+            $assembled = implode("\n\n", array_filter($blocks));
         }
 
         $maxChars = $this->planMaxChars[$planLevel] ?? $this->planMaxChars['free'];
@@ -46,16 +77,54 @@ class PromptEngineService
     }
 
     /**
+     * Extracts and formats metadata fields into a structured block.
+     * Skips fields that are already found as placeholders in the template body to avoid redundancy.
+     */
+    protected function formatMetadata(array $inputs, string $templateBody): string
+    {
+        $relevantFields = [
+            'tone' => 'Tone',
+            'audience' => 'Audience',
+            'word_count' => 'Word Count',
+            'level' => 'Complexity Level',
+            'industry' => 'Industry',
+            'target_role' => 'Target Role',
+            'brand_name' => 'Brand/Company Name',
+            'logo_style' => 'Visual Style',
+            'color_palette' => 'Color Palette',
+            'source_language' => 'Source Language',
+            'target_language' => 'Target Language',
+        ];
+
+        $lines = [];
+        foreach ($relevantFields as $key => $label) {
+            // Skip if value is empty
+            if (empty($inputs[$key])) continue;
+
+            // Skip if this field is already explicitly used as a placeholder in the template body
+            if (str_contains($templateBody, "{{{$key}}}")) continue;
+
+            $lines[] = "- Target {$label}: " . $inputs[$key];
+        }
+
+        return implode("\n", $lines);
+    }
+
+    /**
      * Clean up a structured template body for image generation models.
      * Removes labels and extra whitespace to create a direct visual prompt.
      */
     protected function cleanImagePrompt(string $body): string
     {
-        // Remove labels (e.g., "Photography Style: Portrait" -> "Portrait")
-        $cleaned = preg_replace('/^[\w\s\/]+:\s*/m', '', $body);
+        // Remove section headers like "Intelligence Context:", "Instructions:", etc.
+        $cleaned = preg_replace('/(Intelligence Context|Instructions|Additional Design Intent|Visual Style|Color Strategy):/i', '', $body);
+
+        // Remove field labels including those with hyphens (e.g., "- Target Industry: Portrait" -> "Portrait")
+        $cleaned = preg_replace('/^[\s\-]*[\w\s\/]+:\s*/m', '', $cleaned);
         
-        // Remove boilerplate
+        // Remove known boilerplate phrases
         $cleaned = preg_replace('/Generate a photorealistic image of:\s*/i', '', $cleaned);
+        $cleaned = preg_replace('/Create a professional logo concept for the brand described\./i', '', $cleaned);
         $cleaned = preg_replace('/Make it look like a real photograph taken with a professional camera\./i', '', $cleaned);
         $cleaned = preg_replace('/Use natural lighting and realistic textures\./i', '', $cleaned);
         $cleaned = preg_replace('/Make it look professionally with clean composition and visual appeal\./i', '', $cleaned);

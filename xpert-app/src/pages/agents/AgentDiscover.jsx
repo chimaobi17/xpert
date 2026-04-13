@@ -78,7 +78,7 @@ export default function AgentDiscover() {
   }, [loadAgents]);
 
   async function handleAddAgent(agent) {
-    if (agent.is_premium_only && user?.plan_level === 'free') {
+    if (agent.is_premium_only && (user?.plan_level === 'free' || !user?.plan_level)) {
       setUpgradeModal(true);
       return;
     }
@@ -181,7 +181,7 @@ export default function AgentDiscover() {
       ) : (
         <div id="guide-agents" className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
           {agents.map((agent, index) => {
-            const locked = agent.is_premium_only && user?.plan_level === 'free';
+            const locked = agent.is_premium_only && (user?.plan_level === 'free' || !user?.plan_level);
 
             return (
               <div

@@ -72,10 +72,22 @@ class AgentController extends Controller
             }
 
             if ($request->filled('tier') && $request->tier !== 'all') {
+                $driver = $query->getConnection()->getDriverName();
                 if ($request->tier === 'premium') {
-                    $query->whereRaw('"is_premium_only" IS TRUE');
+                    if ($driver === 'pgsql') {
+                        $query->whereRaw('is_premium_only IS TRUE');
+                    } else {
+                        $query->where('is_premium_only', true);
+                    }
                 } else {
-                    $query->whereRaw('"is_premium_only" IS NOT TRUE');
+                    if ($driver === 'pgsql') {
+                        $query->whereRaw('is_premium_only IS NOT TRUE');
+                    } else {
+                        $query->where(function ($q) {
+                            $q->where('is_premium_only', false)
+                              ->orWhereNull('is_premium_only');
+                        });
+                    }
                 }
             }
 
@@ -201,8 +213,8 @@ class AgentController extends Controller
 
         $user = $request->user();
 
-        // Check premium access
-        if ($agent->is_premium_only && $user->plan_level === 'free') {
+        // Check premium access (null plan_level defaults to free)
+        if ($agent->is_premium_only && ($user->plan_level === 'free' || !$user->plan_level)) {
             return response()->json([
                 'error' => 'premium_required',
                 'message' => "The {$agent->name} agent requires a Standard or Premium plan.",

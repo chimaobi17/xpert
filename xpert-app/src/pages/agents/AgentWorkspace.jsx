@@ -1,8 +1,9 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import { ArrowLeftIcon } from '@heroicons/react/24/outline';
+import { ArrowLeftIcon, LockClosedIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import { get, post, del } from '../../lib/apiClient';
+import useAuth from '../../hooks/useAuth';
 import Card from '../../components/ui/Card';
 import Badge from '../../components/ui/Badge';
 import Button from '../../components/ui/Button';
@@ -32,6 +33,7 @@ export default function AgentWorkspace() {
   const { id } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
+  const { user } = useAuth();
   const storageKey = `${STORAGE_PREFIX}${id}`;
   const restored = useRef(readSession(storageKey)).current;
 
@@ -207,7 +209,8 @@ export default function AgentWorkspace() {
       if (res.error?.retry) {
         toast.error(message + ' Retrying may help.');
       } else if (res.error?.upgrade) {
-        toast(message, { icon: '⬆️' });
+        toast.error(message);
+        navigate('/settings?tab=plan');
       } else {
         toast.error(message);
       }
@@ -287,7 +290,7 @@ export default function AgentWorkspace() {
   // Stop button visible only when actively loading or streaming (not after completion)
   const showStopButton = loading || (step === 3 && !stopped && aiResponse && responseType !== 'image');
 
-  const locked = agent.is_premium_only && user?.plan_level === 'free';
+  const locked = agent.is_premium_only && (user?.plan_level === 'free' || !user?.plan_level);
 
   return (
     <div className="animate-fade-in max-w-5xl mx-auto">

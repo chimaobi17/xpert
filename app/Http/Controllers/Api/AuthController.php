@@ -185,7 +185,7 @@ class AuthController extends Controller
 
         $domains = $domainMap[$specialization] ?? ['Technology'];
 
-        $limit = ($user->plan_level === 'free' || ! $user->plan_level) ? 3 : 5;
+        $limit = ($user->plan_level === 'free' || ! $user->plan_level) ? 2 : 5;
         $agentIds = \App\Models\AiAgent::whereIn('domain', $domains)
             ->where('is_premium_only', false)
             ->limit($limit)

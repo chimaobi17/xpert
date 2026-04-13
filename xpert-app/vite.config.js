@@ -6,8 +6,8 @@ export default defineConfig({
   server: {
     port: 5173,
     proxy: {
-      '/api': 'http://localhost:8000',
-      '/sanctum': 'http://localhost:8000',
+      '/api': 'http://xpert.test',
+      '/sanctum': 'http://xpert.test',
     },
   },
 });

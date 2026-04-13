@@ -146,16 +146,16 @@ export default function Dashboard() {
         {/* Quick Access */}
         <div>
           <div className="flex items-center justify-between mb-6">
-             <h2 className="text-xl font-bold text-foreground tracking-tight">Your AI Helpers</h2>
-             <Link to="/workspace" className="text-xs font-black uppercase tracking-widest text-primary-500 hover:text-foreground transition-colors">View All</Link>
+            <h2 className="text-xl font-bold text-foreground tracking-tight">Your AI Helpers</h2>
+            <Link to="/workspace" className="text-xs font-black uppercase tracking-widest text-primary-500 hover:text-foreground transition-colors">View All</Link>
           </div>
           {loadingData ? (
-             <div className="flex flex-col items-center justify-center py-12 sm:py-20 glass rounded-2xl sm:rounded-[2rem] border border-zinc-800/50">
-               <Spinner />
-               <p className="mt-4 text-xs font-bold text-zinc-500 uppercase tracking-widest animate-pulse sm:mt-6">
-                 Loading your dashboard...
-               </p>
-             </div>
+            <div className="flex flex-col items-center justify-center py-12 sm:py-20 glass rounded-2xl sm:rounded-[2rem] border border-zinc-800/50">
+              <Spinner />
+              <p className="mt-4 text-xs font-bold text-zinc-500 uppercase tracking-widest animate-pulse sm:mt-6">
+                Loading your dashboard...
+              </p>
+            </div>
           ) : (
             <div className="grid gap-3 sm:gap-4 sm:grid-cols-2">
               {myAgents.map((agent) => (
@@ -194,12 +194,12 @@ export default function Dashboard() {
                         <div className="flex items-center gap-2 mb-0.5 sm:mb-1">
                           <h3 className="text-sm sm:text-lg font-bold text-foreground tracking-tight truncate">{agent.name}</h3>
                           {agent.is_premium_only && (
-                             <Badge variant="premium" size="sm" className="scale-75 origin-left">Elite</Badge>
+                            <Badge variant="premium" size="sm" className="scale-75 origin-left">Elite</Badge>
                           )}
                         </div>
                         <p className="text-[9px] font-black uppercase tracking-[0.2em] text-text-tertiary mb-1 sm:mb-2">{agent.domain}</p>
                         <p className="text-[11px] sm:text-xs text-text-secondary leading-relaxed opacity-80 group-hover:opacity-100 transition-opacity truncate pr-4 hidden sm:block">
-                           {agent.description?.slice(0, 100) || agent.system_prompt?.slice(0, 100)}...
+                          {agent.description?.slice(0, 100) || agent.system_prompt?.slice(0, 100)}...
                         </p>
                       </div>
                     </div>
@@ -208,7 +208,7 @@ export default function Dashboard() {
                     {agent.is_premium_only && user?.plan_level === 'free' && (
                       <div className="absolute inset-0 z-20 flex flex-col items-center justify-center p-3 sm:p-4 text-center animate-fade-in bg-background/10">
                         <div className="bg-primary-500/10 p-2 sm:p-2.5 rounded-xl mb-2 sm:mb-3 shadow-lg shadow-primary-500/5">
-                           <LockClosedIcon className="h-5 w-5 sm:h-6 sm:w-6 text-primary-500" />
+                          <LockClosedIcon className="h-5 w-5 sm:h-6 sm:w-6 text-primary-500" />
                         </div>
                         <h4 className="text-xs sm:text-sm font-black text-foreground mb-3 sm:mb-4">{agent.name}</h4>
                         <Button
@@ -243,16 +243,16 @@ export default function Dashboard() {
         <div>
           <h2 className="text-xl font-bold text-foreground mb-6 tracking-tight">Recent Activity</h2>
           {myAgents.length === 0 && !loadingData ? (
-             <Card className="text-center py-20">
-               <p className="text-sm font-bold text-text-tertiary uppercase tracking-widest">No activity yet.</p>
-               <Button variant="outline" className="mt-8 rounded-full h-12 px-8 font-bold" onClick={() => navigate('/agents/discover')}>Find your first helper</Button>
-             </Card>
+            <Card className="text-center py-20">
+              <p className="text-sm font-bold text-text-tertiary uppercase tracking-widest">No activity yet.</p>
+              <Button variant="outline" className="mt-8 rounded-full h-12 px-8 font-bold" onClick={() => navigate('/agents/discover')}>Find your first helper</Button>
+            </Card>
           ) : (
             <Card className="text-center py-20 group">
-               <div className="w-16 h-16 rounded-full bg-surface-hover border border-border flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-500">
-                  <ChartBarIcon className="h-8 w-8 text-text-tertiary" />
-               </div>
-               <p className="text-sm font-bold text-text-tertiary uppercase tracking-widest">
+              <div className="w-16 h-16 rounded-full bg-surface-hover border border-border flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-500">
+                <ChartBarIcon className="h-8 w-8 text-text-tertiary" />
+              </div>
+              <p className="text-sm font-bold text-text-tertiary uppercase tracking-widest">
                 Your recent activity will show up here.
               </p>
               <p className="text-xs text-text-tertiary font-medium mt-2">Use an AI helper to see your history.</p>

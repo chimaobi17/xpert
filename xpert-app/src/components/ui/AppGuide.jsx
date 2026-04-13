@@ -24,7 +24,7 @@ const STEPS = [
   },
   {
     title: "Step 3: Your Workspace",
-    content: "Now, navigate to 'My Helpers'. This is your personal mission control where all your selected AI agents live.",
+    content: "Navigate to 'My Helpers' — your personal mission control. We've pre-selected 2 expert helpers based on your focus, but we've left an empty slot just for you! Head to 'Find Helpers' to pick your 3rd AI teammate for free.",
     target: "#guide-workspace",
     inSidebar: true,
   },

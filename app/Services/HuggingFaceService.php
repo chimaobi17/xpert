@@ -142,7 +142,7 @@ class HuggingFaceService
 
             if ($response->status() === 503) {
                 $errorData = $response->json();
-                $errorMsg = $errorData['error'] ?? 'Your request has been queued and will be processed shortly.';
+                $errorMsg = "Your request has been queued. Processing shortly.";
                 if (isset($errorData['estimated_time'])) {
                     $errorMsg .= ' Estimated loading time: ' . round($errorData['estimated_time']) . 's';
                 }
@@ -217,7 +217,7 @@ class HuggingFaceService
 
                 if ($response->status() === 503) {
                     $errorData = $response->json();
-                    $errorMsg = $errorData['error'] ?? 'Your request has been queued and will be processed shortly.';
+                    $errorMsg = "Your request has been queued. Processing shortly.";
                     if (isset($errorData['estimated_time'])) {
                         $errorMsg .= ' Estimated loading time: ' . round($errorData['estimated_time']) . 's';
                     }
@@ -280,6 +280,6 @@ class HuggingFaceService
             }
         }
 
-        throw $lastException ?? new AiUnavailableException('All retry attempts failed');
+        throw $lastException ?? new AiUnavailableException("The AI system is temporarily busy. Please try again in a few moments. Retrying may help.");
     }
 }

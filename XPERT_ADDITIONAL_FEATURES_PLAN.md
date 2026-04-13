@@ -210,3 +210,72 @@ The practical implication for how you pitch this: don’t say “a better prompt
 - [x] **30.3 Legal Compliance**:
   - Cookie consent banner on first visit.
   - Privacy policy and Terms of Service acceptance in registration.
+
+### Phase 31: Email OTP MFA & Password Reset
+**Goal**: Integrate a secure Email OTP system for account verification, login MFA, and password recovery, ensuring a seamless fit with the current "Blue Ocean" aesthetic.
+- [ ] **31.1 Database Schema Update**: Migration to add `is_verified` (boolean), `otp_code` (string), `otp_expires_at` (timestamp), `reset_token` (string), and `reset_token_expires_at` (timestamp) to the `users` table.
+- [ ] **31.2 Email Infrastructure (Mailtrap & Mailchimp Ready)**:
+  - Configure Laravel Mail for **Mailtrap** during current phase; architecture must allow seamless toggle to **Mailchimp** later.
+  - Implement `VerifyEmail`, `MfaCode`, and `PasswordReset` Mailables with responsive HTML templates using Xpert's Primary Green branding.
+- [ ] **31.3 Signup Verification (Seamless Integration)**: 
+  - Update `AuthController@register` to set `is_verified = false` and trigger OTP without breaking existing onboarding persistence.
+  - Create `VerifyEmail.jsx` frontend component using the application's core UI design system (Input/Button components).
+- [ ] **31.4 Password Recovery (Option B - Reset Link)**:
+  - Implement `PasswordResetController` with secure 30-minute token expiration for a professional recovery experience.
+  - Create `ResetPassword.jsx` frontend page to handle new password input via link validation.
+- [ ] **31.5 Login MFA Enhancement**:
+  - Update `MfaController` to automatically send the 6-digit challenge via email when MFA is enabled.
+- [ ] **31.6 Security Hardening**:
+  - Implement rate limiting for resend operations and ensure generic responses for anti-enumeration.
+
+### Phase 32: Multilingual Accessibility
+
+**Goal**: Enhance app accessibility by allowing users to select their preferred language from a list of 20+ languages. Ensure this feature is discoverable, easy to use, and accessible to all users.
+
+**🔧 Feature Implementation Details**:
+- **Objective**: Multilingual Accessibility.
+- **Core Requirements**:
+  - **Language Selection**: Offer a dropdown menu with 20+ options (English, Spanish, French, Mandarin, Arabic, Portuguese, German, Russian, Japanese, Hindi, etc.).
+  - **Discovery**: Selector available during signup/onboarding, in the global navigation bar (persistent), and in the Settings page.
+  - **Persistence**: Save selection to backend user profile (`language_preference`) to persist across sessions.
+  - **Accessibility**: 
+    - ARIA labels for screen readers (e.g., "Select your language").
+    - Smooth keyboard navigation (tabbing).
+    - Sufficient color contrast and scalable text.
+  - **Localization**: 
+    - Integrate `i18next` for the React frontend.
+    - Properly localize all static text (buttons, labels, error messages).
+    - Dynamically load content based on the preference.
+- **Security & Privacy**: Ensure user data is securely stored and sensitive data is not exposed during setting changes.
+- **Implementation Steps**:
+  1. **Backend**: Add `language_preference` field to user schema and update `AuthController`.
+  2. **Frontend**: Implement a reusable `LanguageSelector` component.
+  3. **Framework**: Integrate `i18next` with JSON locale files.
+  4. **Testing**: Validate UI rendering for all 20+ languages, especially special characters and Right-to-Left (RTL) layouts.
+  5. **UX**: Verify intuitive placement and ensure it does not disrupt user flow.
+
+### Phase 33: Personalized Onboarding & "Your Choice" Agent Slot
+**Goal**: Transition from "3 auto-assigned" to "2 auto-assigned + 1 user choice" to drive engagement with the Agent Library immediately after onboarding.
+
+- [x] **33.1 Backend: Auto-Assignment Decoupling**
+    - Update `AuthController@assignDefaultAgents` to set the `$limit` for free-tier users to **2** (currently 3).
+    - This ensures new users land on the dashboard with 2 expert helpers instead of 3.
+- [x] **33.2 Frontend: App Guide Feature Explanation**
+    - Modify `AppGuide.jsx` (or the underlying `STEPS` array) at **Step 3 (My Helpers)** or **Step 4 (Launch an Agent)**.
+    - **Draft Content**: "We've pre-selected 2 expert helpers for you based on your focus. But wait—we've left an empty slot just for you! Head over to 'Find Helpers' to pick and add your 3rd AI teammate for free."
+- [x] **33.3 UI: Empty Slot CTA**
+    - Identify the empty slot in `Sidebar.jsx` or the `My Agents` grid.
+    - If a free user has < 3 agents, display a subtle "Empty Slot - Add your own helper" placeholder or tooltip to nudge them towards the discovery page.
+### Phase 34: Premium Helpers Loading Fix (Online Version) ✅
+**Goal**: Resolve the issue where premium agents fail to appear or load in the production environment.
+- [x] **34.1 Environment Audit**: Compare `.env` and `config/ai_models.php` between local and production to identify missing premium model mappings.
+- [x] **34.2 Controller Logic Review**: Guard against `null` plan levels in `AgentController` that might default users to a state where premium agents are filtered out.
+- [x] **34.3 Database Synchronization**: Ensure `is_premium_only` flags in the `ai_agents` table are correctly migrated and seeded in the online database.
+- [x] **34.4 Frontend Connectivity**: Debug `apiClient.js` to ensure 402/403 errors from the online API are handled gracefully with the "Upgrade" modal instead of failing to render.
+
+### Phase 35: Delete Confirmation for AI Helpers ✅
+**Goal**: Prevent accidental removal of agents from the user's workspace by adding a confirmation step.
+- [x] **35.1 Reusable Confirmation Modal**: Create a `ConfirmModal.jsx` component with customizable title, message, and "Delete" button styling (Danger Red).
+- [x] **35.2 Delete Logic Interception**: Update the `handleRemoveAgent` function in `Workspace.jsx` to open the modal instead of calling the API immediately.
+- [x] **35.3 State Management**: Pass the `agent_id` to the modal and execute the `DELETE /api/user/agents/{id}` request only upon user confirmation.
+- [x] **35.4 UX Polish**: Add a loading state to the "Confirm" button during the deletion process and a success toast ("Helper removed") upon completion.

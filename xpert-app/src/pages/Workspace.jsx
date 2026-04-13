@@ -15,6 +15,7 @@ import Badge from '../components/ui/Badge';
 import Button from '../components/ui/Button';
 import Spinner from '../components/ui/Spinner';
 import EmptyState from '../components/ui/EmptyState';
+import ConfirmModal from '../components/ui/ConfirmModal';
 import toast from 'react-hot-toast';
 
 const CACHE_KEY = 'workspace_agents';
@@ -42,6 +43,7 @@ export default function Workspace() {
   const cached = useRef(readCache()).current;
   const [myAgents, setMyAgents] = useState(cached || []);
   const [loading, setLoading] = useState(!cached);
+  const [removeTarget, setRemoveTarget] = useState(null);
 
   useEffect(() => {
     loadAgents();
@@ -57,14 +59,16 @@ export default function Workspace() {
     setLoading(false);
   }
 
-  async function handleRemove(agentId) {
-    const res = await del(`/user/agents/${agentId}`);
+  async function confirmRemove() {
+    if (!removeTarget) return;
+    const res = await del(`/user/agents/${removeTarget}`);
     if (res.ok) {
-      const updated = myAgents.filter((a) => a.id !== agentId);
+      const updated = myAgents.filter((a) => a.id !== removeTarget);
       setMyAgents(updated);
       writeCache(updated);
-      toast.success('Agent removed from workspace');
+      toast.success('Helper removed from workspace');
     }
+    setRemoveTarget(null);
   }
 
   if (loading) {
@@ -115,7 +119,7 @@ export default function Workspace() {
 
       <div id="guide-workspace-grid" className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
         {myAgents.map((agent) => {
-          const locked = agent.is_premium_only && user?.plan_level === 'free';
+          const locked = agent.is_premium_only && (user?.plan_level === 'free' || !user?.plan_level);
           
           return (
             <div key={agent.id} className="group relative">
@@ -154,7 +158,7 @@ export default function Workspace() {
                         </Badge>
                       )}
                       <button
-                        onClick={(e) => { e.stopPropagation(); handleRemove(agent.id); }}
+                        onClick={(e) => { e.stopPropagation(); setRemoveTarget(agent.id); }}
                         className="rounded-full p-2.5 text-text-tertiary hover:text-red-500 hover:bg-red-500/10 transition-all opacity-0 group-hover:opacity-100"
                         title="Remove Agent"
                       >
@@ -202,7 +206,7 @@ export default function Workspace() {
                     
                     {/* Allow removal even if locked */}
                     <button
-                      onClick={(e) => { e.stopPropagation(); handleRemove(agent.id); }}
+                      onClick={(e) => { e.stopPropagation(); setRemoveTarget(agent.id); }}
                       className="absolute top-4 right-4 rounded-full p-2.5 text-text-tertiary hover:text-red-500 transition-all opacity-60 hover:opacity-100"
                     >
                       <TrashIcon className="h-5 w-5" />
@@ -213,7 +217,37 @@ export default function Workspace() {
             </div>
           );
         })}
+
+        {/* Empty Slot CTA for free users with < 3 agents */}
+        {(user?.plan_level === 'free' || !user?.plan_level) && myAgents.length < 3 && (
+          <div
+            onClick={() => navigate('/agents/discover')}
+            className="group relative flex flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed border-border/60 hover:border-primary-500/50 bg-surface-hover/20 hover:bg-surface-hover/40 p-6 sm:p-8 cursor-pointer transition-all duration-300 min-h-[200px]"
+          >
+            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary-500/10 text-primary-500 group-hover:scale-110 transition-transform duration-300">
+              <PlusCircleIcon className="h-7 w-7" />
+            </div>
+            <div className="text-center">
+              <p className="text-sm font-bold text-foreground mb-1">Empty Slot</p>
+              <p className="text-xs text-text-secondary font-medium">Pick your own AI helper to complete your team</p>
+            </div>
+            <span className="text-[10px] font-black uppercase tracking-widest text-primary-500 mt-1">
+              {3 - myAgents.length} slot{3 - myAgents.length > 1 ? 's' : ''} remaining
+            </span>
+          </div>
+        )}
       </div>
+
+      <ConfirmModal
+        isOpen={!!removeTarget}
+        onClose={() => setRemoveTarget(null)}
+        onConfirm={confirmRemove}
+        title="Remove Helper"
+        message="Are you sure you want to remove this helper from your workspace? You can always add it back later from Find Helpers."
+        confirmLabel="Remove"
+        icon={TrashIcon}
+        variant="danger"
+      />
     </div>
   );
 }
