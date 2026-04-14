@@ -471,7 +471,7 @@ export default function AgentWorkspace() {
                 <p className="text-text-secondary font-medium">Your AI helper has finished. See the result below.</p>
               </div>
               <button
-                onClick={() => navigate('/workspace')}
+                onClick={() => { sessionStorage.removeItem(storageKey); navigate('/workspace'); }}
                 className="bg-primary-500/10 text-primary-500 border border-primary-500/20 rounded-full px-5 py-2 font-bold uppercase tracking-tighter text-sm hover:bg-primary-500 hover:text-white transition-all duration-300"
               >
                 Done

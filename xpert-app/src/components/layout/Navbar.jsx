@@ -9,10 +9,10 @@ import {
   UserCircleIcon,
   ArrowUpCircleIcon,
   XMarkIcon,
-  SparklesIcon,
 } from '@heroicons/react/24/outline';
 import useAuth from '../../hooks/useAuth';
 import useTheme from '../../hooks/useTheme';
+import LightBulbOnIcon from '../icons/LightBulbOnIcon';
 import { useAppGuide } from '../../contexts/AppGuideContext';
 import Avatar from '../ui/Avatar';
 import Badge from '../ui/Badge';
@@ -82,7 +82,7 @@ export default function Navbar({ onMenuToggle }) {
           className="rounded-2xl p-2.5 text-primary-500 hover:bg-primary-500/10 transition-all border-none"
           title="Start App Tour"
         >
-          <SparklesIcon className="h-5 w-5 animate-pulse" />
+          <LightBulbOnIcon className="h-5 w-5 animate-pulse" />
         </button>
 
         <Link

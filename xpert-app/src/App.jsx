@@ -90,7 +90,7 @@ function RootRoute() {
   }
 
   if (user) {
-    return <Navigate to="/agents/discover" replace />;
+    return <Navigate to="/workspace" replace />;
   }
 
   return <Landing />;

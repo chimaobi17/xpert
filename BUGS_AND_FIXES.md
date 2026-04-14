@@ -330,6 +330,51 @@ html, body {
    ```
 2. (Optional) Sync `step` with URL search params (e.g., `?step=2`) or use `window.history.pushState` to ensure the browser's back button works as expected.
 
+## Bug 19: Clicking "Done" should clear agent session state
+
+**File:** `xpert-app/src/pages/agents/AgentWorkspace.jsx`
+
+**Current Behavior:** When a user finishes using an AI helper and clicks the "Done" button, they are taken back to the Workspace. However, the `sessionStorage` for that agent is not cleared. If they click on the same agent again, it reloads the previous result/step instead of starting fresh.
+
+**Expected Behavior:** Clicking "Done" should explicitly clear the stored session state for that specific agent so that the next time it's opened, it starts at Step 1 (Input Form).
+
+### Steps to Fix:
+1. Locate the "Done" button in `AgentWorkspace.jsx` (around line 450).
+2. Update the `onClick` handler to clear the `storageKey` before navigating:
+   ```javascript
+   <button
+     onClick={() => {
+       sessionStorage.removeItem(storageKey);
+       navigate('/workspace');
+     }}
+     ...
+   >
+     Done
+   </button>
+   ```
+
+---
+
+## Bug 20: Signed-in users should land on "My Helpers" page
+
+**File:** `xpert-app/src/App.jsx` and `xpert-app/src/pages/Landing.jsx`
+
+**Current Behavior:** Some authenticated users land on the public Landing page when visiting the root domain or after certain navigation flows, requiring an extra click to get to their workspace.
+
+**Expected Behavior:** Any user who is already authenticated should be automatically redirected to the "My Helpers" page (`/workspace`) if they land on the home page or root URL.
+
+### Steps to Fix:
+1. Verify `RootRoute` in `App.jsx` correctly handles the redirect (it seems to, but verify reactive updates).
+2. Add a proactive redirect in `Landing.jsx` as a secondary measure:
+   ```javascript
+   const { user, loading } = useAuth();
+   useEffect(() => {
+     if (!loading && user) {
+       navigate('/workspace', { replace: true });
+     }
+   }, [user, loading, navigate]);
+   ```
+
 ---
 
 ## Deployment Checklist

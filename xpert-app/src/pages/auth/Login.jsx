@@ -26,7 +26,7 @@ export default function Login() {
       if (data?.requires_2fa) {
         setMfaUserId(data.user_id);
       } else {
-        navigate('/agents/discover');
+        navigate('/workspace');
       }
     } catch (err) {
       const data = err.response?.data;
@@ -47,7 +47,7 @@ export default function Login() {
 
     try {
       await verifyMfa(mfaUserId, mfaCode);
-      navigate('/agents/discover');
+      navigate('/workspace');
     } catch (err) {
       const data = err.response?.data;
       setErrors({ mfa: data?.message || 'Invalid verification code' });

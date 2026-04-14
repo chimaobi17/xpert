@@ -31,7 +31,7 @@ export default function Register() {
     try {
       const { name, email, password, password_confirmation, ...extra } = form;
       await register(name, email, password, password_confirmation, extra);
-      navigate('/agents/discover');
+      navigate('/workspace');
     } catch (err) {
       const data = err.response?.data;
       if (data?.errors || data?.details) {

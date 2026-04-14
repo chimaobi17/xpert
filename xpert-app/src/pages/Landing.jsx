@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import clsx from 'clsx';
 import {
   ArrowRightIcon,
@@ -13,12 +13,22 @@ import {
 import LandingNavbar from '../components/landing/LandingNavbar';
 import LandingFooter from '../components/landing/LandingFooter';
 import Button from '../components/ui/Button';
+import useAuth from '../hooks/useAuth';
 
 export default function Landing() {
+  const { user, loading } = useAuth();
+  const navigate = useNavigate();
   const [activeStep, setActiveStep] = useState(0);
   const [zoomedImage, setZoomedImage] = useState(null);
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  // Redirect authenticated users to workspace
+  useEffect(() => {
+    if (!loading && user) {
+      navigate('/workspace', { replace: true });
+    }
+  }, [user, loading, navigate]);
 
   useEffect(() => {
     const handleScroll = () => {
