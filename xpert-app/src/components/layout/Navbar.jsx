@@ -99,7 +99,7 @@ export default function Navbar({ onMenuToggle }) {
             onClick={() => setDropdownOpen(!dropdownOpen)}
             className="flex items-center gap-3 rounded-2xl p-1.5 pr-4 hover:bg-surface-hover transition-all border-none group"
           >
-            <Avatar name={user?.name} src={user?.avatar_url} size="sm" className="rounded-xl group-hover:scale-105 transition-transform" />
+            <Avatar name={user?.name} src={user?.avatar_url} size="sm" className="rounded-xl group-hover:scale-105 transition-transform dark:bg-transparent dark:border dark:border-primary-500/40 dark:text-primary-500" />
             <div className="hidden md:flex flex-col items-start px-2">
               <p className="text-sm font-bold text-foreground leading-none mb-0.5">{user?.name?.split(' ')[0]}</p>
               <p className="text-[10px] font-bold uppercase tracking-widest text-text-tertiary scale-90 origin-left opacity-70">
