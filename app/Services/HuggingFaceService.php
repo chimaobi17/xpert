@@ -116,55 +116,146 @@ class HuggingFaceService
             throw new AiUnavailableException("Unknown image category: {$category}");
         }
 
-        try {
-            $payload = ['inputs' => $prompt];
+        $startTime = microtime(true);
 
-            // If a reference image was uploaded, include it for image-to-image models
-            if ($referenceImageBase64) {
-                $payload['image'] = $referenceImageBase64;
-            }
+        // Build ordered model chain: primary → fallback → recovery
+        $modelChain = array_filter([
+            $models['primary'] ?? null,
+            $models['fallback'] ?? null,
+            $models['recovery'] ?? null,
+        ]);
 
-            $response = Http::withToken(config('services.huggingface.api_key'))
-                ->timeout($models['timeout'] ?? 60)
-                ->post($this->imageBaseUrl . $models['primary'], $payload);
+        $lastException = null;
 
-            if ($response->status() === 401 || $response->status() === 403) {
-                throw new InvalidApiKeyException('Invalid HuggingFace API key');
-            }
+        foreach ($modelChain as $modelIndex => $model) {
+            $retries = $modelIndex === 0 ? 2 : 1; // More retries on primary
+            $backoff = 1;
 
-            if ($response->status() === 402) {
-                throw new RateLimitException(3600, 'HuggingFace free credits depleted. Credits reset monthly.');
-            }
-
-            if ($response->status() === 429) {
-                throw new RateLimitException(60, 'HF rate limit hit');
-            }
-
-            if ($response->status() === 503) {
-                $errorData = $response->json();
-                $errorMsg = "Your request has been queued. Processing shortly.";
-                if (isset($errorData['estimated_time'])) {
-                    $errorMsg .= ' Estimated loading time: ' . round($errorData['estimated_time']) . 's';
+            for ($attempt = 0; $attempt <= $retries; $attempt++) {
+                if ($attempt > 0) {
+                    usleep($backoff * 1_000_000);
+                    $backoff = min($backoff * 2, 8);
                 }
-                throw new AiUnavailableException($errorMsg);
+
+                try {
+                    $result = $this->callImageApi($model, $prompt, $models['timeout'] ?? 60, $referenceImageBase64);
+
+                    $latency = (int) ((microtime(true) - $startTime) * 1000);
+                    Log::info('ai_image_call', [
+                        'user_id' => $userId,
+                        'category' => $category,
+                        'model' => $model,
+                        'latency_ms' => $latency,
+                        'status' => 'success',
+                        'was_fallback' => $modelIndex > 0,
+                    ]);
+
+                    return $result;
+                } catch (InvalidApiKeyException $e) {
+                    throw $e; // Never retry on bad key
+                } catch (RateLimitException $e) {
+                    if ($attempt === $retries && $modelIndex === count($modelChain) - 1) {
+                        throw $e;
+                    }
+                    $lastException = $e;
+                    break; // Skip remaining retries, move to next model
+                } catch (AiUnavailableException | AiTimeoutException $e) {
+                    $lastException = $e;
+                    Log::warning('ai_image_attempt_failed', [
+                        'user_id' => $userId,
+                        'model' => $model,
+                        'attempt' => $attempt + 1,
+                        'reason' => $e->getMessage(),
+                    ]);
+                } catch (\Throwable $e) {
+                    $lastException = new AiUnavailableException($e->getMessage());
+                    Log::warning('ai_image_attempt_failed', [
+                        'user_id' => $userId,
+                        'model' => $model,
+                        'attempt' => $attempt + 1,
+                        'reason' => $e->getMessage(),
+                    ]);
+                }
             }
 
-            if ($response->successful() && $response->header('content-type') && str_contains($response->header('content-type'), 'image')) {
-                return base64_encode($response->body());
+            // Log fallback transition
+            if ($modelIndex < count($modelChain) - 1) {
+                Log::warning('ai_image_fallback', [
+                    'user_id' => $userId,
+                    'failed_model' => $model,
+                    'next_model' => $modelChain[$modelIndex + 1],
+                    'reason' => $lastException?->getMessage(),
+                ]);
             }
-
-            return null;
-        } catch (InvalidApiKeyException | RateLimitException | AiUnavailableException $e) {
-            throw $e;
-        } catch (\Throwable $e) {
-            Log::error('ai_image_failed', [
-                'user_id' => $userId,
-                'category' => $category,
-                'error' => $e->getMessage(),
-            ]);
-
-            return null;
         }
+
+        // All models exhausted
+        Log::error('ai_image_all_failed', [
+            'user_id' => $userId,
+            'category' => $category,
+            'models_tried' => $modelChain,
+        ]);
+
+        if ($lastException instanceof RateLimitException || $lastException instanceof AiUnavailableException) {
+            throw $lastException;
+        }
+
+        return null;
+    }
+
+    /**
+     * Call a single HuggingFace image generation model.
+     */
+    protected function callImageApi(string $model, string $prompt, int $timeout, ?string $referenceImageBase64 = null): string
+    {
+        $apiKey = config('services.huggingface.api_key');
+
+        if (empty($apiKey)) {
+            throw new InvalidApiKeyException('HuggingFace API key not configured.');
+        }
+
+        $payload = ['inputs' => $prompt];
+
+        if ($referenceImageBase64) {
+            $payload['image'] = $referenceImageBase64;
+        }
+
+        $response = Http::withToken($apiKey)
+            ->timeout($timeout)
+            ->post($this->imageBaseUrl . $model, $payload);
+
+        if ($response->status() === 401 || $response->status() === 403) {
+            throw new InvalidApiKeyException('Invalid HuggingFace API key');
+        }
+
+        if ($response->status() === 402) {
+            throw new RateLimitException(3600, 'HuggingFace free credits depleted. Credits reset monthly.');
+        }
+
+        if ($response->status() === 429) {
+            throw new RateLimitException(
+                (int) ($response->header('Retry-After') ?? 60),
+                'HuggingFace rate limit exceeded'
+            );
+        }
+
+        if ($response->status() === 503) {
+            $errorData = $response->json();
+            $wait = isset($errorData['estimated_time']) ? round($errorData['estimated_time']) : null;
+            throw new AiUnavailableException(
+                "Model {$model} is loading." . ($wait ? " Estimated wait: {$wait}s." : '')
+            );
+        }
+
+        if ($response->serverError()) {
+            throw new AiUnavailableException("Image model server error: {$response->status()}");
+        }
+
+        if ($response->successful() && $response->header('content-type') && str_contains($response->header('content-type'), 'image')) {
+            return base64_encode($response->body());
+        }
+
+        throw new AiUnavailableException("Unexpected response from image model: {$response->status()}");
     }
 
     /**
