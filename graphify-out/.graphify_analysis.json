@@ -1,0 +1,811 @@
+{
+  "communities": {
+    "0": [
+      "adminroute",
+      "adminroute_adminroute",
+      "agentdiscover",
+      "agentdiscover_agentdiscover",
+      "agentedit",
+      "agentedit_agentedit",
+      "agentworkspace",
+      "agentworkspace_agentworkspace",
+      "agentworkspace_readsession",
+      "agentworkspace_writesession",
+      "airesponse",
+      "airesponse_airesponse",
+      "apiclient",
+      "apiclient_apicall",
+      "apiclient_del",
+      "apiclient_get",
+      "apiclient_patch",
+      "apiclient_post",
+      "apiclient_put",
+      "apiclient_registerapihandlers",
+      "apiclient_toast",
+      "app",
+      "app_apihandlerregistration",
+      "app_app",
+      "app_errorboundary",
+      "app_errorboundary_getderivedstatefromerror",
+      "app_errorboundary_render",
+      "app_pageloader",
+      "app_rootroute",
+      "authlayout",
+      "authlayout_authlayout",
+      "badge",
+      "badge_badge",
+      "blockedscreen",
+      "blockedscreen_blockedscreen",
+      "button",
+      "button_button",
+      "card",
+      "card_card",
+      "dashboard",
+      "dashboard_dashboard",
+      "dynamicform",
+      "dynamicform_dynamicform",
+      "emptystate",
+      "emptystate_emptystate",
+      "feedbackmodal",
+      "feedbackmodal_feedbackmodal",
+      "fileupload",
+      "fileupload_fileupload",
+      "guestroute",
+      "guestroute_guestroute",
+      "help",
+      "help_help",
+      "input",
+      "input_input",
+      "library",
+      "library_library",
+      "login",
+      "login_login",
+      "modal",
+      "modal_modal",
+      "notfound",
+      "notfound_notfound",
+      "onboardingflow",
+      "onboardingflow_onboardingflow",
+      "plantab",
+      "plantab_plantab",
+      "profiletab",
+      "profiletab_profiletab",
+      "promptlogs",
+      "promptlogs_promptlogs",
+      "promptpreview",
+      "promptpreview_promptpreview",
+      "protectedroute",
+      "protectedroute_protectedroute",
+      "register",
+      "register_register",
+      "select",
+      "select_select",
+      "spinner",
+      "spinner_spinner",
+      "textarea",
+      "textarea_textarea",
+      "toggle",
+      "toggle_toggle",
+      "upgradebanner",
+      "upgradebanner_upgradebanner",
+      "useauth",
+      "useauth_useauth",
+      "userdetail",
+      "userdetail_userdetail",
+      "users",
+      "users_getuserbyid",
+      "users_users",
+      "workspace",
+      "workspace_readcache",
+      "workspace_workspace",
+      "workspace_writecache"
+    ],
+    "1": [
+      "admincontroller",
+      "admincontroller_admincontroller",
+      "admincontroller_admincontroller_agents",
+      "admincontroller_admincontroller_blockuser",
+      "admincontroller_admincontroller_createagent",
+      "admincontroller_admincontroller_deleteuser",
+      "admincontroller_admincontroller_logs",
+      "admincontroller_admincontroller_promoteuser",
+      "admincontroller_admincontroller_showuser",
+      "admincontroller_admincontroller_stats",
+      "admincontroller_admincontroller_unblockuser",
+      "admincontroller_admincontroller_updateagent",
+      "admincontroller_admincontroller_updateuser",
+      "admincontroller_admincontroller_users",
+      "agentcontroller",
+      "aiagent",
+      "aitimeout",
+      "aitimeout_aitimeout",
+      "aitimeout_aitimeout_handle",
+      "api",
+      "auth",
+      "authcontroller",
+      "cache",
+      "controller",
+      "controller_controller",
+      "librarycontroller",
+      "librarycontroller_librarycontroller",
+      "librarycontroller_librarycontroller_destroy",
+      "librarycontroller_librarycontroller_index",
+      "librarycontroller_librarycontroller_store",
+      "mfacontroller",
+      "mfacontroller_mfacontroller",
+      "mfacontroller_mfacontroller_disable",
+      "mfacontroller_mfacontroller_enable",
+      "mfacontroller_mfacontroller_verify",
+      "mfacontroller_mfacontroller_verifylogin",
+      "promptlibrary",
+      "promptlibrary_promptlibrary",
+      "promptlibrary_promptlibrary_agent",
+      "promptlibrary_promptlibrary_casts",
+      "promptlibrary_promptlibrary_user",
+      "promptlibraryfactory",
+      "promptlibraryfactory_promptlibraryfactory",
+      "promptlibraryfactory_promptlibraryfactory_definition",
+      "promptlog",
+      "promptlog_promptlog",
+      "promptlog_promptlog_agent",
+      "promptlog_promptlog_casts",
+      "promptlog_promptlog_user",
+      "prompttemplatefactory",
+      "prompttemplatefactory_prompttemplatefactory",
+      "prompttemplatefactory_prompttemplatefactory_definition",
+      "threatdetection",
+      "threatdetection_threatdetection",
+      "threatdetection_threatdetection_handle",
+      "usagecontroller",
+      "usagecontroller_usagecontroller",
+      "usagecontroller_usagecontroller_index",
+      "useragentcontroller",
+      "useragentcontroller_useragentcontroller",
+      "useragentcontroller_useragentcontroller_destroy",
+      "useragentcontroller_useragentcontroller_index",
+      "useragentcontroller_useragentcontroller_store"
+    ],
+    "2": [
+      "applayout",
+      "applayout_applayout",
+      "authcontext",
+      "authcontext_authprovider",
+      "axios",
+      "axios_getcsrfcookie",
+      "chatbotbubble",
+      "chatbotbubble_chatbotbubble",
+      "chatbotcontexthint",
+      "chatbotcontexthint_chatbotcontexthint",
+      "chatbotinput",
+      "chatbotinput_chatbotinput",
+      "chatbotmatcher",
+      "chatbotmatcher_matchquestion",
+      "chatbotmessage",
+      "chatbotmessage_chatbotmessage",
+      "chatbotpanel",
+      "chatbotpanel_chatbotpanel",
+      "chatbotquickactions",
+      "chatbotquickactions_chatbotquickactions",
+      "chatbotwidget",
+      "chatbotwidget_chatbotwidget",
+      "main",
+      "sidebar",
+      "sidebar_sidebar",
+      "themecontext",
+      "themecontext_getsystemtheme",
+      "themecontext_resolvetheme",
+      "themecontext_themeprovider"
+    ],
+    "3": [
+      "databaseseeder",
+      "databaseseeder_databaseseeder",
+      "databaseseeder_databaseseeder_run",
+      "promptlogfactory",
+      "promptlogfactory_promptlogfactory",
+      "promptlogfactory_promptlogfactory_definition",
+      "quotaexceededexception",
+      "quotaexceededexception_quotaexceededexception",
+      "quotaexceededexception_quotaexceededexception_render",
+      "quotaservice",
+      "quotaservice_quotaservice",
+      "quotaservice_quotaservice_checkquota",
+      "quotaservice_quotaservice_recordusage",
+      "uploadedfilefactory",
+      "uploadedfilefactory_uploadedfilefactory",
+      "uploadedfilefactory_uploadedfilefactory_definition",
+      "user",
+      "user_user",
+      "user_user_agents",
+      "user_user_casts",
+      "user_user_getavatarurlattribute",
+      "user_user_getonboardingcompleteattribute",
+      "user_user_isadmin",
+      "user_user_issuperadmin",
+      "user_user_promptlibrary",
+      "user_user_promptlogs",
+      "user_user_tokenusagelogs",
+      "user_user_uploadedfiles"
+    ],
+    "4": [
+      "adminlayout",
+      "adminlayout_adminlayout",
+      "adminnavbar",
+      "adminnavbar_adminnavbar",
+      "adminsidebar",
+      "adminsidebar_adminsidebar",
+      "avatar",
+      "avatar_avatar",
+      "landing",
+      "landing_cookiebanner",
+      "landing_landing",
+      "landingfooter",
+      "landingfooter_landingfooter",
+      "landingnavbar",
+      "landingnavbar_landingnavbar",
+      "navbar",
+      "navbar_navbar",
+      "preferencestab",
+      "preferencestab_preferencestab",
+      "settings",
+      "settings_settings",
+      "tabs",
+      "tabs_tabs",
+      "usetheme",
+      "usetheme_usetheme"
+    ],
+    "5": [
+      "fileprocessorservice",
+      "fileprocessorservice_fileprocessorservice",
+      "fileprocessorservice_fileprocessorservice_getextractedtext",
+      "fileprocessorservice_fileprocessorservice_getfiledescription",
+      "fileprocessorservice_fileprocessorservice_getimagebase64",
+      "fileprocessorservice_fileprocessorservice_isimagemime",
+      "fileprocessorservice_fileprocessorservice_parsedocx",
+      "fileprocessorservice_fileprocessorservice_parsehtml",
+      "fileprocessorservice_fileprocessorservice_parsepdf",
+      "fileprocessorservice_fileprocessorservice_parsepptx",
+      "fileprocessorservice_fileprocessorservice_parsetext",
+      "fileprocessorservice_fileprocessorservice_parsexlsx",
+      "fileprocessorservice_fileprocessorservice_process",
+      "fileuploadcontroller",
+      "fileuploadcontroller_fileuploadcontroller",
+      "fileuploadcontroller_fileuploadcontroller_construct",
+      "fileuploadcontroller_fileuploadcontroller_store",
+      "uploadedfile",
+      "uploadedfile_uploadedfile",
+      "uploadedfile_uploadedfile_casts",
+      "uploadedfile_uploadedfile_user"
+    ],
+    "6": [
+      "aitimeoutexception",
+      "aitimeoutexception_aitimeoutexception",
+      "aitimeoutexception_aitimeoutexception_render",
+      "aiunavailableexception",
+      "aiunavailableexception_aiunavailableexception",
+      "aiunavailableexception_aiunavailableexception_render",
+      "huggingfaceservice",
+      "huggingfaceservice_huggingfaceservice",
+      "huggingfaceservice_huggingfaceservice_callchatapi",
+      "huggingfaceservice_huggingfaceservice_generate",
+      "huggingfaceservice_huggingfaceservice_generateimage",
+      "invalidapikeyexception",
+      "invalidapikeyexception_invalidapikeyexception",
+      "invalidapikeyexception_invalidapikeyexception_render",
+      "ratelimitexception",
+      "ratelimitexception_ratelimitexception",
+      "ratelimitexception_ratelimitexception_construct",
+      "ratelimitexception_ratelimitexception_render"
+    ],
+    "7": [
+      "agentcard",
+      "agentcard_agentcard",
+      "agentlist",
+      "agentlist_agentlist",
+      "agents",
+      "agents_agents",
+      "agents_getagentbyid",
+      "agents_getagentsbydomain",
+      "agents_searchagents",
+      "quickactions",
+      "quickactions_quickactions",
+      "useragents",
+      "useragents_adduseragent",
+      "useragents_assigndefaultagents",
+      "useragents_getuseragents",
+      "useragents_isagentadded",
+      "useragents_removeuseragent"
+    ],
+    "8": [
+      "helpers",
+      "helpers_formatdate",
+      "helpers_formatdatetime",
+      "helpers_formatexactdatetime",
+      "helpers_formatnumber",
+      "helpers_formatrelativetime",
+      "helpers_generatecachekey",
+      "helpers_getgreeting",
+      "helpers_interpolatetemplate",
+      "helpers_truncate",
+      "notifications",
+      "notifications_notifications",
+      "recentactivity",
+      "recentactivity_recentactivity"
+    ],
+    "9": [
+      "promptengineservice",
+      "promptengineservice_promptengineservice",
+      "promptengineservice_promptengineservice_cleanimageprompt",
+      "promptengineservice_promptengineservice_estimatetokens",
+      "promptengineservice_promptengineservice_generate",
+      "promptengineservice_promptengineservice_replaceplaceholders",
+      "promptengineservice_promptengineservice_replacesimpleplaceholders",
+      "prompttoolongexception",
+      "prompttoolongexception_prompttoolongexception",
+      "prompttoolongexception_prompttoolongexception_render",
+      "templatenotfoundexception",
+      "templatenotfoundexception_templatenotfoundexception",
+      "templatenotfoundexception_templatenotfoundexception_render"
+    ],
+    "10": [
+      "notification",
+      "notification_notification",
+      "notification_notification_casts",
+      "notification_notification_scopeforuser",
+      "notification_notification_user",
+      "notificationcontroller",
+      "notificationcontroller_notificationcontroller",
+      "notificationcontroller_notificationcontroller_broadcast",
+      "notificationcontroller_notificationcontroller_index",
+      "notificationcontroller_notificationcontroller_markallread",
+      "notificationcontroller_notificationcontroller_markread"
+    ],
+    "11": [
+      "chatbotknowledge",
+      "chatbotknowledge_chatbotknowledge",
+      "chatbotknowledgecontroller",
+      "chatbotknowledgecontroller_chatbotknowledgecontroller",
+      "chatbotknowledgecontroller_chatbotknowledgecontroller_destroy",
+      "chatbotknowledgecontroller_chatbotknowledgecontroller_index",
+      "chatbotknowledgecontroller_chatbotknowledgecontroller_store",
+      "chatbotknowledgecontroller_chatbotknowledgecontroller_update",
+      "chatbotknowledgeseeder",
+      "chatbotknowledgeseeder_chatbotknowledgeseeder",
+      "chatbotknowledgeseeder_chatbotknowledgeseeder_run"
+    ],
+    "12": [
+      "cacheservice",
+      "cacheservice_cacheservice",
+      "cacheservice_cacheservice_generatekey",
+      "cacheservice_cacheservice_get",
+      "cacheservice_cacheservice_put",
+      "promptcache",
+      "promptcache_promptcache",
+      "promptcache_promptcache_agent",
+      "promptcache_promptcache_casts"
+    ],
+    "13": [
+      "feedback",
+      "feedback_feedback",
+      "feedback_feedback_agent",
+      "feedback_feedback_user",
+      "feedbackcontroller",
+      "feedbackcontroller_feedbackcontroller",
+      "feedbackcontroller_feedbackcontroller_adminindex",
+      "feedbackcontroller_feedbackcontroller_index",
+      "feedbackcontroller_feedbackcontroller_store"
+    ],
+    "14": [
+      "authcontroller_authcontroller",
+      "authcontroller_authcontroller_assigndefaultagents",
+      "authcontroller_authcontroller_login",
+      "authcontroller_authcontroller_logout",
+      "authcontroller_authcontroller_markonboarded",
+      "authcontroller_authcontroller_register",
+      "authcontroller_authcontroller_updateavatar",
+      "authcontroller_authcontroller_updateprofile",
+      "authcontroller_authcontroller_user"
+    ],
+    "15": [
+      "aiagentseeder",
+      "aiagentseeder_aiagentseeder",
+      "aiagentseeder_aiagentseeder_run",
+      "prompttemplate",
+      "prompttemplate_prompttemplate",
+      "prompttemplate_prompttemplate_agent",
+      "prompttemplate_prompttemplate_casts"
+    ],
+    "16": [
+      "aiagent_aiagent",
+      "aiagent_aiagent_casts",
+      "aiagent_aiagent_latesttemplate",
+      "aiagent_aiagent_promptcache",
+      "aiagent_aiagent_promptlibrary",
+      "aiagent_aiagent_promptlogs",
+      "aiagent_aiagent_prompttemplates"
+    ],
+    "17": [
+      "agentcontroller_agentcontroller",
+      "agentcontroller_agentcontroller_construct",
+      "agentcontroller_agentcontroller_generate",
+      "agentcontroller_agentcontroller_index",
+      "agentcontroller_agentcontroller_search",
+      "agentcontroller_agentcontroller_show",
+      "agentcontroller_agentcontroller_submit"
+    ],
+    "18": [
+      "userfactory",
+      "userfactory_userfactory",
+      "userfactory_userfactory_admin",
+      "userfactory_userfactory_definition",
+      "userfactory_userfactory_premium",
+      "userfactory_userfactory_standard",
+      "userfactory_userfactory_unverified"
+    ],
+    "19": [
+      "appserviceprovider",
+      "appserviceprovider_appserviceprovider",
+      "appserviceprovider_appserviceprovider_boot",
+      "appserviceprovider_appserviceprovider_register"
+    ],
+    "20": [
+      "aiagentfactory",
+      "aiagentfactory_aiagentfactory",
+      "aiagentfactory_aiagentfactory_definition",
+      "aiagentfactory_aiagentfactory_premiumonly"
+    ],
+    "21": [
+      "fileparseexception",
+      "fileparseexception_fileparseexception",
+      "fileparseexception_fileparseexception_render"
+    ],
+    "22": [
+      "validateorigin",
+      "validateorigin_validateorigin",
+      "validateorigin_validateorigin_handle"
+    ],
+    "23": [
+      "securityheaders",
+      "securityheaders_securityheaders",
+      "securityheaders_securityheaders_handle"
+    ],
+    "24": [
+      "checkbanstatus",
+      "checkbanstatus_checkbanstatus",
+      "checkbanstatus_checkbanstatus_handle"
+    ],
+    "25": [
+      "2026_04_08_130000_change_avatar_to_text_on_users_table",
+      "2026_04_08_130000_change_avatar_to_text_on_users_table_down",
+      "2026_04_08_130000_change_avatar_to_text_on_users_table_up"
+    ],
+    "26": [
+      "2026_03_26_000007_create_uploaded_files_table",
+      "2026_03_26_000007_create_uploaded_files_table_down",
+      "2026_03_26_000007_create_uploaded_files_table_up"
+    ],
+    "27": [
+      "2026_04_05_132824_create_notifications_table",
+      "2026_04_05_132824_create_notifications_table_down",
+      "2026_04_05_132824_create_notifications_table_up"
+    ],
+    "28": [
+      "0001_01_01_000000_create_users_table",
+      "0001_01_01_000000_create_users_table_down",
+      "0001_01_01_000000_create_users_table_up"
+    ],
+    "29": [
+      "2026_03_26_000002_create_prompt_templates_table",
+      "2026_03_26_000002_create_prompt_templates_table_down",
+      "2026_03_26_000002_create_prompt_templates_table_up"
+    ],
+    "30": [
+      "2026_04_05_132455_create_feedback_table",
+      "2026_04_05_132455_create_feedback_table_down",
+      "2026_04_05_132455_create_feedback_table_up"
+    ],
+    "31": [
+      "0001_01_01_000001_create_cache_table",
+      "0001_01_01_000001_create_cache_table_down",
+      "0001_01_01_000001_create_cache_table_up"
+    ],
+    "32": [
+      "2026_03_26_000009_add_onboarding_fields_to_users_table",
+      "2026_03_26_000009_add_onboarding_fields_to_users_table_down",
+      "2026_03_26_000009_add_onboarding_fields_to_users_table_up"
+    ],
+    "33": [
+      "2026_03_26_000001_create_ai_agents_table",
+      "2026_03_26_000001_create_ai_agents_table_down",
+      "2026_03_26_000001_create_ai_agents_table_up"
+    ],
+    "34": [
+      "2026_04_05_140000_add_two_factor_to_users_table",
+      "2026_04_05_140000_add_two_factor_to_users_table_down",
+      "2026_04_05_140000_add_two_factor_to_users_table_up"
+    ],
+    "35": [
+      "2026_03_26_000003_create_prompt_logs_table",
+      "2026_03_26_000003_create_prompt_logs_table_down",
+      "2026_03_26_000003_create_prompt_logs_table_up"
+    ],
+    "36": [
+      "2026_03_26_000010_create_user_agents_table",
+      "2026_03_26_000010_create_user_agents_table_down",
+      "2026_03_26_000010_create_user_agents_table_up"
+    ],
+    "37": [
+      "0001_01_01_000002_create_queued_jobs_table",
+      "0001_01_01_000002_create_queued_jobs_table_down",
+      "0001_01_01_000002_create_queued_jobs_table_up"
+    ],
+    "38": [
+      "2026_03_26_000005_create_prompt_cache_table",
+      "2026_03_26_000005_create_prompt_cache_table_down",
+      "2026_03_26_000005_create_prompt_cache_table_up"
+    ],
+    "39": [
+      "2026_03_28_013112_add_is_onboarded_to_users_table",
+      "2026_03_28_013112_add_is_onboarded_to_users_table_down",
+      "2026_03_28_013112_add_is_onboarded_to_users_table_up"
+    ],
+    "40": [
+      "2026_04_08_120000_add_avatar_to_users_table",
+      "2026_04_08_120000_add_avatar_to_users_table_down",
+      "2026_04_08_120000_add_avatar_to_users_table_up"
+    ],
+    "41": [
+      "2026_03_26_000004_create_prompt_library_table",
+      "2026_03_26_000004_create_prompt_library_table_down",
+      "2026_03_26_000004_create_prompt_library_table_up"
+    ],
+    "42": [
+      "2026_03_26_202548_create_chatbot_knowledge_table",
+      "2026_03_26_202548_create_chatbot_knowledge_table_down",
+      "2026_03_26_202548_create_chatbot_knowledge_table_up"
+    ],
+    "43": [
+      "responses",
+      "responses_getmockresponse"
+    ],
+    "44": [
+      "templates",
+      "templates_gettemplatebyagentid"
+    ],
+    "45": [
+      "tooltip",
+      "tooltip_tooltip"
+    ],
+    "46": [
+      "footer",
+      "footer_footer"
+    ],
+    "47": [
+      "statscard",
+      "statscard_statscard"
+    ],
+    "48": [
+      "sanctum"
+    ],
+    "49": [
+      "tailwind_config"
+    ],
+    "50": [
+      "vite_config"
+    ],
+    "51": [
+      "postcss_config"
+    ],
+    "52": [
+      "index"
+    ],
+    "53": [
+      "logs"
+    ],
+    "54": [
+      "stats"
+    ],
+    "55": [
+      "ai_models"
+    ],
+    "56": [
+      "mail"
+    ],
+    "57": [
+      "services"
+    ],
+    "58": [
+      "database"
+    ],
+    "59": [
+      "session"
+    ],
+    "60": [
+      "queue"
+    ],
+    "61": [
+      "cors"
+    ],
+    "62": [
+      "logging"
+    ],
+    "63": [
+      "filesystems"
+    ],
+    "64": [
+      "console"
+    ],
+    "65": [
+      "web"
+    ]
+  },
+  "cohesion": {
+    "0": 0.04,
+    "1": 0.04,
+    "2": 0.08,
+    "3": 0.07,
+    "4": 0.08,
+    "5": 0.1,
+    "6": 0.12,
+    "7": 0.12,
+    "8": 0.14,
+    "9": 0.19,
+    "10": 0.18,
+    "11": 0.18,
+    "12": 0.22,
+    "13": 0.22,
+    "14": 0.36,
+    "15": 0.29,
+    "16": 0.29,
+    "17": 0.38,
+    "18": 0.29,
+    "19": 0.5,
+    "20": 0.5,
+    "21": 0.67,
+    "22": 0.67,
+    "23": 0.67,
+    "24": 0.67,
+    "25": 0.67,
+    "26": 0.67,
+    "27": 0.67,
+    "28": 0.67,
+    "29": 0.67,
+    "30": 0.67,
+    "31": 0.67,
+    "32": 0.67,
+    "33": 0.67,
+    "34": 0.67,
+    "35": 0.67,
+    "36": 0.67,
+    "37": 0.67,
+    "38": 0.67,
+    "39": 0.67,
+    "40": 0.67,
+    "41": 0.67,
+    "42": 0.67,
+    "43": 1.0,
+    "44": 1.0,
+    "45": 1.0,
+    "46": 1.0,
+    "47": 1.0,
+    "48": 1.0,
+    "49": 1.0,
+    "50": 1.0,
+    "51": 1.0,
+    "52": 1.0,
+    "53": 1.0,
+    "54": 1.0,
+    "55": 1.0,
+    "56": 1.0,
+    "57": 1.0,
+    "58": 1.0,
+    "59": 1.0,
+    "60": 1.0,
+    "61": 1.0,
+    "62": 1.0,
+    "63": 1.0,
+    "64": 1.0,
+    "65": 1.0
+  },
+  "gods": [
+    {
+      "id": "admincontroller_admincontroller",
+      "label": "AdminController",
+      "edges": 13
+    },
+    {
+      "id": "fileprocessorservice_fileprocessorservice",
+      "label": "FileProcessorService",
+      "edges": 12
+    },
+    {
+      "id": "user_user",
+      "label": "User",
+      "edges": 11
+    },
+    {
+      "id": "authcontroller_authcontroller",
+      "label": "AuthController",
+      "edges": 9
+    },
+    {
+      "id": "apiclient_apicall",
+      "label": "apiCall()",
+      "edges": 7
+    },
+    {
+      "id": "aiagent_aiagent",
+      "label": "AiAgent",
+      "edges": 7
+    },
+    {
+      "id": "agentcontroller_agentcontroller",
+      "label": "AgentController",
+      "edges": 7
+    },
+    {
+      "id": "promptengineservice_promptengineservice",
+      "label": "PromptEngineService",
+      "edges": 6
+    },
+    {
+      "id": "userfactory_userfactory",
+      "label": "UserFactory",
+      "edges": 6
+    },
+    {
+      "id": "chatbotknowledgecontroller_chatbotknowledgecontroller",
+      "label": "ChatbotKnowledgeController",
+      "edges": 5
+    }
+  ],
+  "surprises": [
+    {
+      "source": "apiCall()",
+      "target": "toast()",
+      "source_files": [
+        "/Users/chimzy/Documents/workspace/xpert/xpert-admin-dashboard/src/lib/apiClient.js",
+        "/Users/chimzy/Documents/workspace/xpert/xpert-app/src/lib/apiClient.js"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "peripheral node `toast()` unexpectedly reaches hub `apiCall()`"
+    }
+  ],
+  "questions": [
+    {
+      "type": "isolated_nodes",
+      "question": "What connects `ChatbotKnowledge`, `Controller` to the rest of the system?",
+      "why": "2 weakly-connected nodes found - possible documentation gaps or missing edges."
+    },
+    {
+      "type": "low_cohesion",
+      "question": "Should `Community 0` be split into smaller, more focused modules?",
+      "why": "Cohesion score 0.04 - nodes in this community are weakly interconnected."
+    },
+    {
+      "type": "low_cohesion",
+      "question": "Should `Community 1` be split into smaller, more focused modules?",
+      "why": "Cohesion score 0.04 - nodes in this community are weakly interconnected."
+    },
+    {
+      "type": "low_cohesion",
+      "question": "Should `Community 2` be split into smaller, more focused modules?",
+      "why": "Cohesion score 0.08 - nodes in this community are weakly interconnected."
+    },
+    {
+      "type": "low_cohesion",
+      "question": "Should `Community 3` be split into smaller, more focused modules?",
+      "why": "Cohesion score 0.07 - nodes in this community are weakly interconnected."
+    },
+    {
+      "type": "low_cohesion",
+      "question": "Should `Community 4` be split into smaller, more focused modules?",
+      "why": "Cohesion score 0.08 - nodes in this community are weakly interconnected."
+    },
+    {
+      "type": "low_cohesion",
+      "question": "Should `Community 5` be split into smaller, more focused modules?",
+      "why": "Cohesion score 0.1 - nodes in this community are weakly interconnected."
+    }
+  ]
+}

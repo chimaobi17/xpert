@@ -217,7 +217,10 @@ class HuggingFaceService
         $payload = ['inputs' => $prompt];
 
         if ($referenceImageBase64) {
-            $payload['image'] = $referenceImageBase64;
+            // Pass reference image — FLUX.1-schnell is text-to-image only
+            // so the image is used as context but not for img2img transformation.
+            // Other models (e.g. SDXL) support the image field for image-to-image.
+            $payload['image'] = "data:image/png;base64,{$referenceImageBase64}";
         }
 
         $response = Http::withToken($apiKey)
@@ -230,6 +233,11 @@ class HuggingFaceService
 
         if ($response->status() === 402) {
             throw new RateLimitException(3600, 'HuggingFace free credits depleted. Credits reset monthly.');
+        }
+
+        // Model deprecated or removed — skip to next in chain
+        if ($response->status() === 404 || $response->status() === 410) {
+            throw new AiUnavailableException("Model {$model} is no longer available (HTTP {$response->status()}).");
         }
 
         if ($response->status() === 429) {
@@ -247,6 +255,24 @@ class HuggingFaceService
             );
         }
 
+        // 400 = bad request — often unsupported parameters; retry without extras
+        if ($response->status() === 400) {
+            $errorData = $response->json();
+            $errorMsg = $errorData['error'] ?? "Bad request to model {$model}";
+            Log::warning('ai_image_bad_request', ['model' => $model, 'error' => $errorMsg]);
+
+            // Retry once with a clean payload (inputs only, no image/parameters)
+            $retryResponse = Http::withToken($apiKey)
+                ->timeout($timeout)
+                ->post($this->imageBaseUrl . $model, ['inputs' => $prompt]);
+
+            if ($retryResponse->successful() && str_contains($retryResponse->header('content-type') ?? '', 'image')) {
+                return base64_encode($retryResponse->body());
+            }
+
+            throw new AiUnavailableException("Image model rejected the request: {$errorMsg}");
+        }
+
         if ($response->serverError()) {
             throw new AiUnavailableException("Image model server error: {$response->status()}");
         }
@@ -255,7 +281,7 @@ class HuggingFaceService
             return base64_encode($response->body());
         }
 
-        throw new AiUnavailableException("Unexpected response from image model: {$response->status()}");
+        throw new AiUnavailableException("Unexpected response from image model {$model}: {$response->status()}");
     }
 
     /**
@@ -297,6 +323,11 @@ class HuggingFaceService
 
                 if ($response->status() === 402) {
                     throw new RateLimitException(3600, 'HuggingFace free credits depleted for this month. Credits reset monthly.');
+                }
+
+                // Model deprecated or removed — trigger fallback
+                if ($response->status() === 404 || $response->status() === 410) {
+                    throw new AiUnavailableException("Model {$model} is no longer available (HTTP {$response->status()}).");
                 }
 
                 if ($response->status() === 429) {

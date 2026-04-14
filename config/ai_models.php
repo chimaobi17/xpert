@@ -76,20 +76,16 @@ return [
     // --- Text-to-Image Models (Premium Only) ---
 
     'interior_designer' => [
-        'primary' => 'stabilityai/stable-diffusion-xl-base-1.0',
-        'fallback' => 'black-forest-labs/FLUX.1-schnell',
-        'recovery' => 'runwayml/stable-diffusion-v1-5',
+        'primary' => 'black-forest-labs/FLUX.1-schnell',
         'max_tokens' => 512,
-        'timeout' => 90,
+        'timeout' => 120,
         'type' => 'image',
     ],
 
     'logo_creator' => [
-        'primary' => 'stabilityai/stable-diffusion-xl-base-1.0',
-        'fallback' => 'black-forest-labs/FLUX.1-schnell',
-        'recovery' => 'runwayml/stable-diffusion-v1-5',
+        'primary' => 'black-forest-labs/FLUX.1-schnell',
         'max_tokens' => 512,
-        'timeout' => 90,
+        'timeout' => 120,
         'type' => 'image',
     ],
 
@@ -212,18 +208,14 @@ return [
     ],
 
     'graphics_designer' => [
-        'primary' => 'stabilityai/stable-diffusion-xl-base-1.0',
-        'fallback' => 'black-forest-labs/FLUX.1-schnell',
-        'recovery' => 'runwayml/stable-diffusion-v1-5',
+        'primary' => 'black-forest-labs/FLUX.1-schnell',
         'max_tokens' => 512,
-        'timeout' => 90,
+        'timeout' => 120,
         'type' => 'image',
     ],
 
     'photography' => [
         'primary' => 'black-forest-labs/FLUX.1-schnell',
-        'fallback' => 'stabilityai/stable-diffusion-xl-base-1.0',
-        'recovery' => 'runwayml/stable-diffusion-v1-5',
         'max_tokens' => 512,
         'timeout' => 120,
         'type' => 'image',

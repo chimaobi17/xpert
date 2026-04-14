@@ -296,7 +296,39 @@ html, body {
 - Clicking the icon should toggle the input `type` between `password` and `text`.
 - Use `EyeIcon` and `EyeSlashIcon` from `heroicons`.
 
----
+## Bug 18: Navigate User Flow in AI Agents (Back Navigation)
+
+**File:** `xpert-app/src/pages/agents/AgentWorkspace.jsx`
+
+**Current Behavior:** 
+1. Clicking the browser's back button or the main "Back" arrow icon (top-left) takes the user out of the agent workspace completely, even if they are on Step 2 (Review) or Step 3 (Result).
+2. Users lose their progress if they accidentally click back, unless they rely on the session restoration logic.
+
+**Expected Behavior:** 
+1. If the user is on Step 3 (AI Response), clicking the back button should return them to Step 2 (Prompt Review).
+2. If they are on Step 2, it should return them to Step 1 (Input Form).
+3. If they are on Step 1, it should navigate them back to the Workspace or previous page.
+4. This should apply to both the UI "Back" button and the browser's hardware/keyboard back actions.
+
+### Steps to Fix:
+1. Update `handleBack` in `AgentWorkspace.jsx` to check the current `step` before navigating away:
+   ```javascript
+   function handleBack() {
+     if (step > 1) {
+       setStep(s => s - 1);
+       setStopped(false);
+       return;
+     }
+     
+     const from = location.state?.from;
+     if (from) {
+       navigate(from);
+     } else {
+       navigate('/workspace');
+     }
+   }
+   ```
+2. (Optional) Sync `step` with URL search params (e.g., `?step=2`) or use `window.history.pushState` to ensure the browser's back button works as expected.
 
 ---
 

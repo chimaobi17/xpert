@@ -71,7 +71,7 @@ export default function DynamicForm({ fields, values, onChange, errors, disabled
                 key={field.name}
                 label={field.label}
                 onFile={(file) => handleChange(field.name, file)}
-                accept=".pdf,.docx,.xlsx,.png,.jpg"
+                accept=".pdf,.docx,.xlsx,.png,.jpg,.jpeg,.webp,.gif,.svg"
                 disabled={disabled}
               />
             );

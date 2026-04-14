@@ -30,7 +30,8 @@ class PromptEngineService
         $modelType = config("ai_models.{$agent->category}.type", 'text');
 
         if ($modelType === 'image') {
-            $assembled = $this->buildImagePrompt($agent->category, $userInputs, $body);
+            $hasReferenceImage = !empty($fileContent) && !str_contains($fileContent, 'could not be processed');
+            $assembled = $this->buildImagePrompt($agent->category, $userInputs, $body, $hasReferenceImage);
         } else {
             // Deduplicate metadata: don't repeat fields that were already used as {{placeholders}} in the body
             $metadata = $this->formatMetadata($userInputs, $template->template_body);
@@ -117,16 +118,23 @@ class PromptEngineService
      * that image diffusion models (SDXL, FLUX) actually respond to well.
      * Structure: [subject], [style modifiers], [lighting/mood], [technical quality], [negative guidance]
      */
-    protected function buildImagePrompt(string $category, array $inputs, string $templateBody): string
+    protected function buildImagePrompt(string $category, array $inputs, string $templateBody, bool $hasReference = false): string
     {
         // Route to the right builder based on category
-        return match ($category) {
+        $prompt = match ($category) {
             'photography' => $this->buildPhotographyPrompt($inputs),
             'logo_creator' => $this->buildLogoPrompt($inputs),
             'interior_designer' => $this->buildInteriorPrompt($inputs),
             'graphics_designer' => $this->buildGraphicsPrompt($inputs),
             default => $this->buildGenericImagePrompt($inputs, $templateBody),
         };
+
+        // When a reference image is uploaded, prepend img2img guidance
+        if ($hasReference) {
+            $prompt = "based on the uploaded reference image, " . $prompt;
+        }
+
+        return $prompt;
     }
 
     protected function buildPhotographyPrompt(array $inputs): string
@@ -134,40 +142,38 @@ class PromptEngineService
         $subject = trim($inputs['subject'] ?? 'a scene');
         $style = $inputs['style'] ?? 'Portrait';
         $mood = $inputs['mood'] ?? 'Natural Daylight';
-        $aspectRatio = $inputs['aspect_ratio'] ?? '';
         $extra = trim($inputs['extra_details'] ?? '');
 
-        // Map style to photographic technique descriptors
         $styleMap = [
-            'Portrait' => 'professional portrait photography, shallow depth of field, bokeh background, 85mm lens',
-            'Landscape' => 'sweeping landscape photography, deep depth of field, wide-angle lens, vivid natural colors',
-            'Street Photography' => 'candid street photography, urban environment, documentary style, 35mm lens',
-            'Product / Commercial' => 'commercial product photography, clean background, studio setup, sharp focus, advertising quality',
-            'Food Photography' => 'professional food photography, appetizing presentation, shallow depth of field, overhead angle, styled plating',
-            'Architecture' => 'architectural photography, leading lines, symmetry, tilt-shift perspective, clean geometry',
-            'Wildlife / Nature' => 'wildlife nature photography, telephoto lens, natural habitat, sharp subject isolation',
-            'Fashion' => 'high fashion editorial photography, dramatic pose, stylized lighting, vogue magazine quality',
-            'Macro / Close-Up' => 'extreme macro photography, incredible detail, shallow depth of field, magnified textures',
-            'Aerial / Drone' => 'aerial drone photography, birds eye view, sweeping perspective, geographic patterns',
+            'Portrait' => 'close-up portrait photo, shallow depth of field, soft blurred bokeh background, shot with 85mm f/1.4 lens',
+            'Landscape' => 'wide-angle landscape photograph, deep depth of field, vivid saturated colors, expansive vista',
+            'Street Photography' => 'candid street photograph, urban city setting, gritty authentic feel, shot with 35mm lens',
+            'Product / Commercial' => 'studio product photograph, softbox lighting, clean seamless background, sharp crisp focus',
+            'Food Photography' => 'overhead food photograph, styled plating on ceramic dish, shallow depth of field, warm appetizing tones',
+            'Architecture' => 'architectural photograph, strong leading lines, perfect symmetry, dramatic perspective',
+            'Wildlife / Nature' => 'telephoto wildlife photograph, animal in natural habitat, sharp subject with blurred background',
+            'Fashion' => 'high fashion editorial photograph, dramatic pose, stylized directional lighting, bold colors',
+            'Macro / Close-Up' => 'extreme macro photograph, incredible fine detail, very shallow depth of field, magnified textures',
+            'Aerial / Drone' => 'aerial drone photograph, top-down birds eye view, geometric patterns, sweeping landscape',
         ];
 
         $moodMap = [
-            'Golden Hour / Warm' => 'golden hour warm sunlight, long shadows, amber tones, magic hour glow',
-            'Cool / Blue Hour' => 'blue hour twilight, cool tones, serene atmosphere, soft ambient light',
-            'Dramatic / High Contrast' => 'dramatic chiaroscuro lighting, deep shadows, high contrast, cinematic intensity',
-            'Soft / Diffused' => 'soft diffused lighting, overcast sky, gentle shadows, ethereal quality',
-            'Moody / Dark' => 'moody low-key lighting, dark atmospheric tones, mysterious ambiance, noir influence',
-            'Bright / Airy' => 'bright airy natural light, high-key exposure, clean whites, fresh luminous feel',
-            'Studio Lighting' => 'professional studio lighting, three-point setup, controlled highlights, clean shadows',
-            'Natural Daylight' => 'natural daylight, authentic outdoor lighting, true-to-life colors',
-            'Neon / Night' => 'neon night photography, vibrant colored lights, urban nightscape, light reflections on wet surfaces',
+            'Golden Hour / Warm' => 'golden hour sunlight, long warm shadows, rich amber and orange tones',
+            'Cool / Blue Hour' => 'blue hour twilight sky, cool blue and purple tones, calm serene atmosphere',
+            'Dramatic / High Contrast' => 'dramatic side lighting, deep dark shadows, strong highlights, cinematic contrast',
+            'Soft / Diffused' => 'soft overcast diffused light, gentle even shadows, dreamy ethereal quality',
+            'Moody / Dark' => 'dark moody low-key lighting, deep blacks, mysterious shadowy atmosphere',
+            'Bright / Airy' => 'bright airy natural light, high-key exposure, soft whites and pastels',
+            'Studio Lighting' => 'three-point studio lighting setup, rim light, controlled even illumination',
+            'Natural Daylight' => 'clear natural daylight, true-to-life colors, bright outdoor lighting',
+            'Neon / Night' => 'neon city lights at night, colorful reflections on wet pavement, vibrant glowing signs',
         ];
 
-        $styleDesc = $styleMap[$style] ?? strtolower($style) . ' photography';
+        $styleDesc = $styleMap[$style] ?? strtolower($style) . ' photograph';
         $moodDesc = $moodMap[$mood] ?? strtolower($mood);
 
         $parts = [
-            $subject,
+            "A stunning photograph of {$subject}",
             $styleDesc,
             $moodDesc,
         ];
@@ -176,8 +182,7 @@ class PromptEngineService
             $parts[] = $extra;
         }
 
-        // Quality boosters that SDXL/FLUX respond to
-        $parts[] = 'photorealistic, ultra high resolution, 8K, shot on Canon EOS R5, RAW photo, professional color grading, masterful composition';
+        $parts[] = 'photorealistic, ultra sharp detail, 8K resolution, shot on professional DSLR camera, beautiful color grading';
 
         return implode(', ', array_filter($parts));
     }
@@ -191,33 +196,30 @@ class PromptEngineService
         $preferences = trim($inputs['preferences'] ?? '');
 
         $styleMap = [
-            'Wordmark' => 'typographic wordmark logo, elegant lettering, custom typography, text-based brand identity',
-            'Lettermark' => 'lettermark monogram logo, single initial or initials, distinctive typographic mark',
-            'Icon/Symbol' => 'iconic symbol logo, abstract geometric mark, memorable brand symbol, scalable icon design',
-            'Combination' => 'combination mark logo, symbol paired with wordmark, balanced icon and text integration',
-            'Emblem' => 'emblem logo design, badge style, enclosed crest, classic brand seal',
-            'Abstract' => 'abstract geometric logo, modern shapes, dynamic angles, conceptual brand mark',
+            'Wordmark' => 'bold custom typography logo with the text "{name}", elegant hand-crafted lettering, thick and thin strokes',
+            'Lettermark' => 'single bold letter "{initial}" monogram logo, geometric shape, strong distinctive character',
+            'Icon/Symbol' => 'iconic symbolic logo mark, abstract geometric shape representing {industry}, bold solid form',
+            'Combination' => 'logo featuring a bold icon next to the text "{name}", geometric symbol paired with modern typography',
+            'Emblem' => 'circular emblem badge logo with "{name}" text inside, ornate border details, classic crest design',
+            'Abstract' => 'abstract geometric logo mark, intersecting shapes and angles, dynamic flowing forms, bold colors',
         ];
 
-        $styleDesc = $styleMap[$logoStyle] ?? strtolower($logoStyle) . ' logo design';
+        $initial = strtoupper(substr($brandName, 0, 1));
+        $template = $styleMap[$logoStyle] ?? 'modern logo design for "{name}"';
+        $styleDesc = str_replace(['{name}', '{initial}', '{industry}'], [$brandName, $initial, $industry ?: 'technology'], $template);
 
-        $parts = [
-            "professional {$styleDesc} for \"{$brandName}\"",
-        ];
+        $parts = [$styleDesc];
 
         if ($industry) {
-            $parts[] = "{$industry} industry";
-        }
-
-        if ($tagline) {
-            $parts[] = "incorporating tagline \"{$tagline}\"";
+            $parts[] = "{$industry} theme";
         }
 
         if ($preferences) {
             $parts[] = $preferences;
         }
 
-        $parts[] = 'clean vector style, white background, minimal color palette, high contrast, scalable design, print-ready, corporate quality, Adobe Illustrator style';
+        // Visual descriptors FLUX understands — concrete colors, rendering, background
+        $parts[] = 'solid dark background, vibrant gradient colors, sharp clean edges, centered composition, 3D rendered, glossy metallic finish, high detail, digital art';
 
         return implode(', ', array_filter($parts));
     }
@@ -231,41 +233,37 @@ class PromptEngineService
         $requirements = trim($inputs['special_requirements'] ?? '');
 
         $styleMap = [
-            'Modern' => 'modern contemporary interior, clean lines, open concept, minimalist furniture, neutral palette with accent colors',
-            'Minimalist' => 'minimalist interior design, uncluttered space, functional furniture, monochromatic scheme, breathing room',
-            'Industrial' => 'industrial loft interior, exposed brick, metal fixtures, raw materials, Edison bulbs, warehouse aesthetic',
-            'Scandinavian' => 'Scandinavian hygge interior, light wood, white walls, cozy textiles, natural materials, warm minimalism',
-            'Bohemian' => 'bohemian eclectic interior, layered textiles, mixed patterns, global accents, plants, rich warm colors',
-            'Traditional' => 'traditional classic interior, ornate details, rich wood furniture, elegant fabrics, symmetrical layout',
+            'Modern' => 'modern contemporary furniture, clean straight lines, glass and metal accents, neutral walls with bold accent pieces',
+            'Minimalist' => 'minimalist design, very few furniture pieces, open empty space, monochrome palette, zen-like calm',
+            'Industrial' => 'industrial loft style, exposed red brick walls, black metal pipe shelving, Edison bulb pendant lights, concrete floor',
+            'Scandinavian' => 'Scandinavian style, light blonde wood floors, white painted walls, cozy knit throws, potted green plants',
+            'Bohemian' => 'bohemian eclectic style, layered colorful rugs and textiles, hanging macrame, many green plants, warm rich colors',
+            'Traditional' => 'traditional classic style, dark polished wood furniture, ornate carved details, rich velvet upholstery, crown molding',
         ];
 
-        $budgetMap = [
-            'Budget' => 'smart affordable design',
-            'Mid-Range' => 'balanced quality furnishings',
-            'Luxury' => 'luxury high-end designer furniture, premium materials, bespoke details',
-        ];
+        $budgetDesc = match($budget) {
+            'Luxury' => 'luxury high-end designer pieces, marble surfaces, gold accents, crystal chandelier',
+            'Budget' => 'smart stylish affordable pieces, clever use of space',
+            default => 'well-appointed quality furnishings',
+        };
 
-        $styleDesc = $styleMap[$style] ?? strtolower($style) . ' interior design';
-        $budgetDesc = $budgetMap[$budget] ?? '';
+        $styleDesc = $styleMap[$style] ?? strtolower($style) . ' interior';
 
         $parts = [
-            "beautiful {$roomType} interior design",
+            "Beautiful {$roomType} interior",
             $styleDesc,
+            $budgetDesc,
         ];
 
         if ($colorPalette) {
-            $parts[] = "{$colorPalette} color scheme";
-        }
-
-        if ($budgetDesc) {
-            $parts[] = $budgetDesc;
+            $parts[] = "{$colorPalette} color scheme throughout";
         }
 
         if ($requirements) {
             $parts[] = $requirements;
         }
 
-        $parts[] = 'architectural visualization, photorealistic 3D render, natural lighting through windows, high detail, interior magazine quality, 8K resolution';
+        $parts[] = 'photorealistic 3D architectural render, warm natural light streaming through large windows, high detail textures, wide-angle shot, interior design magazine photo, 8K';
 
         return implode(', ', array_filter($parts));
     }
@@ -276,30 +274,29 @@ class PromptEngineService
         $description = trim($inputs['description'] ?? '');
         $style = $inputs['style'] ?? 'Minimalist';
         $colorPalette = trim($inputs['color_palette'] ?? '');
-        $dimensions = $inputs['dimensions'] ?? '';
 
         $styleMap = [
-            'Minimalist' => 'minimalist clean design, simple shapes, generous whitespace, limited color palette',
-            'Bold & Vibrant' => 'bold vibrant colors, high energy, dynamic composition, eye-catching contrast',
-            'Corporate / Clean' => 'corporate professional design, clean layout, business appropriate, sophisticated typography',
-            'Vintage / Retro' => 'vintage retro aesthetic, distressed textures, nostalgic color palette, classic typography',
-            'Futuristic' => 'futuristic sci-fi design, neon accents, holographic elements, cyberpunk influence, sleek technology',
-            'Hand-Drawn / Sketch' => 'hand-drawn illustration style, organic lines, pencil sketch texture, artistic imperfection',
-            'Flat Design' => 'flat design style, solid colors, no gradients, geometric shapes, modern UI aesthetic',
+            'Minimalist' => 'minimalist flat illustration, simple geometric shapes, limited color palette, clean negative space',
+            'Bold & Vibrant' => 'bold vibrant saturated colors, high energy dynamic composition, eye-catching strong contrast',
+            'Corporate / Clean' => 'clean corporate design, structured grid layout, professional blue tones, refined typography',
+            'Vintage / Retro' => 'vintage retro aesthetic, faded warm color tones, grainy distressed texture, 1970s inspired',
+            'Futuristic' => 'futuristic cyberpunk design, glowing neon blue and purple accents, holographic effects, dark background',
+            'Hand-Drawn / Sketch' => 'hand-drawn pencil sketch illustration, organic loose lines, crosshatch shading, paper texture',
+            'Flat Design' => 'flat design illustration, solid bright colors, no shadows or gradients, bold geometric shapes',
         ];
 
-        $styleDesc = $styleMap[$style] ?? strtolower($style) . ' design style';
+        $styleDesc = $styleMap[$style] ?? strtolower($style);
 
         $parts = [
-            "{$designType}: {$description}",
+            "{$designType} of {$description}",
             $styleDesc,
         ];
 
         if ($colorPalette) {
-            $parts[] = "{$colorPalette} colors";
+            $parts[] = "{$colorPalette} color palette";
         }
 
-        $parts[] = 'professional graphic design, polished composition, high resolution, print quality, visually striking, award-winning design';
+        $parts[] = 'sharp high resolution, detailed digital art, professional quality, visually striking composition';
 
         return implode(', ', array_filter($parts));
     }
@@ -309,7 +306,6 @@ class PromptEngineService
      */
     protected function buildGenericImagePrompt(array $inputs, string $templateBody): string
     {
-        // Extract meaningful values from inputs, skip empty ones
         $descriptors = [];
         foreach ($inputs as $key => $value) {
             if (empty($value) || $key === 'file') continue;
@@ -317,9 +313,7 @@ class PromptEngineService
         }
 
         $prompt = implode(', ', array_filter($descriptors));
-
-        // Add universal quality boosters
-        $prompt .= ', high quality, detailed, professional, 8K resolution, masterful composition';
+        $prompt .= ', high quality, sharp detail, vivid colors, professional digital art, 8K resolution';
 
         return $prompt;
     }
