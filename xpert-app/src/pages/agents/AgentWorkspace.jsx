@@ -93,17 +93,40 @@ export default function AgentWorkspace() {
     setLoadingAgent(false);
   }
 
-  // Smart back navigation: go to referrer or fallback to /workspace
+  // Smart back navigation: step backward through wizard, then exit
   function handleBack() {
+    if (step > 1) {
+      setStep((s) => s - 1);
+      setStopped(false);
+      return;
+    }
+    // On step 1, leave the agent workspace
     const from = location.state?.from;
     if (from) {
       navigate(from);
-    } else if (window.history.length > 2) {
-      navigate(-1);
     } else {
       navigate('/workspace');
     }
   }
+
+  // Sync browser back button with wizard steps
+  useEffect(() => {
+    if (step > 1) {
+      // Push a history entry so the browser back button can step backward
+      window.history.pushState({ step }, '');
+    }
+
+    function onPopState(e) {
+      if (step > 1) {
+        e.preventDefault();
+        setStep((s) => s - 1);
+        setStopped(false);
+      }
+    }
+
+    window.addEventListener('popstate', onPopState);
+    return () => window.removeEventListener('popstate', onPopState);
+  }, [step]);
 
   if (loadingAgent) {
     return <div className="flex justify-center py-16"><Spinner size="lg" /></div>;
