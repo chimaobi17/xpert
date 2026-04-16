@@ -79,15 +79,46 @@ class AuthController extends Controller
             ], 422);
         }
 
-        $user = User::create([
+        $userData = [
             'name' => $request->name,
             'email' => $request->email,
-            'password' => Hash::make($request->password),
+            'password' => $request->password, // 'hashed' cast on User model handles hashing
             'job_title' => $request->job_title,
             'purpose' => $request->purpose,
             'field_of_specialization' => $request->field_of_specialization,
             'is_onboarded' => $request->filled('field_of_specialization'),
-        ]);
+        ];
+
+        // Guard columns that may not exist if migrations haven't run on live DB
+        if (\Schema::hasColumn('users', 'language_preference')) {
+            $userData['language_preference'] = $request->language_preference ?? 'en';
+        }
+
+        $otpCode = str_pad((string) random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+
+        if (\Schema::hasColumn('users', 'is_verified')) {
+            $userData['is_verified'] = false;
+            $userData['otp_code'] = $otpCode;
+            $userData['otp_expires_at'] = now()->addMinutes(15);
+        }
+
+        try {
+            $user = User::create($userData);
+        } catch (\Illuminate\Database\QueryException $e) {
+            \Log::error('Registration DB error: ' . $e->getMessage());
+
+            if (str_contains($e->getMessage(), 'UNIQUE') || str_contains($e->getMessage(), 'Duplicate')) {
+                return response()->json([
+                    'error' => 'registration_failed',
+                    'message' => 'Unable to complete registration. Please try a different email or log in.',
+                ], 422);
+            }
+
+            return response()->json([
+                'error' => 'registration_failed',
+                'message' => 'Registration is temporarily unavailable. Please try again shortly.',
+            ], 503);
+        }
 
         // Automatically assign default agents if specialization info is provided
         if ($request->filled('field_of_specialization')) {
