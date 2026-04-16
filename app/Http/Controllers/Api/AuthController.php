@@ -81,19 +81,44 @@ class AuthController extends Controller
 
         $otpCode = str_pad((string) random_int(0, 999999), 6, '0', STR_PAD_LEFT);
 
-        $user = User::create([
+        $userData = [
             'name' => $request->name,
             'email' => $request->email,
-            'password' => Hash::make($request->password),
+            'password' => $request->password,
             'job_title' => $request->job_title,
             'purpose' => $request->purpose,
             'field_of_specialization' => $request->field_of_specialization,
-            'language_preference' => $request->language_preference ?? 'en',
             'is_onboarded' => $request->filled('field_of_specialization'),
-            'is_verified' => false,
-            'otp_code' => $otpCode,
-            'otp_expires_at' => now()->addMinutes(15),
-        ]);
+        ];
+
+        // Columns from newer migrations — only include if the column exists
+        if (\Schema::hasColumn('users', 'language_preference')) {
+            $userData['language_preference'] = $request->language_preference ?? 'en';
+        }
+        if (\Schema::hasColumn('users', 'is_verified')) {
+            $userData['is_verified'] = false;
+            $userData['otp_code'] = $otpCode;
+            $userData['otp_expires_at'] = now()->addMinutes(15);
+        }
+
+        try {
+            $user = User::create($userData);
+        } catch (\Illuminate\Database\QueryException $e) {
+            \Log::error('Registration DB error: ' . $e->getMessage());
+
+            // Unique constraint violation (duplicate email despite earlier check — race condition)
+            if (str_contains($e->getMessage(), 'UNIQUE') || str_contains($e->getMessage(), 'Duplicate')) {
+                return response()->json([
+                    'error' => 'registration_failed',
+                    'message' => 'Unable to complete registration. Please try a different email or log in.',
+                ], 422);
+            }
+
+            return response()->json([
+                'error' => 'registration_failed',
+                'message' => 'Registration is temporarily unavailable. Please try again shortly.',
+            ], 503);
+        }
 
         // Automatically assign default agents if specialization info is provided
         if ($request->filled('field_of_specialization')) {
@@ -104,14 +129,16 @@ class AuthController extends Controller
             }
         }
 
-        // Send verification email
-        try {
-            Mail::to($user->email)->send(new VerifyEmailOtp(
-                otpCode: $otpCode,
-                userName: $user->name,
-            ));
-        } catch (\Exception $e) {
-            \Log::warning('Verification email failed: ' . $e->getMessage());
+        // Send verification email (only if OTP columns exist)
+        if (\Schema::hasColumn('users', 'otp_code')) {
+            try {
+                Mail::to($user->email)->send(new VerifyEmailOtp(
+                    otpCode: $otpCode,
+                    userName: $user->name,
+                ));
+            } catch (\Exception $e) {
+                \Log::warning('Verification email failed: ' . $e->getMessage());
+            }
         }
 
         $token = $user->createToken('spa')->plainTextToken;
