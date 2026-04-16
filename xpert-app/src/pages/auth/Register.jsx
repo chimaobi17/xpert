@@ -33,7 +33,7 @@ export default function Register() {
     try {
       const { name, email, password, password_confirmation, ...extra } = form;
       await register(name, email, password, password_confirmation, extra);
-      sessionStorage.setItem('just_registered', 'true');
+      sessionStorage.setItem('xpert_just_registered', 'true');
       navigate('/agents/discover');
     } catch (err) {
       const data = err.response?.data;

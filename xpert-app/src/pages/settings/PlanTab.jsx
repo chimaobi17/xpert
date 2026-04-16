@@ -12,7 +12,7 @@ const plans = [
     period: '/month',
     tokens: '25,000/day',
     requests: '50/day',
-    features: ['5 AI agents', 'Basic prompt generation', 'Prompt library', 'Community support'],
+    features: ['3 AI agents', 'Basic prompt generation', 'Prompt library', 'Community support'],
   },
   {
     name: 'Standard',
@@ -47,7 +47,7 @@ export default function PlanTab() {
   useEffect(() => {
     get('/usage').then((res) => {
       if (res.ok) setUsage(res.data);
-    }).catch(() => {});
+    }).catch(() => { });
   }, []);
 
   const limits = quotaLimits[currentPlan] || quotaLimits.free;
@@ -88,11 +88,10 @@ export default function PlanTab() {
             return (
               <div
                 key={plan.name}
-                className={`relative rounded-xl border p-5 ${
-                  plan.popular
+                className={`relative rounded-xl border p-5 ${plan.popular
                     ? 'border-primary-500 shadow-md'
                     : 'border-[var(--color-border)]'
-                }`}
+                  }`}
               >
                 {plan.popular && (
                   <Badge variant="premium" size="sm" className="absolute -top-2.5 left-4">

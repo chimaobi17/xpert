@@ -72,6 +72,7 @@ export function AuthProvider({ children }) {
       localStorage.setItem('auth_token', res.data.token);
     }
     sessionStorage.removeItem('xpert_onboarding_shown');
+    sessionStorage.setItem('xpert_just_registered', 'true');
     const userData = res.data.user || res.data;
     setUser(userData);
     syncLanguage(userData);

@@ -28,21 +28,14 @@ function AppLayoutContent() {
     return () => { document.body.style.overflow = ''; };
   }, [sidebarOpen]);
 
-  // Auto-start guide only for new signups who haven't seen it yet
+  // Auto-start guide only for new signups
   useEffect(() => {
-    // Return early if guide status is unknown or user already saw it
-    if (hasSeenGuide !== false) return;
-
-    const isNewSignup = sessionStorage.getItem('just_registered');
-    if (isNewSignup) {
-      const timer = setTimeout(() => {
-        startGuide();
-        // Clear the flag after starting so it doesn't trigger again on every refresh
-        sessionStorage.removeItem('just_registered');
-      }, 1500); // 1.5s delay for smooth entrance
-      return () => clearTimeout(timer);
+    const isNewSignup = sessionStorage.getItem('xpert_just_registered');
+    if (isNewSignup === 'true') {
+      startGuide();
+      sessionStorage.removeItem('xpert_just_registered');
     }
-  }, [hasSeenGuide, startGuide]);
+  }, [startGuide]);
 
   return (
     <div className="flex h-screen flex-col bg-background selection:bg-primary-500/30 selection:text-primary-500 transition-colors duration-500">

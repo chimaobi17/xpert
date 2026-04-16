@@ -357,20 +357,6 @@ html, body {
 
 ---
 
-## Bug 22: AI Helper Image Generation Adherence & Stability
-
-**Status:** PENDING
-**Issue:** Image helpers (Photography, Logo Creator, etc.) currently use hardcoded internal prompt structures that ignore custom template fields or admin-defined templates. Additionally, failover to Gemini can sometimes return text instead of image data.
-
-**Requirement:** 
-1.  Refactor `PromptEngineService` to use `replacePlaceholders` as the core for image prompts.
-2.  Maintain high-fidelity "Style Modules" for premium agents but allow them to be blended with user-defined templates.
-3.  Enhance `HuggingFaceService` to retry without extra parameters on 400 errors.
-4.  Update `GeminiService` to explicitly handle image generation prompts.
-5.  Add image error state and "Retry" button to `AiResponse.jsx`.
-
----
-
 ## Deployment Checklist
 
 After implementing all fixes:

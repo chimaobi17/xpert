@@ -92,8 +92,8 @@ function RootRoute() {
   }
 
   if (user) {
-    const isNew = sessionStorage.getItem('just_registered');
-    return <Navigate to={isNew ? "/agents/discover" : "/workspace"} replace />;
+    const isNew = sessionStorage.getItem('xpert_just_registered');
+    return <Navigate to={isNew === 'true' ? "/agents/discover" : "/workspace"} replace />;
   }
 
   return <Landing />;

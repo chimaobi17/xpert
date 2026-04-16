@@ -19,37 +19,47 @@ export const AppGuideProvider = ({ children }) => {
   useEffect(() => {
     if (user?.id) {
       const seen = localStorage.getItem(`xpert_guide_seen_${user.id}`);
-      setHasSeenGuide(seen === 'true');
+      if (seen === 'true') {
+        setHasSeenGuide(true);
+      } else if (sessionStorage.getItem('xpert_just_registered') === 'true') {
+        // New signup — auto-start guide once
+        sessionStorage.removeItem('xpert_just_registered');
+        setHasSeenGuide(false);
+        setCurrentStep(0);
+      } else {
+        // Existing user signing in who never finished guide — don't force it
+        setHasSeenGuide(true);
+      }
     } else if (!loading) {
       setHasSeenGuide(true); // Don't show guide for guests
     }
   }, [user?.id, loading]);
 
-  const startGuide = () => {
+  const startGuide = React.useCallback(() => {
     setCurrentStep(0);
-  };
+  }, []);
 
-  const nextStep = () => {
+  const nextStep = React.useCallback(() => {
     setCurrentStep(prev => prev + 1);
-  };
+  }, []);
 
-  const prevStep = () => {
+  const prevStep = React.useCallback(() => {
     setCurrentStep(prev => Math.max(0, prev - 1));
-  };
+  }, []);
 
-  const skipGuide = () => {
+  const skipGuide = React.useCallback(() => {
     setCurrentStep(-1);
     if (user?.id) localStorage.setItem(`xpert_guide_seen_${user.id}`, 'true');
     setHasSeenGuide(true);
-  };
+  }, [user?.id]);
 
-  const finishGuide = () => {
+  const finishGuide = React.useCallback(() => {
     setCurrentStep(-1);
     if (user?.id) localStorage.setItem(`xpert_guide_seen_${user.id}`, 'true');
     setHasSeenGuide(true);
-  };
+  }, [user?.id]);
 
-  const value = {
+  const value = React.useMemo(() => ({
     currentStep,
     hasSeenGuide,
     startGuide,
@@ -58,7 +68,7 @@ export const AppGuideProvider = ({ children }) => {
     skipGuide,
     finishGuide,
     isActive: currentStep >= 0
-  };
+  }), [currentStep, hasSeenGuide, startGuide, nextStep, prevStep, skipGuide, finishGuide]);
 
   return (
     <AppGuideContext.Provider value={value}>
