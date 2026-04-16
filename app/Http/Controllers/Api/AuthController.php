@@ -4,10 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Mail\MfaCodeMail;
-use App\Mail\VerifyEmailOtp;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\RateLimiter;
@@ -54,13 +52,23 @@ class AuthController extends Controller
         $token = $user->createToken('spa')->plainTextToken;
 
         return response()->json([
-            'user' => $user,
+            'user' => $this->safeUserResponse($user),
             'token' => $token,
         ]);
     }
 
     public function register(Request $request)
     {
+        // Rate limit: keyed by IP to prevent brute-force registration
+        $rateLimitKey = 'register:' . $request->ip();
+        if (RateLimiter::tooManyAttempts($rateLimitKey, 5)) {
+            return response()->json([
+                'error' => 'rate_limited',
+                'message' => 'Too many registration attempts. Please try again later.',
+            ], 429);
+        }
+        RateLimiter::hit($rateLimitKey, 300);
+
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255'],
@@ -71,7 +79,7 @@ class AuthController extends Controller
             'language_preference' => ['sometimes', 'nullable', 'string', 'max:10'],
         ]);
 
-        // Anti-enumeration: return generic error if email exists
+        // Anti-enumeration: generic message whether email exists or not
         if (User::where('email', $request->email)->exists()) {
             return response()->json([
                 'error' => 'registration_failed',
@@ -79,52 +87,80 @@ class AuthController extends Controller
             ], 422);
         }
 
-        // Core columns that always exist
-        $userData = [
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => $request->password,
-        ];
+        // Build user data — only set columns that exist on the live DB
+        $user = new User();
+        $user->name = strip_tags($request->name);
+        $user->email = $request->email;
+        $user->password = Hash::make($request->password);
 
-        // Guard every column added by later migrations
-        $optionalColumns = [
-            'job_title' => $request->job_title,
-            'purpose' => $request->purpose,
+        $optionals = [
+            'job_title' => $request->job_title ? strip_tags($request->job_title) : null,
+            'purpose' => $request->purpose ? strip_tags($request->purpose) : null,
             'field_of_specialization' => $request->field_of_specialization,
             'is_onboarded' => $request->filled('field_of_specialization'),
             'language_preference' => $request->language_preference ?? 'en',
         ];
 
-        foreach ($optionalColumns as $column => $value) {
-            if (\Schema::hasColumn('users', $column)) {
-                $userData[$column] = $value;
+        $columns = \Schema::getColumnListing('users');
+        foreach ($optionals as $col => $val) {
+            if (in_array($col, $columns)) {
+                $user->{$col} = $val;
             }
         }
 
         try {
-            $user = User::create($userData);
+            $user->save();
         } catch (\Illuminate\Database\QueryException $e) {
             \Log::error('Registration DB error: ' . $e->getMessage());
 
+            if (str_contains($e->getMessage(), 'UNIQUE') || str_contains($e->getMessage(), 'Duplicate')) {
+                return response()->json([
+                    'error' => 'registration_failed',
+                    'message' => 'Unable to complete registration. Please try a different email or log in.',
+                ], 422);
+            }
+
             return response()->json([
-                'error' => 'registration_failed',
-                'message' => 'Unable to complete registration. Please try a different email or log in.',
-            ], 422);
+                'error' => 'server_error',
+                'message' => 'Registration failed. Please try again.',
+            ], 500);
         }
 
-        // Automatically assign default agents if specialization info is provided
+        // Assign default agents (non-blocking)
         if ($request->filled('field_of_specialization')) {
             try {
                 $this->assignDefaultAgents($user, $request->field_of_specialization);
             } catch (\Exception $e) {
-                \Log::warning('Initial agent assignment failed: ' . $e->getMessage());
+                \Log::warning('Agent assignment failed: ' . $e->getMessage());
             }
         }
 
         $token = $user->createToken('spa')->plainTextToken;
 
+        // Clear rate limiter on success
+        RateLimiter::clear($rateLimitKey);
+
+        // Build safe response — avoid $user->toArray() which triggers $appends on missing columns
+        $userData = [
+            'id' => $user->id,
+            'name' => $user->name,
+            'email' => $user->email,
+            'role' => $user->role ?? 'user',
+            'plan_level' => $user->plan_level ?? 'free',
+        ];
+
+        // Add optional fields only if they were saved
+        foreach (['job_title', 'purpose', 'field_of_specialization', 'is_onboarded', 'language_preference', 'avatar'] as $field) {
+            if (in_array($field, $columns) && isset($user->{$field})) {
+                $userData[$field] = $user->{$field};
+            }
+        }
+
+        $userData['onboarding_complete'] = (bool) ($userData['is_onboarded'] ?? false);
+        $userData['avatar_url'] = $userData['avatar'] ?? null;
+
         return response()->json([
-            'user' => $user->fresh(),
+            'user' => $userData,
             'token' => $token,
         ], 201);
     }
@@ -204,7 +240,7 @@ class AuthController extends Controller
 
     public function user(Request $request)
     {
-        return response()->json($request->user());
+        return response()->json($this->safeUserResponse($request->user()));
     }
 
     public function updateProfile(Request $request)
@@ -244,7 +280,7 @@ class AuthController extends Controller
             \Log::warning('Marking user as onboarded failed: ' . $e->getMessage());
         }
 
-        return response()->json($user->fresh());
+        return response()->json($this->safeUserResponse($user->fresh()));
     }
 
     public function updateAvatar(Request $request)
@@ -261,7 +297,7 @@ class AuthController extends Controller
             'avatar' => "data:{$mime};base64,{$base64}",
         ]);
 
-        return response()->json($request->user()->fresh());
+        return response()->json($this->safeUserResponse($request->user()->fresh()));
     }
 
     public function markOnboarded(Request $request)
@@ -271,13 +307,46 @@ class AuthController extends Controller
             if ($user && ! ($user->is_onboarded ?? false)) {
                 $user->update(['is_onboarded' => true]);
             }
-            return response()->json($user->fresh());
+
+            return response()->json($this->safeUserResponse($user->fresh()));
         } catch (\Exception $e) {
             \Log::error('Explicit onboarding status persistence failed: ' . $e->getMessage());
-            
-            // Return success anyway to unblock the UI, logging the persistent issue
-            return response()->json($request->user());
+
+            return response()->json($this->safeUserResponse($request->user()));
         }
+    }
+
+    private function safeUserResponse(User $user): array
+    {
+        $columns = \Schema::getColumnListing('users');
+
+        $data = [
+            'id' => $user->id,
+            'name' => $user->name,
+            'email' => $user->email,
+            'role' => $user->role ?? 'user',
+            'plan_level' => $user->plan_level ?? 'free',
+            'email_verified_at' => $user->email_verified_at,
+            'created_at' => $user->created_at,
+            'updated_at' => $user->updated_at,
+        ];
+
+        $optional = [
+            'job_title', 'purpose', 'field_of_specialization', 'is_onboarded',
+            'language_preference', 'avatar', 'two_factor_enabled', 'is_verified',
+            'banned_until', 'ban_reason',
+        ];
+
+        foreach ($optional as $field) {
+            if (in_array($field, $columns)) {
+                $data[$field] = $user->{$field};
+            }
+        }
+
+        $data['onboarding_complete'] = (bool) ($data['is_onboarded'] ?? false);
+        $data['avatar_url'] = ($data['avatar'] ?? null) ?: null;
+
+        return $data;
     }
 
     private function assignDefaultAgents(User $user, string $specialization): void

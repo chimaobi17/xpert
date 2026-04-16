@@ -60,12 +60,12 @@ class User extends Authenticatable
 
     public function getOnboardingCompleteAttribute(): bool
     {
-        return (bool) $this->is_onboarded;
+        return (bool) ($this->attributes['is_onboarded'] ?? false);
     }
 
     public function getAvatarUrlAttribute(): ?string
     {
-        return $this->avatar ?: null;
+        return ($this->attributes['avatar'] ?? null) ?: null;
     }
 
     public function isAdmin(): bool
