@@ -83,25 +83,13 @@ return Application::configure(basePath: dirname(__DIR__))
             ], 429);
         });
 
-        // Catch-all for unhandled exceptions — never leak internals
+        // Catch-all for unhandled exceptions — leak for debugging
         $exceptions->renderable(function (\Throwable $e) {
-            if (config('app.debug')) {
-                return null; // Let Laravel handle it in dev mode
-            }
-
-            // Log unhandled errors to security channel for visibility
-            \Illuminate\Support\Facades\Log::channel('security')->error('unhandled_exception', [
-                'exception' => get_class($e),
-                'message' => $e->getMessage(),
-                'file' => $e->getFile() . ':' . $e->getLine(),
-                'timestamp' => now()->toISOString(),
-            ]);
-
             return response()->json([
                 'error' => 'server_error',
-                'message' => 'Something went wrong. Please try again later.',
-                'retry' => true,
-                'upgrade' => false,
+                'message' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
             ], 500);
         });
     })->create();
