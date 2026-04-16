@@ -120,10 +120,17 @@ class AuthController extends Controller
                 ], 422);
             }
 
+            $errData = [
+                'msg' => $e->getMessage(),
+                'sql' => $e->getSql(),
+                'time' => now()->toDateTimeString(),
+            ];
+            @file_put_contents(public_path('debug_reg.json'), json_encode($errData));
+
             return response()->json([
                 'error' => 'server_error',
                 'message' => 'Registration failed. Please try again.',
-                'dev_error' => $e->getMessage(), // Temporarily exposed for triage
+                'dev_error' => $e->getMessage(),
             ], 500);
         }
 
