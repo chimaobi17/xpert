@@ -361,21 +361,4 @@ try {
     Log::warning("Gemini failed, falling back to FLUX: " . $e->getMessage());
     return $flux->generate($prompt);
 }
-### Phase 42: Universal Cloud Deployment (Laravel Cloud + Render/Vercel)
-**Goal**: Optimize the codebase for high-availability deployment on Laravel Cloud while maintaining current Render/Vercel stability.
-
-#### 1. Deployment Flexibility
-- **Config Standardization**: Ensure all API communication and CORS settings use dynamic environment variables (`FRONTEND_URL`, `ADMIN_URL`, `SESSION_DOMAIN`).
-- **Trusted Proxies**: Configure `App\Http\Middleware\TrustProxies` to handle diverse cloud load balancers (Laravel Cloud, Render, Cloudflare).
-- **PHP Optimization**: Align system dependencies with Laravel Cloud's specialized PHP runtime requirements.
-
-#### 2. Cross-Platform API Stability
-- **Domain Agnostic CORS**: Refine `config/cors.php` to handle multiple allowed origins dynamically to prevent "API request failed" errors across environments.
-- **Cookie Security**: Ensure `SESSION_SECURE_COOKIE` logic adapts based on whether the environment is local, staging, or production cloud.
-- **Health Checks**: Implement a simplified health check endpoint (`/api/health`) for cloud orchestrators to monitor container readiness.
-
-#### 3. Transition Strategy
-- **Environment Parity**: Maintain `.env.cloud` vs `.env.production` templates to ensure no configuration drift between platforms.
-- **Database Resilience**: Ensure the connection logic handles high-latency periods during potentially geo-distributed deployments.
-
----
+```

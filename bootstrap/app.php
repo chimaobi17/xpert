@@ -21,7 +21,10 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        // Trust all proxies — required for Laravel Cloud, Render, AWS load balancers
+        // to correctly detect HTTPS, client IP, and APP_URL
         $middleware->trustProxies(at: '*');
+
         $middleware->append(SecurityHeaders::class);
         $middleware->append(ThreatDetection::class);
         $middleware->appendToGroup('api', [

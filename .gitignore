@@ -26,4 +26,6 @@ Thumbs.db
 /xpert
 /xpert-app/dist
 /xpert-admin-dashboard/dist
+/public/app
+/public/admin
 .vercel

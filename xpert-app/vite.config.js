@@ -1,8 +1,13 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   plugins: [react()],
+  base: mode === 'production' ? '/app/' : '/',
+  build: {
+    outDir: '../public/app',
+    emptyOutDir: true,
+  },
   server: {
     port: 5173,
     proxy: {
@@ -10,4 +15,4 @@ export default defineConfig({
       '/sanctum': 'http://127.0.0.1:8000',
     },
   },
-});
+}));

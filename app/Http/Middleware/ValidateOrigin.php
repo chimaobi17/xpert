@@ -23,14 +23,18 @@ class ValidateOrigin
         $origin = $request->header('Origin');
         $referer = $request->header('Referer');
 
-        $allowedOrigins = array_values(array_unique(array_filter([
-            ...explode(',', config('app.frontend_url', '')),
-            ...explode(',', config('app.admin_url', '')),
-            parse_url(config('app.url'), PHP_URL_HOST) ? config('app.url') : null,
-            'http://localhost:5173',
-            'http://localhost:5174',
-            'http://xpert.test',
-        ])));
+        // Build allowed origins from env (supports comma-separated lists)
+        $allowedOrigins = array_filter(array_merge(
+            explode(',', config('app.frontend_url', '')),
+            explode(',', config('app.admin_url', '')),
+            [
+                config('app.url'),                // APP_URL — same-origin on Laravel Cloud
+                'http://localhost:5173',
+                'http://localhost:5174',
+                'http://xpert.test',
+            ]
+        ));
+        $allowedOrigins = array_map('trim', $allowedOrigins);
 
         // Check Origin header first, then Referer
         $requestOrigin = $origin;
