@@ -12,14 +12,14 @@ function resolveTheme(preference) {
 
 export function ThemeProvider({ children }) {
   const [preference, setPreference] = useState(() => {
-    return localStorage.getItem('xpert-admin-theme') || 'dark';
+    return localStorage.getItem('xpert-theme') || 'dark';
   });
 
   const resolved = resolveTheme(preference);
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', resolved);
-    localStorage.setItem('xpert-admin-theme', preference);
+    localStorage.setItem('xpert-theme', preference);
   }, [preference, resolved]);
 
   useEffect(() => {
