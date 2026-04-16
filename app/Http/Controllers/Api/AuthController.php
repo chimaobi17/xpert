@@ -79,19 +79,26 @@ class AuthController extends Controller
             ], 422);
         }
 
+        // Core columns that always exist
         $userData = [
             'name' => $request->name,
             'email' => $request->email,
             'password' => $request->password,
+        ];
+
+        // Guard every column added by later migrations
+        $optionalColumns = [
             'job_title' => $request->job_title,
             'purpose' => $request->purpose,
             'field_of_specialization' => $request->field_of_specialization,
             'is_onboarded' => $request->filled('field_of_specialization'),
+            'language_preference' => $request->language_preference ?? 'en',
         ];
 
-        // Only set columns that exist on the live DB
-        if (\Schema::hasColumn('users', 'language_preference')) {
-            $userData['language_preference'] = $request->language_preference ?? 'en';
+        foreach ($optionalColumns as $column => $value) {
+            if (\Schema::hasColumn('users', $column)) {
+                $userData[$column] = $value;
+            }
         }
 
         try {
