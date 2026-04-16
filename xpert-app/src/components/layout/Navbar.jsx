@@ -16,6 +16,7 @@ import LightBulbOnIcon from '../icons/LightBulbOnIcon';
 import { useAppGuide } from '../../contexts/AppGuideContext';
 import Avatar from '../ui/Avatar';
 import Badge from '../ui/Badge';
+import LanguageSelector from '../ui/LanguageSelector';
 import logoFull from '../../assets/logo-full.svg';
 import logoIcon from '../../assets/logo-icon.svg';
 
@@ -75,6 +76,8 @@ export default function Navbar({ onMenuToggle }) {
         >
           {theme === 'dark' ? <SunriseIcon className="h-5 w-5 text-primary-500" /> : <SunriseIcon className="h-5 w-5 text-primary-500 rotate-180" />}
         </button>
+
+        <LanguageSelector compact />
 
         <button
           onClick={startGuide}

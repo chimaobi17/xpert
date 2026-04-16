@@ -1,0 +1,93 @@
+{
+  "nav": {
+    "dashboard": "لوحة التحكم",
+    "discover": "اكتشف الوكلاء",
+    "workspace": "مساحتي",
+    "library": "المكتبة",
+    "notifications": "الإشعارات",
+    "settings": "الإعدادات",
+    "logout": "تسجيل الخروج",
+    "profile": "الملف الشخصي",
+    "upgrade": "ترقية الخطة"
+  },
+  "auth": {
+    "login": "تسجيل الدخول",
+    "register": "إنشاء حساب",
+    "email": "البريد الإلكتروني",
+    "password": "كلمة المرور",
+    "confirm_password": "تأكيد كلمة المرور",
+    "name": "الاسم الكامل",
+    "forgot_password": "نسيت كلمة المرور؟",
+    "no_account": "ليس لديك حساب؟",
+    "have_account": "لديك حساب بالفعل؟",
+    "mfa_title": "المصادقة الثنائية",
+    "mfa_subtitle": "أدخل الرمز المكون من 6 أرقام للمتابعة",
+    "mfa_code": "رمز التحقق",
+    "mfa_verify": "تحقق"
+  },
+  "agents": {
+    "discover_title": "اكتشف الوكلاء",
+    "discover_subtitle": "ابحث عن وكيل الذكاء الاصطناعي المثالي لمهمتك",
+    "search_placeholder": "بحث عن وكلاء...",
+    "all_domains": "جميع المجالات",
+    "all_tiers": "جميع المستويات",
+    "free_only": "مجاني فقط",
+    "premium_only": "مميز فقط",
+    "add_agent": "أضف إلى المساحة",
+    "remove_agent": "إزالة",
+    "added": "مضاف",
+    "use_ai": "استخدم الذكاء الاصطناعي",
+    "generate": "إنشاء التعليمة",
+    "submit": "إرسال للذكاء الاصطناعي",
+    "no_agents": "لم يتم العثور على وكلاء",
+    "upload_file": "رفع ملف (اختياري)",
+    "premium_badge": "مميز",
+    "free_badge": "مجاني"
+  },
+  "common": {
+    "loading": "جاري التحميل...",
+    "error": "حدث خطأ ما",
+    "retry": "حاول مرة أخرى",
+    "cancel": "إلغاء",
+    "save": "حفظ",
+    "delete": "حذف",
+    "edit": "تعديل",
+    "close": "إغلاق",
+    "copy": "نسخ",
+    "copied": "تم النسخ!",
+    "search": "بحث",
+    "filter": "تصفية",
+    "submit": "إرسال",
+    "skip": "تخطي",
+    "next": "التالي",
+    "back": "رجوع",
+    "welcome": "مرحباً",
+    "thinking": "جاري التفكير..."
+  },
+  "feedback": {
+    "title": "كيف كانت هذه الإجابة؟",
+    "subtitle": "ملاحظاتك تساعدنا على التحسين",
+    "comment_placeholder": "أي أفكار إضافية؟ (اختياري)",
+    "submit": "إرسال",
+    "skip": "تخطي"
+  },
+  "settings": {
+    "title": "الإعدادات",
+    "profile_tab": "الملف الشخصي",
+    "preferences_tab": "التفضيلات",
+    "plan_tab": "الخطة",
+    "security_tab": "الأمان",
+    "language": "اللغة",
+    "theme": "المظهر",
+    "dark_mode": "الوضع الداكن",
+    "light_mode": "الوضع الفاتح",
+    "system_mode": "النظام"
+  },
+  "plan": {
+    "free": "مجاني",
+    "standard": "قياسي",
+    "premium": "مميز",
+    "current_plan": "الخطة الحالية",
+    "upgrade": "ترقية"
+  }
+}

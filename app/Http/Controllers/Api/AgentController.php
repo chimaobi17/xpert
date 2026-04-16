@@ -8,6 +8,7 @@ use App\Models\PromptLog;
 use App\Services\CacheService;
 use App\Services\FileProcessorService;
 use App\Services\HuggingFaceService;
+use App\Services\ImageGenerationManager;
 use App\Services\PromptEngineService;
 use App\Services\QuotaService;
 use Illuminate\Http\Request;
@@ -19,6 +20,7 @@ class AgentController extends Controller
     public function __construct(
         protected PromptEngineService $promptEngine,
         protected HuggingFaceService $huggingFace,
+        protected ImageGenerationManager $imageManager,
         protected QuotaService $quotaService,
         protected CacheService $cacheService,
         protected FileProcessorService $fileProcessor,
@@ -188,7 +190,8 @@ class AgentController extends Controller
             $agent,
             $request->fields,
             $fileContent,
-            $request->user()->plan_level
+            $request->user()->plan_level,
+            $request->user()->language_preference
         );
 
         return response()->json([
@@ -227,6 +230,17 @@ class AgentController extends Controller
         $this->quotaService->checkQuota($user);
 
         $promptText = $request->prompt_text;
+        
+        // Final check: Force language directive if not already present in the prompt
+        $langCode = $user->language_preference ?? 'en';
+        if ($langCode !== 'en') {
+            $langName = $this->promptEngine->getLanguageName($langCode);
+            $directive = "[Language Directive]\nYou MUST respond entirely in {$langName}.";
+            if (!str_contains($promptText, $directive)) {
+                $promptText .= "\n\n" . $directive;
+            }
+        }
+
         $tokensEstimated = $this->promptEngine->estimateTokens($promptText);
 
         // Determine type before checking cache so frontend knows how to render cached result
@@ -278,7 +292,7 @@ class AgentController extends Controller
 
         try {
             if ($modelType === 'image') {
-                $aiResponse = $this->huggingFace->generateImage(
+                $aiResponse = $this->imageManager->generate(
                     $agent->category,
                     $promptText,
                     $user->id,

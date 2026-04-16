@@ -1,0 +1,93 @@
+{
+  "nav": {
+    "dashboard": "Kontrol Paneli",
+    "discover": "Ajanları Keşfet",
+    "workspace": "Çalışma Alanım",
+    "library": "Kütüphane",
+    "notifications": "Bildirimler",
+    "settings": "Ayarlar",
+    "logout": "Çıkış",
+    "profile": "Profil",
+    "upgrade": "Planı Yükselt"
+  },
+  "auth": {
+    "login": "Giriş Yap",
+    "register": "Kayıt Ol",
+    "email": "E-posta",
+    "password": "Şifre",
+    "confirm_password": "Şifreyi Onayla",
+    "name": "Ad Soyad",
+    "forgot_password": "Şifreni mi unuttun?",
+    "no_account": "Hesabın yok mu?",
+    "have_account": "Zaten hesabın var mı?",
+    "mfa_title": "İki Faktörlü Doğrulama",
+    "mfa_subtitle": "Devam etmek için 6 haneli kodu girin",
+    "mfa_code": "Doğrulama Kodu",
+    "mfa_verify": "Doğrula"
+  },
+  "agents": {
+    "discover_title": "Ajanları Keşfet",
+    "discover_subtitle": "Göreviniz için mükemmel AI ajanını bulun",
+    "search_placeholder": "Ajan ara...",
+    "all_domains": "Tüm Alanlar",
+    "all_tiers": "Tüm Seviyeler",
+    "free_only": "Sadece Ücretsiz",
+    "premium_only": "Sadece Premium",
+    "add_agent": "Alana Ekle",
+    "remove_agent": "Kaldır",
+    "added": "Eklendi",
+    "use_ai": "AI Kullan",
+    "generate": "Oluştur",
+    "submit": "AI'ya Gönder",
+    "no_agents": "Ajan bulunamadı",
+    "upload_file": "Dosya yükle (isteğe bağlı)",
+    "premium_badge": "Premium",
+    "free_badge": "Ücretsiz"
+  },
+  "common": {
+    "loading": "Yükleniyor...",
+    "error": "Bir şeyler yanlış gitti",
+    "retry": "Tekrar Dene",
+    "cancel": "İptal",
+    "save": "Kaydet",
+    "delete": "Sil",
+    "edit": "Düzenle",
+    "close": "Kapat",
+    "copy": "Kopyala",
+    "copied": "Kopyalandı!",
+    "search": "Ara",
+    "filter": "Filtrele",
+    "submit": "Gönder",
+    "skip": "Atla",
+    "next": "İleri",
+    "back": "Geri",
+    "welcome": "Hoş geldiniz",
+    "thinking": "Düşünüyor..."
+  },
+  "feedback": {
+    "title": "Bu yanıt nasıldı?",
+    "subtitle": "Geri bildiriminiz gelişmemize yardımcı olur",
+    "comment_placeholder": "Ek düşünceler? (isteğe bağlı)",
+    "submit": "Gönder",
+    "skip": "Atla"
+  },
+  "settings": {
+    "title": "Ayarlar",
+    "profile_tab": "Profil",
+    "preferences_tab": "Tercihler",
+    "plan_tab": "Plan",
+    "security_tab": "Güvenlik",
+    "language": "Dil",
+    "theme": "Tema",
+    "dark_mode": "Karanlık Mod",
+    "light_mode": "Aydınlık Mod",
+    "system_mode": "Sistem"
+  },
+  "plan": {
+    "free": "Ücretsiz",
+    "standard": "Standart",
+    "premium": "Premium",
+    "current_plan": "Mevcut Plan",
+    "upgrade": "Yükselt"
+  }
+}

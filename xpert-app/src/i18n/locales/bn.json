@@ -1,0 +1,93 @@
+{
+  "nav": {
+    "dashboard": "ড্যাশবোর্ড",
+    "discover": "এজেন্ট খুঁজুন",
+    "workspace": "আমার স্থান",
+    "library": "লাইব্রেরি",
+    "notifications": "বিজ্ঞপ্তি",
+    "settings": "সেটিংস",
+    "logout": "লগ আউট",
+    "profile": "প্রোফাইল",
+    "upgrade": "প্ল্যান আপগ্রেড"
+  },
+  "auth": {
+    "login": "লগ ইন",
+    "register": "সাইন আপ",
+    "email": "ইমেইল",
+    "password": "পাসওয়ার্ড",
+    "confirm_password": "পাসওয়ার্ড নিশ্চিত করুন",
+    "name": "পুরো নাম",
+    "forgot_password": "পাসওয়ার্ড ভুলে গেছেন?",
+    "no_account": "অ্যাকাউন্ট নেই?",
+    "have_account": "আগে থেকেই অ্যাকাউন্ট আছে?",
+    "mfa_title": "দুই-ধাপ যাচাই",
+    "mfa_subtitle": "চালিয়ে যেতে ৬ সংখ্যার কোড দিন",
+    "mfa_code": "যাচাই কোড",
+    "mfa_verify": "যাচাই করুন"
+  },
+  "agents": {
+    "discover_title": "এজেন্ট খুঁজুন",
+    "discover_subtitle": "আপনার কাজের জন্য সেরা AI এজেন্ট খুঁজুন",
+    "search_placeholder": "এজেন্ট খুঁজুন...",
+    "all_domains": "সব ডোমেইন",
+    "all_tiers": "সব স্তর",
+    "free_only": "শুধু বিনামূল্যে",
+    "premium_only": "শুধু প্রিমিয়াম",
+    "add_agent": "যোগ করুন",
+    "remove_agent": "সরান",
+    "added": "যোগ করা হয়েছে",
+    "use_ai": "AI ব্যবহার করুন",
+    "generate": "তৈরি করুন",
+    "submit": "AI-তে পাঠান",
+    "no_agents": "কোনো এজেন্ট পাওয়া যায়নি",
+    "upload_file": "ফাইল আপলোড করুন (ঐচ্ছিক)",
+    "premium_badge": "প্রিমিয়াম",
+    "free_badge": "বিনামূল্যে"
+  },
+  "common": {
+    "loading": "লোড হচ্ছে...",
+    "error": "কিছু ভুল হয়েছে",
+    "retry": "আবার চেষ্টা করুন",
+    "cancel": "বাতিল",
+    "save": "সংরক্ষণ",
+    "delete": "মুছুন",
+    "edit": "সম্পাদনা",
+    "close": "বন্ধ",
+    "copy": "কপি",
+    "copied": "কপি হয়েছে!",
+    "search": "খুঁজুন",
+    "filter": "ফিল্টার",
+    "submit": "জমা দিন",
+    "skip": "এড়িয়ে যান",
+    "next": "পরবর্তী",
+    "back": "পিছনে",
+    "welcome": "স্বাগতম",
+    "thinking": "ভাবছে..."
+  },
+  "feedback": {
+    "title": "এই উত্তরটি কেমন ছিল?",
+    "subtitle": "আপনার মতামত আমাদের উন্নতিতে সাহায্য করে",
+    "comment_placeholder": "অতিরিক্ত মন্তব্য? (ঐচ্ছিক)",
+    "submit": "জমা দিন",
+    "skip": "এড়িয়ে যান"
+  },
+  "settings": {
+    "title": "সেটিংস",
+    "profile_tab": "প্রোফাইল",
+    "preferences_tab": "পছন্দ",
+    "plan_tab": "প্ল্যান",
+    "security_tab": "নিরাপত্তা",
+    "language": "ভাষা",
+    "theme": "থিম",
+    "dark_mode": "ডার্ক মোড",
+    "light_mode": "লাইট মোড",
+    "system_mode": "সিস্টেম"
+  },
+  "plan": {
+    "free": "বিনামূল্যে",
+    "standard": "স্ট্যান্ডার্ড",
+    "premium": "প্রিমিয়াম",
+    "current_plan": "বর্তমান প্ল্যান",
+    "upgrade": "আপগ্রেড"
+  }
+}

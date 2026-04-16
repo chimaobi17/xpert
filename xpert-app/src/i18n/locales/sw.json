@@ -1,0 +1,93 @@
+{
+  "nav": {
+    "dashboard": "Dashibodi",
+    "discover": "Gundua Mawakala",
+    "workspace": "Nafasi Yangu",
+    "library": "Maktaba",
+    "notifications": "Arifa",
+    "settings": "Mipangilio",
+    "logout": "Ondoka",
+    "profile": "Wasifu",
+    "upgrade": "Boresha Mpango"
+  },
+  "auth": {
+    "login": "Ingia",
+    "register": "Jisajili",
+    "email": "Barua pepe",
+    "password": "Nenosiri",
+    "confirm_password": "Thibitisha Nenosiri",
+    "name": "Jina Kamili",
+    "forgot_password": "Umesahau nenosiri?",
+    "no_account": "Huna akaunti?",
+    "have_account": "Tayari una akaunti?",
+    "mfa_title": "Uthibitishaji wa Hatua Mbili",
+    "mfa_subtitle": "Ingiza nambari ya tarakimu 6 kuendelea",
+    "mfa_code": "Nambari ya Uthibitishaji",
+    "mfa_verify": "Thibitisha"
+  },
+  "agents": {
+    "discover_title": "Gundua Mawakala",
+    "discover_subtitle": "Pata wakala bora wa AI kwa kazi yako",
+    "search_placeholder": "Tafuta mawakala...",
+    "all_domains": "Maeneo Yote",
+    "all_tiers": "Viwango Vyote",
+    "free_only": "Bure Tu",
+    "premium_only": "Premium Tu",
+    "add_agent": "Ongeza",
+    "remove_agent": "Ondoa",
+    "added": "Imeongezwa",
+    "use_ai": "Tumia AI",
+    "generate": "Tengeneza",
+    "submit": "Tuma kwa AI",
+    "no_agents": "Hakuna mawakala",
+    "upload_file": "Pakia faili (hiari)",
+    "premium_badge": "Premium",
+    "free_badge": "Bure"
+  },
+  "common": {
+    "loading": "Inapakia...",
+    "error": "Kuna tatizo",
+    "retry": "Jaribu Tena",
+    "cancel": "Ghairi",
+    "save": "Hifadhi",
+    "delete": "Futa",
+    "edit": "Hariri",
+    "close": "Funga",
+    "copy": "Nakili",
+    "copied": "Imenakiliwa!",
+    "search": "Tafuta",
+    "filter": "Chuja",
+    "submit": "Tuma",
+    "skip": "Ruka",
+    "next": "Ifuatayo",
+    "back": "Rudi",
+    "welcome": "Karibu",
+    "thinking": "Inafikiria..."
+  },
+  "feedback": {
+    "title": "Jibu hili lilikuwaje?",
+    "subtitle": "Maoni yako yanasaidia kuboresha",
+    "comment_placeholder": "Mawazo mengine? (hiari)",
+    "submit": "Tuma",
+    "skip": "Ruka"
+  },
+  "settings": {
+    "title": "Mipangilio",
+    "profile_tab": "Wasifu",
+    "preferences_tab": "Mapendeleo",
+    "plan_tab": "Mpango",
+    "security_tab": "Usalama",
+    "language": "Lugha",
+    "theme": "Mandhari",
+    "dark_mode": "Hali ya Giza",
+    "light_mode": "Hali ya Mwanga",
+    "system_mode": "Mfumo"
+  },
+  "plan": {
+    "free": "Bure",
+    "standard": "Kawaida",
+    "premium": "Premium",
+    "current_plan": "Mpango wa Sasa",
+    "upgrade": "Boresha"
+  }
+}

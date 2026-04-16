@@ -28,11 +28,14 @@ function AppLayoutContent() {
     return () => { document.body.style.overflow = ''; };
   }, [sidebarOpen]);
 
-  // Auto-start guide if not seen
+  // Auto-start guide only for new signups who haven't seen it yet
   useEffect(() => {
-    if (!hasSeenGuide) {
+    const isNewSignup = sessionStorage.getItem('just_registered');
+    if (hasSeenGuide === false && isNewSignup) {
       const timer = setTimeout(() => {
         startGuide();
+        // Clear the flag after starting so it doesn't trigger again on every refresh
+        sessionStorage.removeItem('just_registered');
       }, 1500); // 1.5s delay for smooth entrance
       return () => clearTimeout(timer);
     }

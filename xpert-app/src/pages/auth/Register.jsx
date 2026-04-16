@@ -5,6 +5,7 @@ import AuthLayout from '../../components/layout/AuthLayout';
 import Input from '../../components/ui/Input';
 import Button from '../../components/ui/Button';
 import { UserIcon, EnvelopeIcon, LockClosedIcon, EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
+import { LANGUAGES } from '../../i18n';
 
 export default function Register() {
   const { register } = useAuth();
@@ -17,6 +18,7 @@ export default function Register() {
     job_title: '',
     purpose: '',
     field_of_specialization: '',
+    language_preference: 'en',
   });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
@@ -31,7 +33,8 @@ export default function Register() {
     try {
       const { name, email, password, password_confirmation, ...extra } = form;
       await register(name, email, password, password_confirmation, extra);
-      navigate('/workspace');
+      sessionStorage.setItem('just_registered', 'true');
+      navigate('/agents/discover');
     } catch (err) {
       const data = err.response?.data;
       if (data?.errors || data?.details) {
@@ -52,6 +55,11 @@ export default function Register() {
     { value: 'research', label: 'Research' },
     { value: 'language', label: 'Language' },
   ];
+
+  const languages = LANGUAGES.map((l) => ({
+    value: l.code,
+    label: `${l.nativeName} — ${l.name}`,
+  }));
 
   return (
     <AuthLayout>
@@ -150,6 +158,19 @@ export default function Register() {
               >
                 {specializations.map((s) => (
                   <option key={s.value} value={s.value}>{s.label}</option>
+                ))}
+              </select>
+            </div>
+
+            <div className="space-y-2">
+              <label className="block text-xs font-black uppercase tracking-widest text-text-tertiary ml-1">Language Preference</label>
+              <select
+                className="block w-full rounded-2xl border border-border/80 bg-background px-4 py-3.5 text-sm text-foreground focus:border-primary-500/50 focus:ring-4 focus:ring-primary-500/10 transition-all duration-300"
+                value={form.language_preference}
+                onChange={(e) => setForm({ ...form, language_preference: e.target.value })}
+              >
+                {languages.map((l) => (
+                  <option key={l.value} value={l.value}>{l.label}</option>
                 ))}
               </select>
             </div>

@@ -14,6 +14,7 @@ export default function ProfileTab() {
   const [jobTitle, setJobTitle] = useState('');
   const [purpose, setPurpose] = useState('');
   const [specialization, setSpecialization] = useState('technology');
+  const [language, setLanguage] = useState('en');
   const [loading, setLoading] = useState(false);
   const [avatarUploading, setAvatarUploading] = useState(false);
   const fileInputRef = useRef(null);
@@ -24,6 +25,7 @@ export default function ProfileTab() {
       setJobTitle(user.job_title || '');
       setPurpose(user.purpose || '');
       setSpecialization(user.field_of_specialization || 'technology');
+      setLanguage(user.language_preference || 'en');
     }
   }, [user]);
 
@@ -57,7 +59,8 @@ export default function ProfileTab() {
         name,
         job_title: jobTitle,
         purpose,
-        field_of_specialization: specialization
+        field_of_specialization: specialization,
+        language_preference: language
       });
       if (res.ok) {
         updateUser(res.data);
@@ -145,6 +148,37 @@ export default function ProfileTab() {
             <option value="business">Business & Support</option>
             <option value="research">Research & Analysis</option>
             <option value="language">Language & Arts</option>
+          </select>
+        </div>
+        
+        <div className="space-y-1">
+          <label className="text-xs font-semibold text-[var(--color-text-secondary)] uppercase tracking-wider">
+            Language Preference
+          </label>
+          <select
+            value={language}
+            onChange={(e) => setLanguage(e.target.value)}
+            className="w-full rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-2 text-sm text-[var(--color-text)] focus:border-primary-500 focus:outline-none"
+          >
+            <option value="en">English</option>
+            <option value="es">Español</option>
+            <option value="fr">Français</option>
+            <option value="de">Deutsch</option>
+            <option value="zh">中文</option>
+            <option value="ar">العربية</option>
+            <option value="pt">Português</option>
+            <option value="it">Italiano</option>
+            <option value="ru">Русский</option>
+            <option value="ja">日本語</option>
+            <option value="ko">한국어</option>
+            <option value="hi">हिन्दी</option>
+            <option value="tr">Türkçe</option>
+            <option value="nl">Nederlands</option>
+            <option value="sw">Kiswahili</option>
+            <option value="id">Bahasa Indonesia</option>
+            <option value="vi">Tiếng Việt</option>
+            <option value="pl">Polski</option>
+            <option value="bn">বাংলা</option>
           </select>
         </div>
 

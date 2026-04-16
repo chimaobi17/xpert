@@ -1,0 +1,93 @@
+{
+  "nav": {
+    "dashboard": "Dashboard",
+    "discover": "Agenten entdecken",
+    "workspace": "Mein Bereich",
+    "library": "Bibliothek",
+    "notifications": "Benachrichtigungen",
+    "settings": "Einstellungen",
+    "logout": "Abmelden",
+    "profile": "Profil",
+    "upgrade": "Plan upgraden"
+  },
+  "auth": {
+    "login": "Anmelden",
+    "register": "Registrieren",
+    "email": "E-Mail-Adresse",
+    "password": "Passwort",
+    "confirm_password": "Passwort bestätigen",
+    "name": "Vollständiger Name",
+    "forgot_password": "Passwort vergessen?",
+    "no_account": "Kein Konto?",
+    "have_account": "Bereits ein Konto?",
+    "mfa_title": "Zwei-Faktor-Authentifizierung",
+    "mfa_subtitle": "Geben Sie den 6-stelligen Code ein",
+    "mfa_code": "Bestätigungscode",
+    "mfa_verify": "Bestätigen"
+  },
+  "agents": {
+    "discover_title": "Agenten entdecken",
+    "discover_subtitle": "Finden Sie den perfekten KI-Agenten",
+    "search_placeholder": "Agenten suchen...",
+    "all_domains": "Alle Bereiche",
+    "all_tiers": "Alle Stufen",
+    "free_only": "Nur Kostenlos",
+    "premium_only": "Nur Premium",
+    "add_agent": "Zum Bereich hinzufügen",
+    "remove_agent": "Entfernen",
+    "added": "Hinzugefügt",
+    "use_ai": "KI verwenden",
+    "generate": "Prompt generieren",
+    "submit": "An KI senden",
+    "no_agents": "Keine Agenten gefunden",
+    "upload_file": "Datei hochladen (optional)",
+    "premium_badge": "Premium",
+    "free_badge": "Kostenlos"
+  },
+  "common": {
+    "loading": "Laden...",
+    "error": "Etwas ist schiefgelaufen",
+    "retry": "Erneut versuchen",
+    "cancel": "Abbrechen",
+    "save": "Speichern",
+    "delete": "Löschen",
+    "edit": "Bearbeiten",
+    "close": "Schließen",
+    "copy": "Kopieren",
+    "copied": "Kopiert!",
+    "search": "Suchen",
+    "filter": "Filtern",
+    "submit": "Absenden",
+    "skip": "Überspringen",
+    "next": "Weiter",
+    "back": "Zurück",
+    "welcome": "Willkommen",
+    "thinking": "Denke nach..."
+  },
+  "feedback": {
+    "title": "Wie war diese Antwort?",
+    "subtitle": "Ihr Feedback hilft uns zu verbessern",
+    "comment_placeholder": "Zusätzliche Gedanken? (optional)",
+    "submit": "Absenden",
+    "skip": "Überspringen"
+  },
+  "settings": {
+    "title": "Einstellungen",
+    "profile_tab": "Profil",
+    "preferences_tab": "Einstellungen",
+    "plan_tab": "Plan",
+    "security_tab": "Sicherheit",
+    "language": "Sprache",
+    "theme": "Design",
+    "dark_mode": "Dunkelmodus",
+    "light_mode": "Hellmodus",
+    "system_mode": "System"
+  },
+  "plan": {
+    "free": "Kostenlos",
+    "standard": "Standard",
+    "premium": "Premium",
+    "current_plan": "Aktueller Plan",
+    "upgrade": "Upgraden"
+  }
+}

@@ -13,7 +13,10 @@ export default function GuestRoute() {
     );
   }
 
-  if (user) return <Navigate to="/agents/discover" replace />;
+  if (user) {
+    const isNew = sessionStorage.getItem('just_registered');
+    return <Navigate to={isNew ? "/agents/discover" : "/workspace"} replace />;
+  }
 
   return <Outlet />;
 }

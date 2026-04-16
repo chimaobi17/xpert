@@ -1,0 +1,93 @@
+{
+  "nav": {
+    "dashboard": "Dasbor",
+    "discover": "Temukan Agen",
+    "workspace": "Ruang Kerja Saya",
+    "library": "Perpustakaan",
+    "notifications": "Notifikasi",
+    "settings": "Pengaturan",
+    "logout": "Keluar",
+    "profile": "Profil",
+    "upgrade": "Tingkatkan Paket"
+  },
+  "auth": {
+    "login": "Masuk",
+    "register": "Daftar",
+    "email": "Email",
+    "password": "Kata Sandi",
+    "confirm_password": "Konfirmasi Kata Sandi",
+    "name": "Nama Lengkap",
+    "forgot_password": "Lupa kata sandi?",
+    "no_account": "Belum punya akun?",
+    "have_account": "Sudah punya akun?",
+    "mfa_title": "Autentikasi Dua Faktor",
+    "mfa_subtitle": "Masukkan kode 6 digit untuk melanjutkan",
+    "mfa_code": "Kode Verifikasi",
+    "mfa_verify": "Verifikasi"
+  },
+  "agents": {
+    "discover_title": "Temukan Agen",
+    "discover_subtitle": "Temukan agen AI yang sempurna untuk tugas Anda",
+    "search_placeholder": "Cari agen...",
+    "all_domains": "Semua Domain",
+    "all_tiers": "Semua Tingkat",
+    "free_only": "Gratis Saja",
+    "premium_only": "Premium Saja",
+    "add_agent": "Tambah ke Ruang",
+    "remove_agent": "Hapus",
+    "added": "Ditambahkan",
+    "use_ai": "Gunakan AI",
+    "generate": "Buat Prompt",
+    "submit": "Kirim ke AI",
+    "no_agents": "Tidak ada agen ditemukan",
+    "upload_file": "Unggah file (opsional)",
+    "premium_badge": "Premium",
+    "free_badge": "Gratis"
+  },
+  "common": {
+    "loading": "Memuat...",
+    "error": "Terjadi kesalahan",
+    "retry": "Coba Lagi",
+    "cancel": "Batal",
+    "save": "Simpan",
+    "delete": "Hapus",
+    "edit": "Edit",
+    "close": "Tutup",
+    "copy": "Salin",
+    "copied": "Disalin!",
+    "search": "Cari",
+    "filter": "Filter",
+    "submit": "Kirim",
+    "skip": "Lewati",
+    "next": "Selanjutnya",
+    "back": "Kembali",
+    "welcome": "Selamat Datang",
+    "thinking": "Berpikir..."
+  },
+  "feedback": {
+    "title": "Bagaimana respons ini?",
+    "subtitle": "Masukan Anda membantu kami meningkatkan layanan",
+    "comment_placeholder": "Pemikiran tambahan? (opsional)",
+    "submit": "Kirim",
+    "skip": "Lewati"
+  },
+  "settings": {
+    "title": "Pengaturan",
+    "profile_tab": "Profil",
+    "preferences_tab": "Preferensi",
+    "plan_tab": "Paket",
+    "security_tab": "Keamanan",
+    "language": "Bahasa",
+    "theme": "Tema",
+    "dark_mode": "Mode Gelap",
+    "light_mode": "Mode Terang",
+    "system_mode": "Sistem"
+  },
+  "plan": {
+    "free": "Gratis",
+    "standard": "Standar",
+    "premium": "Premium",
+    "current_plan": "Paket Saat Ini",
+    "upgrade": "Tingkatkan"
+  }
+}

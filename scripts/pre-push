@@ -1,0 +1,17 @@
+#!/bin/bash
+# Git pre-push hook for XPERT
+# Runs secret scanning before allowing push
+# Install: cp scripts/pre-push .git/hooks/pre-push && chmod +x .git/hooks/pre-push
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+PROJECT_ROOT="$(git rev-parse --show-toplevel)"
+
+echo "Running pre-push secret scan..."
+"$PROJECT_ROOT/scripts/secret-scan.sh"
+
+if [[ $? -ne 0 ]]; then
+    echo ""
+    echo "Push blocked: secrets detected in staged files."
+    echo "Remove the secrets and try again."
+    exit 1
+fi

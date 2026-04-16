@@ -31,6 +31,14 @@ These issues have already been resolved and deployed to production. **Do NOT re-
      - *"The AI system is temporarily busy. Please try again in a few moments. Retrying may help."*
      - *"Your request has been queued. Processing shortly."*
 
+### Fix E: Session state clearing on "Done" (Bug 19)
+- **Files changed:** `xpert-app/src/pages/agents/AgentWorkspace.jsx`
+- **What was done:** Added `sessionStorage.removeItem(storageKey)` to the "Done" button handler to ensure agents start at Step 1 when reopened.
+
+### Fix F: Authenticated user redirection (Bug 20)
+- **Files changed:** `xpert-app/src/App.jsx`, `xpert-app/src/pages/Landing.jsx`, `xpert-app/src/pages/auth/Login.jsx`, `xpert-app/src/pages/auth/Register.jsx`
+- **What was done:** Implemented logic to redirect already-signed-in users specifically to the `/workspace` dashboard, improving the returning user experience.
+
 ---
 
 ## 🔧 Outstanding Bugs (Implement These)
@@ -330,50 +338,36 @@ html, body {
    ```
 2. (Optional) Sync `step` with URL search params (e.g., `?step=2`) or use `window.history.pushState` to ensure the browser's back button works as expected.
 
-## Bug 19: Clicking "Done" should clear agent session state
+## Bug 21: Auth Stability & Global Language Expansion (25+ Languages)
 
-**File:** `xpert-app/src/pages/agents/AgentWorkspace.jsx`
+**Files:** `.env`, `AuthController.php`, `Register.jsx`, `Settings.jsx`, `PromptEngineService.php`, `AgentWorkspace.jsx`, `Landing.jsx`
 
-**Current Behavior:** When a user finishes using an AI helper and clicks the "Done" button, they are taken back to the Workspace. However, the `sessionStorage` for that agent is not cleared. If they click on the same agent again, it reloads the previous result/step instead of starting fresh.
-
-**Expected Behavior:** Clicking "Done" should explicitly clear the stored session state for that specific agent so that the next time it's opened, it starts at Step 1 (Input Form).
+**Current Issues:**
+1. **Auth Failure**: Sign-in and Sign-up are failing for some users despite valid credentials, likely due to `localhost` vs `127.0.0.1` origin mismatches and stale `.env` loading.
+2. **Missing Languages**: The signup form only shows 8 languages, while the app promise "20+ languages".
+3. **Inconsistencies**: The AI doesn't automatically respond in the user's preferred language, and there are race conditions in navigation/session clearing.
 
 ### Steps to Fix:
-1. Locate the "Done" button in `AgentWorkspace.jsx` (around line 450).
-2. Update the `onClick` handler to clear the `storageKey` before navigating:
-   ```javascript
-   <button
-     onClick={() => {
-       sessionStorage.removeItem(storageKey);
-       navigate('/workspace');
-     }}
-     ...
-   >
-     Done
-   </button>
-   ```
+1. **Infrastructure**: Standardize `VITE_API_URL` and `APP_URL` to `http://localhost:8000` to ensure Chrome treats it as same-site for cookie storage.
+2. **Language Expansion**: Populate the `languages` array in `Register.jsx` and `Settings.jsx` with 25+ major world languages.
+3. **AI Logic**: Update `PromptEngineService.php` to inject a `[Language Directive]` into every prompt based on the user's `language_preference`.
+4. **UX/UI Fixes**: 
+   - Fix `AgentWorkspace` cleanup race condition using a `ref`.
+   - Implement proactive redirect in `Landing.jsx` for authenticated users.
 
 ---
 
-## Bug 20: Signed-in users should land on "My Helpers" page
+## Bug 22: AI Helper Image Generation Adherence & Stability
 
-**File:** `xpert-app/src/App.jsx` and `xpert-app/src/pages/Landing.jsx`
+**Status:** PENDING
+**Issue:** Image helpers (Photography, Logo Creator, etc.) currently use hardcoded internal prompt structures that ignore custom template fields or admin-defined templates. Additionally, failover to Gemini can sometimes return text instead of image data.
 
-**Current Behavior:** Some authenticated users land on the public Landing page when visiting the root domain or after certain navigation flows, requiring an extra click to get to their workspace.
-
-**Expected Behavior:** Any user who is already authenticated should be automatically redirected to the "My Helpers" page (`/workspace`) if they land on the home page or root URL.
-
-### Steps to Fix:
-1. Verify `RootRoute` in `App.jsx` correctly handles the redirect (it seems to, but verify reactive updates).
-2. Add a proactive redirect in `Landing.jsx` as a secondary measure:
-   ```javascript
-   const { user, loading } = useAuth();
-   useEffect(() => {
-     if (!loading && user) {
-       navigate('/workspace', { replace: true });
-     }
-   }, [user, loading, navigate]);
-   ```
+**Requirement:** 
+1.  Refactor `PromptEngineService` to use `replacePlaceholders` as the core for image prompts.
+2.  Maintain high-fidelity "Style Modules" for premium agents but allow them to be blended with user-defined templates.
+3.  Enhance `HuggingFaceService` to retry without extra parameters on 400 errors.
+4.  Update `GeminiService` to explicitly handle image generation prompts.
+5.  Add image error state and "Retry" button to `AiResponse.jsx`.
 
 ---
 

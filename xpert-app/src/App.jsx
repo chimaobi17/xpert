@@ -13,6 +13,8 @@ const Landing = lazy(() => import('./pages/Landing'));
 const Login = lazy(() => import('./pages/auth/Login'));
 const Register = lazy(() => import('./pages/auth/Register'));
 const ForgotPassword = lazy(() => import('./pages/auth/ForgotPassword'));
+const ResetPassword = lazy(() => import('./pages/auth/ResetPassword'));
+const VerifyEmail = lazy(() => import('./pages/auth/VerifyEmail'));
 const Dashboard = lazy(() => import('./pages/Dashboard'));
 const Workspace = lazy(() => import('./pages/Workspace'));
 const AgentDiscover = lazy(() => import('./pages/agents/AgentDiscover'));
@@ -90,7 +92,8 @@ function RootRoute() {
   }
 
   if (user) {
-    return <Navigate to="/workspace" replace />;
+    const isNew = sessionStorage.getItem('just_registered');
+    return <Navigate to={isNew ? "/agents/discover" : "/workspace"} replace />;
   }
 
   return <Landing />;
@@ -145,11 +148,13 @@ export default function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
           </Route>
 
           <Route path="/blocked" element={<BlockedScreen />} />
 
           <Route element={<ProtectedRoute />}>
+            <Route path="/verify-email" element={<VerifyEmail />} />
             <Route element={<AppLayout />}>
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/workspace" element={<Workspace />} />

@@ -1,7 +1,14 @@
 import { createContext, useState, useEffect } from 'react';
 import api from '../lib/axios';
+import i18n from '../i18n';
 
 export const AuthContext = createContext(null);
+
+function syncLanguage(userData) {
+  if (userData?.language_preference && userData.language_preference !== i18n.language?.split('-')[0]) {
+    i18n.changeLanguage(userData.language_preference);
+  }
+}
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
@@ -15,6 +22,7 @@ export function AuthProvider({ children }) {
     try {
       const res = await api.get('/user');
       setUser(res.data);
+      syncLanguage(res.data);
     } catch {
       setUser(null);
       localStorage.removeItem('auth_token');
@@ -35,7 +43,9 @@ export function AuthProvider({ children }) {
       localStorage.setItem('auth_token', res.data.token);
     }
     sessionStorage.removeItem('xpert_onboarding_shown');
-    setUser(res.data.user || res.data);
+    const userData = res.data.user || res.data;
+    setUser(userData);
+    syncLanguage(userData);
     return res.data;
   }
 
@@ -45,22 +55,26 @@ export function AuthProvider({ children }) {
       localStorage.setItem('auth_token', res.data.token);
     }
     sessionStorage.removeItem('xpert_onboarding_shown');
-    setUser(res.data.user || res.data);
+    const userData = res.data.user || res.data;
+    setUser(userData);
+    syncLanguage(userData);
   }
 
   async function register(name, email, password, password_confirmation, extra = {}) {
-    const res = await api.post('/register', { 
-      name, 
-      email, 
-      password, 
+    const res = await api.post('/register', {
+      name,
+      email,
+      password,
       password_confirmation,
-      ...extra 
+      ...extra
     });
     if (res.data.token) {
       localStorage.setItem('auth_token', res.data.token);
     }
     sessionStorage.removeItem('xpert_onboarding_shown');
-    setUser(res.data.user || res.data);
+    const userData = res.data.user || res.data;
+    setUser(userData);
+    syncLanguage(userData);
   }
 
   async function logout() {
@@ -84,7 +98,13 @@ export function AuthProvider({ children }) {
   }
 
   function updateUser(data) {
-    setUser((prev) => (prev ? { ...prev, ...data } : prev));
+    setUser((prev) => {
+      const newUser = prev ? { ...prev, ...data } : prev;
+      if (data.language_preference) {
+        syncLanguage(newUser);
+      }
+      return newUser;
+    });
   }
 
   return (

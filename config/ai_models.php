@@ -77,6 +77,10 @@ return [
 
     'interior_designer' => [
         'primary' => 'black-forest-labs/FLUX.1-schnell',
+        'fallback' => 'stabilityai/stable-diffusion-xl-base-1.0',
+        'recovery' => 'black-forest-labs/FLUX.1-dev',
+        'safety' => 'stabilityai/sdxl-turbo',
+        'last_resort' => 'stabilityai/stable-diffusion-2-1',
         'max_tokens' => 512,
         'timeout' => 120,
         'type' => 'image',
@@ -84,6 +88,10 @@ return [
 
     'logo_creator' => [
         'primary' => 'black-forest-labs/FLUX.1-schnell',
+        'fallback' => 'stabilityai/stable-diffusion-xl-base-1.0',
+        'recovery' => 'black-forest-labs/FLUX.1-dev',
+        'safety' => 'stabilityai/sdxl-turbo',
+        'last_resort' => 'stabilityai/stable-diffusion-2-1',
         'max_tokens' => 512,
         'timeout' => 120,
         'type' => 'image',
@@ -209,6 +217,10 @@ return [
 
     'graphics_designer' => [
         'primary' => 'black-forest-labs/FLUX.1-schnell',
+        'fallback' => 'stabilityai/stable-diffusion-xl-base-1.0',
+        'recovery' => 'black-forest-labs/FLUX.1-dev',
+        'safety' => 'stabilityai/sdxl-turbo',
+        'last_resort' => 'stabilityai/stable-diffusion-2-1',
         'max_tokens' => 512,
         'timeout' => 120,
         'type' => 'image',
@@ -216,6 +228,10 @@ return [
 
     'photography' => [
         'primary' => 'black-forest-labs/FLUX.1-schnell',
+        'fallback' => 'stabilityai/stable-diffusion-xl-base-1.0',
+        'recovery' => 'black-forest-labs/FLUX.1-dev',
+        'safety' => 'stabilityai/sdxl-turbo',
+        'last_resort' => 'stabilityai/stable-diffusion-2-1',
         'max_tokens' => 512,
         'timeout' => 120,
         'type' => 'image',

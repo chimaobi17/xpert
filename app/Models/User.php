@@ -17,6 +17,7 @@ class User extends Authenticatable
         'password',
         'role',
         'plan_level',
+        'language_preference',
         'avatar',
         'job_title',
         'purpose',
@@ -26,12 +27,19 @@ class User extends Authenticatable
         'is_onboarded',
         'two_factor_secret',
         'two_factor_enabled',
+        'is_verified',
+        'otp_code',
+        'otp_expires_at',
+        'reset_token',
+        'reset_token_expires_at',
     ];
 
     protected $hidden = [
         'password',
         'remember_token',
         'two_factor_secret',
+        'otp_code',
+        'reset_token',
     ];
 
     protected $appends = ['onboarding_complete', 'avatar_url'];
@@ -44,6 +52,9 @@ class User extends Authenticatable
             'banned_until' => 'datetime',
             'is_onboarded' => 'boolean',
             'two_factor_enabled' => 'boolean',
+            'is_verified' => 'boolean',
+            'otp_expires_at' => 'datetime',
+            'reset_token_expires_at' => 'datetime',
         ];
     }
 

@@ -1,0 +1,93 @@
+{
+  "nav": {
+    "dashboard": "Dashboard",
+    "discover": "Ontdek Agenten",
+    "workspace": "Mijn Werkruimte",
+    "library": "Bibliotheek",
+    "notifications": "Meldingen",
+    "settings": "Instellingen",
+    "logout": "Uitloggen",
+    "profile": "Profiel",
+    "upgrade": "Plan Upgraden"
+  },
+  "auth": {
+    "login": "Inloggen",
+    "register": "Registreren",
+    "email": "E-mailadres",
+    "password": "Wachtwoord",
+    "confirm_password": "Bevestig Wachtwoord",
+    "name": "Volledige Naam",
+    "forgot_password": "Wachtwoord vergeten?",
+    "no_account": "Geen account?",
+    "have_account": "Al een account?",
+    "mfa_title": "Tweestapsverificatie",
+    "mfa_subtitle": "Voer de 6-cijferige code in om door te gaan",
+    "mfa_code": "Verificatiecode",
+    "mfa_verify": "Verifiëren"
+  },
+  "agents": {
+    "discover_title": "Ontdek Agenten",
+    "discover_subtitle": "Vind de perfecte AI-agent voor jouw taak",
+    "search_placeholder": "Zoek agenten...",
+    "all_domains": "Alle Domeinen",
+    "all_tiers": "Alle Niveaus",
+    "free_only": "Alleen Gratis",
+    "premium_only": "Alleen Premium",
+    "add_agent": "Toevoegen aan Werkruimte",
+    "remove_agent": "Verwijderen",
+    "added": "Toegevoegd",
+    "use_ai": "AI Gebruiken",
+    "generate": "Genereer Prompt",
+    "submit": "Verzenden naar AI",
+    "no_agents": "Geen agenten gevonden",
+    "upload_file": "Bestand uploaden (optioneel)",
+    "premium_badge": "Premium",
+    "free_badge": "Gratis"
+  },
+  "common": {
+    "loading": "Laden...",
+    "error": "Er ging iets mis",
+    "retry": "Opnieuw Proberen",
+    "cancel": "Annuleren",
+    "save": "Opslaan",
+    "delete": "Verwijderen",
+    "edit": "Bewerken",
+    "close": "Sluiten",
+    "copy": "Kopiëren",
+    "copied": "Gekopieerd!",
+    "search": "Zoeken",
+    "filter": "Filteren",
+    "submit": "Verzenden",
+    "skip": "Overslaan",
+    "next": "Volgende",
+    "back": "Terug",
+    "welcome": "Welkom",
+    "thinking": "Nadenken..."
+  },
+  "feedback": {
+    "title": "Hoe was dit antwoord?",
+    "subtitle": "Je feedback helpt ons verbeteren",
+    "comment_placeholder": "Aanvullende gedachten? (optioneel)",
+    "submit": "Verzenden",
+    "skip": "Overslaan"
+  },
+  "settings": {
+    "title": "Instellingen",
+    "profile_tab": "Profiel",
+    "preferences_tab": "Voorkeuren",
+    "plan_tab": "Plan",
+    "security_tab": "Beveiliging",
+    "language": "Taal",
+    "theme": "Thema",
+    "dark_mode": "Donkere Modus",
+    "light_mode": "Lichte Modus",
+    "system_mode": "Systeem"
+  },
+  "plan": {
+    "free": "Gratis",
+    "standard": "Standaard",
+    "premium": "Premium",
+    "current_plan": "Huidig Plan",
+    "upgrade": "Upgraden"
+  }
+}

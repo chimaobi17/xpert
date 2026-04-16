@@ -14,6 +14,7 @@ class AiAgent extends Model
         'domain',
         'category',
         'system_prompt',
+        'tagline',
         'is_premium_only',
     ];
 

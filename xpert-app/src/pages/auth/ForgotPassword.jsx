@@ -3,21 +3,31 @@ import { Link } from 'react-router-dom';
 import AuthLayout from '../../components/layout/AuthLayout';
 import Input from '../../components/ui/Input';
 import Button from '../../components/ui/Button';
+import { post } from '../../lib/apiClient';
 import { EnvelopeIcon } from '@heroicons/react/24/outline';
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState('');
   const [sent, setSent] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   async function handleSubmit(e) {
     e.preventDefault();
+    setError('');
     setLoading(true);
-    // Mock: simulate API call
-    setTimeout(() => {
-      setSent(true);
+    try {
+      const res = await post('/password/forgot', { email });
+      if (res.ok) {
+        setSent(true);
+      } else {
+        setError(res.error?.message || 'Something went wrong. Please try again.');
+      }
+    } catch {
+      setError('Unable to connect. Please try again.');
+    } finally {
       setLoading(false);
-    }, 1000);
+    }
   }
 
   return (
@@ -38,6 +48,9 @@ export default function ForgotPassword() {
         </div>
       ) : (
         <form onSubmit={handleSubmit} className="space-y-4">
+          {error && (
+            <div className="rounded-lg bg-red-50 p-3 text-sm text-red-600">{error}</div>
+          )}
           <Input
             label="Email"
             type="email"

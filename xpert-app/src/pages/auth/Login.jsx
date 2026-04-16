@@ -26,6 +26,7 @@ export default function Login() {
       if (data?.requires_2fa) {
         setMfaUserId(data.user_id);
       } else {
+        sessionStorage.removeItem('just_registered');
         navigate('/workspace');
       }
     } catch (err) {

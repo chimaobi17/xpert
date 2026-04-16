@@ -512,5 +512,38 @@ class AiAgentSeeder extends Seeder
                 ]
             );
         }
+
+        // Apply taglines to all agents
+        $taglines = [
+            'Code Assistant' => 'Write code that speaks for itself — clean, efficient, production-ready.',
+            'Content Writer' => 'Words that captivate, content that converts.',
+            'Business Analyst' => 'Data-driven insights for smarter business decisions.',
+            'Document Analyzer' => 'Upload any document, get instant clarity.',
+            'Translation Agent' => 'Break language barriers — natural, accurate translations.',
+            'UX Researcher' => 'Understand your users before you build for them.',
+            'Sentiment Analyzer' => 'Read between the lines — decode emotions in any text.',
+            'Graphics Design Advisor' => 'Expert creative direction for stunning visual design.',
+            'Interior Designer' => 'Transform spaces with AI-powered design vision.',
+            'Logo Creator' => 'Your brand identity, visualized in seconds.',
+            'Email Composer' => 'Professional emails crafted in moments, not hours.',
+            'Resume Builder' => 'Stand out from the pile — ATS-ready resumes that land interviews.',
+            'Social Media Strategist' => 'Scroll-stopping content for every platform.',
+            'Academic Writer' => 'Rigorous, well-cited academic content on demand.',
+            'Legal Document Assistant' => 'Draft, review, and understand legal documents with confidence.',
+            'Data Analyst' => 'Turn raw data into actionable business intelligence.',
+            'Grammar & Style Editor' => 'Polish every word — flawless grammar, perfect style.',
+            'Meeting Notes Summarizer' => 'Never miss an action item — meetings distilled to what matters.',
+            'Creative Story Writer' => 'Bring your stories to life with vivid, compelling prose.',
+            'API Documentation Writer' => 'Developer-friendly docs that make APIs easy to use.',
+            'Pitch Deck Advisor' => 'Pitch with confidence — investor-ready presentations.',
+            'Language Tutor' => 'Learn any language at your own pace with a patient AI tutor.',
+            'Tone Transformer' => 'Same message, different voice — rewrite in any tone instantly.',
+            'Graphics Design Assistant' => 'Professional graphics created from your description.',
+            'AI Photographer' => 'Stunning photorealistic images from words alone.',
+        ];
+
+        foreach ($taglines as $name => $tagline) {
+            AiAgent::where('name', $name)->update(['tagline' => $tagline]);
+        }
     }
 }

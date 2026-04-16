@@ -118,16 +118,25 @@ class HuggingFaceService
 
         $startTime = microtime(true);
 
-        // Build ordered model chain: primary → fallback → recovery
+        // Build ordered model chain: primary → fallback → recovery → safety → last_resort
         $modelChain = array_filter([
             $models['primary'] ?? null,
             $models['fallback'] ?? null,
             $models['recovery'] ?? null,
+            $models['safety'] ?? null,
+            $models['last_resort'] ?? null,
         ]);
 
         $lastException = null;
 
         foreach ($modelChain as $modelIndex => $model) {
+            // Check model circuit breaker (skips model if it failed recently)
+            $cooldownKey = "ai_model_cooldown_" . str_replace('/', '_', $model);
+            if (\Illuminate\Support\Facades\Cache::has($cooldownKey)) {
+                Log::warning('ai_image_model_skipped', ['model' => $model, 'reason' => 'cooldown_active']);
+                continue;
+            }
+
             $retries = $modelIndex === 0 ? 2 : 1; // More retries on primary
             $backoff = 1;
 
@@ -167,6 +176,14 @@ class HuggingFaceService
                         'attempt' => $attempt + 1,
                         'reason' => $e->getMessage(),
                     ]);
+
+                    // If it's a "Loading", "Out of Memory", or 404/410 error, trigger model cooldown
+                    $errorMsg = strtolower($e->getMessage());
+                    if (str_contains($errorMsg, 'loading') || str_contains($errorMsg, 'memory') || str_contains($errorMsg, '404') || str_contains($errorMsg, '410')) {
+                        $cooldownKey = "ai_model_cooldown_" . str_replace('/', '_', $model);
+                        \Illuminate\Support\Facades\Cache::put($cooldownKey, true, now()->addMinutes(5));
+                        break; // Skip remaining retries for this specific model
+                    }
                 } catch (\Throwable $e) {
                     $lastException = new AiUnavailableException($e->getMessage());
                     Log::warning('ai_image_attempt_failed', [
@@ -216,10 +233,12 @@ class HuggingFaceService
 
         $payload = ['inputs' => $prompt];
 
-        if ($referenceImageBase64) {
-            // Pass reference image — FLUX.1-schnell is text-to-image only
-            // so the image is used as context but not for img2img transformation.
-            // Other models (e.g. SDXL) support the image field for image-to-image.
+        // FLUX.1-schnell and some other fast models do not support the 'image' parameter
+        // for image-to-image on the free Inference API. We only include it for models
+        // known to support it or if it's explicitly allowed.
+        $supportsImg2Img = !str_contains(strtolower($model), 'schnell');
+
+        if ($referenceImageBase64 && $supportsImg2Img) {
             $payload['image'] = "data:image/png;base64,{$referenceImageBase64}";
         }
 

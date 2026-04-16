@@ -1,0 +1,93 @@
+{
+  "nav": {
+    "dashboard": "ダッシュボード",
+    "discover": "エージェント発見",
+    "workspace": "マイスペース",
+    "library": "ライブラリ",
+    "notifications": "通知",
+    "settings": "設定",
+    "logout": "ログアウト",
+    "profile": "プロフィール",
+    "upgrade": "プランアップグレード"
+  },
+  "auth": {
+    "login": "ログイン",
+    "register": "サインアップ",
+    "email": "メールアドレス",
+    "password": "パスワード",
+    "confirm_password": "パスワード確認",
+    "name": "フルネーム",
+    "forgot_password": "パスワードを忘れた？",
+    "no_account": "アカウントをお持ちでない？",
+    "have_account": "アカウントをお持ちの方",
+    "mfa_title": "二要素認証",
+    "mfa_subtitle": "6桁のコードを入力してください",
+    "mfa_code": "認証コード",
+    "mfa_verify": "確認"
+  },
+  "agents": {
+    "discover_title": "エージェント発見",
+    "discover_subtitle": "タスクに最適なAIエージェントを見つけよう",
+    "search_placeholder": "エージェントを検索...",
+    "all_domains": "すべてのドメイン",
+    "all_tiers": "すべてのティア",
+    "free_only": "無料のみ",
+    "premium_only": "プレミアムのみ",
+    "add_agent": "スペースに追加",
+    "remove_agent": "削除",
+    "added": "追加済み",
+    "use_ai": "AIを使用",
+    "generate": "プロンプト生成",
+    "submit": "AIに送信",
+    "no_agents": "エージェントが見つかりません",
+    "upload_file": "ファイルをアップロード（任意）",
+    "premium_badge": "プレミアム",
+    "free_badge": "無料"
+  },
+  "common": {
+    "loading": "読み込み中...",
+    "error": "問題が発生しました",
+    "retry": "再試行",
+    "cancel": "キャンセル",
+    "save": "保存",
+    "delete": "削除",
+    "edit": "編集",
+    "close": "閉じる",
+    "copy": "コピー",
+    "copied": "コピーしました！",
+    "search": "検索",
+    "filter": "フィルター",
+    "submit": "送信",
+    "skip": "スキップ",
+    "next": "次へ",
+    "back": "戻る",
+    "welcome": "ようこそ",
+    "thinking": "考え中..."
+  },
+  "feedback": {
+    "title": "この回答はいかがでしたか？",
+    "subtitle": "フィードバックは改善に役立ちます",
+    "comment_placeholder": "追加のコメント？（任意）",
+    "submit": "送信",
+    "skip": "スキップ"
+  },
+  "settings": {
+    "title": "設定",
+    "profile_tab": "プロフィール",
+    "preferences_tab": "設定",
+    "plan_tab": "プラン",
+    "security_tab": "セキュリティ",
+    "language": "言語",
+    "theme": "テーマ",
+    "dark_mode": "ダークモード",
+    "light_mode": "ライトモード",
+    "system_mode": "システム"
+  },
+  "plan": {
+    "free": "無料",
+    "standard": "スタンダード",
+    "premium": "プレミアム",
+    "current_plan": "現在のプラン",
+    "upgrade": "アップグレード"
+  }
+}

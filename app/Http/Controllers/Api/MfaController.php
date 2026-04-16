@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Mail\MfaCodeMail;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 class MfaController extends Controller
 {
@@ -24,10 +26,18 @@ class MfaController extends Controller
             'two_factor_enabled' => false,
         ]);
 
-        // In production, send this via email/SMS. For now, return it.
+        // Send code via email
+        try {
+            Mail::to($user->email)->send(new MfaCodeMail(
+                otpCode: $secret,
+                userName: $user->name,
+            ));
+        } catch (\Exception $e) {
+            \Log::warning('MFA enable email failed: ' . $e->getMessage());
+        }
+
         return response()->json([
-            'message' => 'Verify this code to enable 2FA.',
-            'code' => $secret,
+            'message' => 'A verification code has been sent to your email.',
         ]);
     }
 

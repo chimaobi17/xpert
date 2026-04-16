@@ -1,0 +1,93 @@
+{
+  "nav": {
+    "dashboard": "Dashibod",
+    "discover": "Gano Wakili",
+    "workspace": "Filin Aiki",
+    "library": "Laburare",
+    "notifications": "Sanarwa",
+    "settings": "Saituna",
+    "logout": "Fita",
+    "profile": "Bayani",
+    "upgrade": "Inganta Shiri"
+  },
+  "auth": {
+    "login": "Shiga",
+    "register": "Yi Rajista",
+    "email": "Imel",
+    "password": "Kalmar Sirri",
+    "confirm_password": "Tabbatar da Kalmar Sirri",
+    "name": "Cikakken Suna",
+    "forgot_password": "An manta kalmar sirri?",
+    "no_account": "Ba ka da asusu?",
+    "have_account": "Kana da asusu?",
+    "mfa_title": "Tabbatarwa ta Hanyoyi Biyu",
+    "mfa_subtitle": "Shigar da lambar 6 don ci gaba",
+    "mfa_code": "Lambar Tabbatarwa",
+    "mfa_verify": "Tabbatar"
+  },
+  "agents": {
+    "discover_title": "Gano Wakili",
+    "discover_subtitle": "Nemo wakili AI mafi dacewa",
+    "search_placeholder": "Nemo wakili...",
+    "all_domains": "Duk Fannonin",
+    "all_tiers": "Duk Matakan",
+    "free_only": "Kyauta Kadai",
+    "premium_only": "Premium Kadai",
+    "add_agent": "Kara zuwa Filin",
+    "remove_agent": "Cire",
+    "added": "An Kara",
+    "use_ai": "Yi amfani da AI",
+    "generate": "Kirkiro",
+    "submit": "Aika zuwa AI",
+    "no_agents": "Ba a sami wakili ba",
+    "upload_file": "Loda fayil (na zabi)",
+    "premium_badge": "Premium",
+    "free_badge": "Kyauta"
+  },
+  "common": {
+    "loading": "Ana lodi...",
+    "error": "Wani abu ya faru",
+    "retry": "Sake Gwadawa",
+    "cancel": "Soke",
+    "save": "Ajiye",
+    "delete": "Goge",
+    "edit": "Gyara",
+    "close": "Rufe",
+    "copy": "Kwafi",
+    "copied": "An kwafi!",
+    "search": "Nema",
+    "filter": "Tace",
+    "submit": "Aika",
+    "skip": "Tsallake",
+    "next": "Na Gaba",
+    "back": "Baya",
+    "welcome": "Barka da zuwa",
+    "thinking": "Yana tunani..."
+  },
+  "feedback": {
+    "title": "Yaya wannan amsawar?",
+    "subtitle": "Ra'ayin ka yana taimakawa wajen ingantawa",
+    "comment_placeholder": "Wani tunani? (na zabi)",
+    "submit": "Aika",
+    "skip": "Tsallake"
+  },
+  "settings": {
+    "title": "Saituna",
+    "profile_tab": "Bayani",
+    "preferences_tab": "Zabin",
+    "plan_tab": "Shiri",
+    "security_tab": "Tsaro",
+    "language": "Harshe",
+    "theme": "Jigo",
+    "dark_mode": "Yanayin Duhu",
+    "light_mode": "Yanayin Haske",
+    "system_mode": "Tsarin"
+  },
+  "plan": {
+    "free": "Kyauta",
+    "standard": "Daidai",
+    "premium": "Premium",
+    "current_plan": "Shirin Yanzu",
+    "upgrade": "Inganta"
+  }
+}

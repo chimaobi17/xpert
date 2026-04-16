@@ -1,0 +1,93 @@
+{
+  "nav": {
+    "dashboard": "Dashboard",
+    "discover": "Scopri Agenti",
+    "workspace": "Il Mio Spazio",
+    "library": "Libreria",
+    "notifications": "Notifiche",
+    "settings": "Impostazioni",
+    "logout": "Esci",
+    "profile": "Profilo",
+    "upgrade": "Aggiorna Piano"
+  },
+  "auth": {
+    "login": "Accedi",
+    "register": "Registrati",
+    "email": "Email",
+    "password": "Password",
+    "confirm_password": "Conferma Password",
+    "name": "Nome Completo",
+    "forgot_password": "Password dimenticata?",
+    "no_account": "Non hai un account?",
+    "have_account": "Hai già un account?",
+    "mfa_title": "Autenticazione a Due Fattori",
+    "mfa_subtitle": "Inserisci il codice a 6 cifre per continuare",
+    "mfa_code": "Codice di Verifica",
+    "mfa_verify": "Verifica"
+  },
+  "agents": {
+    "discover_title": "Scopri Agenti",
+    "discover_subtitle": "Trova l'agente AI perfetto per il tuo compito",
+    "search_placeholder": "Cerca agenti...",
+    "all_domains": "Tutti i Domini",
+    "all_tiers": "Tutti i Livelli",
+    "free_only": "Solo Gratuiti",
+    "premium_only": "Solo Premium",
+    "add_agent": "Aggiungi allo Spazio",
+    "remove_agent": "Rimuovi",
+    "added": "Aggiunto",
+    "use_ai": "Usa AI",
+    "generate": "Genera Prompt",
+    "submit": "Invia all'AI",
+    "no_agents": "Nessun agente trovato",
+    "upload_file": "Carica file (opzionale)",
+    "premium_badge": "Premium",
+    "free_badge": "Gratuito"
+  },
+  "common": {
+    "loading": "Caricamento...",
+    "error": "Qualcosa è andato storto",
+    "retry": "Riprova",
+    "cancel": "Annulla",
+    "save": "Salva",
+    "delete": "Elimina",
+    "edit": "Modifica",
+    "close": "Chiudi",
+    "copy": "Copia",
+    "copied": "Copiato!",
+    "search": "Cerca",
+    "filter": "Filtra",
+    "submit": "Invia",
+    "skip": "Salta",
+    "next": "Avanti",
+    "back": "Indietro",
+    "welcome": "Benvenuto",
+    "thinking": "Sto pensando..."
+  },
+  "feedback": {
+    "title": "Come è stata questa risposta?",
+    "subtitle": "Il tuo feedback ci aiuta a migliorare",
+    "comment_placeholder": "Pensieri aggiuntivi? (opzionale)",
+    "submit": "Invia",
+    "skip": "Salta"
+  },
+  "settings": {
+    "title": "Impostazioni",
+    "profile_tab": "Profilo",
+    "preferences_tab": "Preferenze",
+    "plan_tab": "Piano",
+    "security_tab": "Sicurezza",
+    "language": "Lingua",
+    "theme": "Tema",
+    "dark_mode": "Modalità Scura",
+    "light_mode": "Modalità Chiara",
+    "system_mode": "Sistema"
+  },
+  "plan": {
+    "free": "Gratuito",
+    "standard": "Standard",
+    "premium": "Premium",
+    "current_plan": "Piano Attuale",
+    "upgrade": "Aggiorna"
+  }
+}

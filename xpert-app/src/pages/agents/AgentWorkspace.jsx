@@ -51,9 +51,11 @@ export default function AgentWorkspace() {
   const [loading, setLoading] = useState(false);
   const [stopped, setStopped] = useState(false);
   const abortRef = useRef(null);
+  const clearOnUnmount = useRef(false);
 
   // Persist state to sessionStorage on every meaningful change
   const saveState = useCallback(() => {
+    if (clearOnUnmount.current) return;
     writeSession(storageKey, {
       step, formValues, generatedPrompt, aiResponse, responseType, savedLibraryId, uploadedFileId,
     });
@@ -66,17 +68,24 @@ export default function AgentWorkspace() {
   // Also save on unmount (captures final state before component is destroyed)
   const stateRef = useRef();
   stateRef.current = { step, formValues, generatedPrompt, aiResponse, responseType, savedLibraryId, uploadedFileId };
+  // Keep storageKey in a ref so the cleanup always uses the latest value
+  const storageKeyRef = useRef(storageKey);
+  storageKeyRef.current = storageKey;
 
   useEffect(() => {
     return () => {
-      writeSession(storageKey, stateRef.current);
+      // Check clearOnUnmount ref atomically — if "Done" or "New Prompt" was clicked,
+      // do NOT re-write stale session data (avoids race with sessionStorage.removeItem)
+      if (!clearOnUnmount.current) {
+        writeSession(storageKeyRef.current, stateRef.current);
+      }
       // Abort any in-flight AI request on unmount
       if (abortRef.current) {
         abortRef.current.abort();
         abortRef.current = null;
       }
     };
-  }, [storageKey]);
+  }, []);
 
   useEffect(() => {
     loadAgent();
@@ -298,6 +307,7 @@ export default function AgentWorkspace() {
   }
 
   function handleNewPrompt() {
+    clearOnUnmount.current = true;
     setStep(1);
     setFormValues({});
     setGeneratedPrompt('');
@@ -471,7 +481,11 @@ export default function AgentWorkspace() {
                 <p className="text-text-secondary font-medium">Your AI helper has finished. See the result below.</p>
               </div>
               <button
-                onClick={() => { sessionStorage.removeItem(storageKey); navigate('/workspace'); }}
+                onClick={() => { 
+                  clearOnUnmount.current = true;
+                  sessionStorage.removeItem(storageKey); 
+                  navigate('/workspace'); 
+                }}
                 className="bg-primary-500/10 text-primary-500 border border-primary-500/20 rounded-full px-5 py-2 font-bold uppercase tracking-tighter text-sm hover:bg-primary-500 hover:text-white transition-all duration-300"
               >
                 Done

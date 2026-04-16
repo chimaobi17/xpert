@@ -1,0 +1,93 @@
+{
+  "nav": {
+    "dashboard": "仪表板",
+    "discover": "发现助手",
+    "workspace": "我的空间",
+    "library": "提示库",
+    "notifications": "通知",
+    "settings": "设置",
+    "logout": "退出",
+    "profile": "个人资料",
+    "upgrade": "升级计划"
+  },
+  "auth": {
+    "login": "登录",
+    "register": "注册",
+    "email": "电子邮箱",
+    "password": "密码",
+    "confirm_password": "确认密码",
+    "name": "全名",
+    "forgot_password": "忘记密码？",
+    "no_account": "没有账户？",
+    "have_account": "已有账户？",
+    "mfa_title": "双重认证",
+    "mfa_subtitle": "输入6位验证码继续",
+    "mfa_code": "验证码",
+    "mfa_verify": "验证"
+  },
+  "agents": {
+    "discover_title": "发现助手",
+    "discover_subtitle": "找到适合您任务的完美AI助手",
+    "search_placeholder": "搜索助手...",
+    "all_domains": "所有领域",
+    "all_tiers": "所有级别",
+    "free_only": "仅免费",
+    "premium_only": "仅高级",
+    "add_agent": "添加到空间",
+    "remove_agent": "移除",
+    "added": "已添加",
+    "use_ai": "使用AI",
+    "generate": "生成提示",
+    "submit": "提交给AI",
+    "no_agents": "未找到助手",
+    "upload_file": "上传文件（可选）",
+    "premium_badge": "高级",
+    "free_badge": "免费"
+  },
+  "common": {
+    "loading": "加载中...",
+    "error": "出了点问题",
+    "retry": "重试",
+    "cancel": "取消",
+    "save": "保存",
+    "delete": "删除",
+    "edit": "编辑",
+    "close": "关闭",
+    "copy": "复制",
+    "copied": "已复制！",
+    "search": "搜索",
+    "filter": "筛选",
+    "submit": "提交",
+    "skip": "跳过",
+    "next": "下一步",
+    "back": "返回",
+    "welcome": "欢迎",
+    "thinking": "思考中..."
+  },
+  "feedback": {
+    "title": "这个回答怎么样？",
+    "subtitle": "您的反馈帮助我们改进",
+    "comment_placeholder": "其他想法？（可选）",
+    "submit": "提交",
+    "skip": "跳过"
+  },
+  "settings": {
+    "title": "设置",
+    "profile_tab": "个人资料",
+    "preferences_tab": "偏好",
+    "plan_tab": "计划",
+    "security_tab": "安全",
+    "language": "语言",
+    "theme": "主题",
+    "dark_mode": "深色模式",
+    "light_mode": "浅色模式",
+    "system_mode": "系统"
+  },
+  "plan": {
+    "free": "免费",
+    "standard": "标准",
+    "premium": "高级",
+    "current_plan": "当前计划",
+    "upgrade": "升级"
+  }
+}

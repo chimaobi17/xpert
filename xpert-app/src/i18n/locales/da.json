@@ -1,0 +1,93 @@
+{
+  "nav": {
+    "dashboard": "Dashboard",
+    "discover": "Discover Agents",
+    "workspace": "My Workspace",
+    "library": "Prompt Library",
+    "notifications": "Notifications",
+    "settings": "Settings",
+    "logout": "Log Out",
+    "profile": "Profile",
+    "upgrade": "Upgrade Plan"
+  },
+  "auth": {
+    "login": "Log In",
+    "register": "Sign Up",
+    "email": "Email Address",
+    "password": "Password",
+    "confirm_password": "Confirm Password",
+    "name": "Full Name",
+    "forgot_password": "Forgot Password?",
+    "no_account": "Don't have an account?",
+    "have_account": "Already have an account?",
+    "mfa_title": "Two-Factor Authentication",
+    "mfa_subtitle": "Enter the 6-digit code to continue",
+    "mfa_code": "Verification Code",
+    "mfa_verify": "Verify"
+  },
+  "agents": {
+    "discover_title": "Discover Agents",
+    "discover_subtitle": "Find the perfect AI agent for your task",
+    "search_placeholder": "Search agents...",
+    "all_domains": "All Domains",
+    "all_tiers": "All Tiers",
+    "free_only": "Free Only",
+    "premium_only": "Premium Only",
+    "add_agent": "Add to Workspace",
+    "remove_agent": "Remove",
+    "added": "Added",
+    "use_ai": "Use AI",
+    "generate": "Generate Prompt",
+    "submit": "Submit to AI",
+    "no_agents": "No agents found",
+    "upload_file": "Upload a file (optional)",
+    "premium_badge": "Premium",
+    "free_badge": "Free"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Something went wrong",
+    "retry": "Try Again",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "close": "Close",
+    "copy": "Copy",
+    "copied": "Copied!",
+    "search": "Search",
+    "filter": "Filter",
+    "submit": "Submit",
+    "skip": "Skip",
+    "next": "Next",
+    "back": "Back",
+    "welcome": "Welcome",
+    "thinking": "Thinking..."
+  },
+  "feedback": {
+    "title": "How was this response?",
+    "subtitle": "Your feedback helps us improve",
+    "comment_placeholder": "Any additional thoughts? (optional)",
+    "submit": "Submit Feedback",
+    "skip": "Skip"
+  },
+  "settings": {
+    "title": "Settings",
+    "profile_tab": "Profile",
+    "preferences_tab": "Preferences",
+    "plan_tab": "Plan",
+    "security_tab": "Security",
+    "language": "Language",
+    "theme": "Theme",
+    "dark_mode": "Dark Mode",
+    "light_mode": "Light Mode",
+    "system_mode": "System"
+  },
+  "plan": {
+    "free": "Free",
+    "standard": "Standard",
+    "premium": "Premium",
+    "current_plan": "Current Plan",
+    "upgrade": "Upgrade"
+  }
+}

@@ -14,7 +14,22 @@ class PromptEngineService
         'premium' => 50000,
     ];
 
-    public function generate(AiAgent $agent, array $userInputs, ?string $fileContent = null, string $planLevel = 'free'): string
+    protected array $languageNames = [
+        'en' => 'English', 'fr' => 'French', 'es' => 'Spanish', 'ar' => 'Arabic',
+        'pt' => 'Portuguese', 'de' => 'German', 'zh' => 'Chinese', 'ja' => 'Japanese',
+        'ko' => 'Korean', 'hi' => 'Hindi', 'sw' => 'Swahili', 'yo' => 'Yoruba',
+        'ha' => 'Hausa', 'ig' => 'Igbo', 'ru' => 'Russian', 'tr' => 'Turkish',
+        'it' => 'Italian', 'nl' => 'Dutch', 'id' => 'Indonesian', 'bn' => 'Bengali',
+        'vi' => 'Vietnamese', 'pl' => 'Polish', 'ro' => 'Romanian', 'el' => 'Greek',
+        'sv' => 'Swedish', 'da' => 'Danish', 'fi' => 'Finnish', 'no' => 'Norwegian',
+    ];
+
+    public function getLanguageName(string $code): string
+    {
+        return $this->languageNames[$code] ?? $code;
+    }
+
+    public function generate(AiAgent $agent, array $userInputs, ?string $fileContent = null, string $planLevel = 'free', ?string $languagePreference = null): string
     {
         $template = $agent->latestTemplate;
 
@@ -28,41 +43,53 @@ class PromptEngineService
         $body = $this->replacePlaceholders($template->template_body, $userInputs);
 
         $modelType = config("ai_models.{$agent->category}.type", 'text');
+        $tagline = $agent->tagline;
 
         if ($modelType === 'image') {
             $hasReferenceImage = !empty($fileContent) && !str_contains($fileContent, 'could not be processed');
-            $assembled = $this->buildImagePrompt($agent->category, $userInputs, $body, $hasReferenceImage);
+            $assembled = $this->buildImagePrompt($agent->category, $userInputs, $body, $hasReferenceImage, $tagline);
         } else {
             // Deduplicate metadata: don't repeat fields that were already used as {{placeholders}} in the body
             $metadata = $this->formatMetadata($userInputs, $template->template_body);
-            
+
             // Separate Instructions if present in the template body
             $parts = explode('Instructions:', $body, 2);
             $taskMain = trim($parts[0]);
             $instructions = isset($parts[1]) ? trim($parts[1]) : '';
 
             $blocks = [];
-            
+
             // 1. Role (from system prompt)
             if ($systemPrompt) {
                 $blocks[] = "[Expert Role]\n" . trim($systemPrompt);
             }
 
-            // 2. Task & Context (from template body minus instructions)
+            // 2. Tagline as style/tone directive when no explicit tone is selected
+            if ($tagline && empty($userInputs['tone'])) {
+                $blocks[] = "[Style Directive]\nApproach this task with the following philosophy: " . $tagline;
+            }
+
+            // 3. Task & Context (from template body minus instructions)
             $blocks[] = trim($taskMain);
-            
-            // 3. Supplemental Intelligence Context (Curated Metadata)
+
+            // 4. Supplemental Intelligence Context (Curated Metadata)
             if ($metadata) {
                 $blocks[] = "Intelligence Context:\n" . $metadata;
             }
 
-            // 4. Instructions (Prioritized at the bottom)
+            // 5. Instructions (Prioritized at the bottom)
             if ($instructions) {
                 $blocks[] = "Instructions:\n" . trim($instructions);
             }
 
             if ($fileContent) {
                 $blocks[] = "--- ATTACHED DOCUMENT ---\n" . $fileContent;
+            }
+
+            // Inject language directive for non-English users
+            if ($languagePreference && $languagePreference !== 'en') {
+                $langName = $this->languageNames[$languagePreference] ?? $languagePreference;
+                $blocks[] = "[Language Directive]\nYou MUST respond entirely in {$langName}. All output text, headings, and explanations must be written in {$langName}.";
             }
 
             $assembled = implode("\n\n", array_filter($blocks));
@@ -118,7 +145,7 @@ class PromptEngineService
      * that image diffusion models (SDXL, FLUX) actually respond to well.
      * Structure: [subject], [style modifiers], [lighting/mood], [technical quality], [negative guidance]
      */
-    protected function buildImagePrompt(string $category, array $inputs, string $templateBody, bool $hasReference = false): string
+    protected function buildImagePrompt(string $category, array $inputs, string $templateBody, bool $hasReference = false, ?string $tagline = null): string
     {
         // Route to the right builder based on category
         $prompt = match ($category) {
@@ -128,6 +155,11 @@ class PromptEngineService
             'graphics_designer' => $this->buildGraphicsPrompt($inputs),
             default => $this->buildGenericImagePrompt($inputs, $templateBody),
         };
+
+        // Weave tagline into image prompt as creative direction
+        if ($tagline) {
+            $prompt .= ', ' . strtolower(trim($tagline));
+        }
 
         // When a reference image is uploaded, prepend img2img guidance
         if ($hasReference) {
@@ -215,7 +247,11 @@ class PromptEngineService
         }
 
         if ($preferences) {
-            $parts[] = $preferences;
+            $parts[] = "Specific requirements: {$preferences}";
+        }
+
+        if ($tagline) {
+            $parts[] = "including the text tagline: \"{$tagline}\"";
         }
 
         // Visual descriptors FLUX understands — concrete colors, rendering, background

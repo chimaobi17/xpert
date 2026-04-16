@@ -39,6 +39,11 @@ return [
         'api_key' => env('HUGGINGFACE_API_KEY'),
     ],
 
+    'gemini' => [
+        'api_key' => env('GEMINI_API_KEY'),
+        'image_model' => env('GEMINI_IMAGE_MODEL', 'gemini-2.5-flash-image'),
+    ],
+
     'discord' => [
         'webhook_url' => env('DISCORD_WEBHOOK_URL'),
     ],

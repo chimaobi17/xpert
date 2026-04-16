@@ -1,0 +1,93 @@
+{
+  "nav": {
+    "dashboard": "Dashibọọdụ",
+    "discover": "Chọta Ndị nnọchiteanya",
+    "workspace": "Ebe Ọrụ M",
+    "library": "Ọba akwụkwọ",
+    "notifications": "Ọkwa",
+    "settings": "Ntọala",
+    "logout": "Pụọ",
+    "profile": "Profaịlụ",
+    "upgrade": "Kwalite Atụmatụ"
+  },
+  "auth": {
+    "login": "Banye",
+    "register": "Debanye aha",
+    "email": "Email",
+    "password": "Okwuntughe",
+    "confirm_password": "Kwenye Okwuntughe",
+    "name": "Aha zuru oke",
+    "forgot_password": "Chefuru okwuntughe?",
+    "no_account": "Enweghị akaụntụ?",
+    "have_account": "Nwere akaụntụ?",
+    "mfa_title": "Nkwenye Ọnụọgụ Abụọ",
+    "mfa_subtitle": "Tinye koodu ọnụọgụ 6 iji gaa nʼihu",
+    "mfa_code": "Koodu Nkwenye",
+    "mfa_verify": "Kwenye"
+  },
+  "agents": {
+    "discover_title": "Chọta Ndị nnọchiteanya",
+    "discover_subtitle": "Chọta onye nnọchiteanya AI kacha mma",
+    "search_placeholder": "Chọọ ndị nnọchiteanya...",
+    "all_domains": "Ngalaba niile",
+    "all_tiers": "Ọkwa niile",
+    "free_only": "Efu naanị",
+    "premium_only": "Premium naanị",
+    "add_agent": "Tinye na Ebe",
+    "remove_agent": "Wepụ",
+    "added": "Etinyela",
+    "use_ai": "Jiri AI",
+    "generate": "Mepụta",
+    "submit": "Zipu na AI",
+    "no_agents": "Ahụghị onye nnọchiteanya ọbụla",
+    "upload_file": "Bulite faịlụ (nhọrọ)",
+    "premium_badge": "Premium",
+    "free_badge": "Efu"
+  },
+  "common": {
+    "loading": "Na-ebu...",
+    "error": "Ihe mere",
+    "retry": "Nwaa Ọzọ",
+    "cancel": "Kagbuo",
+    "save": "Chekwaa",
+    "delete": "Hichapụ",
+    "edit": "Dezie",
+    "close": "Mechie",
+    "copy": "Detuo",
+    "copied": "Edetuola!",
+    "search": "Chọọ",
+    "filter": "Nyocha",
+    "submit": "Nyefee",
+    "skip": "Mafee",
+    "next": "Ọzọ",
+    "back": "Laghachi",
+    "welcome": "Nnọọ",
+    "thinking": "Na-eche echiche..."
+  },
+  "feedback": {
+    "title": "Kedu ka azịza a si dị?",
+    "subtitle": "Nzaghachi gị na-enyere anyị aka ịmeziwanye",
+    "comment_placeholder": "Echiche ọzọ? (nhọrọ)",
+    "submit": "Nyefee",
+    "skip": "Mafee"
+  },
+  "settings": {
+    "title": "Ntọala",
+    "profile_tab": "Profaịlụ",
+    "preferences_tab": "Mmasị",
+    "plan_tab": "Atụmatụ",
+    "security_tab": "Nchekwa",
+    "language": "Asụsụ",
+    "theme": "Isiokwu",
+    "dark_mode": "Ọnọdụ Ojii",
+    "light_mode": "Ọnọdụ Ìhè",
+    "system_mode": "Sistemu"
+  },
+  "plan": {
+    "free": "Efu",
+    "standard": "Standaadụ",
+    "premium": "Premium",
+    "current_plan": "Atụmatụ Ugbu a",
+    "upgrade": "Kwalite"
+  }
+}

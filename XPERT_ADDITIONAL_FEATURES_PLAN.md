@@ -279,3 +279,86 @@ The practical implication for how you pitch this: don’t say “a better prompt
 - [x] **35.2 Delete Logic Interception**: Update the `handleRemoveAgent` function in `Workspace.jsx` to open the modal instead of calling the API immediately.
 - [x] **35.3 State Management**: Pass the `agent_id` to the modal and execute the `DELETE /api/user/agents/{id}` request only upon user confirmation.
 - [x] **35.4 UX Polish**: Add a loading state to the "Confirm" button during the deletion process and a success toast ("Helper removed") upon completion.
+
+### Phase 36: Tagline-Driven Prompt Generation
+**Goal**: Utilize the 'tagline' property of agents to enrich the prompt generation context, providing more stylized and targeted AI outputs.
+- [ ] **36.1 Backend Integration**: Update `PromptEngineService.php` to include the agent's `tagline` in the system instructions or context block.
+- [ ] **36.2 Intelligent Mapping**: Ensure the tagline is used to define the "Tone" or "Style" of the response when no explicit tone is selected.
+- [ ] **36.3 Variable Support**: Allow for dynamic taglines that can be updated in `AiAgentSeeder.php` to quickly pivot agent personalities.
+
+### Phase 37: Automated Security & Secret Scanning (Claude Code)
+**Goal**: Implement a proactive security layer where Claude Code audits the repository for exposed secrets and vulnerabilities.
+- [ ] **37.1 Secret Scanning Step**: Integrate a pre-push or pre-deployment script that scans for API keys, database credentials, and hardcoded secrets.
+- [ ] **37.2 GitHub Vulnerability Audit**: Configure Claude Code workflows to check for known vulnerabilities in the API keys and dependencies used in the app.
+- [ ] **37.3 Risk Mitigation**: Develop a "Secret Rotation" protocol and ensure all sensitive keys are migrated to GitHub Secrets or Render environment variables.
+
+### Phase 38: Session State Management (Bug 19 Fix) ✅
+**Goal**: Ensure a completely fresh start when re-accessing an agent.
+- [x] **38.1 Done Button Logic**: Update `AgentWorkspace.jsx` to clear `sessionStorage` for the specific agent when "Done" is clicked.
+- [x] **38.2 State Reset Verification**: Confirm that re-entering the agent takes the user to Step 1 (Input Form) instead of Step 3 (Results).
+
+### Phase 39: Enhanced Authentication Routing (Bug 20 Fix) ✅
+**Goal**: Optimize the landing experience for returning users.
+- [x] **39.1 Root Redirect**: Update `App.jsx` and `Landing.jsx` to proactively detect authenticated users and redirect them to `/workspace`.
+- [x] **39.2 Login Flow Polish**: Update `Login.jsx` and `Register.jsx` to prioritize the "My Helpers" dashboard as the primary landing zone post-auth.
+
+### Phase 40: Accessibility & Localization System
+**Goal**: Implement a world-class localization system supporting 20+ languages and modern accessibility standards (WCAG).
+
+#### 1. Multi-Language Support (20+ Languages)
+- **i18n Architecture**: Use `react-i18next` with JSON-based translation files.
+- **Supported Languages**: English, French, Spanish, Arabic (RTL), Portuguese, German, Chinese, Japanese, Korean, Hindi, Swahili, Yoruba, Hausa, Igbo, Russian, Turkish, Italian, Dutch, Indonesian, Bengali.
+- **Dynamic Switching**: UI must update instantly without page reloads.
+
+#### 2. Language Selector Placement
+- **Sign Up Form**: Allow users to choose their language during registration; save to `language_preference`.
+- **Settings Page**: Dedicated "Preferences" tab with a language dropdown.
+
+#### 3. Accessibility Features (WCAG Standards)
+- **Visuals**: Adjustable font sizes (S/M/L), High Contrast mode, Dark/Light mode toggle.
+- **Navigation**: Screen reader support (ARIA), Keyboard navigation (focus indicators), Reduced motion.
+- **UI/UX**: Color-blind friendly palettes, clear error messaging, and text spacing options.
+
+#### 4. User Preference Persistence
+- **Storage**: Store `language_preference`, `theme_mode`, `font_size`, and `accessibility_settings` in the `users` table.
+- **Sync**: Settings must persist across all devices and sessions.
+
+#### 5. Smart Defaults
+- **Detection**: Auto-detect browser/device language on first visit and suggest the matching locale.
+- **Manual Override**: Always allow users to change language via the UI.
+
+### Phase 41: Robust AI Image Generation (SDXL + Recovery)
+**Goal**: Implement a high-availability image generation system using Stable Diffusion XL as the primary provider for maximum uptime and reliability.
+
+#### 1. System Architecture (Laravel Backend)
+- **Service Layer**: Implement `ImageGenerationManager` to handle multi-tier provider logic.
+- **Queue System**: Process image tasks in the background to prevent timeouts.
+- **Tracking**: Log requests, successes, and failures for analytics.
+
+#### 2. Provider Priority & Failover Logic
+- **Tier 1 (Primary)**: `stabilityai/stable-diffusion-xl-base-1.0` — (High availability / MVP Standard).
+- **Tier 2 (Recovery)**: `black-forest-labs/FLUX.1-dev` — (Secondary option).
+- **Tier 3 (Alternative)**: Gemini 2.0 (High availability failover).
+
+#### 3. Execution Flow
+- User submits prompt → Laravel tries SDXL (Primary) → Success (Return Image)
+- If SDXL fails → Retry with Gemini/Flux (Recovery) → Return Image.
+
+#### 4. Smart Availability Features
+- **Cooldown Logic**: Briefly disable a provider if it fails repeatedly to prevent consecutive delays.
+- **Analytics**: Track cost and performance per provider in the Admin Dashboard.
+
+#### 5. User Experience Rules
+- Show a unified loading state regardless of provider.
+- Never show technical provider errors; use friendly retry messages if both fail.
+- Preserve a seamless generation experience with no perceived latency between failovers.
+
+#### 6. Example Logic (Pseudocode)
+```php
+try {
+    return $gemini->generate($prompt);
+} catch (ProviderException $e) {
+    Log::warning("Gemini failed, falling back to FLUX: " . $e->getMessage());
+    return $flux->generate($prompt);
+}
+```

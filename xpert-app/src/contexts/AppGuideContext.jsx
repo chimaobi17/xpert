@@ -12,16 +12,18 @@ export const useAppGuide = () => {
 };
 
 export const AppGuideProvider = ({ children }) => {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
   const [currentStep, setCurrentStep] = useState(-1); // -1 means guide is not active
-  const [hasSeenGuide, setHasSeenGuide] = useState(true); // Default true until verified to prevent premature fires
+  const [hasSeenGuide, setHasSeenGuide] = useState(null); // null means pending verification
 
   useEffect(() => {
     if (user?.id) {
       const seen = localStorage.getItem(`xpert_guide_seen_${user.id}`);
-      setHasSeenGuide(!!seen);
+      setHasSeenGuide(seen === 'true');
+    } else if (!loading) {
+      setHasSeenGuide(true); // Don't show guide for guests
     }
-  }, [user?.id]);
+  }, [user?.id, loading]);
 
   const startGuide = () => {
     setCurrentStep(0);

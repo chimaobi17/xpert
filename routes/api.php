@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\UsageController;
 use App\Http\Controllers\Api\UserAgentController;
 use App\Http\Controllers\Api\FeedbackController;
 use App\Http\Controllers\Api\MfaController;
+use App\Http\Controllers\Api\PasswordResetController;
 use App\Http\Controllers\Api\Admin\AdminController;
 use App\Http\Middleware\AiTimeout;
 use Illuminate\Support\Facades\Route;
@@ -34,6 +35,8 @@ Route::middleware('throttle:10,1')->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
     Route::post('/register', [AuthController::class, 'register']);
     Route::post('/mfa/verify-login', [MfaController::class, 'verifyLogin']);
+    Route::post('/password/forgot', [PasswordResetController::class, 'sendResetLink']);
+    Route::post('/password/reset', [PasswordResetController::class, 'reset']);
 });
 
 // Authenticated routes
@@ -44,6 +47,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::patch('/user/profile', [AuthController::class, 'updateProfile']);
     Route::post('/user/avatar', [AuthController::class, 'updateAvatar']);
     Route::patch('/user/onboarded', [AuthController::class, 'markOnboarded']);
+    Route::post('/email/verify', [AuthController::class, 'verifyEmail']);
+    Route::post('/email/resend', [AuthController::class, 'resendVerification']);
 
     // MFA
     Route::post('/mfa/enable', [MfaController::class, 'enable']);

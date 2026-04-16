@@ -1,0 +1,93 @@
+{
+  "nav": {
+    "dashboard": "डैशबोर्ड",
+    "discover": "एजेंट खोजें",
+    "workspace": "मेरा स्थान",
+    "library": "लाइब्रेरी",
+    "notifications": "सूचनाएं",
+    "settings": "सेटिंग्स",
+    "logout": "लॉग आउट",
+    "profile": "प्रोफ़ाइल",
+    "upgrade": "प्लान अपग्रेड"
+  },
+  "auth": {
+    "login": "लॉग इन",
+    "register": "साइन अप",
+    "email": "ईमेल",
+    "password": "पासवर्ड",
+    "confirm_password": "पासवर्ड पुष्टि",
+    "name": "पूरा नाम",
+    "forgot_password": "पासवर्ड भूल गए?",
+    "no_account": "खाता नहीं है?",
+    "have_account": "पहले से खाता है?",
+    "mfa_title": "दो-चरणीय सत्यापन",
+    "mfa_subtitle": "जारी रखने के लिए 6 अंकों का कोड दर्ज करें",
+    "mfa_code": "सत्यापन कोड",
+    "mfa_verify": "सत्यापित करें"
+  },
+  "agents": {
+    "discover_title": "एजेंट खोजें",
+    "discover_subtitle": "अपने कार्य के लिए सही AI एजेंट खोजें",
+    "search_placeholder": "एजेंट खोजें...",
+    "all_domains": "सभी डोमेन",
+    "all_tiers": "सभी स्तर",
+    "free_only": "केवल मुफ्त",
+    "premium_only": "केवल प्रीमियम",
+    "add_agent": "स्थान में जोड़ें",
+    "remove_agent": "हटाएं",
+    "added": "जोड़ा गया",
+    "use_ai": "AI उपयोग करें",
+    "generate": "प्रॉम्प्ट बनाएं",
+    "submit": "AI को भेजें",
+    "no_agents": "कोई एजेंट नहीं मिला",
+    "upload_file": "फ़ाइल अपलोड करें (वैकल्पिक)",
+    "premium_badge": "प्रीमियम",
+    "free_badge": "मुफ्त"
+  },
+  "common": {
+    "loading": "लोड हो रहा है...",
+    "error": "कुछ गलत हो गया",
+    "retry": "पुनः प्रयास",
+    "cancel": "रद्द करें",
+    "save": "सहेजें",
+    "delete": "हटाएं",
+    "edit": "संपादित करें",
+    "close": "बंद करें",
+    "copy": "कॉपी",
+    "copied": "कॉपी हो गया!",
+    "search": "खोजें",
+    "filter": "फ़िल्टर",
+    "submit": "जमा करें",
+    "skip": "छोड़ें",
+    "next": "आगे",
+    "back": "पीछे",
+    "welcome": "स्वागत है",
+    "thinking": "सोच रहा है..."
+  },
+  "feedback": {
+    "title": "यह उत्तर कैसा था?",
+    "subtitle": "आपकी प्रतिक्रिया सुधार में मदद करती है",
+    "comment_placeholder": "कोई अतिरिक्त विचार? (वैकल्पिक)",
+    "submit": "जमा करें",
+    "skip": "छोड़ें"
+  },
+  "settings": {
+    "title": "सेटिंग्स",
+    "profile_tab": "प्रोफ़ाइल",
+    "preferences_tab": "प्राथमिकताएं",
+    "plan_tab": "प्लान",
+    "security_tab": "सुरक्षा",
+    "language": "भाषा",
+    "theme": "थीम",
+    "dark_mode": "डार्क मोड",
+    "light_mode": "लाइट मोड",
+    "system_mode": "सिस्टम"
+  },
+  "plan": {
+    "free": "मुफ्त",
+    "standard": "स्टैंडर्ड",
+    "premium": "प्रीमियम",
+    "current_plan": "वर्तमान प्लान",
+    "upgrade": "अपग्रेड"
+  }
+}

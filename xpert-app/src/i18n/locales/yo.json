@@ -1,0 +1,93 @@
+{
+  "nav": {
+    "dashboard": "Dasibodu",
+    "discover": "Wa Awon Asofe",
+    "workspace": "Aaye Mi",
+    "library": "Ile-ikawe",
+    "notifications": "Awon Iwifunni",
+    "settings": "Eto",
+    "logout": "Jade",
+    "profile": "Profaili",
+    "upgrade": "Gbe Eto Soke"
+  },
+  "auth": {
+    "login": "Wole",
+    "register": "Forukosile",
+    "email": "Imeeli",
+    "password": "Oro asina",
+    "confirm_password": "Jeri Oro asina",
+    "name": "Oruko Ni Kikun",
+    "forgot_password": "Se o gbagbe oro asina?",
+    "no_account": "Ko ni akanti?",
+    "have_account": "O ni akanti tele?",
+    "mfa_title": "Ijeri Igbesoke Meji",
+    "mfa_subtitle": "Te koodu nomba 6 lati tesiwaju",
+    "mfa_code": "Koodu Ijeri",
+    "mfa_verify": "Jeri"
+  },
+  "agents": {
+    "discover_title": "Wa Awon Asofe",
+    "discover_subtitle": "Wa asofe AI to dara julọ fun ise re",
+    "search_placeholder": "Wa asofe...",
+    "all_domains": "Gbogbo Agbegbe",
+    "all_tiers": "Gbogbo Ipele",
+    "free_only": "Ofe Nikan",
+    "premium_only": "Premium Nikan",
+    "add_agent": "Fi kun Aaye",
+    "remove_agent": "Yọ kuro",
+    "added": "Ti fi kun",
+    "use_ai": "Lo AI",
+    "generate": "Pilese",
+    "submit": "Fi ranse si AI",
+    "no_agents": "Ko ri asofe kankan",
+    "upload_file": "Gbe faili soke (ayanfẹ)",
+    "premium_badge": "Premium",
+    "free_badge": "Ofe"
+  },
+  "common": {
+    "loading": "N gbe wole...",
+    "error": "Nkan kan sele",
+    "retry": "Gbiyanju Leekan si",
+    "cancel": "Fagilee",
+    "save": "Fi pamo",
+    "delete": "Pa re",
+    "edit": "Satunse",
+    "close": "Pa a de",
+    "copy": "Daako",
+    "copied": "Ti daako!",
+    "search": "Wa",
+    "filter": "Se asayan",
+    "submit": "Fi ranse",
+    "skip": "Fo",
+    "next": "Itelee",
+    "back": "Pada",
+    "welcome": "Kaabo",
+    "thinking": "N ronu..."
+  },
+  "feedback": {
+    "title": "Bawo ni idahun yi se ri?",
+    "subtitle": "Ero re ran wa lowo lati ni ilọsiwaju",
+    "comment_placeholder": "Ero afikun? (ayanfẹ)",
+    "submit": "Fi ranse",
+    "skip": "Fo"
+  },
+  "settings": {
+    "title": "Eto",
+    "profile_tab": "Profaili",
+    "preferences_tab": "Ayanfẹ",
+    "plan_tab": "Eto",
+    "security_tab": "Aabo",
+    "language": "Ede",
+    "theme": "Akori",
+    "dark_mode": "Ipo Okunkun",
+    "light_mode": "Ipo Imọle",
+    "system_mode": "Eto"
+  },
+  "plan": {
+    "free": "Ofe",
+    "standard": "Boṣewa",
+    "premium": "Premium",
+    "current_plan": "Eto Lọwọlọwọ",
+    "upgrade": "Gbe Soke"
+  }
+}
