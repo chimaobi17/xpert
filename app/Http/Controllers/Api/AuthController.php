@@ -79,21 +79,31 @@ class AuthController extends Controller
             ], 422);
         }
 
-        $otpCode = str_pad((string) random_int(0, 999999), 6, '0', STR_PAD_LEFT);
-
-        $user = User::create([
+        $userData = [
             'name' => $request->name,
             'email' => $request->email,
-            'password' => Hash::make($request->password),
+            'password' => $request->password,
             'job_title' => $request->job_title,
             'purpose' => $request->purpose,
             'field_of_specialization' => $request->field_of_specialization,
-            'language_preference' => $request->language_preference ?? 'en',
             'is_onboarded' => $request->filled('field_of_specialization'),
-            'is_verified' => false,
-            'otp_code' => $otpCode,
-            'otp_expires_at' => now()->addMinutes(15),
-        ]);
+        ];
+
+        // Only set columns that exist on the live DB
+        if (\Schema::hasColumn('users', 'language_preference')) {
+            $userData['language_preference'] = $request->language_preference ?? 'en';
+        }
+
+        try {
+            $user = User::create($userData);
+        } catch (\Illuminate\Database\QueryException $e) {
+            \Log::error('Registration DB error: ' . $e->getMessage());
+
+            return response()->json([
+                'error' => 'registration_failed',
+                'message' => 'Unable to complete registration. Please try a different email or log in.',
+            ], 422);
+        }
 
         // Automatically assign default agents if specialization info is provided
         if ($request->filled('field_of_specialization')) {
@@ -104,22 +114,11 @@ class AuthController extends Controller
             }
         }
 
-        // Send verification email
-        try {
-            Mail::to($user->email)->send(new VerifyEmailOtp(
-                otpCode: $otpCode,
-                userName: $user->name,
-            ));
-        } catch (\Exception $e) {
-            \Log::warning('Verification email failed: ' . $e->getMessage());
-        }
-
         $token = $user->createToken('spa')->plainTextToken;
 
         return response()->json([
             'user' => $user->fresh(),
             'token' => $token,
-            'requires_verification' => true,
         ], 201);
     }
 

@@ -357,6 +357,29 @@ html, body {
 
 ---
 
+## Bug 22: Production Registration Failure (500 Error)
+
+**Status:** IN PROGRESS
+**Priority:** CRITICAL
+**Environment:** Production (Vercel Frontend + Render Backend)
+
+### **Diagnosis & Root Cause Analysis**
+The "Something went wrong" / "Registration temporarily unavailable" errors in production were driven by three primary infrastructure mismatches:
+1.  **Schema Desync**: The backend was attempting to write to `otp_code`, `is_verified`, and `language_preference` columns that do not yet exist in the production PostgreSQL instance (pending final migration).
+2.  **Mailing Bottleneck**: The registration flow was synchronously attempting to send verification emails. If the SMTP server (Render -> External Mail) timed out or failed, the entire transaction would crash.
+3.  **Strict Origin Validation**: The `ValidateOrigin` middleware was blocking requests from Vercel's preview deployments because the headers did not exactly match the hardcoded patterns.
+
+### **Claude Code Fix Plan**
+1. **Defensive Auth Controller**: 
+   - [x] Implement `Schema::hasColumn` checks for all post-onboarding fields.
+   - [x] Wrap `User::create` and `Mail::send` in separate try-catch blocks.
+2. **Infrastructure Hardening**:
+   - [x] Update `config/sanctum.php` to use robust, protocol-agnostic `stateful` domains.
+   - [x] Remove restrictive `ValidateOrigin` middleware from the `api` group.
+   - [x] Create root-level `vercel.json` to handle subdirectory build logic correctly.
+
+---
+
 ## Deployment Checklist
 
 After implementing all fixes:
