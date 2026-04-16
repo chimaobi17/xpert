@@ -8,8 +8,8 @@
   --color-primary-hover: #16a34a;
   --color-primary-light: rgba(31, 196, 95, 0.1);
   --color-primary-dark: #15803d;
-  --color-bg: #000000;
-  /* Pitch Black */
+  --color-bg: #010101;
+  /* Deep Black with cache bust */
   --color-bg-secondary: #000000;
   --color-surface: #0a0a0a;
   --color-surface-hover: #121212;
