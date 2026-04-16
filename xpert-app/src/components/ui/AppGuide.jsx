@@ -226,13 +226,16 @@ export default function AppGuide() {
       {/* Interaction Limiting Overlay */}
       <div
         className={clsx(
-          "absolute transition-opacity duration-500 inset-0",
+          "absolute inset-0 transition-all duration-500 animate-fade-in",
           step.target
-            ? (isMobile ? "bg-background/60 backdrop-blur-sm" : "bg-black/40 backdrop-blur-[2px]")
-            : "bg-background/80 backdrop-blur-md",
-          // On mobile, universally block all underlying clicks. On desktop, only block when there's no target.
+            ? (isMobile ? "bg-background/70" : "bg-black/60")
+            : "bg-background/90",
           (isMobile || !step.target) ? "pointer-events-auto" : "pointer-events-none"
         )}
+        style={{ 
+          backdropFilter: step.target ? (isMobile ? 'blur(12px)' : 'blur(8px)') : 'blur(20px)',
+          WebkitBackdropFilter: step.target ? (isMobile ? 'blur(12px)' : 'blur(8px)') : 'blur(20px)'
+        }}
         onClick={skipGuide}
       />
 
