@@ -83,13 +83,4 @@ return Application::configure(basePath: dirname(__DIR__))
             ], 429);
         });
 
-        // Catch-all for unhandled exceptions — leak for debugging
-        $exceptions->renderable(function (\Throwable $e) {
-            return response()->json([
-                'error' => 'server_error',
-                'message' => $e->getMessage(),
-                'file' => $e->getFile(),
-                'line' => $e->getLine(),
-            ], 500);
-        });
     })->create();
