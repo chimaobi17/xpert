@@ -167,13 +167,30 @@ export default function AiResponse({ response, responseType, tokensUsed, onSaveT
                 variant="outline"
                 size="sm"
                 onClick={() => {
-                  const link = document.createElement('a');
-                  link.href = `data:image/jpeg;base64,${response}`;
-                  link.download = `xpert-ai-gen-${Date.now()}.jpg`;
-                  document.body.appendChild(link);
-                  link.click();
-                  document.body.removeChild(link);
-                  toast.success('Downloading masterpiece...');
+                  try {
+                    const byteCharacters = atob(response);
+                    const byteNumbers = new Array(byteCharacters.length);
+                    for (let i = 0; i < byteCharacters.length; i++) {
+                      byteNumbers[i] = byteCharacters.charCodeAt(i);
+                    }
+                    const byteArray = new Uint8Array(byteNumbers);
+                    const blob = new Blob([byteArray], { type: 'image/jpeg' });
+                    
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = `xpert-ai-gen-${Date.now()}.jpg`;
+                    document.body.appendChild(link);
+                    link.click();
+                    
+                    // Cleanup
+                    document.body.removeChild(link);
+                    URL.revokeObjectURL(url);
+                    toast.success('Downloading masterpiece...');
+                  } catch (err) {
+                    console.error('Download error:', err);
+                    toast.error('Failed to prepare download');
+                  }
                 }}
               >
                 <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
