@@ -30,8 +30,11 @@ function AppLayoutContent() {
 
   // Auto-start guide only for new signups who haven't seen it yet
   useEffect(() => {
+    // Return early if guide status is unknown or user already saw it
+    if (hasSeenGuide !== false) return;
+
     const isNewSignup = sessionStorage.getItem('just_registered');
-    if (hasSeenGuide === false && isNewSignup) {
+    if (isNewSignup) {
       const timer = setTimeout(() => {
         startGuide();
         // Clear the flag after starting so it doesn't trigger again on every refresh
@@ -39,7 +42,7 @@ function AppLayoutContent() {
       }, 1500); // 1.5s delay for smooth entrance
       return () => clearTimeout(timer);
     }
-  }, [hasSeenGuide]);
+  }, [hasSeenGuide, startGuide]);
 
   return (
     <div className="flex h-screen flex-col bg-background selection:bg-primary-500/30 selection:text-primary-500 transition-colors duration-500">

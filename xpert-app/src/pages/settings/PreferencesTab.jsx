@@ -2,6 +2,10 @@ import clsx from 'clsx';
 import useTheme from '../../hooks/useTheme';
 import Card from '../../components/ui/Card';
 import LanguageSelector from '../../components/ui/LanguageSelector';
+import Button from '../../components/ui/Button';
+import { useAppGuide } from '../../contexts/AppGuideContext';
+import LightBulbOnIcon from '../../components/icons/LightBulbOnIcon';
+import { ArrowRightIcon } from '@heroicons/react/24/outline';
 
 const themeOptions = [
   { id: 'light', label: 'Light', icon: '☀️' },
@@ -11,6 +15,13 @@ const themeOptions = [
 
 export default function PreferencesTab() {
   const { preference, setTheme } = useTheme();
+  const { startGuide } = useAppGuide();
+  const navigate = useNavigate();
+
+  const startTour = () => {
+    navigate('/workspace');
+    setTimeout(startGuide, 500);
+  };
 
   return (
     <div className="space-y-6">
@@ -45,6 +56,29 @@ export default function PreferencesTab() {
         <p className="text-xs text-[var(--color-text-tertiary)] mt-3">
           Choose your preferred language. All UI text will be translated accordingly.
         </p>
+      </Card>
+
+      <Card>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h3 className="text-sm font-semibold text-[var(--color-text)] flex items-center gap-2">
+              <LightBulbOnIcon className="h-4 w-4 text-primary-500" />
+              App Tour
+            </h3>
+            <p className="text-xs text-[var(--color-text-tertiary)] mt-1">
+              Need a refresher? Restart the guided walkthrough to see how Xpert works.
+            </p>
+          </div>
+          <Button 
+            variant="outline" 
+            size="sm" 
+            onClick={startTour}
+            className="whitespace-nowrap flex items-center gap-2"
+          >
+            Take a Tour
+            <ArrowRightIcon className="h-3.5 w-3.5" />
+          </Button>
+        </div>
       </Card>
     </div>
   );
