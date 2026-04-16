@@ -53,7 +53,18 @@ class ValidateOrigin
 
         // Check against allowed origins
         foreach ($allowedOrigins as $allowed) {
-            if ($allowed && str_starts_with($requestOrigin, $allowed)) {
+            if (!$allowed) continue;
+            
+            // Exact match or start match (handles slashes)
+            if (str_starts_with($requestOrigin, $allowed)) {
+                return $next($request);
+            }
+            
+            // Protocol-agnostic match (checks if the host matches)
+            $allowedHost = parse_url($allowed, PHP_URL_HOST) ?? $allowed;
+            $requestHost = parse_url($requestOrigin, PHP_URL_HOST) ?? $requestOrigin;
+            
+            if ($allowedHost === $requestHost) {
                 return $next($request);
             }
         }

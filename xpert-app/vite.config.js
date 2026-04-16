@@ -3,9 +3,10 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig(({ mode }) => ({
   plugins: [react()],
-  base: mode === 'production' ? '/app/' : '/',
+  // Use root base for Vercel, but keep /app/ support if needed for future monolith integration
+  base: mode === 'production' ? '/' : '/',
   build: {
-    outDir: '../public/app',
+    outDir: 'dist',
     emptyOutDir: true,
   },
   server: {
