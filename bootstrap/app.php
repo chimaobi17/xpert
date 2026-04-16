@@ -25,6 +25,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->append(ThreatDetection::class);
         $middleware->appendToGroup('api', [
             \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
+            ValidateOrigin::class,
             CheckBanStatus::class,
         ]);
     })
@@ -83,4 +84,25 @@ return Application::configure(basePath: dirname(__DIR__))
             ], 429);
         });
 
+        // Catch-all for unhandled exceptions — never leak internals
+        $exceptions->renderable(function (\Throwable $e) {
+            if (config('app.debug')) {
+                return null; // Let Laravel handle it in dev mode
+            }
+
+            // Log unhandled errors to security channel for visibility
+            \Illuminate\Support\Facades\Log::channel('security')->error('unhandled_exception', [
+                'exception' => get_class($e),
+                'message' => $e->getMessage(),
+                'file' => $e->getFile() . ':' . $e->getLine(),
+                'timestamp' => now()->toISOString(),
+            ]);
+
+            return response()->json([
+                'error' => 'server_error',
+                'message' => 'Something went wrong. Please try again later.',
+                'retry' => true,
+                'upgrade' => false,
+            ], 500);
+        });
     })->create();

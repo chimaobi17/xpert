@@ -14,15 +14,6 @@ use App\Http\Middleware\AiTimeout;
 use Illuminate\Support\Facades\Route;
 
 // Public routes (no auth required)
-Route::get('/test-debug', function () {
-    return response()->json([
-        'status' => 'online',
-        'debug_mode' => true,
-        'app_env' => config('app.env'),
-        'timestamp' => now()->toDateTimeString(),
-    ]);
-});
-
 Route::get('/health', function () {
     $checks = ['status' => 'ok', 'timestamp' => now()->toISOString()];
 

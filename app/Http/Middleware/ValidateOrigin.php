@@ -23,18 +23,13 @@ class ValidateOrigin
         $origin = $request->header('Origin');
         $referer = $request->header('Referer');
 
-        // Build allowed origins from env (supports comma-separated lists)
-        $allowedOrigins = array_filter(array_merge(
-            explode(',', config('app.frontend_url', '')),
-            explode(',', config('app.admin_url', '')),
-            [
-                config('app.url'),                // APP_URL — same-origin on Laravel Cloud
-                'http://localhost:5173',
-                'http://localhost:5174',
-                'http://xpert.test',
-            ]
-        ));
-        $allowedOrigins = array_map('trim', $allowedOrigins);
+        $allowedOrigins = array_filter([
+            config('app.frontend_url'),      // FRONTEND_URL env
+            config('app.admin_url'),          // ADMIN_URL env
+            'http://localhost:5173',
+            'http://localhost:5174',
+            'http://xpert.test',
+        ]);
 
         // Check Origin header first, then Referer
         $requestOrigin = $origin;
@@ -53,18 +48,7 @@ class ValidateOrigin
 
         // Check against allowed origins
         foreach ($allowedOrigins as $allowed) {
-            if (!$allowed) continue;
-            
-            // Exact match or start match (handles slashes)
-            if (str_starts_with($requestOrigin, $allowed)) {
-                return $next($request);
-            }
-            
-            // Protocol-agnostic match (checks if the host matches)
-            $allowedHost = parse_url($allowed, PHP_URL_HOST) ?? $allowed;
-            $requestHost = parse_url($requestOrigin, PHP_URL_HOST) ?? $requestOrigin;
-            
-            if ($allowedHost === $requestHost) {
+            if ($allowed && str_starts_with($requestOrigin, $allowed)) {
                 return $next($request);
             }
         }

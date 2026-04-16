@@ -79,46 +79,21 @@ class AuthController extends Controller
             ], 422);
         }
 
-        $userData = [
+        $otpCode = str_pad((string) random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+
+        $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => $request->password, // 'hashed' cast on User model handles hashing
+            'password' => Hash::make($request->password),
             'job_title' => $request->job_title,
             'purpose' => $request->purpose,
             'field_of_specialization' => $request->field_of_specialization,
+            'language_preference' => $request->language_preference ?? 'en',
             'is_onboarded' => $request->filled('field_of_specialization'),
-        ];
-
-        // Guard columns that may not exist if migrations haven't run on live DB
-        if (\Schema::hasColumn('users', 'language_preference')) {
-            $userData['language_preference'] = $request->language_preference ?? 'en';
-        }
-
-        $otpCode = str_pad((string) random_int(0, 999999), 6, '0', STR_PAD_LEFT);
-
-        if (\Schema::hasColumn('users', 'is_verified')) {
-            $userData['is_verified'] = false;
-            $userData['otp_code'] = $otpCode;
-            $userData['otp_expires_at'] = now()->addMinutes(15);
-        }
-
-        try {
-            $user = User::create($userData);
-        } catch (\Illuminate\Database\QueryException $e) {
-            \Log::error('Registration DB error: ' . $e->getMessage());
-
-            if (str_contains($e->getMessage(), 'UNIQUE') || str_contains($e->getMessage(), 'Duplicate')) {
-                return response()->json([
-                    'error' => 'registration_failed',
-                    'message' => 'Unable to complete registration. Please try a different email or log in.',
-                ], 422);
-            }
-
-            return response()->json([
-                'error' => 'registration_failed',
-                'message' => 'Registration is temporarily unavailable. Please try again shortly.',
-            ], 503);
-        }
+            'is_verified' => false,
+            'otp_code' => $otpCode,
+            'otp_expires_at' => now()->addMinutes(15),
+        ]);
 
         // Automatically assign default agents if specialization info is provided
         if ($request->filled('field_of_specialization')) {
@@ -127,6 +102,16 @@ class AuthController extends Controller
             } catch (\Exception $e) {
                 \Log::warning('Initial agent assignment failed: ' . $e->getMessage());
             }
+        }
+
+        // Send verification email
+        try {
+            Mail::to($user->email)->send(new VerifyEmailOtp(
+                otpCode: $otpCode,
+                userName: $user->name,
+            ));
+        } catch (\Exception $e) {
+            \Log::warning('Verification email failed: ' . $e->getMessage());
         }
 
         $token = $user->createToken('spa')->plainTextToken;
