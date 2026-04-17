@@ -85,9 +85,6 @@ export default function Workspace() {
     );
   }
 
-    );
-  }
-
   const MAX_FREE_AGENTS = 3;
   const isFree = user?.plan_level === 'free' || !user?.plan_level;
   const showEmptySlots = isFree && myAgents.length < MAX_FREE_AGENTS;
