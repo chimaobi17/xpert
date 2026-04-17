@@ -174,6 +174,18 @@ class AuthController extends Controller
         $userData['onboarding_complete'] = (bool) ($userData['is_onboarded'] ?? false);
         $userData['avatar_url'] = $userData['avatar'] ?? null;
 
+        // Include assigned agents in registration response
+        $userData['agents'] = $user->agents()->get()->map(function ($agent) {
+            return [
+                'id' => $agent->id,
+                'name' => $agent->name,
+                'slug' => $agent->slug ?? null,
+                'domain' => $agent->domain ?? null,
+                'description' => $agent->description ?? null,
+                'is_premium_only' => (bool) ($agent->is_premium_only ?? false),
+            ];
+        })->values();
+
         return response()->json([
             'user' => $userData,
             'token' => $token,
