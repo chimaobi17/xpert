@@ -386,7 +386,12 @@ class AuthController extends Controller
             'language' => ['Language', 'Creative', 'Research'],
         ];
 
-        $domains = $domainMap[$specialization] ?? ['Technology'];
+        // Only assign if we have a matching domain mapping
+        $domains = $domainMap[strtolower($specialization)] ?? [];
+
+        if (empty($domains)) {
+            return;
+        }
 
         $limit = ($user->plan_level === 'free' || ! $user->plan_level) ? 2 : 5;
         $agentIds = \App\Models\AiAgent::whereIn('domain', $domains)
@@ -394,6 +399,8 @@ class AuthController extends Controller
             ->limit($limit)
             ->pluck('id');
 
-        $user->agents()->syncWithoutDetaching($agentIds);
+        if ($agentIds->isNotEmpty()) {
+            $user->agents()->syncWithoutDetaching($agentIds);
+        }
     }
 }
