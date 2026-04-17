@@ -155,39 +155,9 @@ class AuthController extends Controller
         // Clear rate limiter on success
         RateLimiter::clear($rateLimitKey);
 
-        // Build safe response — avoid $user->toArray() which triggers $appends on missing columns
-        $userData = [
-            'id' => $user->id,
-            'name' => $user->name,
-            'email' => $user->email,
-            'role' => $user->role ?? 'user',
-            'plan_level' => $user->plan_level ?? 'free',
-        ];
-
-        // Add optional fields only if they were saved
-        foreach (['job_title', 'purpose', 'field_of_specialization', 'is_onboarded', 'language_preference', 'avatar'] as $field) {
-            if (in_array($field, $columns) && isset($user->{$field})) {
-                $userData[$field] = $user->{$field};
-            }
-        }
-
-        $userData['onboarding_complete'] = (bool) ($userData['is_onboarded'] ?? false);
-        $userData['avatar_url'] = $userData['avatar'] ?? null;
-
-        // Include assigned agents in registration response
-        $userData['agents'] = $user->agents()->get()->map(function ($agent) {
-            return [
-                'id' => $agent->id,
-                'name' => $agent->name,
-                'slug' => $agent->slug ?? null,
-                'domain' => $agent->domain ?? null,
-                'description' => $agent->description ?? null,
-                'is_premium_only' => (bool) ($agent->is_premium_only ?? false),
-            ];
-        })->values();
-
+        // Build unified response
         return response()->json([
-            'user' => $userData,
+            'user' => $this->safeUserResponse($user->load('agents')),
             'token' => $token,
         ], 201);
     }
@@ -373,6 +343,18 @@ class AuthController extends Controller
         $data['onboarding_complete'] = (bool) ($data['is_onboarded'] ?? false);
         $data['avatar_url'] = ($data['avatar'] ?? null) ?: null;
 
+        // CRITICAL: Always include agents to ensure persistence in frontend state
+        $data['agents'] = $user->agents->map(function ($agent) {
+            return [
+                'id' => $agent->id,
+                'name' => $agent->name,
+                'slug' => $agent->slug ?? null,
+                'domain' => $agent->domain ?? null,
+                'description' => $agent->description ?? null,
+                'is_premium_only' => (bool) ($agent->is_premium_only ?? false),
+            ];
+        });
+
         return $data;
     }
 
@@ -388,8 +370,16 @@ class AuthController extends Controller
 
         $domains = $domainMap[$specialization] ?? ['Technology'];
 
+        // Support case-insensitive matching for PostgreSQL
+        $searchDomains = [];
+        foreach ($domains as $d) {
+            $searchDomains[] = ucfirst(strtolower($d));
+            $searchDomains[] = strtolower($d);
+            $searchDomains[] = strtoupper($d);
+        }
+
         $limit = ($user->plan_level === 'free' || ! $user->plan_level) ? 2 : 5;
-        $agentIds = \App\Models\AiAgent::whereIn('domain', $domains)
+        $agentIds = \App\Models\AiAgent::whereIn('domain', array_unique($searchDomains))
             ->where('is_premium_only', false)
             ->limit($limit)
             ->pluck('id');

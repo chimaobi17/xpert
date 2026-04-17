@@ -85,20 +85,13 @@ export default function Workspace() {
     );
   }
 
-  if (myAgents.length === 0) {
-    return (
-      <div>
-        <h1 className="text-2xl font-bold text-[var(--color-text)] mb-6">My Workspace</h1>
-        <EmptyState
-          icon={RectangleStackIcon}
-          title="No helpers yet"
-          description="Browse our AI helpers and pick the ones you need to get started."
-          actionLabel="Browse Helpers"
-          onAction={() => navigate('/agents/discover')}
-        />
-      </div>
     );
   }
+
+  const MAX_FREE_AGENTS = 3;
+  const isFree = user?.plan_level === 'free' || !user?.plan_level;
+  const showEmptySlots = isFree && myAgents.length < MAX_FREE_AGENTS;
+  const emptySlotCount = MAX_FREE_AGENTS - myAgents.length;
 
   return (
     <div className="animate-fade-in">
@@ -218,24 +211,27 @@ export default function Workspace() {
           );
         })}
 
-        {/* Empty Slot CTA for free users with < 3 agents */}
-        {(user?.plan_level === 'free' || !user?.plan_level) && myAgents.length < 3 && (
+        {/* Empty Slot CTAs for free users with vacancies */}
+        {showEmptySlots && [...Array(emptySlotCount)].map((_, i) => (
           <div
+            key={`empty-slot-${i}`}
             onClick={() => navigate('/agents/discover')}
-            className="group relative flex flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed border-border/60 hover:border-primary-500/50 bg-surface-hover/20 hover:bg-surface-hover/40 p-6 sm:p-8 cursor-pointer transition-all duration-300 min-h-[200px]"
+            className="group relative flex flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed border-border/60 hover:border-primary-500/50 bg-surface-hover/20 hover:bg-surface-hover/40 p-6 sm:p-8 cursor-pointer transition-all duration-300 min-h-[220px]"
           >
             <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary-500/10 text-primary-500 group-hover:scale-110 transition-transform duration-300">
               <PlusCircleIcon className="h-7 w-7" />
             </div>
             <div className="text-center">
-              <p className="text-sm font-bold text-foreground mb-1">Empty Slot</p>
-              <p className="text-xs text-text-secondary font-medium">Pick your own AI helper to complete your team</p>
+              <p className="text-sm font-bold text-foreground mb-1">
+                {i === 0 && myAgents.length > 0 ? "Add Third Helper" : "Empty Slot"}
+              </p>
+              <p className="text-xs text-text-secondary font-medium">Pick an AI helper to complete your team</p>
             </div>
             <span className="text-[10px] font-black uppercase tracking-widest text-primary-500 mt-1">
-              {3 - myAgents.length} slot{3 - myAgents.length > 1 ? 's' : ''} remaining
+              Slot {myAgents.length + i + 1} of 3
             </span>
           </div>
-        )}
+        ))}
       </div>
 
       <ConfirmModal
