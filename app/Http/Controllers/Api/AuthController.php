@@ -107,7 +107,12 @@ class AuthController extends Controller
         $columns = \Schema::getColumnListing('users');
         foreach ($optionals as $col => $val) {
             if (in_array($col, $columns)) {
-                $userData[$col] = $val;
+                // Failsafe for Postgres: convert booleans to literal true/false strings
+                if (is_bool($val)) {
+                    $userData[$col] = $val ? 'true' : 'false';
+                } else {
+                    $userData[$col] = $val;
+                }
             }
         }
 
