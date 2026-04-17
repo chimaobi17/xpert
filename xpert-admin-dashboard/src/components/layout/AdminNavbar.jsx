@@ -25,38 +25,38 @@ export default function AdminNavbar({ onMenuToggle }) {
   }
 
   return (
-    <header className="sticky top-0 z-40 flex h-16 items-center justify-between border-b border-[var(--color-border)] bg-[var(--color-surface)] px-4 lg:px-6">
-      <div className="flex items-center gap-3">
+    <header className="sticky top-0 z-40 flex h-20 items-center justify-between border-b border-[var(--color-border)] bg-[var(--color-surface)] px-4 lg:px-6 transition-all duration-300">
+      <div className="flex items-center gap-3 shrink-0">
         <button
           onClick={onMenuToggle}
-          className="rounded-lg p-2 text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-hover)] lg:hidden"
+          className="rounded-lg p-2 text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-hover)] lg:hidden shrink-0"
         >
-          <Bars3Icon className="h-5 w-5" />
+          <Bars3Icon className="h-6 w-6" />
         </button>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3 shrink-0">
           <img src={logoFull} alt="Xpert" className="hidden sm:block h-14" />
-          <img src={logoIcon} alt="Xpert" className="block sm:hidden h-12" />
-          <span className="rounded-md bg-primary-100 px-2 py-0.5 text-xs font-semibold text-primary-700 hidden sm:block">
+          <img src={logoIcon} alt="Xpert" className="block sm:hidden h-16 shrink-0" />
+          <span className="rounded-md bg-primary-100 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-primary-700 hidden sm:block border border-primary-200">
             Admin
           </span>
         </div>
       </div>
 
-      <div className="flex items-center gap-2 md:gap-4">
+      <div className="flex items-center gap-2 md:gap-4 shrink-0">
         
         <button
           onClick={toggleTheme}
-          className="rounded-lg p-2 text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-hover)] transition-colors"
+          className="rounded-lg p-2 text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-hover)] transition-colors shrink-0"
         >
           {theme === 'dark' ? <SunIcon className="h-5 w-5" /> : <MoonIcon className="h-5 w-5" />}
         </button>
 
-        <div className="relative ml-1">
+        <div className="relative ml-1 shrink-0">
           <button
             onClick={() => setDropdownOpen(!dropdownOpen)}
-            className="flex items-center gap-2 rounded-lg p-1.5 hover:bg-[var(--color-surface-hover)] transition-colors"
+            className="flex items-center gap-2 rounded-lg p-1.5 hover:bg-[var(--color-surface-hover)] transition-colors shrink-0"
           >
-            <Avatar name={user?.name} size="sm" />
+            <Avatar name={user?.name} size="md" className="shrink-0" />
           </button>
 
           {dropdownOpen && (
