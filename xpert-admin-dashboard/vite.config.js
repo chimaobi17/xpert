@@ -5,7 +5,7 @@ export default defineConfig(({ mode }) => ({
   plugins: [react()],
   base: mode === 'production' ? '/admin/' : '/',
   build: {
-    outDir: '../public/admin',
+    outDir: 'dist',
     emptyOutDir: true,
   },
   server: {
