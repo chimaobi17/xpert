@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        if (Schema::hasTable('ai_agents')) {
+        if (Schema::hasTable('ai_agents') && !app()->environment('testing')) {
             try {
                 if (AiAgent::count() === 0) {
                     \Log::info('Production Data Sync: Seeding Starter AI Agents...');
