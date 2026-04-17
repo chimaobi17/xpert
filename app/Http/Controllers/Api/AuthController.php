@@ -88,11 +88,12 @@ class AuthController extends Controller
         }
 
         // Build user data — only set columns that exist on the live DB
-        $user = new User();
-        $user->name = strip_tags($request->name);
-        $user->email = $request->email;
-        $user->password = Hash::make($request->password);
-
+        $userData = [
+            'name' => strip_tags($request->name),
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+        ];
+        
         $optionals = [
             'job_title' => $request->job_title ? strip_tags($request->job_title) : null,
             'purpose' => $request->purpose ? strip_tags($request->purpose) : null,
@@ -106,12 +107,12 @@ class AuthController extends Controller
         $columns = \Schema::getColumnListing('users');
         foreach ($optionals as $col => $val) {
             if (in_array($col, $columns)) {
-                $user->{$col} = $val;
+                $userData[$col] = $val;
             }
         }
 
         try {
-            $user->save();
+            $user = User::create($userData);
         } catch (\Illuminate\Database\QueryException $e) {
             \Log::error('Registration DB error: ' . $e->getMessage());
 
