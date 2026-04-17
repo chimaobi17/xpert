@@ -393,8 +393,15 @@ class AuthController extends Controller
             return;
         }
 
+        // Expand domain array to handle varying database collations (Postgres vs SQLite)
+        $searchDomains = [];
+        foreach ($domains as $d) {
+            $searchDomains[] = ucfirst(strtolower($d));
+            $searchDomains[] = strtolower($d);
+        }
+
         $limit = ($user->plan_level === 'free' || ! $user->plan_level) ? 2 : 5;
-        $agentIds = \App\Models\AiAgent::whereIn('domain', $domains)
+        $agentIds = \App\Models\AiAgent::whereIn('domain', $searchDomains)
             ->where('is_premium_only', false)
             ->limit($limit)
             ->pluck('id');
