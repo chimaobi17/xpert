@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        \DB::table('chatbot_knowledges')
+        \DB::table('chatbot_knowledge')
             ->where('question', 'LIKE', '%upgrade%')
             ->update([
                 'action_type' => 'navigate',
@@ -24,7 +24,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        \DB::table('chatbot_knowledges')
+        \DB::table('chatbot_knowledge')
             ->where('question', 'LIKE', '%upgrade%')
             ->update([
                 'action_type' => 'modal',
