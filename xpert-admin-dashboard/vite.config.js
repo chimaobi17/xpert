@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig(({ mode }) => ({
   plugins: [react()],
-  base: mode === 'production' ? '/admin/' : '/',
+  base: process.env.VERCEL ? '/' : (mode === 'production' ? '/admin/' : '/'),
   build: {
     outDir: 'dist',
     emptyOutDir: true,
