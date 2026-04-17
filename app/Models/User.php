@@ -48,7 +48,6 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
-            'password' => 'hashed',
             'banned_until' => 'datetime',
             'is_onboarded' => 'boolean',
             'two_factor_enabled' => 'boolean',
