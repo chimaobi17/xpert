@@ -97,7 +97,7 @@ class AuthController extends Controller
             'job_title' => $request->job_title ? strip_tags($request->job_title) : null,
             'purpose' => $request->purpose ? strip_tags($request->purpose) : null,
             'field_of_specialization' => $request->field_of_specialization,
-            'is_onboarded' => $request->filled('field_of_specialization'),
+            'is_onboarded' => (bool) $request->filled('field_of_specialization'),
             'language_preference' => $request->language_preference ?? 'en',
         ];
 
@@ -129,7 +129,7 @@ class AuthController extends Controller
 
             return response()->json([
                 'error' => 'server_error',
-                'message' => 'REGISTRATION ERROR: ' . $e->getMessage(),
+                'message' => 'Registration failed. Please try again.',
             ], 500);
         }
 

@@ -66,9 +66,7 @@ export default function Register() {
       <Link to="/" className="inline-flex items-center text-xs font-black uppercase tracking-widest text-primary-500 hover:text-primary-600 mb-8 group transition-all">
         <span className="mr-2 group-hover:-translate-x-1 transition-transform">←</span> Back to home
       </Link>
-      <h2 className="text-2xl sm:text-3xl font-black text-[var(--color-text)] mb-2 tracking-tight">
-        Create your account <span className="text-sm font-normal opacity-50">(SYSTEM ACTIVE - DO NOT REFRESH)</span>
-      </h2>
+      <h2 className="text-2xl sm:text-3xl font-black text-[var(--color-text)] mb-2 tracking-tight">Create your account</h2>
       <p className="text-sm sm:text-base text-[var(--color-text-secondary)] font-medium mb-8">Start using AI-powered prompts today</p>
 
       <form onSubmit={handleSubmit} className="space-y-4">
