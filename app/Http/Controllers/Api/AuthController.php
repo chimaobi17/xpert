@@ -386,28 +386,14 @@ class AuthController extends Controller
             'language' => ['Language', 'Creative', 'Research'],
         ];
 
-        // Only assign if we have a matching domain mapping
-        $domains = $domainMap[strtolower($specialization)] ?? [];
-
-        if (empty($domains)) {
-            return;
-        }
-
-        // Expand domain array to handle varying database collations (Postgres vs SQLite)
-        $searchDomains = [];
-        foreach ($domains as $d) {
-            $searchDomains[] = ucfirst(strtolower($d));
-            $searchDomains[] = strtolower($d);
-        }
+        $domains = $domainMap[$specialization] ?? ['Technology'];
 
         $limit = ($user->plan_level === 'free' || ! $user->plan_level) ? 2 : 5;
-        $agentIds = \App\Models\AiAgent::whereIn('domain', $searchDomains)
+        $agentIds = \App\Models\AiAgent::whereIn('domain', $domains)
             ->where('is_premium_only', false)
             ->limit($limit)
             ->pluck('id');
 
-        if ($agentIds->isNotEmpty()) {
-            $user->agents()->syncWithoutDetaching($agentIds);
-        }
+        $user->agents()->syncWithoutDetaching($agentIds);
     }
 }

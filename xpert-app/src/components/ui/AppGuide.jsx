@@ -24,8 +24,8 @@ const STEPS = [
     target: "#guide-agent-card",
   },
   {
-    title: "Step 3: Your Workspace",
-    content: "You can manage your chosen assistants here in 'My Helpers'. We've already added a few for you to try out right away.",
+    title: "Step 3: My Helpers",
+    content: "We've pre-selected 2 expert helpers for you based on your focus. But we've left an empty slot just for you! Head over to 'Find Helpers' to pick and add your 3rd AI teammate for free.",
     target: "#guide-workspace",
     inSidebar: true,
   },
