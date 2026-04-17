@@ -99,6 +99,8 @@ class AuthController extends Controller
             'field_of_specialization' => $request->field_of_specialization,
             'is_onboarded' => (bool) $request->filled('field_of_specialization'),
             'language_preference' => $request->language_preference ?? 'en',
+            'is_verified' => false,
+            'two_factor_enabled' => false,
         ];
 
         $columns = \Schema::getColumnListing('users');
@@ -129,7 +131,7 @@ class AuthController extends Controller
 
             return response()->json([
                 'error' => 'server_error',
-                'message' => 'Registration failed. Please try again.',
+                'message' => 'REGISTRATION ERROR: ' . $e->getMessage(),
             ], 500);
         }
 
