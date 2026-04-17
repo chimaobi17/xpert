@@ -9,8 +9,8 @@ function ChatbotBubble({ isOpen, toggle, unreadCount }) {
         : 'bg-primary-100 dark:bg-black hover:bg-primary-200 dark:hover:bg-primary-900/10 !text-primary-600 dark:!text-primary-500 border-primary-500'
         }`}
       style={{
-        bottom: '24px',
-        right: '24px',
+        bottom: '32px',
+        right: '32px',
         width: '56px', // Slightly larger for clarity
         height: '56px'
       }}

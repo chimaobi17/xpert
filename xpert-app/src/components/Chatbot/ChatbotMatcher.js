@@ -39,8 +39,8 @@ export const FALLBACK_KNOWLEDGE = [
     keywords: "upgrade,plan,standard,premium,pay,subscribe",
     question: "How do I upgrade my plan?",
     answer: "You can upgrade your plan at any time to unlock more tokens, larger file sizes, and premium agents.",
-    action_type: "modal",
-    action_target: "upgrade",
+    action_type: "navigate",
+    action_target: "/settings?tab=plan",
     category: "billing",
     sort_order: 100
   },

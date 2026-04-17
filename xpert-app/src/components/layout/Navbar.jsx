@@ -50,7 +50,7 @@ export default function Navbar({ onMenuToggle }) {
 
   return (
     <header className={clsx(
-      "sticky top-0 z-40 flex h-16 sm:h-20 items-center justify-between !border-x-0 !border-t-0 border-b border-border/30 px-4 sm:px-6 lg:px-10 transition-all duration-300",
+      "sticky top-0 z-40 flex h-20 items-center justify-between !border-x-0 !border-t-0 border-b border-border/30 px-4 sm:px-6 lg:px-10 transition-all duration-300",
       theme === 'light' ? 'bg-white' : 'glass'
     )}>
       <div className="flex items-center gap-4">
@@ -61,28 +61,27 @@ export default function Navbar({ onMenuToggle }) {
         >
           <Bars3Icon className="h-6 w-6 font-bold" />
         </button>
-        <Link to="/dashboard" className="flex items-center group">
+        <Link to="/dashboard" className="flex items-center group shrink-0">
           <img src={logoFull} alt="Xpert" className="hidden sm:block h-14 transition-transform group-hover:scale-105" />
-          <img src={logoIcon} alt="Xpert" className="block sm:hidden h-12 transition-transform group-hover:scale-105" />
+          <img src={logoIcon} alt="Xpert" className="block sm:hidden h-16 transition-transform group-hover:scale-105 shrink-0" />
         </Link>
       </div>
 
       <div className="flex items-center gap-3 sm:gap-5 lg:gap-6">
         <button
           onClick={toggleTheme}
-
           className="rounded-2xl p-2.5 text-text-secondary hover:text-foreground hover:bg-surface-hover transition-all border-none"
           title="Toggle Theme"
         >
           {theme === 'dark' ? <SunriseIcon className="h-5 w-5 text-primary-500" /> : <SunriseIcon className="h-5 w-5 text-primary-500 rotate-180" />}
         </button>
 
-        <LanguageSelector compact />
+        <LanguageSelector compact className="hidden sm:block" />
 
         <button
           onClick={startGuide}
           id="guide-tour-start"
-          className="rounded-2xl p-2.5 text-primary-500 hover:bg-primary-500/10 transition-all border-none"
+          className="hidden sm:block rounded-2xl p-2.5 text-primary-500 hover:bg-primary-500/10 transition-all border-none"
           title="Start App Tour"
         >
           <LightBulbOnIcon className="h-5 w-5 animate-pulse" />
@@ -100,9 +99,9 @@ export default function Navbar({ onMenuToggle }) {
         <div className="relative">
           <button
             onClick={() => setDropdownOpen(!dropdownOpen)}
-            className="flex items-center gap-3 rounded-2xl p-1.5 pr-4 hover:bg-surface-hover transition-all border-none group"
+            className="flex items-center gap-3 rounded-2xl p-1.5 pr-4 hover:bg-surface-hover transition-all border-none group shrink-0"
           >
-            <Avatar name={user?.name} src={user?.avatar_url} size="sm" className="rounded-xl group-hover:scale-105 transition-transform dark:bg-transparent dark:border dark:border-primary-500/40 dark:text-primary-500" />
+            <Avatar name={user?.name} src={user?.avatar_url} size="lg" className="rounded-xl group-hover:scale-105 transition-transform dark:bg-transparent dark:border dark:border-primary-500/40 dark:text-primary-500" />
             <div className="hidden md:flex flex-col items-start px-2">
               <p className="text-sm font-bold text-foreground leading-none mb-0.5">{user?.name?.split(' ')[0]}</p>
               <p className="text-[10px] font-bold uppercase tracking-widest text-text-tertiary scale-90 origin-left opacity-70">
