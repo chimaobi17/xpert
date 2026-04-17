@@ -3,8 +3,8 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Artisan;
 use App\Models\AiAgent;
-use Database\Seeders\AiAgentSeeder;
 
 return new class extends Migration
 {
@@ -15,10 +15,16 @@ return new class extends Migration
     {
         // Check if the ai_agents table is empty and seed it if so
         if (Schema::hasTable('ai_agents')) {
-            if (AiAgent::count() === 0) {
-                \Log::info('Production Data Sync: Seeding AI Agents...');
-                $seeder = new AiAgentSeeder();
-                $seeder->run();
+            try {
+                if (AiAgent::count() === 0) {
+                    \Log::info('Production Data Sync: Seeding AI Agents via Artisan...');
+                    Artisan::call('db:seed', [
+                        '--class' => 'AiAgentSeeder',
+                        '--force' => true
+                    ]);
+                }
+            } catch (\Exception $e) {
+                \Log::warning('Production Seed Warning: ' . $e->getMessage());
             }
         }
     }
